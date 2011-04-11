@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GlobalTester SmartCardShell Integration
+Bundle-SymbolicName: org.globaltester.smartcardshell
+Bundle-Version: 3.0.0.qualifier
+Bundle-Activator: org.globaltester.smartcardshell.Activator
+Bundle-Vendor: HJP Consulting GmbH
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/ocf-cc.jar,
+ lib/scdp4j.jar,
+ lib/scsh3.jar
+Export-Package: opencard.core,
+ opencard.core.service

@@ -1,0 +1,16 @@
+The libraries provided within SmartCardShell are either included in this plugin or moved to org.globaltester.core.
+This is required because the cryptographic functionality may be needed in use cases where the SmartCardShell itself is dispensable.
+
+Currently SmartCardShelll version 3.7.989 is used.
+
+Jars included in org.globaltester.smartcardshell:
+ocf
+scdp4j
+scsh3
+
+
+Jars included in org.globaltester.core:
+bcmail
+bcprov
+js
+xmldsig
