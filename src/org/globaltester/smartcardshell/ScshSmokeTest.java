@@ -7,6 +7,7 @@ import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -17,14 +18,16 @@ import org.junit.Test;
  */
 public class ScshSmokeTest {
 
-	@Test
-	public void terminalsAvailable() throws Exception {
-
+	@BeforeClass
+	public static void setUp() {
 		//initialize OCF
 		System.setProperty("OpenCard.loaderClassName",
 				org.globaltester.smartcardshell.test.TestPropertyLoader.class.getName());
+	}
+	
+	@Test
+	public void terminalsAvailable() throws Exception {
 
-		
 		//Start OCF, check for terminals and shutdown OCF
 		SmartCard.start();
 		boolean terminalsAvailable = CardTerminalRegistry.getRegistry()
