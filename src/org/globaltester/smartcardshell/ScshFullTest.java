@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import opencard.core.service.CardRequest;
 import opencard.core.service.SmartCard;
-import opencard.core.terminal.CardTerminal;
-import opencard.core.terminal.CardTerminalRegistry;
 import opencard.core.terminal.CommandAPDU;
 import opencard.core.terminal.ResponseAPDU;
 import opencard.core.util.HexString;
