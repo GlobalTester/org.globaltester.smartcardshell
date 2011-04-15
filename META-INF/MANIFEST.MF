@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.globaltester.smartcardshell
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.globaltester.smartcardshell.Activator
 Bundle-Vendor: HJP Consulting GmbH
-Require-Bundle: org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ org.globaltester.core;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
@@ -13,4 +14,5 @@ Bundle-ClassPath: .,
  lib/scdp4j.jar,
  lib/scsh3.jar
 Export-Package: opencard.core,
- opencard.core.service
+ opencard.core.service,
+ org.globaltester.smartcardshell
