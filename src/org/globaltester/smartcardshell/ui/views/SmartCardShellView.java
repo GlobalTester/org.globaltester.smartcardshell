@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
@@ -21,6 +22,7 @@ public class SmartCardShellView extends ViewPart {
 	private Text txtConsoleInput;
 
 	private GPScriptRunner scriptRunner;
+	private Label lblPrompt;
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
@@ -33,7 +35,7 @@ public class SmartCardShellView extends ViewPart {
 
 		// use main composite to get rid of outer influence
 		Composite mainComp = new Composite(parent, SWT.NONE);
-		mainComp.setLayout(new GridLayout(1, false));
+		mainComp.setLayout(new GridLayout(2, false));
 
 		// widget for console output
 		sTxtConsoleOut = new StyledText(mainComp, SWT.READ_ONLY | SWT.H_SCROLL
@@ -41,7 +43,11 @@ public class SmartCardShellView extends ViewPart {
 		sTxtConsoleOut.setText(scriptRunner.reset());
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
+				true, 2, 1));
+		
+		lblPrompt = new Label(mainComp, SWT.NONE);
+		lblPrompt.setBackground(sTxtConsoleOut.getBackground());
+		lblPrompt.setText(scriptRunner.getPromptString()+">");
 
 		// widget for command input
 		txtConsoleInput = new Text(mainComp, SWT.NONE);
@@ -58,6 +64,9 @@ public class SmartCardShellView extends ViewPart {
 
 			}
 		});
+		
+		//make common white background
+		mainComp.setBackground(sTxtConsoleOut.getBackground());
 
 	}
 
