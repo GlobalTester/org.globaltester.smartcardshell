@@ -2,13 +2,11 @@ package org.globaltester.smartcardshell;
 
 import java.io.PrintStream;
 
-import opencard.core.OpenCardException;
 import opencard.core.service.SmartCard;
 
 import org.eclipse.core.runtime.Platform;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.Scriptable;
 
 import de.cardcontact.scdp.js.GPRuntime;
 import de.cardcontact.scdp.js.GPTracer;
@@ -16,27 +14,34 @@ import de.cardcontact.scdp.js.GPTracer;
 public class GPScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	private static final long serialVersionUID = -1490363545404798195L;
-	private Scriptable scope;
+	private Context context;
 	private int interactiveLineNo = 0;
 	private String promptString = "interactive";
 
-
-	public String init() throws OpenCardException, ClassNotFoundException {
+	public String init() {
 		assert (SmartCard.isStarted());
 
 		// Initialize ECMAScript environment
-		Context cx = Context.enter();
-		scope = cx.initStandardObjects();
-		Context.exit();
-		
-		return "GlobalTester SmartCardShell\n"+
-		"version "+ Platform.getBundle("org.globaltester.smartcardshell").getVersion();
-	}
-	
-	public String reset() throws OpenCardException, ClassNotFoundException {
+		context = Context.enter();
+		context.initStandardObjects(this);
 
-		scope = null;
+		return "GlobalTester SmartCardShell\n"
+				+ "version "
+				+ Platform.getBundle("org.globaltester.smartcardshell")
+						.getVersion();
+	}
+
+	public String reset() {
+		// reset context
+		if (context != null) {
+			Context.exit();
+			context = null;
+		}
+
+		// reset internal variables
 		interactiveLineNo = 0;
+
+		// init all required values
 		return init();
 	}
 
@@ -50,7 +55,7 @@ public class GPScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * @return
 	 */
 	public String executeCommand(String cmd) {
-		return executeCommand(cmd, getPromptString(), interactiveLineNo ++);
+		return executeCommand(cmd, getPromptString(), interactiveLineNo++);
 	}
 
 	/**
@@ -67,23 +72,22 @@ public class GPScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * @return
 	 */
 	public String executeCommand(String cmd, String sourceName, int lineNo) {
-		Context cx = Context.enter();
-		Object result = cx.evaluateString(scope, cmd, sourceName, lineNo, null);
-		Context.exit();
+		Object result = context.evaluateString(this, cmd, sourceName, lineNo,
+				null);
 		String resultString = Context.toString(result);
 		return resultString;
 	}
-	
+
 	public String getPromptString() {
-		return promptString ;
+		return promptString;
 	}
-	
+
 	public void setPromptString(String newPrompt) {
 		promptString = newPrompt;
 	}
-	
-	public String getInteractivePrompt(){
-		return promptString+"("+interactiveLineNo+")";
+
+	public String getInteractivePrompt() {
+		return promptString + "(" + interactiveLineNo + ")";
 	}
 
 	@Override
