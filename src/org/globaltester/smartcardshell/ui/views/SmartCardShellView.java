@@ -7,11 +7,11 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Control;
 import org.globaltester.smartcardshell.GPScriptRunner;
 
 public class SmartCardShellView extends ViewPart {
@@ -22,7 +22,8 @@ public class SmartCardShellView extends ViewPart {
 
 	private GPScriptRunner scriptRunner;
 
-	public SmartCardShellView() throws OpenCardException, ClassNotFoundException {
+	public SmartCardShellView() throws OpenCardException,
+			ClassNotFoundException {
 		scriptRunner = new GPScriptRunner();
 		scriptRunner.setPromptString("scsh");
 		scriptRunner.init();
@@ -34,16 +35,15 @@ public class SmartCardShellView extends ViewPart {
 		Composite mainComp = new Composite(parent, SWT.NONE);
 		mainComp.setLayout(new GridLayout(1, false));
 
-		//widget for console output
+		// widget for console output
 		sTxtConsoleOut = new StyledText(mainComp, SWT.READ_ONLY | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		sTxtConsoleOut
-				.setText("Error: ScriptRunner not properly initialized");
+		sTxtConsoleOut.setText(scriptRunner.reset());
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 
-		//widget for command input
+		// widget for command input
 		txtConsoleInput = new Text(mainComp, SWT.NONE);
 		txtConsoleInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
@@ -58,27 +58,24 @@ public class SmartCardShellView extends ViewPart {
 
 			}
 		});
-		
-		try {
-			sTxtConsoleOut
-			.setText(scriptRunner.reset());
-		} catch (OpenCardException e) {
-			sTxtConsoleOut
-			.setText("OpenCardException: Could not initalize OpenCardFramework properly. Check the preferences.");
-		} catch (ClassNotFoundException e) {
-			sTxtConsoleOut
-			.setText("ClassNotFoundException: Could not initalize OpenCardFramework properly. Check the preferences.");
-		}
+
 	}
 
 	protected void executeCommand(String cmd) {
 
 		// print promt and command in output widget
-		sTxtConsoleOut.append("\n" + scriptRunner.getInteractivePrompt()+ "> " + cmd +"\n");
+		sTxtConsoleOut.append("\n" + scriptRunner.getInteractivePrompt() + "> "
+				+ cmd + "\n");
 		sTxtConsoleOut.setTopIndex(sTxtConsoleOut.getLineCount());
-		
+
 		// execute the command in ScriptRunner and print output to widget
-		sTxtConsoleOut.append(scriptRunner.executeCommand(cmd));
+		String output;
+		try {
+			output = scriptRunner.executeCommand(cmd);
+		} catch (Exception e) {
+			output = e.getMessage();
+		}
+		sTxtConsoleOut.append(output);
 		sTxtConsoleOut.setTopIndex(sTxtConsoleOut.getLineCount());
 
 	}
