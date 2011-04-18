@@ -23,6 +23,7 @@ public class GPScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		// Initialize ECMAScript environment
 		context = Context.enter();
+		context.setWrapFactory(new GTWrapFactory());
 		context.initStandardObjects(this);
 
 		return "GlobalTester SmartCardShell\n"
