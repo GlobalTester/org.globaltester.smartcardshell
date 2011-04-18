@@ -1,0 +1,1771 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>CardFile - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>CardFile - Reference Documentation</h1>
+<p>
+<p>Class implementing support for ISO7816-4 elementary and dedicated files on an ICC</p>
+                 
+<p>Objects created using this class represent a file on the ICC. Each file has an
+                    associated absolute path, that uniquely identifies the file in the hierarchical
+                    file system of the ICC. The path is constructed from file identifiers and/or file
+                    names. File identifier are 16 bit hexadecimal value prefixed by a ':'. File names
+                    are hexadecimal strings prefixed with '#'. They usually contain the Application
+                    Identifier (AID) assigned to an application dedicated file or an applet.</p>
+                 
+<p>The class provided for two variant of the constructor. The first variant requires
+                    a card object to bind the file to a specific card activated in a reader. This is
+                    quite typically the MF (":3F00"), an application DF or an applet. Subsequent
+                    instantiations of CardFile objects shall use the second variant of the CardFile
+                    constructor, which takes a parent
+                    object as first argument. This second variant accepts relative paths, which are
+                    then evalutated relative to the parent CardFile object.</p>
+	     
+<p>When an application is selected using an AID, then the CardFile object may
+                    have the MF as parent. This will however not construct an invalid path
+                    ":3F00#A00000270101", but allocate a new CardFile objects that inherits
+                    the credentials from the MF. This construct is suitable, if credentials from the
+                    MF level are valid in subordinate DF as well.</p>
+	     
+<p>Short file identifier are supported as 1 byte file identifier. Specify a 
+                    8 bit hexadecimal value rather than the 16 bit hexadecimal file id.
+                    ":3F00:12" for example refers to a file in the MF with short file identifier 18.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">CardFile() constructor</a>
+</li>
+<li>
+<a href="#getFCPBytes">getFCPBytes()</a>
+</li>
+<li>
+<a href="#getFileID">getFileID()</a>
+</li>
+<li>
+<a href="#isDirectory">isDirectory()</a>
+</li>
+<li>
+<a href="#isTransparent">isTransparent()</a>
+</li>
+<li>
+<a href="#isCyclic">isCyclic()</a>
+</li>
+<li>
+<a href="#getLength">getLength()</a>
+</li>
+<li>
+<a href="#getRecordSize">getRecordSize()</a>
+</li>
+<li>
+<a href="#exists">exists()</a>
+</li>
+<li>
+<a href="#readBinary">readBinary()</a>
+</li>
+<li>
+<a href="#readRecord">readRecord()</a>
+</li>
+<li>
+<a href="#updateBinary">updateBinary()</a>
+</li>
+<li>
+<a href="#updateRecord">updateRecord()</a>
+</li>
+<li>
+<a href="#appendRecord">appendRecord()</a>
+</li>
+<li>
+<a href="#performCHV">performCHV()</a>
+</li>
+<li>
+<a href="#setCredential">setCredential()</a>
+</li>
+<li>
+<a href="#createFile">createFile()</a>
+</li>
+<li>
+<a href="#deleteFile">deleteFile()</a>
+</li>
+<li>
+<a href="#activateFile">activateFile()</a>
+</li>
+<li>
+<a href="#deactivateFile">deactivateFile()</a>
+</li>
+<li>
+<a href="#sendApdu">sendApdu()</a>
+</li>
+<li>
+<a href="#sendSecMsgApdu">sendSecMsgApdu()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>READ</td><td>READ access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>UPDATE</td><td>UPDATE access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>APPEND</td><td>APPEND access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>SELECT</td><td>SELECT access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>CREATE</td><td>CREATE access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>DELETE</td><td>DELETE access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>ACTIVATE</td><td>ACTIVATE access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>DEACTIVATE</td><td>DEACTIVATE access mode in setCredential().</td>
+</tr>
+<tr>
+<td>Number</td><td>ALL</td><td>All access modes or all usage qualifier in setCredential()</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">CardFile(Card card, String path)</p>
+<p class="signature">CardFile(CardFile parent, String path)</p>
+<h3>Description</h3>Obtain access to an existing file on an ICC.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Card</code></td><td>card</td><td>Card object to operate on</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>path</td><td>Path to object</td>
+</tr>
+<tr>
+<td><code>CardFile</code></td><td>parent</td><td>Parent CardFile object used to share session</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.OBJECT_NOT_FOUND</td><td>File not found</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+card = new Card(_scsh3.reader);
+
+root = new CardFile(card, ":3F00");
+print(root);
+print(root.getFCPBytes());
+
+// Select EF_DIR with file identifier 2F00
+efdir = new CardFile(root, ":2F00");
+print(efdir);
+print(efdir.getFCPBytes());
+
+// Select EF_DIR with short file identifier 1E (dec. 30)
+efdir = new CardFile(root, ":1E");
+print(efdir);
+print(efdir.getFCPBytes());
+
+df = new CardFile(card, "#D040000017010101");
+print(df);
+print(df.getFCPBytes());
+
+efsvpd = new CardFile(df, ":EF01");
+print(efsvpd);
+print(efsvpd.getFCPBytes());
+
+df = new CardFile(card, ":3F00:3F01");
+print(df);
+print(df.getFCPBytes());
+
+efsvpd = new CardFile(df, ":EF01");
+print(efsvpd);
+print(efsvpd.getFCPBytes());
+
+</pre>
+<h2 id="getFCPBytes">getFCPBytes()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getFCPBytes()</p>
+<h3>Description</h3>
+            
+<p>Get the bytes returned as File Control Parameter (FCP) in response to the select file command APDU.</p>
+            
+<p>This method can be used to ensure, that the object on the ICC is selected.</p>
+            
+<p>This method is not available for files refered to by a short file identifier. It will return
+               the FCP of the directory instead.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Header returned by the ICC</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+efsvpd = new CardFile(card, "#D040000017010101:EF01");
+
+fcp = efsvpd.getFCPBytes();
+print(fcp.toString(HEX));
+assert(fcp);
+
+</pre>
+<h2 id="getFileID">getFileID()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getFileID()</p>
+<h3>Description</h3>
+            
+<p>Return the file identifier as indicated in the file control parameter (FCP)</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>File identifier</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+ef = new CardFile(card, ":3F00:2F00");
+
+fid = ef.getFileID();
+assert(typeof(fid) == "number");
+assert(fid == 0x2F00);
+
+</pre>
+<h2 id="isDirectory">isDirectory()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean isDirectory()</p>
+<h3>Description</h3>
+            
+<p>Use file control parameter to determine if the file is a dedicated file</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if file is dedicated file</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+df = new CardFile(card, ":3F00");
+assert(df.isDirectory());
+ef = new CardFile(df, ":2F00");
+assert(!ef.isDirectory());
+
+</pre>
+<h2 id="isTransparent">isTransparent()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean isTransparent()</p>
+<h3>Description</h3>
+            
+<p>Use file control parameter to determine if the file is a transparent elementary file</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if file is a transparent elementary file</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+ef = new CardFile(card, "#D040000017010101:EF01");
+assert(ef.isTransparent());
+
+ef = new CardFile(card, ":3F00:2F00");
+assert(!ef.isTransparent());
+
+</pre>
+<h2 id="isCyclic">isCyclic()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean isCyclic()</p>
+<h3>Description</h3>
+            
+<p>Use file control parameter to determine if the file is a cyclic elementary file</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if file is a cyclic linear elementary file</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+ef = new CardFile(card, ":3F00:2F00");
+assert(!ef.isCyclic());
+
+</pre>
+<h2 id="getLength">getLength()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getLength()</p>
+<h3>Description</h3>
+            
+<p>Use file control parameter to determine length of the file</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Length in byte</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+ef = new CardFile(card, "#D040000017010101:EF01");
+len = ef.getLength();
+assert(typeof(len) == "number");
+assert((len == 550) || (len == 12));
+
+ef = new CardFile(card, ":3F00:2F00");
+len = ef.getLength();
+assert((len == 200) || (len == 800));
+
+</pre>
+<h2 id="getRecordSize">getRecordSize()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getRecordSize()</p>
+<h3>Description</h3>
+            
+<p>Use file control parameter to determine maximum size of a record</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Maximum size of record</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+ef = new CardFile(card, ":3F00:2F00");
+assert(typeof(ef.getRecordSize()) == "number");
+assert(ef.getRecordSize() &gt; 0);
+
+</pre>
+<h2 id="exists">exists()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean exists(String file)</p>
+<h3>Description</h3>
+            
+<p>Check if file exists in dedicated file</p>
+            
+<p>This method is not available for files refered to by a short file identifier</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if the file exists</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new CardFile(card, ":3F00");
+assert(root.exists(":2F00"));
+assert(!root.exists(":2F77"));
+
+</pre>
+<h2 id="readBinary">readBinary()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString readBinary()</p>
+<p class="signature">ByteString readBinary(Number offset)</p>
+<p class="signature">ByteString readBinary(Number offset, Number length)</p>
+<h3>Description</h3>Read content of transparent EF<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset at which data should be read. Default is 0</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>length</td><td>Number of bytes to be read. Default is all</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Data read from EF</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>The card service layer reported an error</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>The card terminal layer reported an error</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Using a file identifier
+efsvpd = new CardFile(card, "#D040000017010101:EF01");
+
+svpd = efsvpd.readBinary();
+
+print(svpd);
+
+// Using a short file identifier
+efsvpd = new CardFile(card, "#D040000017010101:01");
+
+svpd = efsvpd.readBinary();
+
+print(svpd);
+
+</pre>
+<h2 id="readRecord">readRecord()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString readRecord(Number record)</p>
+<h3>Description</h3>Read record from linear file<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>record</td><td>Record number</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Record read from linear EF</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>The card service layer reported an error</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>The card terminal layer reported an error</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Using a file identifier
+efdir = new CardFile(card, ":3F00:2F00");
+
+dir = efdir.readRecord(1);
+
+print(dir);
+
+// Using a short file identifier
+efdir = new CardFile(card, ":3F00:1E");
+
+dir = efdir.readRecord(1);
+
+print(dir);
+
+</pre>
+<h2 id="updateBinary">updateBinary()</h2>
+<h3>Prototype</h3>
+<p class="signature">updateBinary(Number offset, ByteString data)</p>
+<h3>Description</h3>
+            
+<p>Write data to transparent file at offset.</p>
+            
+<p>A method writeBinary() is provided for backward compatibility with scripts written before
+               version 3.4. Please refrain from use.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset in transparent elementary file</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Date to be written</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td>Method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>The card service layer reported an error</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>The card terminal layer reported an error</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Using a file identifier
+efsvpb = new CardFile(card, "#D040000017010101:EF03");
+
+efsvpb.updateBinary(0, new ByteString("Hello World", ASCII));
+
+efsvpb = new CardFile(card, "#D040000017010101:03");
+
+efsvpb.updateBinary(0, new ByteString("Hello World", ASCII));
+
+</pre>
+<h2 id="updateRecord">updateRecord()</h2>
+<h3>Prototype</h3>
+<p class="signature">updateRecord(Number record, ByteString data)</p>
+<h3>Description</h3>
+            
+<p>Write record to linear file.</p>
+            
+<p>A method writeRecord() is provided for backward compatibility with scripts written before
+               version 3.4. Please refrain from use.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>record</td><td>Record number starting at 1</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Date to be written</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td>Method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>The card service layer reported an error</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>The card terminal layer reported an error</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Using a file identifier
+efdir = new CardFile(card, ":3F00:2F00");
+efdir.updateRecord(2, 
+  new ByteString("611C4F08D040000017001001500A53565369676E61747572530454312E30", HEX));
+
+</pre>
+<h2 id="appendRecord">appendRecord()</h2>
+<h3>Prototype</h3>
+<p class="signature">appendRecord(ByteString data)</p>
+<h3>Description</h3>Append a record with data to linear file.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Date to be written to appended record</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td>Method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>The card service layer reported an error</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>The card terminal layer reported an error</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Using a file identifier
+efdir = new CardFile(card, ":3F00:2F00");
+efdir.appendRecord(
+  new ByteString("611C4F08D040000017001001500A53565369676E61747572530454312E30", HEX));
+
+</pre>
+<h2 id="performCHV">performCHV()</h2>
+<h3>Prototype</h3>
+<p class="signature">performCHV(Boolean global, Number reference)</p>
+<p class="signature">performCHV(Boolean global, Number reference, ByteString value)</p>
+<h3>Description</h3>Perform cardholder verification.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>global</td><td>True, if global reference data is to be used. False, if reference data
+                                               resides in the directory of the CardFile object.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>reference</td><td>Reference to data to be used for CHV.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Cardholder verification value (e.g. PIN or PASSWORD)</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if cardholder verification is successful.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DEVICE_ERROR</td><td>An card terminal error occured or the CHV was aborted</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Allocate a cardfile object
+var root = new CardFile(card, ":3F00");
+
+// Perform cardholder verification (e.g. PIN entry) for global reference data 1
+root.performCHV(true, 1);
+
+// Perform cardholder verification procedure using given data for global reference data 1
+root.performCHV(true, 1, new ByteString("241122FFFFFFFFFF", HEX));
+
+// Perform cardholder verification (e.g. PIN entry) for local reference data 1 (Signature-PIN)
+var dfssig = new CardFile(card, "#D040000017001201");
+dfssig.performCHV(false, 1);
+
+</pre>
+<h2 id="setCredential">setCredential()</h2>
+<h3>Prototype</h3>
+<p class="signature">setCredential(Number accessMode, Number usageQualifier, Object credential)</p>
+<h3>Description</h3>
+            
+<p>Provide an object that contains the credential required to access the file in the
+               specified mode.</p>
+            
+<p>Currently only a secure channel credential can be supplied. A secure channel credential
+               is a JavaScript object that supplies a wrap() and optionally an unwrap() method. The
+               wrap() method is called to transform the command-APDU, the unwrap() method is called to
+               transform the response-APDU. The transformation is applied, if the file access operation
+               (e.g. readBinary()) matches the access mode.</p>
+            
+<p>The access mode can be defined by or'ing the constants CardFile.READ, CardFile.UPDATE or
+               CardFile.APPEND. Use CardFile.ALL as a combination of the above.</p>
+	
+<p>The usage qualifier determins, which part of the command and response APDU are to be
+               protected and how. Any of the following four options can be combined: MAC protected command APDU (CPRO), encrypted 
+               command APDU (CENC), MAC protected response APDU (RPRO) and encrypted response APDU (RENC).</p>
+            
+<p>The usage qualifier controls the transformation of command and reponse APDU. It is passed
+               to the wrap() and unwrap() method as the second parameter.</p>
+            
+<p>The usage qualifier can be defined by or'ing the constants Card.CPRO, Card.CENC, Card.RPRO or
+               Card.RENC. Use Card.ALL as a combination of the above.</p>
+            
+<p>Usage qualifier are stored per access mode. Use multiple calls to setCredential(), if different
+               access modes require different usage qualifier.</p>
+            
+<p>Subsequent calls to this method will overwrite the previous credential for an access mode.</p>
+            
+<p>If the CardFile object was created as the child of a parent DF (the second constructor
+               option), then all credentials are stored with the top-most parent CardFile in the
+               hierarchy. Credentials are stored based on the file's path on the card, so subsequent
+               CardFile objects with the same file identifier will inherit a once defined credential.
+               If this is not desired, then the CardFile object must be created without a parent
+               dependency.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>accessMode</td><td>Bitwise or'ing of CardFile.READ, CardFile.UPDATE or CardFile.APPEND to
+               specify the access mode for which this credential is applicable.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>usageQualifier</td><td>Bitwise or'ing of Card.CPRO, Card.CENC,
+               Card.RPRO or Card.RENC. Card.ALL is a combination of all.</td>
+</tr>
+<tr>
+<td><code>Object</code></td><td>credential</td><td>Object to be used as credential.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td>Method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+//
+// Define SecureChannelCredential class constructor
+//
+function SecureChannelCredential() {
+}
+
+//
+// Wrap command-APDU with secure messaging
+//
+SecureChannelCredential.prototype.wrap = function(apduToWrap, usageQualifier) {
+	print("APDU to wrap with usageQualifier " + usageQualifier + " :");
+	print(apduToWrap);
+	
+	// Put secure messaging transformation here
+	
+	return(apduToWrap);
+}
+
+
+//
+// Unwrap response-APDU with secure messaging
+//
+SecureChannelCredential.prototype.unwrap = function(apduToUnwrap, usageQualifier) {
+	print("APDU to unwrap with usageQualifier " + usageQualifier + " :");
+	print(apduToUnwrap);
+	
+	// Put secure messaging transformation here
+	
+	return(apduToUnwrap);
+}
+
+
+// Allocate a secure channel credential
+var sc = new SecureChannelCredential();
+
+// Allocate a cardfile object
+var efsvpd = new CardFile(card, "#D040000017010101:EF01");
+efsvpd.setCredential(CardFile.READ, Card.ALL, sc);
+svpd = efsvpd.readBinary();
+
+
+</pre>
+<h2 id="createFile">createFile()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void createFile(ByteString fcp)</p>
+<p class="signature">Void createFile(ByteString fcp, Number fileDescriptorByte)</p>
+<h3>Description</h3>
+            
+<p>Create a new file object on the card subordinate to the dedicated file for
+               which this method is called.</p>
+	
+<p>The data passed in the method invocation must match the data supplied to the
+               card operating system in the CREATE FILE APDU.</p>
+            
+<p>The optional parameter fileDescriptorByte can be used to set P1 of the
+               command APDU to a specific value as defined in ISO 7816-9.</p>
+	
+<p>The command APDU will be send using secure messaging, if a credential
+               is set for the object that has the access mode CardFile.CREATE defined.</p>
+    
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>fcp</td><td>File control parameter defining the properties of the new card object. Format and encoding depends on the card operation system.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>fileDescriptorByte</td><td>File descriptor byte passed as P1 in the command APDU. 0 if missing.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>A card service error occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DEVICE_ERROR</td><td>A card terminal error occured</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Create an EF_DIR on a Starcos 3.1 card
+var fcp = new ByteString("621A8205044100500F83022F00850203208801F08A0105A1038B0102", HEX);
+
+var mf = new CardFile(card, ":3F00");
+mf.createFile(fcp);
+
+</pre>
+<h2 id="deleteFile">deleteFile()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void deleteFile()</p>
+<p class="signature">Void deleteFile(String fileIdentifier)</p>
+<p class="signature">Void deleteFile(String fileIdentifier, boolean isDF)</p>
+<h3>Description</h3>
+            
+<p>Delete a file object from the card.</p>
+            
+<p>If this method is called without parameters, then the card object represented
+               by the CardFile object is deleted (DELETE SELF).</p>
+	
+<p>If this method is called with a fileIdentifier argument, then a file objects
+               within the dedicated file represented by the CardFile object is deleted.</p>
+	
+<p>By default, the method assumes that the subordinate file is a EF. This can
+               be overwritten by setting the isDF argument to true.</p>
+	
+<p>The command APDU will be send using secure messaging, if a credential
+               is set for the object that has the access mode CardFile.DELETE defined.</p>
+    
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>fileIdentifier</td><td>File identifier (FID or AID).</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>isDF</td><td>Indicator, that the file to be deleted is a DF. Default is false.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The fileIdentifier argument must be a single id, not a path.</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>A card service error occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DEVICE_ERROR</td><td>An card terminal error occured or the CHV was aborted</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Delete EF_DIR in MF
+var mf = new CardFile(card, ":3F00");
+mf.deleteFile(":2F00");
+
+// Delete DF using DELETE SELF method
+var df = new CardFile(card, "#A0000000041234");
+df.deleteFile();
+
+// Delete DF from MF
+mf.deleteFile(":DF01", true);
+
+</pre>
+<h2 id="activateFile">activateFile()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void activateFile()</p>
+<h3>Description</h3>
+            
+<p>Activate the file object on the card represented by this CardFile object
+               using the ACTIVATE FILE command APDU defined by ISO 7816-9.</p>
+	
+<p>The command APDU will be send using secure messaging, if a credential
+               is set for the object that has the access mode CardFile.ACTIVATE defined.</p>
+    
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>A card service error occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DEVICE_ERROR</td><td>An card terminal error occured or the CHV was aborted</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Activate DF
+var df = new CardFile(card, "#A0000000041234");
+df.activate();
+
+</pre>
+<h2 id="deactivateFile">deactivateFile()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void deactivateFile()</p>
+<h3>Description</h3>
+            
+<p>De-activate the file object on the card represented by this CardFile object
+               using the DEACTIVATE FILE command APDU defined by ISO 7816-9.</p>
+	
+<p>The command APDU will be send using secure messaging, if a credential
+               is set for the object that has the access mode CardFile.DEACTIVATE defined.</p>
+    
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>An error occured while talking to the ICC</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_USAGE</td><td>A card service error occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DEVICE_ERROR</td><td>An card terminal error occured or the CHV was aborted</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// De-activate DF
+var df = new CardFile(card, "#A0000000041234");
+df.deactivate();
+
+</pre>
+<h2 id="sendApdu">sendApdu()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, Number[] sw)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, ByteString data)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, ByteString data, Number[] sw)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, Number le)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, Number le, Number[] sw)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, ByteString data, Number le)</p>
+<p class="signature">ByteString sendApdu(Number cla, Number ins, Number p1, Number p2, ByteString data, Number le, Number[] sw)</p>
+<h3>Description</h3>
+<p>Transmit a Command-APDU to the ICC and receive the Response-APDU.</p>
+                     
+<p>This methods works similar to Card.sendApdu(), but also ensures, that the object for which 
+                        the method is called is selected before the APDU is transmitted.</p>
+                     
+<p>The method updates the fields SW, SW1, SW2 and SWMSG and response with the values received from the ICC.</p>
+                     
+<p>An array of valid return codes can be passed as argument sw. If the SW1/SW2 from the ICC does
+                        not match with one of the entries in the array, then an GPError.CARD_COMM_ERROR exception is raised.</p>
+                     
+<p>The method supports ISO7816-4 extended format. This is automatically used, if the length of the data
+                        argument exceeds 255 or if the argument le exceeds 256.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>cla</td><td>The CLA byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>ins</td><td>The INS byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p1</td><td>The P1 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p2</td><td>The P2 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>The data bytes to be send in the Command-APDU for case 3 or case 4 commands</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>le</td><td>The number of bytes expected in the response. 256 is encoded as '00' in short format.
+                                          65536 is encoded as '0000' in extended format.</td>
+</tr>
+<tr>
+<td><code>Number[]</code></td><td>sw</td><td>Array of acceptable SW1/SW2 return codes</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Response APDU received from ICC</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call or SW array contain a type other than Number</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>A communication error with the ICC occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_INVALID_SW</td><td>The status word return by the ICC does not match one of the expected result</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data for the command APDU exceeds 65536</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>The value given for Le is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See Card.sendApdu() for an example
+
+</pre>
+<h2 id="sendSecMsgApdu">sendSecMsgApdu()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, Number[] sw)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, ByteString data)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, ByteString data, Number[] sw)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, Number le)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, Number le, Number[] sw)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, ByteString data, Number le)</p>
+<p class="signature">ByteString sendSecMsgApdu(Number usageQualifier, Number cla, Number ins, Number p1, Number p2, ByteString data, Number le, Number[] sw)</p>
+<h3>Description</h3>
+<p>Transmit a Command-APDU to the ICC and receive the Response-APDU.</p>
+                     
+<p>This methods works similar to Card.sendSecMsgApdu() but uses credentials
+                        set for the object for which this method is called.</p>
+		 
+<p>This method also ensures, that the object for which the method is called
+                        is selected before the APDU is transmitted.</p>
+                     
+<p>If a secure channel is set with the setCredential() method, then this credential
+                        will be used to tranform the command and response APDU accordingly. During this
+                        transformation process, the usageQualifier is passed to the wrapping / unwrapping
+                        methods. APDUs send with this method will be transformed using the credential
+                        set for the CardFile.SELECT access mode.</p>
+                     
+<p>The method updates the fields SW, SW1, SW2 and SWMSG and response with the values received from the ICC.</p>
+                     
+<p>An array of valid return codes can be passed as argument sw. If the SW1/SW2 from the ICC does
+                        not match with one of the entries in the array, then an GPError.CARD_COMM_ERROR exception is raised.</p>
+                     
+<p>The method supports ISO7816-4 extended format. This is automatically used, if the length of the data
+                        argument exceeds 255 or if the argument le exceeds 256.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>usageQualifier</td><td>Usage qualifier for secure messaging transformation. Can be a combination of
+                Card.CPRO, Card.CENC, Card.RPRO, Card.RENC and Card.ALL.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>cla</td><td>The CLA byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>ins</td><td>The INS byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p1</td><td>The P1 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p2</td><td>The P2 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>The data bytes to be send in the Command-APDU for case 3 or case 4 commands</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>le</td><td>The number of bytes expected in the response. 256 is encoded as '00' in short format.
+                                          65536 is encoded as '0000' in extended format.</td>
+</tr>
+<tr>
+<td><code>Number[]</code></td><td>sw</td><td>Array of acceptable SW1/SW2 return codes</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Response APDU received from ICC</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call or SW array contain a type other than Number</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>A communication error with the ICC occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_INVALID_SW</td><td>The status word return by the ICC does not match one of the expected result</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data for the command APDU exceeds 65536</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>The value given for Le is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See Card.sendApdu() for an example
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

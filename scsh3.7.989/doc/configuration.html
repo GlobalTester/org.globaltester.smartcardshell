@@ -1,0 +1,139 @@
+<!-- #BeginTemplate "template.dwt" -->
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h2>Shell Configuration</h2>
+<p>All configuration of the shell is done from within the scripting environment. The top level
+   scripting object is instantiated when the shell is started. This so called global object contains
+   all global variables and function definitions. When executing scripts, then these run in the context
+   of the global object.</p>
+<p>During startup, the Smart Card Shell will try to find and execute the CONFIG.JS file, unless the user
+   specifies an alternative script for configuration. The CONFIG.JS file provides for the basic shell configuration.
+   It defines the required scripting classes, global definitions and shortcut functions. After the CONFIG.JS
+   script is completed, the shell is ready configured.</p>
+<p>In the default CONFIG.JS file, a global object under the name "_scsh3" is created. This object
+   contains <a href="settings.html">persistent configuration informations</a> that can be changed from
+   within the scripting environment.</p>
+
+<h2>Card Terminal Configuration</h2>
+<p>The Smart Card Shell uses the OpenCard Framework (OCF) to access card terminals and
+   smart cards. OCF has it's own configuration mechanism using a property file named opencard.properties.</p>
+<p>When OCF is started by the Smart Card Shell, then OCF looks for configuration information in
+   three different locations:</p>
+<ul>
+<li>[java.home]/lib/opencard.properties</li>
+<li>[user.home]/.opencard.properties</li>
+<li>[user.dir]/opencard.properties</li>
+<li>[user.dir]/.opencard.properties</li>
+</ul>
+<p>[java.home] is the directory where the Java runtime is installed. The configuration file
+   there may be used for system and application wide configurations.</p>
+<p>[user.home] is the user's home directory on the system. For Windows this is the
+   "Document and Settings"/"User Name" directory.</p>
+<p>[user.dir] is the current directory when the application is started.</p>
+<p>OCF will read configuration information in the order defined above. The Smart Card Shell
+   installation places a default opencard.properties file in the directory where the executable
+   is installed. This default configuration enables all PC/SC card terminals and configures the
+   necessary card service factories.</p>
+<p>A user specific configuration can be added by creating a file named .opencard.properties in the
+   home directory of the user.</p>
+<h3>Adding CT-API Card Terminals</h3>
+<p>The Smart Card Shell comes bundled with the CardContact JNI2CTAPI and CTAPI4OCF drivers. These allow
+   to access CT-API card terminals from OCF. JNI2CTAPI is a Java Native Interface to the CT-API dll or shared
+   object provided by the card terminal manufacturer. CTAPI4OCF implements an OCF card terminal driver that
+   maps OCF methods to CT-BCS card terminal commands.</p>
+<p>A CT-API card terminal is added using the</p>
+<pre>    de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory</pre>
+<p>card terminal factory. This factory can be configured with four parameter separated by a '|'</p>
+<pre>    |name|type|device|libname</pre>
+<p>The parameter name is a user selected friendly name for the card terminal. The parameter type must contain
+   'CTAPI'. The port number to be used in CT_INIT() is defined by the device field.</p>
+<p>The name of the DLL or shared object is defined in the libname field. The name of the DLL or shared
+   object must be given without extension or leading 'lib'.</p>
+<p>The following example shows the configuration for 3 different CT-API card terminals:</p>
+<pre>
+# ORGA ECO 5000 with CardContact ECO5000 driver
+OpenCard.terminals = \
+ de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory|ECO5000|CTAPI|1|cteco5000
+
+# ORGA MCT 5000
+OpenCard.terminals = \
+ de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory|MCT|CTAPI|1|ctorg32
+
+# Reiner SCT CT-API Driver
+OpenCard.terminals = \
+ de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory|REINERSCT|CTAPI|1|ctrsct32
+
+# G+D ICT800 STD
+OpenCard.terminals = \
+ de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory|ICT800|CTAPI|1|ctapiw32
+</pre>
+<p>If more than one CT-API card reader shall be added, then the factory and configuration must be
+   given multiple times on the same line, separated by blanks. Entries can span multiple lines, if they end
+   with a backslash as shown above.</p>
+<!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->

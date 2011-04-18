@@ -1,0 +1,1037 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>TLVList - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>TLVList - Reference Documentation</h1>
+<p>Implementation of a mutable TLV object list.</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">TLVList() constructor</a>
+</li>
+<li>
+<a href="#index">index()</a>
+</li>
+<li>
+<a href="#append">append()</a>
+</li>
+<li>
+<a href="#appendValue">appendValue()</a>
+</li>
+<li>
+<a href="#appendValueIndex">appendValueIndex()</a>
+</li>
+<li>
+<a href="#deleteByIndex">deleteByIndex()</a>
+</li>
+<li>
+<a href="#deleteByTag">deleteByTag()</a>
+</li>
+<li>
+<a href="#findIndex">findIndex()</a>
+</li>
+<li>
+<a href="#find">find()</a>
+</li>
+<li>
+<a href="#updateValue">updateValue()</a>
+</li>
+<li>
+<a href="#updateValueIndex">updateValueIndex()</a>
+</li>
+<li>
+<a href="#toByteString">toByteString()</a>
+</li>
+</ul>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>encodingMode</td><td>Encoding mode used for TLV object. One of TLV.EMV, TLV.DGI or TLV.L16</td>
+</tr>
+<tr>
+<td>Number</td><td>length</td><td>The number of TLV objects in the list</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">TLVList(ByteString tlvStream, Number encoding)</p>
+<h3>Description</h3>
+            
+<p>Create a TLV list object initialized with the tlv objects encoded within the given ByteString object.</p>
+            
+<p>For EMV encoding the tag field has a variable length of up to 4 bytes. 
+               The length field has a variable length of up to 4 byte. Both fields are
+               encoded as specified as per ASN.1 Basic Encoding Rule (ISO 8825).</p>
+            
+<p>For DGI encoding the tag field has a fixed length of two bytes.
+               The length field contains one byte for values between 0 and 254. The length
+               is encoded in three bytes for values between 255 and 65535, with the first byte
+               set to 'FF'.</p>
+            
+<p>For L16 encoding the tag field has a fixed length of two bytes.
+               The length field is always two byte long and is encoded in big endian / 
+               little endian format.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>tlvStream</td><td>ByteString containing the encoded tlv objects</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>encoding</td><td>Encoding for tag and length field of the tlv objects in the ByteString. Must be one of TLV.EMV, TLV.DGI or TLV.L16.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ENCODING</td><td>The argument encoding is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+// EMV
+data = new ByteString("61050102030405620100630A00010203040506070809", HEX);
+
+// Create a TLV list
+list = new TLVList(data, TLV.EMV);
+assert(list.length == 3);
+
+// Create a TLV list with "illegal" ASN.1 DER encoding
+list = new TLVList(new ByteString("9f030100", HEX), TLV.EMV);
+assert(list.length == 1);
+
+// DGI
+data = new ByteString("7F1F05010203040500630A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.DGI);
+assert(list.length == 2);
+
+// L16
+data = new ByteString("7F1F000501020304050063000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+</pre>
+<h2 id="index">index()</h2>
+<h3>Prototype</h3>
+<p class="signature">TLV index(Number index)</p>
+<h3>Description</h3>Returns a TLV object which represents the TLV stored within the TLVList at the given index. The index is zero based.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the TLV object</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>TLV</code></td><td>TLV object at the specified index</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+// EMV
+data = new ByteString("610501020304056201008E0A00010203040506070809", HEX);
+
+// Create a TLV list
+list = new TLVList(data, TLV.EMV);
+assert(list.length == 3);
+
+tag_61 = list.index(0);
+assert(tag_61 != null);
+assert(tag_61.getTag() == 0x61);
+
+tag_62 = list.index(1);
+assert(tag_62 != null);
+assert(tag_62.getTag() == 0x62);
+
+tag_8e = list.index(2);
+assert(tag_8e != null);
+assert(tag_8e.getTag() == 0x8E);
+
+// Invalid index
+try {
+	tag = list.index(10);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+// Check various EMV length encodings
+
+data = new ByteString("6181050102030405", HEX);
+list = new TLVList(data, TLV.EMV);
+tlv = list.index(0);
+assert(tlv.getTag() == 0x61);
+assert(tlv.getValue().length == 5);
+assert(tlv.getValue().toString(HEX) == "0102030405");
+
+data = new ByteString("618200050102030405", HEX);
+list = new TLVList(data, TLV.EMV);
+tlv = list.index(0);
+assert(tlv.getTag() == 0x61);
+assert(tlv.getValue().length == 5);
+assert(tlv.getValue().toString(HEX) == "0102030405");
+
+</pre>
+<h2 id="append">append()</h2>
+<h3>Prototype</h3>
+<p class="signature">append(ByteString tlvStream)</p>
+<p class="signature">append(Number tag, ByteString value)</p>
+<p class="signature">append(TLV tlv)</p>
+<h3>Description</h3>Appends the specified TLV data to the end of the existing list of TLV objects.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>tlvStream</td><td>TLV as a single stream of bytes in a ByteString.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>Tag to be used to be added to the list.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value to be used to be added to the List. </td>
+</tr>
+<tr>
+<td><code>TLV</code></td><td>tlv</td><td>TLV as a TLV object.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.TAG_ALREADY_EXISTS</td><td>The tag of the specified TLV object already exists within the TLV list</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F00050102030405", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 1);
+
+// append(Number, Value)
+list.append(0x63, new ByteString("00010203040506070809", HEX));
+assert(list.length == 2);
+
+// append(ByteString) 
+list.append(new ByteString("0061000A00010203040506070809", HEX));
+assert(list.length == 3);
+
+// append(TLV)
+t = new TLV(0x3221, new ByteString("123456", HEX), TLV.L16);
+list.append(t);
+assert(list.length == 4);
+
+// try to append an invalid type
+try {
+ 	list.append("HALLO");
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+// try to append a tag with an already existing tag number
+try {
+	t = new TLV(0x3221, new ByteString("123456", HEX), TLV.L16);
+	list.append(t);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+</pre>
+<h2 id="appendValue">appendValue()</h2>
+<h3>Prototype</h3>
+<p class="signature">appendValue(Number tag, ByteString value)</p>
+<h3>Description</h3>Appends the data to the existing data for the specified tag.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>Tag to be used to be added to the list.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value to be used to be added to the List. </td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F00050102030405", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 1);
+
+// appendValue(Number, Value)
+list.appendValue(0x7F1F, new ByteString("06070809", HEX));
+
+tlv = list.index(0);
+assert(tlv.getValue().toString(HEX) == "010203040506070809");
+
+</pre>
+<h2 id="appendValueIndex">appendValueIndex()</h2>
+<h3>Prototype</h3>
+<p class="signature">appendValueIndex(Number index, ByteString value)</p>
+<h3>Description</h3>Appends the data to the existing data for the specified zero-based index into the TLVStream.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Tag to be used to be added to the list.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value to be used to be added to the List. </td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F00050102030405", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 1);
+
+// appendValueIndex(Number, Value)
+list.appendValueIndex(0, new ByteString("06070809", HEX));
+
+tlv = list.index(0);
+assert(tlv.getValue().toString(HEX) == "010203040506070809");
+
+</pre>
+<h2 id="deleteByIndex">deleteByIndex()</h2>
+<h3>Prototype</h3>
+<p class="signature">deleteByIndex(Number index)</p>
+<h3>Description</h3>Delete the specified TLV from the list using a zero based index.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Zero based index number that represents the Tag that will be deleted from the list.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F000501020304050061000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+// deleteByIndex(Number)
+list.deleteByIndex(0);
+assert(list.length == 1);
+
+tlv = list.index(0);
+assert(tlv.getTLV().toString(HEX) == "0061000A00010203040506070809");
+
+</pre>
+<h2 id="deleteByTag">deleteByTag()</h2>
+<h3>Prototype</h3>
+<p class="signature">deleteByTag(Number tag)</p>
+<h3>Description</h3>Delete the specified TLV from the list by tag value.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>Number of Tag that will be deleted from the list.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.TAG_NOT_FOUND</td><td>The specified tag could not be found</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F000501020304050061000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+// deleteByTag(Number)
+list.deleteByTag(0x7F1F);
+assert(list.length == 1);
+
+tlv = list.index(0);
+assert(tlv.getTLV().toString(HEX) == "0061000A00010203040506070809");
+
+</pre>
+<h2 id="findIndex">findIndex()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number findIndex(Number tag)</p>
+<h3>Description</h3>Searches the list for a specified tag, and returns a zero based index for that TLV.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>The Tag that will be searched for within the list.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Index that indicates the location of the TLV within TLV list or -1 if not found.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F000501020304050061000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+index_tag_61 = list.findIndex(0x61);
+assert(typeof(index_tag_61) == "number");
+assert(index_tag_61 == 1);
+
+index_tag_63 = list.findIndex(0x63);
+assert(index_tag_63 == -1);
+
+</pre>
+<h2 id="find">find()</h2>
+<h3>Prototype</h3>
+<p class="signature">TLV find(Number tag)</p>
+<h3>Description</h3>Searches the list for a specified tag, and returns a TLV object.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>The Tag that will be searched for within the list.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>TLV</code></td><td>A TLV object which contains the data stored for that Tag or null if the Tag was not found.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F000501020304050061000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+tag_61 = list.find(0x61);
+assert(tag_61 != null);
+
+tag_63 = list.find(0x63);
+assert(tag_63 == null);
+
+</pre>
+<h2 id="updateValue">updateValue()</h2>
+<h3>Prototype</h3>
+<p class="signature">updateValue(Number tag, ByteString value)</p>
+<h3>Description</h3>Updates the data for the specified tag.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>Tag to be used to be added to the list.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Data to replace existing value of TLV specified by tag with. </td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F00050102030405", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 1);
+
+// appendValue(Number, Value)
+list.updateValue(0x7F1F, new ByteString("06070809", HEX));
+
+tlv = list.index(0);
+assert(tlv.getValue().toString(HEX) == "06070809");
+
+</pre>
+<h2 id="updateValueIndex">updateValueIndex()</h2>
+<h3>Prototype</h3>
+<p class="signature">updateValueIndex(Number index, ByteString value)</p>
+<h3>Description</h3>Updates the data for the specified zero-based index into the TLVStream.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Tag to be used to be added to the list.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value to be used to be added to the List. </td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index is not valid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F00050102030405", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 1);
+
+// appendValueIndex(Number, Value)
+list.updateValueIndex(0, new ByteString("06070809", HEX));
+
+tlv = list.index(0);
+assert(tlv.getValue().toString(HEX) == "06070809");
+
+</pre>
+<h2 id="toByteString">toByteString()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString toByteString()</p>
+<h3>Description</h3>Returns the contents of the entire list, including T, L and V values in a TLV format as a ByteString object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The concatenated T, L and V values in a TLV format.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// L16 encoded data
+data = new ByteString("7F1F000501020304050061000A00010203040506070809", HEX);
+
+list = new TLVList(data, TLV.L16);
+assert(list.length == 2);
+
+t = list.toByteString();
+assert(t != null);
+
+assert(t.toString() == data.toString());
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

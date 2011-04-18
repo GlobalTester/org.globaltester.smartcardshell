@@ -1,0 +1,529 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="eccutils.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>eccutils.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'eccutils.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="ECCUtils.html">ECCUtils</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/*
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2006 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  Utility class for Elliptic Curve Cryptography
+ */</span>
+
+ 
+<span class="reserved">function</span> ECCUtils() {
+}
+
+
+
+<span class="comment">/**
+ * Wrap a ECDSA signature in the format r || s into a TLV encoding as defined by RFC 3279
+ *
+ * <span class="attrib">@param</span> signature ByteString containing the concatenation of r and s as unsigned integer values
+ * <span class="attrib">@returns</span> ASN.1 SEQUENCE objects containing two signed integer r and s
+ */</span>
+ECCUtils.wrapSignature = <span class="reserved">function</span>(signature) {
+	var len = signature.length / 2;
+	
+	<span class="comment">// r and s are big integer. We pad a zero to prevent interpretation as signed integer</span>
+	var r = new ByteString(<span class="literal">"00"</span>, HEX);
+	r = r.concat(signature.bytes(0, len));
+
+	var s = new ByteString(<span class="literal">"00"</span>, HEX);
+	s = s.concat(signature.bytes(len, len));
+
+	var t = new ASN1(ASN1.SEQUENCE);
+	t.add(new ASN1(ASN1.INTEGER, r));
+	t.add(new ASN1(ASN1.INTEGER, s));
+
+	<span class="reserved">return</span> t.getBytes();
+}
+
+
+
+<span class="comment">/**
+ * Integer to octet string conversion
+ */</span>
+ECCUtils.I2O = <span class="reserved">function</span>(value, length) {
+	<span class="reserved">if</span> (value.length &gt; length) {
+		value = value.right(length);
+	}
+	<span class="reserved">while</span> (value.length &lt; length) {
+		value = ECCUtils.PAD.left((length - value.length - 1 &amp; 15) + 1).concat(value);
+	}
+	<span class="reserved">return</span> value;
+}
+ECCUtils.PAD = new ByteString(<span class="literal">"00000000000000000000000000000000"</span>, HEX);
+
+
+
+<span class="comment">/**
+ * Unwrap a ECDSA signature from the TLV encoding according to RFC3279 into the concatenation
+ * of the unsigned integer r and s
+ *
+ * <span class="attrib">@param</span> signature TLV encoded signature
+ * <span class="attrib">@returns</span> concatenation of r and s
+ */</span>
+ECCUtils.unwrapSignature = <span class="reserved">function</span>(signature, keylen) {
+	var t = new ASN1(signature);
+	<span class="reserved">if</span> (typeof(keylen) != <span class="literal">"undefined"</span>) {
+		var r = ECCUtils.I2O(t.get(0).value, keylen);
+		var s = ECCUtils.I2O(t.get(1).value, keylen);
+	} <span class="reserved">else</span> {
+		var r = t.get(0).value;
+		<span class="reserved">if</span> (r.byteAt(0) == 00)
+			r = r.bytes(1);
+
+		var s = t.get(1).value;
+		<span class="reserved">if</span> (s.byteAt(0) == 00)
+			s = s.bytes(1);
+	}
+	
+	<span class="reserved">return</span> r.concat(s);
+}
+
+
+
+<span class="comment">/**
+ * Decode domain parameter from ECParameters
+ *
+ * &lt;pre&gt;
+ *	ECParameters ::= SEQUENCE {
+ *		version INTEGER{ecpVer1(1)} (ecpVer1),
+ *		fieldID FieldID,
+ *		curve Curve,
+ *		base ECPoint,
+ *		order INTEGER,
+ *		cofactor INTEGER OPTIONAL,
+ *		...
+ *	}
+ *
+ *	Curve ::= SEQUENCE {
+ *		a FieldElement,
+ *		b FieldElement,
+ *		seed BIT STRING OPTIONAL
+ *	}
+ *
+ *	FieldElement ::= OCTET STRING
+ *	ECPoint ::= OCTET STRING
+ *	FieldID ::= SEQUENCE {
+ *		fieldType OBJECT IDENTIFIER,
+ *		parameters ANY DEFINED BY fieldType
+ *	}
+ *	prime-field OBJECT IDENTIFIER ::= { ansi-x9-62 fieldType(1) 1 }
+ *	Prime-p ::= INTEGER 
+ * &lt;/pre&gt;
+ */</span>
+ECCUtils.decodeECParameters = <span class="reserved">function</span>(tlv) {
+	assert(tlv.tag == ASN1.SEQUENCE);
+	
+	var key = new Key();
+	key.setType(Key.PUBLIC);
+	
+	<span class="comment">// version</span>
+	assert(tlv.get(0).value.toSigned() == 1);
+	
+	<span class="comment">// fieldID</span>
+	assert(tlv.get(1).tag == ASN1.SEQUENCE);
+	assert(tlv.get(1).get(1).tag = ASN1.INTEGER);
+	
+	var prime = tlv.get(1).get(1).value;
+	<span class="reserved">if</span> (prime.byteAt(0) == 0) {		<span class="comment">// Strip leading zero byte</span>
+		prime = prime.bytes(1);
+	}
+	key.setComponent(Key.ECC_P, prime);
+	
+	<span class="comment">// curve</span>
+	assert(tlv.get(2).tag == ASN1.SEQUENCE);
+	assert(tlv.get(2).get(0).tag == ASN1.OCTET_STRING);
+
+	var coeff_A = tlv.get(2).get(0);
+	key.setComponent(Key.ECC_A, coeff_A.value);
+	
+	var coeff_B = tlv.get(2).get(1);
+	key.setComponent(Key.ECC_B, coeff_B.value);
+
+	<span class="comment">// base</span>
+	assert(tlv.get(3).tag == ASN1.OCTET_STRING);
+	var pkbin = tlv.get(3).value;
+	assert(pkbin.byteAt(0) == 4);
+	pkbin = pkbin.bytes(1);
+	
+	key.setComponent(Key.ECC_GX, pkbin.left(pkbin.length &gt;&gt; 1));
+	key.setComponent(Key.ECC_GY, pkbin.right(pkbin.length &gt;&gt; 1));
+	
+	<span class="comment">// order</span>
+	assert(tlv.get(4).tag == ASN1.INTEGER);
+	var groupOrder = tlv.get(4).value;
+	<span class="reserved">if</span> (groupOrder.byteAt(0) == 0) {		<span class="comment">// Strip leading zero byte</span>
+		groupOrder = groupOrder.bytes(1);
+	}
+	key.setComponent(Key.ECC_N, groupOrder);
+	
+	<span class="comment">// cofactor</span>
+	<span class="reserved">if</span> (tlv.elements &gt; 5) {
+		assert(tlv.get(5).tag == ASN1.INTEGER);
+		var cofactor = tlv.get(0).value;
+		<span class="reserved">if</span> (cofactor.byteAt(0) == 0) {		<span class="comment">// Strip leading zero byte</span>
+			cofactor = cofactor.bytes(1);
+		}
+		key.setComponent(Key.ECC_H, cofactor);
+	}
+	
+	<span class="reserved">return</span> key;
+}
+
+
+
+ECCUtils.ECParametersToString = <span class="reserved">function</span>(key) {
+	var str = <span class="literal">"EC Parameter:\n"</span>;
+	
+	str += <span class="literal">"  prime "</span> + key.getComponent(Key.ECC_P) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  curve a "</span> + key.getComponent(Key.ECC_A) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  curve b "</span> + key.getComponent(Key.ECC_B) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  generator x "</span> + key.getComponent(Key.ECC_GX) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  generator y "</span> + key.getComponent(Key.ECC_GY) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  order "</span> + key.getComponent(Key.ECC_N) + <span class="literal">"\n"</span>;
+	str += <span class="literal">"  cofactor "</span> + key.getComponent(Key.ECC_H) + <span class="literal">"\n"</span>;
+	<span class="reserved">return</span> str;
+}
+
+
+
+<span class="comment">// List of object identifier used in Key.setComponent(ECC_CURVE_OID)</span>
+
+<span class="comment">// Fp curves defined by ANSI X6.92</span>
+ECCUtils.prime192v1 = new ByteString(<span class="literal">"1.2.840.10045.3.1.1"</span>, OID);
+ECCUtils.prime192v2 = new ByteString(<span class="literal">"1.2.840.10045.3.1.2"</span>, OID);
+ECCUtils.prime192v3 = new ByteString(<span class="literal">"1.2.840.10045.3.1.3"</span>, OID);
+ECCUtils.prime239v1 = new ByteString(<span class="literal">"1.2.840.10045.3.1.4"</span>, OID);
+ECCUtils.prime239v2 = new ByteString(<span class="literal">"1.2.840.10045.3.1.5"</span>, OID);
+ECCUtils.prime239v3 = new ByteString(<span class="literal">"1.2.840.10045.3.1.6"</span>, OID);
+ECCUtils.prime256v1 = new ByteString(<span class="literal">"1.2.840.10045.3.1.7"</span>, OID);
+
+<span class="comment">// F2m curves defined by ANSI X6.92</span>
+ECCUtils.c2pnb163v1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.1"</span>, OID);
+ECCUtils.c2pnb163v2 = new ByteString(<span class="literal">"1.2.840.10045.3.0.2"</span>, OID);
+ECCUtils.c2pnb163v3 = new ByteString(<span class="literal">"1.2.840.10045.3.0.3"</span>, OID);
+ECCUtils.c2pnb176w1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.4"</span>, OID);
+ECCUtils.c2tnb191v1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.5"</span>, OID);
+ECCUtils.c2tnb191v2 = new ByteString(<span class="literal">"1.2.840.10045.3.0.6"</span>, OID);
+ECCUtils.c2tnb191v3 = new ByteString(<span class="literal">"1.2.840.10045.3.0.7"</span>, OID);
+ECCUtils.c2pnb208w1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.10"</span>, OID);
+ECCUtils.c2tnb239v1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.11"</span>, OID);
+ECCUtils.c2tnb239v2 = new ByteString(<span class="literal">"1.2.840.10045.3.0.12"</span>, OID);
+ECCUtils.c2tnb239v3 = new ByteString(<span class="literal">"1.2.840.10045.3.0.13"</span>, OID);
+ECCUtils.c2pnb272w1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.16"</span>, OID);
+ECCUtils.c2pnb304w1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.17"</span>, OID);
+ECCUtils.c2tnb359v1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.18"</span>, OID);
+ECCUtils.c2pnb368w1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.19"</span>, OID);
+ECCUtils.c2tnb431r1 = new ByteString(<span class="literal">"1.2.840.10045.3.0.20"</span>, OID);
+
+<span class="comment">// Fp curves defined by SECG</span>
+ECCUtils.secp224r1 = new ByteString(<span class="literal">"1.3.132.0.33"</span>, OID);
+ECCUtils.secp256r1 = ECCUtils.prime256v1;
+ECCUtils.secp384r1 = new ByteString(<span class="literal">"1.3.132.0.34"</span>, OID);
+ECCUtils.secp521r1 = new ByteString(<span class="literal">"1.3.132.0.35"</span>, OID);
+ 
+<span class="comment">// F2m curves defined by SECG</span>
+ECCUtils.sect163r2 = new ByteString(<span class="literal">"1.3.132.0.15"</span>, OID);
+ECCUtils.sect233r1 = new ByteString(<span class="literal">"1.3.132.0.27"</span>, OID);
+ECCUtils.sect283r1 = new ByteString(<span class="literal">"1.3.132.0.17"</span>, OID);
+ECCUtils.sect409r1 = new ByteString(<span class="literal">"1.3.132.0.37"</span>, OID);
+ECCUtils.sect571r1 = new ByteString(<span class="literal">"1.3.132.0.39"</span>, OID);
+
+ECCUtils.brainpoolP160r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.1"</span>, OID);
+ECCUtils.brainpoolP160t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.2"</span>, OID);
+ECCUtils.brainpoolP192r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.3"</span>, OID);
+ECCUtils.brainpoolP192t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.4"</span>, OID);
+ECCUtils.brainpoolP224r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.5"</span>, OID);
+ECCUtils.brainpoolP224t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.6"</span>, OID);
+ECCUtils.brainpoolP256r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.7"</span>, OID);
+ECCUtils.brainpoolP256t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.8"</span>, OID);
+ECCUtils.brainpoolP320r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.9"</span>, OID);
+ECCUtils.brainpoolP320t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.10"</span>, OID);
+ECCUtils.brainpoolP384r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.11"</span>, OID);
+ECCUtils.brainpoolP384t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.12"</span>, OID);
+ECCUtils.brainpoolP512r1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.13"</span>, OID);
+ECCUtils.brainpoolP512t1 = new ByteString(<span class="literal">"1.3.36.3.3.2.8.1.1.14"</span>, OID);
+
+<span class="comment">/* Test all curve parameter
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime192v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime192v2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime192v3);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime239v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime239v2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime239v3);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.prime256v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb163v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb163v2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb163v3);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb176w1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb191v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb191v2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb191v3);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb208w1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb239v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb239v2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb239v3);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb272w1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb304w1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb359v1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2pnb368w1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.c2tnb431r1);
+
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.secp224r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.secp256r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.secp384r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.secp521r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.sect163r2);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.sect233r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.sect283r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.sect409r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.sect571r1);
+
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP160r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP160t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP192r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP192t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP224r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP224t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP256r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP256t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP320r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP320t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP384r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP384t1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP512r1);
+var k = new Key();
+k.setComponent(Key.ECC_CURVE_OID, ECCUtils.brainpoolP512t1);
+*/</span></pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Dec  3 18:14:23 2010</div>
+</body>
+</html>

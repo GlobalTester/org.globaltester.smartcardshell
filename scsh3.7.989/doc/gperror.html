@@ -1,0 +1,254 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>GPError - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>GPError - Reference Documentation</h1>
+<p>Exception class thrown by various GP functions</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">GPError() constructor</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>ACCESS_DENIED</td><td>Access to resource denied</td>
+</tr>
+<tr>
+<td>Number</td><td>ARGUMENTS_MISSING</td><td>A required argument is missing from the argument list</td>
+</tr>
+<tr>
+<td>Number</td><td>CARD_COMM_ERROR</td><td>Card communication error</td>
+</tr>
+<tr>
+<td>Number</td><td>CARD_INVALID_SW</td><td>A SW1/SW2 returned by the ICC is not as expected</td>
+</tr>
+<tr>
+<td>Number</td><td>CRYPTO_FAILED</td><td>Cryptographic operation failed</td>
+</tr>
+<tr>
+<td>Number</td><td>DATA_TOO_LARGE</td><td>Data supplied is too large for operation</td>
+</tr>
+<tr>
+<td>Number</td><td>DEVICE_ERROR</td><td>Hardware device reported error</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_ARGUMENTS</td><td>Too many arguments supplied in argument list</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_DATA</td><td>Invalid data supplied as argument</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_ENCODING</td><td>Invalid encoding format used in argument</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_INDEX</td><td>Index is out of bounds</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_KEY</td><td>Invalid key for operation</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_LENGTH</td><td>Length is out of range</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_MECH</td><td>Invalid mechanism specified</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_TAG</td><td>Invalid tag value or format</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_TYPE</td><td>Invalid type given as argument</td>
+</tr>
+<tr>
+<td>Number</td><td>INVALID_USAGE</td><td>Invalid usage</td>
+</tr>
+<tr>
+<td>Number</td><td>KEY_NOT_FOUND</td><td>Key not found</td>
+</tr>
+<tr>
+<td>Number</td><td>OBJECTCREATION- FAILED</td><td>Object could not be created</td>
+</tr>
+<tr>
+<td>Number</td><td>SECURE_CHANNEL_ WRONG_STATE</td><td>Secure channel is in wrong state for desired operation</td>
+</tr>
+<tr>
+<td>Number</td><td>TAG_ALREADY_EXISTS</td><td>Tag does already exist in TLVList that must contain unique tags</td>
+</tr>
+<tr>
+<td>Number</td><td>TAG_NOT_FOUND</td><td>Tag not found</td>
+</tr>
+<tr>
+<td>Number</td><td>OBJECT_NOT_FOUND</td><td>Object could not be found</td>
+</tr>
+<tr>
+<td>Number</td><td>UNDEFINED</td><td>Undefined error code</td>
+</tr>
+<tr>
+<td>Number</td><td>UNSUPPORTED</td><td>Unsupported operation</td>
+</tr>
+<tr>
+<td>Number</td><td>USER_DEFINED</td><td>User defined error</td>
+</tr>
+</table>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>String</td><td>className</td><td>Class throwing the exception</td>
+</tr>
+<tr>
+<td>Number</td><td>error</td><td>Error code. Must be one of the defined constants</td>
+</tr>
+<tr>
+<td>Number</td><td>reason</td><td>Reason for exception, e.g. the argument causing the exception</td>
+</tr>
+<tr>
+<td>String</td><td>message</td><td>Human readable message describing the error</td>
+</tr>
+<tr>
+<td>String</td><td>fileName</td><td>The name of the file containing the source code</td>
+</tr>
+<tr>
+<td>Number</td><td>lineNumber</td><td>The line in the source code where the exception occurred</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">GPError(String className, Number error, Number reason, String message)</p>
+<h3>Description</h3>Create a new GPError object with the fields set to the arguments.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>className</td><td>Class throwing the exception</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>error</td><td>Error code. Must be one of the defined constants</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>reason</td><td>Reason for exception, e.g. the argument causing the exception</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>message</td><td>Human readable message describing the error</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Throw from within script
+try	{
+	throw new GPError("test.class", 1, 2, "script");
+	assert(false);
+}
+
+catch(e) {
+	assert(e instanceof GPError);
+	assert(e.className == "test.class");
+	assert(e.error == 1);
+	assert(e.reason == 2);
+	assert(e.message == "script");
+	print(e.fileName);
+	print(e.lineNumber);
+}
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

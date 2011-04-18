@@ -1,0 +1,325 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="explore.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>explore.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'explore.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="OutlineCard.html">OutlineCard</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/*
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2006 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  Generic smart card explorer
+ */</span>
+
+load(<span class="literal">"OutlineCore.js"</span>);
+
+<span class="reserved">function</span> OutlineCard() {
+
+        <span class="comment">// Create card object</span>
+        var card = new Card(_scsh3.reader);
+        <span class="reserved">this</span>.atr = card.reset(Card.RESET_COLD);
+
+        <span class="reserved">this</span>.card = card;
+
+        <span class="comment">// Create OutlineNode object and register in object</span>
+        var view = new OutlineNode(<span class="literal">"Card"</span>);
+        view.setUserObject(<span class="reserved">this</span>);
+        <span class="reserved">this</span>.view = view;
+}
+
+
+
+<span class="comment">//</span>
+<span class="comment">// Expand clicked on node</span>
+<span class="comment">//</span>
+OutlineCard.<span class="reserved">prototype</span>.expandListener = <span class="reserved">function</span>() {
+        <span class="reserved">if</span> (<span class="reserved">this</span>.expanded)
+                <span class="reserved">return</span>;
+                
+        var view = <span class="reserved">this</span>.view;
+
+	<span class="comment">//</span>
+	<span class="comment">// Display ATR</span>
+	<span class="comment">//</span>
+	var atrnode = new OutlineATR(<span class="reserved">this</span>.atr);
+	view.insert(atrnode.view);
+        <span class="reserved">this</span>.expanded = true;
+
+        <span class="comment">//</span>
+        <span class="comment">// Explore files in MF</span>
+        <span class="comment">//</span>
+	try	{
+		var mf = new CardFile(<span class="reserved">this</span>.card, <span class="literal">":3F00"</span>);
+				
+	        var struct = GPXML.parse(<span class="literal">"genericmf.xml"</span>);
+	        <span class="reserved">this</span>.mf = new OutlineDF(<span class="reserved">this</span>.card, <span class="literal">":3F00"</span>, <span class="literal">"MF"</span>, struct);
+	        view.insert(<span class="reserved">this</span>.mf.view);
+	}
+	catch(e) {
+		print(<span class="literal">"Card does not seem to have a compatible MF\n"</span> + e);
+	}
+
+        <span class="comment">//</span>
+        <span class="comment">// Obtain list of applications from EF_DIR</span>
+        <span class="comment">//</span>
+        var isTransparent = true;
+        try	{
+		var efdir = new CardFile(<span class="reserved">this</span>.card, <span class="literal">":2F00"</span>);
+		var fci = efdir.getFCPBytes();
+		<span class="reserved">if</span> (fci) {
+			isTransparent = efdir.isTransparent();
+		} <span class="reserved">else</span> {
+			isTransparent = true;
+		}
+        }
+        catch(e) {
+                print(<span class="literal">"Card does not seem to have a compatible EF_DIR\n"</span> + e);
+                <span class="reserved">return</span>;
+        }
+                
+        <span class="reserved">for</span> (var rec = 1; rec &lt; 255; rec++) {
+                var record;
+                try     {
+	                <span class="reserved">if</span> (isTransparent) {
+	                	record = efdir.readBinary();
+	                } <span class="reserved">else</span> {
+	                        record = efdir.readRecord(rec);
+	                }
+                }
+                catch(e) {
+                        print(e);
+                        break;
+                }
+
+                var tlv = new ASN1(record);
+                
+                var label = null;
+                var aid = null;
+                        
+                <span class="reserved">for</span> (var i = 0; i &lt; tlv.elements; i++) {
+                        var t = tlv.get(i);
+                        switch(t.tag) {
+                        case 0x50:
+                                label = t.value.toString(UTF8);
+                                break;
+                        case 0x4F:
+                                aid = t.value;
+                                break;
+                        }
+                }
+
+                <span class="reserved">if</span> (label &amp;&amp; aid) {
+                        var applentry;
+
+                       	<span class="reserved">if</span> (!label) {
+                       		<span class="reserved">if</span> (!aid) {
+                       			label = <span class="literal">"Invalid entry in EF.DIR"</span>;
+                       		} <span class="reserved">else</span> {
+                       			label = aid.toString(HEX);
+                       		}
+                       	}
+                        	
+			applentry = new OutlineNode(label);
+			applentry.insert(tlv);
+			view.insert(applentry);
+                }
+                
+                <span class="reserved">if</span> (efdir.isTransparent())
+                	break;
+        }
+}
+
+
+
+
+
+<span class="comment">//</span>
+<span class="comment">// Outline root node erzeugen</span>
+<span class="comment">// </span>
+var cardoutline = new OutlineCard();
+
+cardoutline.view.show();
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Dec  3 18:14:23 2010</div>
+</body>
+</html>

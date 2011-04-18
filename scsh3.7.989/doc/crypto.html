@@ -1,0 +1,1921 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>Crypto - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>Crypto - Reference Documentation</h1>
+<p>Implements access to cryptographic services.</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">Crypto() constructor</a>
+</li>
+<li>
+<a href="#encrypt">encrypt()</a>
+</li>
+<li>
+<a href="#decrypt">decrypt()</a>
+</li>
+<li>
+<a href="#sign">sign()</a>
+</li>
+<li>
+<a href="#verify">verify()</a>
+</li>
+<li>
+<a href="#deriveKey">deriveKey()</a>
+</li>
+<li>
+<a href="#digest">digest()</a>
+</li>
+<li>
+<a href="#generateKeyPair">generateKeyPair()</a>
+</li>
+<li>
+<a href="#generateRandom">generateRandom()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>RSA</td><td>RSA algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_ISO9796_2</td><td>RSA algorithm in ISO-9796-2 variant</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PKCS1</td><td>RSA Encryption with PKCS#1 V1.5 padding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_OAEP</td><td>RSA Encryption with OAEP padding using SHA-1 and MGF1</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_OAEP_SHA224</td><td>RSA Encryption with OAEP padding using SHA-224 and MGF1</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_OAEP_SHA256</td><td>RSA Encryption with OAEP padding using SHA-256 and MGF1</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_OAEP_SHA384</td><td>RSA Encryption with OAEP padding using SHA-384 and MGF1</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_OAEP_SHA512</td><td>RSA Encryption with OAEP padding using SHA-512 and MGF1</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_SHA1</td><td>SHA-1 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_SHA224</td><td>SHA-224 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_SHA256</td><td>SHA-256 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_SHA384</td><td>SHA-384 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_SHA512</td><td>SHA-512 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PSS_SHA1</td><td>SHA-1 with RSA signature algorithm and PKCS#1 V1.5 encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PSS_SHA224</td><td>SHA-224 with RSA signature algorithm and PSS encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PSS_SHA256</td><td>SHA-256 with RSA signature algorithm and PSS encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PSS_SHA384</td><td>SHA-384 with RSA signature algorithm and PSS encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>RSA_PSS_SHA512</td><td>SHA-512 with RSA signature algorithm and PSS encoding</td>
+</tr>
+<tr>
+<td>Number</td><td>EC</td><td>Elliptic curve key operation</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA</td><td>Elliptic curve digital signature algorithm without hash</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA_SHA1</td><td>Elliptic curve digital signature algorithm using SHA-1</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA_SHA224</td><td>Elliptic curve digital signature algorithm using SHA-224</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA_SHA256</td><td>Elliptic curve digital signature algorithm using SHA-256</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA_SHA384</td><td>Elliptic curve digital signature algorithm using SHA-384</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDSA_SHA512</td><td>Elliptic curve digital signature algorithm using SHA-512</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDH</td><td>Elliptic curve Diffie-Hellmann algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDHC</td><td>Elliptic curve Diffie-Hellmann algorithm with cofactor</td>
+</tr>
+<tr>
+<td>Number</td><td>ECDHP</td><td>Elliptic curve Diffie-Hellmann algorithm returning x and y coordinate of shared point</td>
+</tr>
+<tr>
+<td>Number</td><td>EC_MULTIPLY_ADD</td><td>Elliptic curve point multiplication and addition</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_CBC</td><td>Cipher Block Chaining encryption using DES</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_ECB</td><td>Electronic Cook Book encryption using DES</td>
+</tr>
+<tr>
+<td>Number</td><td>AES_CBC</td><td>Cipher Block Chaining encryption using AES</td>
+</tr>
+<tr>
+<td>Number</td><td>AES_ECB</td><td>Electronic Cook Book encryption using AES</td>
+</tr>
+<tr>
+<td>Number</td><td>AES_CTR</td><td>Segmented Integer Counter (CTR) encryption using AES</td>
+</tr>
+<tr>
+<td>Number</td><td>AES_CMAC</td><td>Message Authentication Code (MAC) acccording to NIST Special Publication 800-38B</td>
+</tr>
+<tr>
+<td>Number</td><td>MD5</td><td>MD5 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>SHA_1</td><td>SHA-1 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>SHA_224</td><td>SHA-224 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>SHA_256</td><td>SHA-256 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>SHA_384</td><td>SHA-384 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>SHA_512</td><td>SHA-512 message digest algorithm</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_MAC</td><td>Message authentication code using 3DES for each block</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_MAC_EMV</td><td>Message authentication code using DES for each block and 3DES for final block (Retail MAC)</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_CBC_LP</td><td>Variant of DES_CBC encryption used for wrap operations (Length || Key || ISOPadding)</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_CBC_P</td><td>Variant of DES_CBC encryption used for wrap operations (Key || ISOPadding)</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_ECB_LP</td><td>Variant of DES_ECB encryption used for wrap operations (Length || Key || ISOPadding)</td>
+</tr>
+<tr>
+<td>Number</td><td>DES_ECB_P</td><td>Variant of DES_ECB encryption used for wrap operations (Key || ISOPadding)</td>
+</tr>
+<tr>
+<td>Number</td><td>ISO9797_METHOD_1</td><td>Padding method according to ISO 9797</td>
+</tr>
+<tr>
+<td>Number</td><td>ISO9797_METHOD_2</td><td>Padding method according to ISO 9797</td>
+</tr>
+<tr>
+<td>Number</td><td>DES</td><td>Constant to denote a single length (56 bit) DES key in generateKey()</td>
+</tr>
+<tr>
+<td>Number</td><td>DES2</td><td>Constant to denote a double length (112 bit) DES key in generateKey()</td>
+</tr>
+<tr>
+<td>Number</td><td>DES3</td><td>Constant to denote a double length (168 bit) DES key in generateKey()</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">Crypto()</p>
+<p class="signature">Crypto(String provider)</p>
+<h3>Description</h3>Create a crypto object and bind it to the given cryptographic service provider.
+                     If no provider is defined, then the default provider "BC" will be used.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>provider</td><td>Name of cryptographic service provider (JCE Provider)</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>On or more arguments are not of the expected type</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+crypto = new Crypto();
+assert(crypto != null);
+
+crypto = new Crypto("BC");
+assert(crypto != null);
+
+
+</pre>
+<h2 id="encrypt">encrypt()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString encrypt(Key key, Number mech, ByteString data)</p>
+<p class="signature">ByteString encrypt(Key key, Number mech, ByteString data, ByteString iv)</p>
+<h3>Description</h3>
+            
+<p>Encrypt the plain data using the algorithm defined by mech and the specified key.</p>
+            
+<p>The Crypto.RSA mechanism performs a plain RSA encrypt operation with no encoding format.</p>
+            
+<p>The Crypto.RSA_ISO9796_2 mechanism performs a plain RSA encrypt operation with no encoding format
+               but according to ISO 9697-2. The result is less than half of the modulus.</p>
+            
+<p>The Crypto.PKCS1 mechanism performs a plain RSA encrypt operation with PKCS1 V1.5 encoding format.</p>
+            
+<p>The Crypto.OAEP_XXX mechanism performs a plain RSA encrypt operation with 
+               PKCS1 V2.1 OEAP encoding format using the selected message digest algorithm.</p>
+            
+<p>If the algorithm requires an initialisation vector, then the additional
+               argument iv must be specified (DES_CBC, AES_CBC or AES_CTR).</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>Key object representing the key</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>mech</td><td>Algorithm to be used to decryption. Must be one of
+                                         Crypto.DES_CBC, Crypto.DES_ECB, Crypto.AES_CBC, Crypto.AES_ECB,
+                                         Crypto.AES_ECB or Crypto.RSA.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>The data to be encrypted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Returns the plain text value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>The mechanism is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Instantiate crypto service
+var crypto = new Crypto();
+
+// Define 3 different single DES key values
+var key1 = new ByteString("7CA110454A1A6E57", HEX);
+var key2 = new ByteString("0131D9619DC1376E", HEX);
+var key3 = new ByteString("9DC1376E0131D961", HEX);
+
+var plain = new ByteString("01A1D6D039776742", HEX);
+var cipher;
+var result;
+
+// Create three single DES keys, a double DES key and a triple DES key
+var deskey1 = new Key();
+deskey1.setComponent(Key.DES, key1);
+
+var deskey2 = new Key();
+deskey2.setComponent(Key.DES, key2);
+
+var deskey3 = new Key();
+deskey3.setComponent(Key.DES, key3);
+
+var des2key = new Key();
+des2key.setComponent(Key.DES, key1.concat(key2));
+
+var des3key = new Key();
+des3key.setComponent(Key.DES, key1.concat(key2).concat(key3));
+
+
+// Single DES ECB encrypt
+cipher = new ByteString("690F5B0D9A26939B", HEX);
+
+result = crypto.encrypt(deskey1, Crypto.DES_ECB, plain);
+assert(result.equals(cipher));
+
+
+// Single DES ECB decrypt
+result = crypto.decrypt(deskey1, Crypto.DES_ECB, cipher);
+assert(result.equals(plain));
+
+
+// Double DES ECB encrypt
+cipher = plain;
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, cipher);
+cipher = crypto.decrypt(deskey2, Crypto.DES_ECB, cipher);
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, cipher);
+
+result = crypto.encrypt(des2key, Crypto.DES_ECB, plain);
+assert(result.equals(cipher));
+
+
+// Double DES ECB decrypt
+result = crypto.decrypt(des2key, Crypto.DES_ECB, cipher);
+assert(result.equals(plain));
+
+
+// Triple DES ECB encrypt
+cipher = plain;
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, cipher);
+cipher = crypto.decrypt(deskey2, Crypto.DES_ECB, cipher);
+cipher = crypto.encrypt(deskey3, Crypto.DES_ECB, cipher);
+
+result = crypto.encrypt(des3key, Crypto.DES_ECB, plain);
+assert(result.equals(cipher));
+
+
+// Triple DES ECB decrypt
+result = crypto.decrypt(des3key, Crypto.DES_ECB, cipher);
+assert(result.equals(plain));
+
+
+// Single DES CBC encrypt
+var plain = new ByteString("01A1D6D0397767423977674201A1D6D0", HEX);
+var iv = new ByteString("59D9839733B8455D", HEX);
+var v;
+
+v = plain.bytes(0, 8);
+v = v.xor(iv);
+v = crypto.encrypt(deskey1, Crypto.DES_ECB, v);
+cipher = v;
+
+v = plain.bytes(8, 8);
+v = cipher.xor(v);
+v = crypto.encrypt(deskey1, Crypto.DES_ECB, v);
+cipher = cipher.concat(v);
+
+result = crypto.encrypt(deskey1, Crypto.DES_CBC, plain, iv);
+assert(result.equals(cipher));
+
+
+// Single DES CBC decrypt
+result = crypto.decrypt(deskey1, Crypto.DES_CBC, cipher, iv);
+assert(result.equals(plain));
+
+
+// Encrypt and decrypt with AES key
+
+var key = new Key();
+
+// Make key a 128 bit AES key
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f", HEX));
+var plain = new ByteString("00112233445566778899aabbccddeeff", HEX);
+var cipher = new ByteString("69c4e0d86a7b0430d8cdb78070b4c55a", HEX);
+
+var result = crypto.encrypt(key, Crypto.AES_ECB, plain);
+assert(cipher.equals(result));
+
+var result = crypto.decrypt(key, Crypto.AES_ECB, cipher);
+assert(plain.equals(result));
+
+
+// Make key a 192 bit AES key
+key.setComponent(Key.AES, new ByteString(
+            "000102030405060708090a0b0c0d0e0f1011121314151617", HEX));
+var plain = new ByteString("00112233445566778899aabbccddeeff", HEX);
+var cipher = new ByteString("dda97ca4864cdfe06eaf70a0ec0d7191", HEX);
+var result = crypto.encrypt(key, Crypto.AES_ECB, plain);
+assert(cipher.equals(result));
+
+var result = crypto.decrypt(key, Crypto.AES_ECB, cipher);
+assert(plain.equals(result));
+
+
+// Make key a 256 bit AES key
+key.setComponent(Key.AES, new ByteString(
+            "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", HEX));
+var plain = new ByteString("00112233445566778899aabbccddeeff", HEX);
+var cipher = new ByteString("8ea2b7ca516745bfeafc49904b496089", HEX);
+var result = crypto.encrypt(key, Crypto.AES_ECB, plain);
+assert(cipher.equals(result));
+
+var result = crypto.decrypt(key, Crypto.AES_ECB, cipher);
+assert(plain.equals(result));
+
+
+// AES CTR mode
+key.setComponent(Key.AES, new ByteString("2b7e151628aed2a6abf7158809cf4f3c", HEX));
+var plain = new ByteString("6bc1bee22e409f96e93d7e117393172a", HEX);
+var cipher = new ByteString("874d6191b620e3261bef6864990db6ce", HEX);
+var iv = new ByteString("F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF", HEX);
+
+var result = crypto.encrypt(key, Crypto.AES_CTR, plain, iv);
+assert(cipher.equals(result));
+
+var result = crypto.decrypt(key, Crypto.AES_CTR, cipher, iv);
+assert(plain.equals(result));
+
+// Decrypt and encrypt as basically the same in CTR mode
+var result = crypto.encrypt(key, Crypto.AES_CTR, cipher, iv);
+assert(plain.equals(result));
+
+
+// RSA encrypt with plain input block
+
+// Make RSA private key from modulus and private exponent
+
+var rsaprkey = new Key();
+rsaprkey.setType(Key.PRIVATE);
+
+rsaprkey.setComponent(Key.MODULUS, new ByteString(
+            "b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9" +
+            "900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX));
+rsaprkey.setComponent(Key.EXPONENT, new ByteString(
+            "9f66f6b05410cd503b2709e88115d55daced94d1a34d4e32bf824d0dde6028ae" +
+            "79c5f07b580f5dce240d7111f7ddb130a7945cd7d957d1920994da389f490c89", HEX));
+
+// Make RSA public key from modulus and public exponent
+
+var rsapukey = new Key();
+rsapukey.setType(Key.PUBLIC);
+rsapukey.setComponent(Key.MODULUS, new ByteString(
+            "b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9"+
+            "900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX));
+rsapukey.setComponent(Key.EXPONENT, new ByteString("11", HEX));
+
+
+var inp = new ByteString(
+            "2600000000000000000000000000000000000000000000000000000000000000" +
+            "0000000000000000000000000000000000000000000000000000000000000000", HEX);
+assert(inp.length == 64);
+
+var cipher = crypto.encrypt(rsaprkey, Crypto.RSA, inp);
+
+print(cipher);
+
+var plain = crypto.decrypt(rsapukey, Crypto.RSA, cipher);
+
+print(plain);
+assert(plain.equals(inp));
+
+
+// RSA encrypt with OAEP padding
+
+var inp = new ByteString("Message", ASCII);
+
+var cipher = crypto.encrypt(rsapukey, Crypto.RSA_OAEP, inp);
+
+print(cipher);
+
+var plain = crypto.decrypt(rsaprkey, Crypto.RSA, cipher);
+
+print("Decrypted OAEP block:");
+print(plain);
+
+assert(plain.byteAt(0) == 0);
+
+var plain = crypto.decrypt(rsaprkey, Crypto.RSA_OAEP, cipher);
+assert(plain.equals(inp));
+
+
+//RSA encrypt with PKCS#1 V1.5 padding
+
+var inp = new ByteString("Message", ASCII);
+
+var cipher = crypto.encrypt(rsapukey, Crypto.RSA_PKCS1, inp);
+
+print(cipher);
+
+var plain = crypto.decrypt(rsaprkey, Crypto.RSA, cipher);
+
+print("Decrypted PKCS#1 V1.5 block:");
+print(plain);
+
+assert(plain.byteAt(0) == 0);
+assert(plain.byteAt(1) == 2);
+
+var plain = crypto.decrypt(rsaprkey, Crypto.RSA_PKCS1, cipher);
+assert(plain.equals(inp));
+
+
+// Encrypt and decrypt with RSA primitive using ISO 9796-2 (DINSIG) variant that
+// ensures that the numeric value of the output message is less than half of the
+// modulus
+var inp = new ByteString(
+            "260000000000000000000000000000000000000000000000000000000000000" +
+            "000000000000000000000000000000000000000000000000000000000000000BC", HEX);
+assert(inp.length == 64);
+
+var cipher = crypto.encrypt(rsaprkey, Crypto.RSA_ISO9796_2, inp);
+
+print(cipher);
+
+var plain = crypto.decrypt(rsapukey, Crypto.RSA_ISO9796_2, cipher);
+assert(plain.equals(inp));
+
+
+// Make RSA private key from CRT components stored in key profile
+
+var rsaprkey = new Key("profiles/kp_rsa_private_crt.xml");
+
+// Make RSA public key from modulus and public exponent stored in key profile
+
+var rsapukey = new Key("profiles/kp_rsa_public.xml");
+
+var inp = new ByteString(
+            "2600000000000000000000000000000000000000000000000000000000000000" +
+            "0000000000000000000000000000000000000000000000000000000000000000", HEX);
+assert(inp.length == 64);
+
+var cipher = crypto.encrypt(rsaprkey, Crypto.RSA, inp);
+
+print(cipher);
+
+var plain = crypto.decrypt(rsapukey, Crypto.RSA, cipher);
+
+print(plain);
+assert(plain.equals(inp));
+
+</pre>
+<h2 id="decrypt">decrypt()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString decrypt(Key key, Number mech, ByteString data)</p>
+<p class="signature">ByteString decrypt(Key key, Number mech, ByteString data, ByteString iv)</p>
+<h3>Description</h3>
+             
+<p>Decrypt the cipher in data using the algorithm defined by mech and the specified key.
+                If the algorithm requires an initialisation vector, then the additional
+                argument iv must be specified (DES_CBC, AES_CBC or AES_CTR).</p>
+            
+<p>The Crypto.RSA mechanism performs a plain RSA decrypt operation with no encoding format.</p>
+            
+<p>The Crypto.RSA_ISO9796_2 mechanism performs a plain RSA decrypt operation with no encoding format
+               but according to ISO 9697-2.</p>
+            
+<p>The Crypto.PKCS1 mechanism performs a RSA decrypt operation with PKCS1 V1.5 encoding format.</p>
+            
+<p>The Crypto.OAEP_XXX mechanism performs a RSA decrypt operation with 
+               PKCS1 V2.1 OEAP encoding format using the selected message digest algorithm and MGF1.</p>
+			
+<p>This method can also be used to perform an ECDH or an ECDHC with cofactor primitive
+                using a private EC key. The method treats the data as x and y coordinate of the
+                EC public key from the sending party.</p>
+			
+<p>The Crypto.ECDH method return as result the x coordinate of the multiplication of the private key
+                value d with the public point Q (result = xof(d * q))</p>
+			
+<p>The Crypto.ECDHC method returns as result the x coordinate of the multiplication of the private key
+                value d with the cofactor h and the public point Q (result = xof(d * h * q)). The
+                cofactor is a parameter of the curve.</p>
+			
+<p>The Crypto.ECDHP method returns as result the concatenation of the x and y coordinate
+                of the multiplication of the private key value d with the public point Q (result = d * h * q).
+                This method is a non-standard variant, only available with the default BouncyCastle crypto provider.</p>
+			
+<p>The ECDH decryption is a basic building block for cipher operations based on ECC.
+                The result of the decrypt operation is a common secret, which can be either used
+                directly as secret key or used as input to a key derivation process.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>Key object representing the key</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>mech</td><td>Algorithm to be used to decryption. Must be one of
+                                         Crypto.DES_CBC, Crypto.DES_ECB, Crypto.AES_CBC, 
+                                         Crypto.AES_ECB, Crypto.AES_CTR, Crypto.RSA, 
+                                         Crypto.ECDH, Crypto.ECDHC or Crypto.ECDHP.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>The cryptogram</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Returns the plain text value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The data or initial vector provided is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>The mechanism is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See encrypt() for a complete example using DES and RSA
+
+// ECDH Generating a shared secret between Bob and Alice to exchange protected messages
+
+var pubKeyBob = new Key();
+pubKeyBob.setType(Key.PUBLIC);
+pubKeyBob.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+
+var priKeyBob = new Key();
+priKeyBob.setType(Key.PRIVATE);
+priKeyBob.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+crypto.generateKeyPair(Crypto.EC, pubKeyBob, priKeyBob);
+
+var pubKeyAlice = new Key();
+pubKeyAlice.setType(Key.PUBLIC);
+pubKeyAlice.setComponent(Key.ECC_CURVE_OID, 
+                                    new ByteString("1.2.840.10045.3.1.1", OID));
+
+var priKeyAlice = new Key();
+priKeyAlice.setType(Key.PRIVATE);
+priKeyAlice.setComponent(Key.ECC_CURVE_OID,
+                                    new ByteString("1.2.840.10045.3.1.1", OID));
+crypto.generateKeyPair(Crypto.EC, pubKeyAlice, priKeyAlice);
+
+var inputBob = pubKeyBob.getComponent(Key.ECC_QX).concat(
+                                    pubKeyBob.getComponent(Key.ECC_QY));
+var inputAlice = pubKeyAlice.getComponent(Key.ECC_QX).concat(
+                                    pubKeyAlice.getComponent(Key.ECC_QY));
+
+
+var secretAlice = crypto.decrypt(priKeyAlice, Crypto.ECDH, inputBob);
+print(secretAlice);
+
+var secretBob = crypto.decrypt(priKeyBob, Crypto.ECDH, inputAlice);
+print(secretBob);
+
+assert(secretBob.equals(secretAlice));
+
+
+var secretAlice = crypto.decrypt(priKeyAlice, Crypto.ECDHC, inputBob);
+print(secretAlice);
+
+var secretBob = crypto.decrypt(priKeyBob, Crypto.ECDHC, inputAlice);
+print(secretBob);
+
+assert(secretBob.equals(secretAlice));
+
+
+var secretAlice = crypto.decrypt(priKeyAlice, Crypto.ECDHP, inputBob);
+print(secretAlice);
+
+var secretBob = crypto.decrypt(priKeyBob, Crypto.ECDHP, inputAlice);
+print(secretBob);
+
+assert(secretBob.equals(secretAlice));
+
+</pre>
+<h2 id="sign">sign()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString sign(Key key, Number mech, ByteString data)</p>
+<p class="signature">ByteString sign(Key key, Number mech, ByteString data, ByteString iv)</p>
+<h3>Description</h3>
+            
+<p>Sign the data provided using the mechanism and key specified. If the
+               algorithms requires an initialisation vector, then it can be provided
+               in the iv argument.</p>
+            
+<p>When the Crypto.RSA argument is supplied, then RSA with SHA-1 and PKCS#1 V1.5 encoding is used as
+               signature algorithm. Crypto.RSA has the same effect as Crypto.RSA_SHA1.</p>
+            
+<p>When the Crypto.ECDSA argument is supplied, then ECDSA without a hash is used, i.e. the
+               hash value must be provided as input.</p>
+            
+<p>A signature created using ECDSA is encoded in an ASN1 SEQUENCE object containing an
+               INTEGER object r and s. See RFC3279 for details.</p>
+            
+<p>A method to convert a TLV encoded ECDSA signature into a binary concatenation
+               of the x and y coordinate is provided in the tools/eccutils.js script.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>Key reference object to be used for signature generation</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mech</td><td>Signature algorithm to be used. Must be one of Crypto.DES_MAC, 
+                                            Crypto.DES_MAC_EMV, Crypto.AES_MAC, Crypto.AES_CMAC, Crypto.RSA* or Crypto.ECDSA*.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Input data for signature computation</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>iv</td><td>Initialisation vector for symmetric algorithm</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Signature value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>The mechanism is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Instantiate crypto service
+var crypto = new Crypto();
+
+
+// Define 3 different single DES key values
+var key1 = new ByteString("7CA110454A1A6E57", HEX);
+var key2 = new ByteString("0131D9619DC1376E", HEX);
+var key3 = new ByteString("9DC1376E0131D961", HEX);
+
+var plain = new ByteString("Hello World !!!!", ASCII);
+var cipher;
+var result;
+
+
+// Create three single DES keys, a double DES key and a triple DES key
+var deskey1 = new Key();
+deskey1.setComponent(Key.DES, key1);
+
+var deskey2 = new Key();
+deskey2.setComponent(Key.DES, key2);
+
+var deskey3 = new Key();
+deskey3.setComponent(Key.DES, key3);
+
+var des2key = new Key();
+des2key.setComponent(Key.DES, key1.concat(key2));
+
+var des3key = new Key();
+des3key.setComponent(Key.DES, key1.concat(key2).concat(key3));
+
+
+// Triple DES MAC
+cipher = crypto.encrypt(des3key, Crypto.DES_ECB, plain.bytes(0, 8));
+cipher = cipher.xor(plain.bytes(8, 8));
+cipher = crypto.encrypt(des3key, Crypto.DES_ECB, cipher);
+
+result = crypto.sign(des3key, Crypto.DES_MAC, plain);
+assert(result.equals(cipher));
+
+
+// Triple DES MAC according to EMV (aka Retail MAC)
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, plain.bytes(0, 8));
+cipher = cipher.xor(plain.bytes(8, 8));
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, cipher);
+cipher = crypto.decrypt(deskey2, Crypto.DES_ECB, cipher);
+cipher = crypto.encrypt(deskey1, Crypto.DES_ECB, cipher);
+
+result = crypto.sign(des2key, Crypto.DES_MAC_EMV, plain);
+assert(result.equals(cipher));
+
+
+// AES MAC
+// Make key a 128 bit AES key
+var key = new Key();
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f", HEX));
+var plain = new ByteString("01234567890123456789012345678901", ASCII);
+var cipher = crypto.encrypt(key, Crypto.AES_ECB, plain.bytes(0, 16));
+cipher = cipher.xor(plain.bytes(16, 16));
+var cipher = crypto.encrypt(key, Crypto.AES_ECB, cipher);
+
+result = crypto.sign(key, Crypto.AES_MAC, plain);
+assert(result.equals(cipher));
+
+
+//AES CMAC
+//Make key a 128 bit AES key
+var key = new Key();
+key.setComponent(Key.AES, new ByteString("2b7e151628aed2a6abf7158809cf4f3c", HEX));
+var plain = new ByteString("6bc1bee22e409f96e93d7e117393172aae2d8a571" +
+                           "e03ac9c9eb76fac45af8e5130c81c46a35ce411", HEX);
+var mac = crypto.sign(key, Crypto.AES_CMAC, plain);
+var ref = new ByteString("dfa66747de9ae63030ca32611497c827", HEX);
+assert(ref.equals(mac));
+
+
+// RSA with SHA-1
+var rsaprkey = new Key("profiles/kp_rsa_private_crt.xml");
+var rsapukey = new Key("profiles/kp_rsa_public.xml");
+
+var message = new ByteString("Hello World !", ASCII);
+
+var signature = crypto.sign(rsaprkey, Crypto.RSA, message);
+
+print("Plain PKCS#1 V1.5 = " + crypto.decrypt(rsapukey, Crypto.RSA, signature));
+assert(crypto.verify(rsapukey, Crypto.RSA, message, signature));
+
+// RSA with SHA-224
+
+var signature = crypto.sign(rsaprkey, Crypto.RSA_SHA224, message);
+
+print("Plain PKCS#1 V1.5 = " + crypto.decrypt(rsapukey, Crypto.RSA, signature));
+assert(crypto.verify(rsapukey, Crypto.RSA_SHA224, message, signature));
+
+// RSA with SHA-256
+
+var signature = crypto.sign(rsaprkey, Crypto.RSA_SHA256, message);
+
+print("Plain PKCS#1 V1.5 = " + crypto.decrypt(rsapukey, Crypto.RSA, signature));
+assert(crypto.verify(rsapukey, Crypto.RSA_SHA256, message, signature));
+
+//RSA with SHA-1 and PSS
+
+var signature = crypto.sign(rsaprkey, Crypto.RSA_PSS_SHA1, message);
+
+print("Plain PSS = " + crypto.decrypt(rsapukey, Crypto.RSA, signature));
+assert(crypto.verify(rsapukey, Crypto.RSA_PSS_SHA1, message, signature));
+
+
+//Create empty public key object and set size
+var rsapukey = new Key();
+rsapukey.setType(Key.PUBLIC);
+rsapukey.setSize(1024);
+
+// Create empty private key object and set size
+var rsaprkey = new Key();
+rsaprkey.setType(Key.PRIVATE);
+
+// Generate key pair
+crypto.generateKeyPair(Crypto.RSA, rsapukey, rsaprkey);
+
+//RSA with SHA-256 and PSS
+
+var signature = crypto.sign(rsaprkey, Crypto.RSA_PSS_SHA256, message);
+
+print("Plain PSS = " + crypto.decrypt(rsapukey, Crypto.RSA, signature));
+assert(crypto.verify(rsapukey, Crypto.RSA_PSS_SHA256, message, signature));
+
+
+// ECDSA Fp with SHA-1
+var eccprkey = new Key("profiles/kp_ec_private.xml");
+var eccpukey = new Key("profiles/kp_ec_public.xml");
+
+var message = new ByteString("Hello World !", ASCII);
+
+var signature = crypto.sign(eccprkey, Crypto.ECDSA_SHA1, message);
+
+assert(crypto.verify(eccpukey, Crypto.ECDSA_SHA1, message, signature));
+
+
+// ECDSA F2m with SHA-1
+var eccprkey = new Key("profiles/kp_ec_f2m_private.xml");
+var eccpukey = new Key("profiles/kp_ec_f2m_public.xml");
+
+var message = new ByteString("Hello World !", ASCII);
+
+var signature = crypto.sign(eccprkey, Crypto.ECDSA_SHA1, message);
+
+assert(crypto.verify(eccpukey, Crypto.ECDSA_SHA1, message, signature));
+
+// see Crypto.generateKeyPair for longer ECC keys
+
+</pre>
+<h2 id="verify">verify()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean verify(Key key, Number mech, ByteString data, ByteString signature)</p>
+<p class="signature">Boolean verify(Key key, Number mech, ByteString data, ByteString signature, ByteString iv)</p>
+<h3>Description</h3>
+            
+<p>Verify the signature applied to data with the mechanism and key specified</p>
+            
+<p>For ECDSA the signature must be TLV encoded as defined in RFC3279.</p>
+            
+<p>A method to convert a ECDSA signature encoded as binary concatenation
+               of the x and y coordinate into the TLV format is provided in the tools/eccutils.js script.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>Key reference object to be used for signature verificaton</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mech</td><td>Verification algorithm to be used. Must be one of Crypto.DES_MAC, 
+                                            Crypto.DES_MAC_EMV, Crypto.AES_MAC, Crypto.RSA* or Crypto.ECDSA*.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Input data for signature computation</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>signature</td><td>Signature to be verified</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>iv</td><td>Initialisation vector for symmetric algorithm</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>True, if the signature was valid, false otherwise</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>The mechanism is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Instantiate crypto service
+var crypto = new Crypto();
+
+// Define 3 different single DES key values
+var key1 = new ByteString("7CA110454A1A6E57", HEX);
+var key2 = new ByteString("0131D9619DC1376E", HEX);
+var key3 = new ByteString("9DC1376E0131D961", HEX);
+
+var plain = new ByteString("Hello World !!!!", ASCII);
+var cipher;
+var result;
+
+// Create three single DES keys, a double DES key and a triple DES key
+var des1key = new Key();
+des1key.setComponent(Key.DES, key1);
+
+var des2key = new Key();
+des2key.setComponent(Key.DES, key1.concat(key2));
+
+var des3key = new Key();
+des3key.setComponent(Key.DES, key1.concat(key2).concat(key3));
+
+// Single DES MAC
+result = crypto.sign(des1key, Crypto.DES_MAC, plain);
+var ok = crypto.verify(des1key, Crypto.DES_MAC, plain, result);
+assert(ok);
+
+// Triple DES MAC
+result = crypto.sign(des3key, Crypto.DES_MAC, plain);
+var ok = crypto.verify(des3key, Crypto.DES_MAC, plain, result);
+assert(ok);
+
+// Triple DES MAC according to EMV (aka Retail MAC)
+result = crypto.sign(des2key, Crypto.DES_MAC_EMV, plain);
+var ok = crypto.verify(des2key, Crypto.DES_MAC_EMV, plain, result);
+assert(ok);
+
+
+// AES MAC
+// Make key a 128 bit AES key
+var key = new Key();
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f", HEX));
+var plain = new ByteString("01234567890123456789012345678901", ASCII);
+
+result = crypto.sign(key, Crypto.AES_MAC, plain);
+var ok = crypto.verify(key, Crypto.AES_MAC, plain, result);
+assert(ok);
+
+
+//AES CMAC
+//Make key a 128 bit AES key
+var key = new Key();
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f", HEX));
+var plain = new ByteString("01234567890123456789012345678901", ASCII);
+
+result = crypto.sign(key, Crypto.AES_CMAC, plain);
+var ok = crypto.verify(key, Crypto.AES_CMAC, plain, result);
+assert(ok);
+
+
+// RSA
+
+var cert = new X509("root.cer");
+var ncert = cert.getNative();
+
+var message = ncert.getTBSCertificate();
+var signature = ncert.getSignature();
+var key = cert.getPublicKey();
+
+assert(crypto.verify(key, Crypto.RSA, message, signature));
+
+
+// ECDSA
+
+var cert = new X509("ecdsacert.cer");
+var key = cert.getPublicKey();
+
+var message = new ByteString("Hello World", ASCII);
+
+// Be carefull if the most significant bit of r or s is 1. In that case you need
+// to add a 00 to prevent interpretation as negative integer
+var r = new ByteString("06CF31FCE556DC74F7B0B3061E47300CC11B3F5BFD01976A", HEX);
+var s = new ByteString("33F8D70EF472EEC8489CAA705837FA5F0156BF70CFD371FD", HEX);
+
+var signature = new ASN1(ASN1.SEQUENCE);
+signature.add(new ASN1(ASN1.INTEGER, r));
+signature.add(new ASN1(ASN1.INTEGER, s));
+
+assert(crypto.verify(key, Crypto.ECDSA_SHA1, message, signature.getBytes()));
+
+
+</pre>
+<h2 id="deriveKey">deriveKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">void deriveKey (Key masterKey, Number mech, ByteString data, Key derivedKey)</p>
+<h3>Description</h3>
+            
+<p>Derive key from a master key using the mechanism specified and data for diversification.</p>
+            
+<p>The resulting DES key is parity adjusted, so that the number of 1 bits in each byte
+               of the key value is odd.</p>
+            
+<p>This method can be used to calculate a public key (point) by multiplying the point with a skalar
+               value and adding a second point (EC_MULTIPLY_ADD). This method is used in the PACE protocol to determine 
+               a temporary generator point using the formular G' = s * G + P.</p>
+            
+<p>The parameter G is the point from the masterKey, the point P is provided by the public key value in derivedKey and
+               the skalar value s is provided in the argument data. The result is stored as public key value in derivedKey.</p>
+            
+<p>If the public point P is undefined, then only the skalar multiplication is performed. If the argument data
+               is null, then only the point addition is performed.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>masterKey</td><td>Master key to use for derivation algorithm</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mech</td><td>Derivation algorithm. Must be Crypto.DES_CBC or Crypto.DES_ECB.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Derivation data. The length of the derivation data determines the length
+                        of the resulting key (8/16 or 24 Bytes). For method EC_MULTIPLY_ADD the argument
+                        determines the skalar value. If data is null, then the skalar multiplication is skipped and
+                        only the point addition is performed.</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>derivedKey</td><td>The key object to store the resulting key value.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>None</code></td><td>The method does not return data</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Instantiate crypto service
+var crypto = new Crypto();
+
+// Create a single DES key, a double DES key and a triple DES key
+var des1key = new Key("profiles/kp_single_des_1.xml");
+var des2key = new Key("profiles/kp_double_des.xml");
+var des3key = new Key("profiles/kp_triple_des.xml");
+
+// Define derivation parameter
+var dpara8  = new ByteString("0102030405060708", HEX);
+var dpara16 = new ByteString("01020304050607081020304050607080", HEX);
+var dpara24 = new ByteString("010203040506070810203040506070801122334455667788", HEX);
+
+var derivedKey = new Key();
+var reference;
+
+// Derive a single DES key
+crypto.deriveKey(des1key, Crypto.DES_ECB, dpara8, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_ECB, dpara8);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des1key, Crypto.DES_ECB, dpara16, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_ECB, dpara16);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des1key, Crypto.DES_ECB, dpara24, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_ECB, dpara24);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a single DES key
+crypto.deriveKey(des2key, Crypto.DES_ECB, dpara8, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_ECB, dpara8);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des2key, Crypto.DES_ECB, dpara16, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_ECB, dpara16);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des2key, Crypto.DES_ECB, dpara24, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_ECB, dpara24);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a single DES key
+crypto.deriveKey(des3key, Crypto.DES_ECB, dpara8, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_ECB, dpara8);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des3key, Crypto.DES_ECB, dpara16, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_ECB, dpara16);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des3key, Crypto.DES_ECB, dpara24, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_ECB, dpara24);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+
+var iv = new ByteString("0000000000000000", HEX);
+
+// Derive a single DES key
+crypto.deriveKey(des1key, Crypto.DES_CBC, dpara8, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_CBC, dpara8, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des1key, Crypto.DES_CBC, dpara16, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_CBC, dpara16, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des1key, Crypto.DES_CBC, dpara24, derivedKey);
+reference = crypto.encrypt(des1key, Crypto.DES_CBC, dpara24, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a single DES key
+crypto.deriveKey(des2key, Crypto.DES_CBC, dpara8, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_CBC, dpara8, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des2key, Crypto.DES_CBC, dpara16, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_CBC, dpara16, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des2key, Crypto.DES_CBC, dpara24, derivedKey);
+reference = crypto.encrypt(des2key, Crypto.DES_CBC, dpara24, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a single DES key
+crypto.deriveKey(des3key, Crypto.DES_CBC, dpara8, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_CBC, dpara8, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a double DES key
+crypto.deriveKey(des3key, Crypto.DES_CBC, dpara16, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_CBC, dpara16, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Derive a triple DES key
+crypto.deriveKey(des3key, Crypto.DES_CBC, dpara24, derivedKey);
+reference = crypto.encrypt(des3key, Crypto.DES_CBC, dpara24, iv);
+assert(keyequals(derivedKey.getComponent(Key.DES), reference));
+
+// Calculate a new point by multiplying G with skalar s and adding P.
+// This method is used to implement PACE as defined by the 
+// Extended Access Control 2.x specification
+
+var P = new Key();
+P.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.36.3.3.2.8.1.1.5", OID));
+P.setComponent(Key.ECC_QX, new ByteString(
+            "A99D861875FDCAF2406B6CE4423C1FE2EB4396A8636CF039C723DDEE", HEX));
+P.setComponent(Key.ECC_QY, new ByteString(
+            "634A17EA9EC0DC8611EF51CDF46E8247C64A2B9F8ECFCE53B690ADC0", HEX));
+
+var G = new Key();
+G.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.36.3.3.2.8.1.1.5", OID));
+G.setComponent(Key.ECC_QX, P.getComponent(Key.ECC_GX));
+G.setComponent(Key.ECC_QY, P.getComponent(Key.ECC_GY));
+
+var s = new ByteString("3924D2D1E31CE13C", HEX);
+
+// Calculate G' = s * G + P
+crypto.deriveKey(G, Crypto.EC_MULTIPLY_ADD, s, P);
+
+// This method does not change the generator point directly, but the public key point
+// in the derived key. For PACE the public key point ECC_QX/Y must be copied 
+// to ECC_GX/Y !
+assert(P.getComponent(Key.ECC_QX).toString(HEX) == 
+            "992042B9D17CBDFA5915EAE4292E62A3F6582071622371F47C2C717E");
+assert(P.getComponent(Key.ECC_QY).toString(HEX) == 
+            "16FC907BD3D87C7F45F56533DE33909A3A1D1E25487615284BC741E7");
+
+
+var G1 = new Key();
+G1.setType(Key.PUBLIC);
+G1.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.36.3.3.2.8.1.1.5", OID));
+
+var G = new Key();
+G.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.36.3.3.2.8.1.1.5", OID));
+G.setComponent(Key.ECC_QX, P.getComponent(Key.ECC_GX));
+G.setComponent(Key.ECC_QY, P.getComponent(Key.ECC_GY));
+
+var s = new ByteString("3924D2D1E31CE13C", HEX);
+
+// Calculate G'' = s * G
+crypto.deriveKey(G, Crypto.EC_MULTIPLY_ADD, s, G1);
+
+var P = new Key();
+P.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.36.3.3.2.8.1.1.5", OID));
+P.setComponent(Key.ECC_QX, new ByteString(
+            "A99D861875FDCAF2406B6CE4423C1FE2EB4396A8636CF039C723DDEE", HEX));
+P.setComponent(Key.ECC_QY, new ByteString(
+            "634A17EA9EC0DC8611EF51CDF46E8247C64A2B9F8ECFCE53B690ADC0", HEX));
+
+//Calculate G'' = G'' + P
+crypto.deriveKey(G1, Crypto.EC_MULTIPLY_ADD, null, P);
+
+assert(P.getComponent(Key.ECC_QX).toString(HEX) == 
+            "992042B9D17CBDFA5915EAE4292E62A3F6582071622371F47C2C717E");
+assert(P.getComponent(Key.ECC_QY).toString(HEX) == 
+            "16FC907BD3D87C7F45F56533DE33909A3A1D1E25487615284BC741E7");
+
+</pre>
+<h2 id="digest">digest()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString digest(Number mech, ByteString data)</p>
+<h3>Description</h3>Calculate message digest for data using hash algorithm specified in argument mech.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mech</td><td>Digest algorithm. Must be either Crypto.SHA_x or Crypto.MD5.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Message to process</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Message digest for given data</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>The mechanism is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var message = new ByteString("Hello World", ASCII);
+var hash = crypto.digest(Crypto.SHA_1, message);
+print("SHA1: " + hash);
+var hash = crypto.digest(Crypto.MD5, message);
+print("MD5: " + hash);
+
+
+var message = new ByteString("", HEX);
+var ref = new ByteString("da39a3ee5e6b4b0d3255bfef95601890afd80709", HEX);
+var hash = crypto.digest(Crypto.SHA_1, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("61", HEX);
+var ref = new ByteString("86f7e437faa5a7fce15d1ddcb9eaeaea377667b8", HEX);
+var hash = crypto.digest(Crypto.SHA_1, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString("a9993e364706816aba3e25717850c26c9cd0d89d", HEX);
+var hash = crypto.digest(Crypto.SHA_1, message);
+assert(ref.equals(hash));
+
+var message = new ByteString(
+            "6162636465666768696a6b6c6d6e6f707172737475767778797a", HEX);
+var ref = new ByteString("32d10c7b8cf96570ca04ce37f2a19d84240d3a89", HEX);
+var hash = crypto.digest(Crypto.SHA_1, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString(
+            "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7", HEX);
+var hash = crypto.digest(Crypto.SHA_224, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString(
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", HEX);
+var hash = crypto.digest(Crypto.SHA_256, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString(
+            "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded163" +
+            "1a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7", HEX);
+var hash = crypto.digest(Crypto.SHA_384, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString(
+            "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a" + 
+            "2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f", HEX);
+var hash = crypto.digest(Crypto.SHA_512, message);
+assert(ref.equals(hash));
+
+
+
+var message = new ByteString("", HEX);
+var ref = new ByteString("d41d8cd98f00b204e9800998ecf8427e", HEX);
+var hash = crypto.digest(Crypto.MD5, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("61", HEX);
+var ref = new ByteString("0cc175b9c0f1b6a831c399e269772661", HEX);
+var hash = crypto.digest(Crypto.MD5, message);
+assert(ref.equals(hash));
+
+var message = new ByteString("616263", HEX);
+var ref = new ByteString("900150983cd24fb0d6963f7d28e17f72", HEX);
+var hash = crypto.digest(Crypto.MD5, message);
+assert(ref.equals(hash));
+
+var message = new ByteString(
+            "6162636465666768696a6b6c6d6e6f707172737475767778797a", HEX);
+var ref = new ByteString("c3fcd3d76192e4007dfb496cca67e13b", HEX);
+var hash = crypto.digest(Crypto.MD5, message);
+assert(ref.equals(hash));
+
+</pre>
+<h2 id="generateKeyPair">generateKeyPair()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void generateKeyPair(Number mech, Key pubKey, Key priKey)</p>
+<h3>Description</h3>
+            
+<p>Generate an asymmetric key pair according to the specification from the
+               public key object.</p>
+            
+<p>For RSA key, the key size must be defined using the Key.setSize() method.</p>
+            
+<p>For EC keys, the curve parameter must be set using the setComponent() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mech</td><td>Type of key pair, must be either Crypto.RSA or Crypto.EC.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The type of key is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// RSA Example - Generate a 1024 bit RSA key pair
+
+// Create empty public key object and set size
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+pubKey.setSize(1024);
+
+// Create empty private key object and set size
+var priKey = new Key();
+priKey.setType(Key.PRIVATE);
+
+// Generate key pair
+crypto.generateKeyPair(Crypto.RSA, pubKey, priKey);
+
+// Extract key components...
+var modulus = pubKey.getComponent(Key.MODULUS);
+print("RSA Modulus:");
+print(modulus);
+
+var publicexponent = pubKey.getComponent(Key.EXPONENT);
+print("RSA Public Exponent:");
+print(publicexponent);
+
+print("CRT prime P");
+var crt_p = priKey.getComponent(Key.CRT_P);
+print(crt_p);
+
+print("CRT prime Q");
+var crt_q = priKey.getComponent(Key.CRT_Q);
+print(crt_q);
+
+print("CRT prime exponent P");
+var crt_dp = priKey.getComponent(Key.CRT_DP1);
+print(crt_dp);
+
+print("CRT prime exponent Q");
+var crt_dq = priKey.getComponent(Key.CRT_DQ1);
+print(crt_dq);
+
+print("CRT coefficient pq");
+var crt_pq = priKey.getComponent(Key.CRT_PQ);
+print(crt_pq);
+
+// ... and reassemble in newly created key
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+pubKey.setComponent(Key.MODULUS, modulus);
+pubKey.setComponent(Key.EXPONENT, publicexponent);
+
+var priKey = new Key();
+priKey.setType(Key.PRIVATE);
+priKey.setComponent(Key.CRT_P, crt_p);
+priKey.setComponent(Key.CRT_Q, crt_q);
+priKey.setComponent(Key.CRT_DP1, crt_dp);
+priKey.setComponent(Key.CRT_DQ1, crt_dq);
+priKey.setComponent(Key.CRT_PQ, crt_pq);
+
+// Verify that keys still work
+var message = new ByteString("Hello World", ASCII);
+
+var cryptogram = crypto.sign(priKey, Crypto.RSA, message);
+
+assert(crypto.verify(pubKey, Crypto.RSA, message, cryptogram));
+
+// ECC Example - Generate a 192 bit key pair over the prime192v1 curve
+
+// Create empty public key object
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+
+// Select prime192v1 curve using it's object identifier
+pubKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+
+// Print out the curve parameter selected
+print("Curve Fp:");
+print(pubKey.getComponent(Key.ECC_P));
+print("Curve A:");
+print(pubKey.getComponent(Key.ECC_A));
+print("Curve B:");
+print(pubKey.getComponent(Key.ECC_B));
+print("Parameter Gx:");
+print(pubKey.getComponent(Key.ECC_GX));
+print("Parameter Gy:");
+print(pubKey.getComponent(Key.ECC_GY));
+print("Parameter N:");
+print(pubKey.getComponent(Key.ECC_N));
+print("Parameter H:");
+print(pubKey.getComponent(Key.ECC_H));
+
+// Create empty private key object
+var priKey = new Key();
+priKey.setType(Key.PRIVATE);
+
+// Generate key pair
+crypto.generateKeyPair(Crypto.EC, pubKey, priKey);
+
+// Extract and print private and public key values
+print("Public Key Qx:");
+var qx = pubKey.getComponent(Key.ECC_QX);
+assert(qx.length == 24);
+print(qx.toString(HEX));
+var qy = pubKey.getComponent(Key.ECC_QY);
+assert(qy.length == 24);
+print("Public Key Qy:");
+print(qy.toString(HEX));
+var d = priKey.getComponent(Key.ECC_D);
+print("Private Key D:");
+print(d.toString(HEX));
+
+// Reassemble keys
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+pubKey.setComponent(Key.ECC_QX, qx);
+pubKey.setComponent(Key.ECC_QY, qy);
+pubKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+
+var priKey = new Key();
+priKey.setComponent(Key.ECC_D, d);
+priKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+
+// Test keys to verify integrity
+var message = new ByteString("Hello World", ASCII);
+
+var cryptogram = crypto.sign(priKey, Crypto.ECDSA_SHA1, message);
+
+assert(crypto.verify(pubKey, Crypto.ECDSA_SHA1, message, cryptogram));
+
+
+// ECC Example - Generate a 571 bit key pair over the secp521r1 curve
+
+// Create empty public key object
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+
+// Select secp521r1 curve using it's object identifier
+pubKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.132.0.35", OID));
+
+// Print out the curve parameter selected
+print("Curve P:");
+print(pubKey.getComponent(Key.ECC_P));
+print("Curve A:");
+print(pubKey.getComponent(Key.ECC_A));
+print("Curve B:");
+print(pubKey.getComponent(Key.ECC_B));
+print("Parameter Gx:");
+print(pubKey.getComponent(Key.ECC_GX));
+print("Parameter Gy:");
+print(pubKey.getComponent(Key.ECC_GY));
+print("Parameter N:");
+print(pubKey.getComponent(Key.ECC_N));
+print("Parameter H:");
+print(pubKey.getComponent(Key.ECC_H));
+
+// Create empty private key object
+var priKey = new Key();
+priKey.setType(Key.PRIVATE);
+
+// Generate key pair
+crypto.generateKeyPair(Crypto.EC, pubKey, priKey);
+
+// Extract and print private and public key values
+print("Public Key Qx:");
+var qx = pubKey.getComponent(Key.ECC_QX);
+assert(qx.length == 66);
+print(qx.toString(HEX));
+var qy = pubKey.getComponent(Key.ECC_QY);
+assert(qy.length == 66);
+print("Public Key Qy:");
+print(qy.toString(HEX));
+var d = priKey.getComponent(Key.ECC_D);
+print("Private Key D:");
+print(d.toString(HEX));
+
+// Reassemble keys
+var pubKey = new Key();
+pubKey.setType(Key.PUBLIC);
+pubKey.setComponent(Key.ECC_QX, qx);
+pubKey.setComponent(Key.ECC_QY, qy);
+pubKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.132.0.35", OID));
+
+var priKey = new Key();
+priKey.setComponent(Key.ECC_D, d);
+priKey.setComponent(Key.ECC_CURVE_OID, new ByteString("1.3.132.0.35", OID));
+
+// Test keys to verify integrity
+var message = new ByteString("Hello World", ASCII);
+
+var cryptogram = crypto.sign(priKey, Crypto.ECDSA_SHA512, message);
+
+assert(crypto.verify(pubKey, Crypto.ECDSA_SHA512, message, cryptogram));
+
+
+</pre>
+<h2 id="generateRandom">generateRandom()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString generateRandom(Number length)</p>
+<h3>Description</h3>Generate a ByteString of given length with random data<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>length</td><td>Number of random bytes</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Returns length bytes of random data</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var val1 = crypto.generateRandom(10);
+assert(val1.length == 10);
+
+var val2 = crypto.generateRandom(10);
+assert(val2.length == 10);
+
+assert(val1 != val2);
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

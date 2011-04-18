@@ -1,0 +1,143 @@
+GLOBALPLATFORM LICENSE AGREEMENT 
+This License Agreement ("the Agreement") is a legal agreement between you and 
+GlobalPlatform, Inc., a Delaware corporation with a place of business at 900 Metro Center 
+Boulevard, Foster City, California, 94404 ("GlobalPlatform"), which owns or licenses the 
+Chip Card Technology, Software and Specifications relating to chip-based card products, as 
+listed in the "Technical Downloads" page of the GlobalPlatform web site. As used in this 
+Agreement: 
+"You" or "you" means the company, entity or individual ("Licensee") that is acquiring a 
+license under this Agreement. 
+"Affiliate" is an entity that directly or indirectly controls, is controlled by, or is under common 
+control with another entity, so long as such control exists. "Control" means beneficial 
+ownership of more than fifty percent of the voting stock or equity in an entity. 
+"End User" is a company, entity or individual that is the ultimate purchaser, either directly or 
+indirectly, from Licensee or an Affiliate of Licensee, of a Compliant Product (as defined 
+hereinafter). 
+"Chip Card Technology" means each of the GlobalPlatform technologies listed in the 
+"Technical Downloads" page of the GlobalPlatform web site, and Updates thereto (as defined 
+hereinafter). 
+"Software" means the software listed in the "Technical Downloads" page of the 
+GlobalPlatform web site, and Updates thereto. 
+"Specifications" means the specifications listed in the "Technical Downloads" page of the 
+GlobalPlatform web site, and Updates thereto. 
+"Update(s)" means any update, revision, or extension of some or all of the Chip Card 
+Technology, Software, and Specifications. 
+"Compliant Product" is a product or service that complies with one or more of the 
+Specifications. 
+You must accept all of the terms of this Agreement before viewing, downloading, taking 
+possession of, or otherwise using the information governed by this Agreement. By clicking on 
+the "ACCEPT" button below, you are consenting to be bound by and are becoming a party to 
+this Agreement, and you are representing that you are authorized to bind your company, as 
+identified by you in the Acceptance Form at the end of this Agreement, as a party to this 
+Agreement. If you do not agree to all of the terms of this Agreement, click the "DO NOT 
+ACCEPT" button at the end of this Agreement. 
+1. GRANT OF LICENSE.  
+1.1 License. GlobalPlatform hereby grants to Licensee, its Affiliates and End Users, a non-
+exclusive, perpetual (except as provided for herein), royalty-free, fully paid-up, worldwide 
+license in the Chip Card Technology and the Software for purposes of creating, developing, 
+testing, demonstrating, using, producing, licensing, distributing, copying, selling and 
+otherwise exploiting Compliant Products, and the right to reproduce and distribute the 
+Specifications, subject to the conditions set forth in this Agreement.  
+1.2 Modifications. Licensee, its Affiliates and End Users, shall not modify the Specifications. 
+Licensee and its Affiliates may modify the Software, but only to the extent the Software, as 
+modified, is used as or in connection with a product or service which is a Compliant Product.  
+1.3 Sublicensing. Licensee, its Affiliates and End Users, shall not sublicense any of the 
+Specifications. Licensee and its Affiliates may sublicense, through one or more 
+intermediaries, the Software, to the extent necessary to create, develop, test, demonstrate, use, 
+produce, license, distribute, copy, sell or otherwise exploit any Compliant Products, and may 
+disclose the Specifications and Software to third party developers, subject to the conditions 
+set forth in this Agreement. 
+2. INTELLECTUAL PROPERTY. Licensee acknowledges and agrees that, as between 
+Licensee and GlobalPlatform, all Chip Card Technology shall at all times be the exclusive 
+property of GlobalPlatform, and nothing in this Agreement shall be construed to convey to 
+Licensee any ownership interest in the Chip Card Technology, Software or Specifications. 
+Licensee shall be the owner of any derivative works it develops based on the Chip Card 
+Technology, including commercial implementations of the Software, but Licensee's 
+ownership and use of such derivative works shall be subject in all respects to GlobalPlatform's 
+ownership of the underlying Chip Card Technology and the terms and conditions upon which 
+Licensee may use the underlying Chip Card Technology under this Agreement. 
+GlobalPlatform acknowledges and agrees that, as between Licensee and GlobalPlatform, 
+Compliant Products developed by Licensee shall be the exclusive property of Licensee. 
+3. SUPPORT AND MAINTENANCE. GlobalPlatform shall have no obligation to Licensee, 
+its Affiliates or End Users to support or maintain the Chip Card Technology. 
+4. TERMINATION OF LICENSE.  
+4.1 Breach. In the event of a breach of this Agreement by Licensee or its Affiliates, 
+GlobalPlatform shall give Licensee written notice and an opportunity to cure. If the breach is 
+not cured within thirty (30) days after written notice, or if the breach is of a nature that cannot 
+be cured, then GlobalPlatform may immediately or thereafter terminate the licenses granted in 
+this Agreement; provided, however, that Licensee, its Affiliates and End Users shall be 
+permitted to continue to use Compliant Products created or obtained prior to such termination, 
+and to use the Chip Card Technology, Specifications and Software as they existed on the date 
+of such termination (but not subsequent Updates thereto), in a manner not inconsistent with 
+the terms of this Agreement.  
+4.2 Notice. Licensee may immediately terminate the licenses granted in this Agreement upon 
+written notice to GlobalPlatform.  
+4.3 Litigation. GlobalPlatform may terminate all or part of the licenses granted in this 
+Agreement in the event Compliant Products sold by Licensee or its Affiliates give rise to a 
+lawsuit against an Indemnified Party (as defined in Section 7 below), containing at least one 
+claim predicated upon manufacture, use or sale of the Compliant Products and (a) for which 
+the indemnification in Section 7 does not apply, (b) for which Licensee asserts that such 
+indemnification does not apply, or (c) in the event that, in GlobalPlatform's reasonable 
+opinion, Licensee does not have the resources to reasonably fulfill its obligations under 
+Section 7. Notwithstanding the foregoing, Licensee, its Affiliates and End Users may continue 
+to use the Chip Card Technology, Specifications and Software if Licensee agrees to assume 
+the cost of defending such lawsuit and if, in GlobalPlatform's reasonable opinion, Licensee 
+has the resources to reasonably fulfill its obligations under Section 7. 
+5. NO WARRANTIES. Licensee acknowledges and agrees that the neither the Chip Card 
+Technology nor the Software are necessarily ready for commercial use and that 
+GlobalPlatform has not necessarily approved, registered, tested or certified their use with any 
+payment or chip card system. GlobalPlatform makes no representations or warranties 
+whatsoever regarding the Chip Card Technology, the Software or any derivative works 
+thereof and is granting the licenses in Section 1 of this Agreement on an "AS-IS", "WHERE 
+IS", basis, "WITH ALL FAULTS" known and unknown. WITHOUT LIMITING THE 
+GENERALITY OF THE FOREGOING, GLOBALPLATFORM HEREBY DISCLAIMS 
+ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, 
+ANY IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE, ANY 
+IMPLIED WARRANTY OF NON-INFRINGEMENT AND ANY IMPLIED WARRANTY 
+OF MERCHANTABILITY. 
+6. NO DAMAGES. TO THE EXTENT PERMITTED BY APPLICABLE LAW, NEITHER 
+PARTY SHALL BE LIABLE TO THE OTHER PARTY OR ANY THIRD PARTY FOR 
+ANY DAMAGES UNDER ANY THEORY OF LAW, INCLUDING, WITHOUT 
+LIMITATION, ANY SPECIAL, CONSEQUENTIAL, INCIDENTAL, OR PUNITIVE 
+DAMAGES, NOR ANY DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS 
+INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR OTHER MONETARY 
+LOSS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+7. INDEMNIFICATION. Licensee shall indemnify, defend and hold harmless GlobalPlatform 
+and its officers, directors, employees and agents (each, an "Indemnified Party") from all 
+losses, costs, damages, claims and other expenses (including reasonable attorneys' fees) 
+arising out of any claim by any third party in connection with use by Licensee, its Affiliates or 
+End Users, of the Chip Card Technology or the Software, including, without limitation, 
+claims asserting that any Licensee product or service infringes the patent, copyright, trade 
+secret or other intellectual property anywhere in the world of such third party (each, a 
+"Claim"); provided, however, that the indemnity set forth in this Section 7 shall not apply to 
+the extent any Claim necessarily results from Licensee's (a) compliance with one or more of 
+the Specifications, or (b) use of the Software in the form supplied by GlobalPlatform 
+hereunder. 
+8. EXPORT REGULATIONS. The Chip Card Technology, including technical data, may be 
+subject to U.S. export control laws, including the U.S. Export Administration Act and its 
+associated regulations, and may be subject to export or import regulations in other countries. 
+Licensee agrees to comply strictly with all such regulations and acknowledges that it has the 
+responsibility to obtain licenses to export, re-export, or import the Chip Card Technology. 
+9. RESTRICTED RIGHTS. Use, duplication or disclosure by the United States government is 
+subject to the restrictions as set forth in the Rights in Technical Data and Computer Software 
+Clauses in DFARS 252.227-7013© (1) (ii) and FAR 52.227-19(a) through (d) as applicable. 
+10. MISCELLANEOUS.  
+10.1 Notices. All notices required under this Agreement shall be in writing. Notice shall be 
+deemed given when delivered personally to an authorized representative or one (1) day after 
+deposit for overnight delivery upon written verification of receipt. Notices and 
+correspondence to GlobalPlatform should be sent to the attention of the Secretariat at the 
+address shown above. Notices and correspondence to Licensee should be sent to the person or 
+address identified by Licensee in the form completed below in connection with Licensee's 
+acceptance of this Agreement.  
+10.2 Governing Law. This Agreement shall be construed and interpreted under the internal 
+laws of the United States and the State of Delaware, without giving effect to its principles of 
+conflict of law.  
+10.3 Entire Agreement. This Agreement constitutes the entire agreement and understanding 
+between GlobalPlatform and Licensee regarding the subject matter contained herein. No 
+modification or waiver of this Agreement shall be binding unless it is in writing and signed by 
+both parties. If any provision of this Agreement is invalid, illegal or unenforceable, the parties 
+shall omit it from the Agreement to the extent required. The remaining terms shall remain in 
+full force and effect. This Agreement supersedes any and all prior agreements between 
+GlobalPlatform and Licensee regarding Licensee's right to use the Chip Card Technology, or 
+any prior versions thereof. 
+

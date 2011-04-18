@@ -1,0 +1,336 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="x509name.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>x509name.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'x509name.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="X509Name.html">X509Name</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/*
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2006 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  X509Name - Class to support X500 Names
+ */</span>
+
+<span class="comment">// 	Name ::= CHOICE {</span>
+<span class="comment">// 	     RDNSequence }</span>
+<span class="comment">// 	</span>
+<span class="comment">// 	RDNSequence ::= SEQUENCE OF RelativeDistinguishedName</span>
+<span class="comment">// 	</span>
+<span class="comment">// 	RelativeDistinguishedName ::=</span>
+<span class="comment">// 		SET OF AttributeTypeAndValue</span>
+<span class="comment">// 	</span>
+<span class="comment">// 	AttributeTypeAndValue ::= SEQUENCE {</span>
+<span class="comment">// 		type     AttributeType,</span>
+<span class="comment">// 		value    AttributeValue }</span>
+<span class="comment">// 	</span>
+<span class="comment">// 	AttributeType ::= OBJECT IDENTIFIER</span>
+<span class="comment">// 	</span>
+<span class="comment">// 	AttributeValue ::= ANY DEFINED BY AttributeType</span>
+   
+   
+<span class="reserved">function</span> X509Name() {
+
+	<span class="reserved">if</span> (arguments.length == 1) {
+		<span class="reserved">if</span> (arguments[0] instanceof ASN1) {
+			var seq = arguments[0];
+			<span class="reserved">if</span> (!seq.isconstructed) {
+				throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"Name must be constructed"</span>);
+			}
+
+			var seq = seq.get(0);
+			<span class="reserved">if</span> (seq.tag != ASN1.SEQUENCE) {
+				throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"RDNSequence must be SEQUENCE"</span>);
+			}
+			
+			<span class="reserved">this</span>.rdn = new Array();
+			<span class="reserved">for</span> (var i = 0; i &lt; seq.elements; i++) {
+				var set = seq.get(i)
+<span class="comment">//				print("RDN" + i + ": " + set);</span>
+				<span class="reserved">if</span> (set.tag != ASN1.SET) {
+					throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"RDNSequence must only contain SETs"</span>);
+				}
+				<span class="reserved">for</span> (var j = 0; j &lt; set.elements; j++) {
+					var attr = set.get(j);
+					<span class="reserved">if</span> (attr.tag != ASN1.SEQUENCE) {
+						throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"AttributeTypeAndValue must be SEQUENCE"</span>);
+					}
+					<span class="reserved">if</span> (attr.elements != 2) {
+						throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"AttributeTypeAndValue must have 2 elements"</span>);
+					}
+					var attrType = attr.get(0);
+					<span class="reserved">if</span> (attrType.tag != ASN1.OBJECT_IDENTIFIER) {
+						throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_DATA, 1, <span class="literal">"AttributeType must be OBJECT IDENTIFIER"</span>);
+					}
+					var oid = attrType.value.toString(HEX);
+					var attrValue = attr.get(1);
+<span class="comment">//					print("Type " + oid + " = " + attrValue);</span>
+					<span class="reserved">this</span>.rdn[oid] = attrValue;
+				}
+			}
+		} <span class="reserved">else</span> {
+			throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_TYPE, 1, <span class="literal">"Argument must be of type ASN1"</span>);
+		}			
+	}
+}
+
+
+
+<span class="reserved">function</span> X509Name_hasRDN(oid) {
+	<span class="reserved">return</span> <span class="reserved">this</span>.rdn[oid] != undefined;
+}
+
+
+
+<span class="reserved">function</span> X509Name_getRDNAsString(oid) {
+
+	var r = <span class="reserved">this</span>.rdn[oid];
+	<span class="reserved">if</span> (r == undefined) {
+		throw new GPError(<span class="literal">"X509Name"</span>, GPError.INVALID_INDEX,0,<span class="literal">"No matching RDN found"</span>);
+	}
+	
+	<span class="reserved">if</span> (r.tag == ASN1.UTF8String) {
+		<span class="reserved">return</span> r.value.toString(UTF8);
+	} <span class="reserved">else</span> {
+		<span class="reserved">return</span> r.value.toString(ASCII);
+	}
+}
+
+
+
+<span class="reserved">function</span> X509Name_toString() {
+	var result = <span class="literal">""</span>;
+	
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasRDN(X509Name.commonName)) {
+		result += <span class="literal">"CN="</span> + <span class="reserved">this</span>.getRDNAsString(X509Name.commonName);
+	}
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasRDN(X509Name.organizationalUnitName)) {
+		<span class="reserved">if</span> (result.length &gt; 0)
+			result += <span class="literal">","</span>;
+			
+		result += <span class="literal">"OU="</span> + <span class="reserved">this</span>.getRDNAsString(X509Name.organizationalUnitName);
+	}
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasRDN(X509Name.organizationName)) {
+		<span class="reserved">if</span> (result.length &gt; 0)
+			result += <span class="literal">","</span>;
+			
+		result += <span class="literal">"O="</span> + <span class="reserved">this</span>.getRDNAsString(X509Name.organizationName);
+	}
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.hasRDN(X509Name.countryName)) {
+		<span class="reserved">if</span> (result.length &gt; 0)
+			result += <span class="literal">","</span>;
+			
+		result += <span class="literal">"C="</span> + <span class="reserved">this</span>.getRDNAsString(X509Name.countryName);
+	}
+
+	<span class="reserved">return</span> result;	
+}
+
+
+X509Name.name = <span class="literal">"550429"</span>;
+X509Name.surname = <span class="literal">"550404"</span>;
+X509Name.givenname = <span class="literal">"55042A"</span>;
+X509Name.initials = <span class="literal">"55042B"</span>;
+X509Name.generationQualifier = <span class="literal">"55042C"</span>;
+X509Name.commonName = <span class="literal">"550403"</span>;
+X509Name.localityName = <span class="literal">"550407"</span>;
+X509Name.stateOrProvinceName = <span class="literal">"550408"</span>;
+X509Name.organizationName = <span class="literal">"55040A"</span>;
+X509Name.organizationalUnitName = <span class="literal">"55040B"</span>;
+X509Name.title = <span class="literal">"55040C"</span>;
+X509Name.dnQualifier = <span class="literal">"55042C"</span>;
+X509Name.countryName = <span class="literal">"550406"</span>;
+X509Name.serialNumber = <span class="literal">"550405"</span>;
+X509Name.emailAddress = <span class="literal">"2A864886F70D010901"</span>;
+
+X509Name.<span class="reserved">prototype</span>.toString = X509Name_toString;
+X509Name.<span class="reserved">prototype</span>.getRDNAsString = X509Name_getRDNAsString;
+X509Name.<span class="reserved">prototype</span>.hasRDN = X509Name_hasRDN;
+
+
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Dec  3 18:14:23 2010</div>
+</body>
+</html>

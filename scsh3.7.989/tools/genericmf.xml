@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileStructure arrayElement="EF" arrayIndex="#">
+    <EF fid="2F00" format="asn1.efdir" name="EF_DIR" />
+    <EF fid="2F01" format="asn1" name="EF_ATR" />
+    <EF fid="0030" format="asn1.arr" name="EF_ARR" />
+</FileStructure>    

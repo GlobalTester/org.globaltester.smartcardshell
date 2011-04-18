@@ -1,0 +1,498 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>GPApplication - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>GPApplication - Reference Documentation</h1>
+<p>
+        
+<p>An instance of the GPApplication class represents an application
+           on a Global Platform card.</p>
+        
+<p>Instances of this class are created using the getApplicationInstance() method
+           of the application factory.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">GPApplication() constructor</a>
+</li>
+<li>
+<a href="#run">run()</a>
+</li>
+<li>
+<a href="#select">select()</a>
+</li>
+<li>
+<a href="#sendApdu">sendApdu()</a>
+</li>
+</ul>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>ByteString</td><td>aid</td><td>Application identifier for this application.</td>
+</tr>
+<tr>
+<td>Card</td><td>card</td><td>Card object associated with application.</td>
+</tr>
+<tr>
+<td>Card</td><td>crypto</td><td>Crypto object associated with application.</td>
+</tr>
+<tr>
+<td>Array</td><td>data[]</td><td>Associative array of data elements.</td>
+</tr>
+<tr>
+<td>Array</td><td>key[]</td><td>Associative array of keys.</td>
+</tr>
+<tr>
+<td>Object</td><td>profile</td><td>Deserialized application profile.</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">GPApplication(String profile)</p>
+<p class="signature">GPApplication(String profile, ByteString aid, Card card, Crypto crypto, Object dataMapper)</p>
+<h3>Description</h3>
+            
+<p>Create a GPApplication object and initialize from profile.</p>
+            
+<p>This constructor is provided for special development and testing purposes.
+               The preferred method is to use the getApplicationInstance() method of the
+               ApplicationFactory.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>profile</td><td>Name of file containing Global Platform Application profile. The file name
+                  will be mapped to the file system of the runtime environment.</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>aid</td><td>Application identifier for application.</td>
+</tr>
+<tr>
+<td><code>Card</code></td><td>card</td><td>Card object to associate Application with or null if none defined.</td>
+</tr>
+<tr>
+<td><code>Crypto</code></td><td>crypto</td><td>Crypto object to associate Application with.</td>
+</tr>
+<tr>
+<td><code>Object</code></td><td>dataMapper</td><td>Data mapper object to be used for external data elements or null if none defined.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>On or more arguments are not of the expected type</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var sd = new GPApplication("profiles/ap_sample.xml");
+
+assert(sd != null);
+
+</pre>
+<h2 id="run">run()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void run(String scriptName)</p>
+<h3>Description</h3>
+            
+<p>Locate and execute script fragment in application profile.</p>
+            
+<p>This method does the complete initialization of the key and data
+               properties according to the declarations for this script fragment</p>
+            
+<p>Key profiles are obtained from the ApplicationFactory that created the
+               Application object.</p>
+            
+<p>External data elements are mapped using the data mapper defined in the
+               constructor or the getApplicationInstance() method of the application
+               factory.</p>
+            
+<p>Warning: This method is an extension to the methods defined in the Global Platform
+               Scripting specification. It is provided as development and test aid.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>scriptName</td><td>Name of script fragment to execute.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+</pre>
+<h2 id="select">select()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString select()</p>
+<p class="signature">ByteString select(Boolean next, Boolean noData)</p>
+<p class="signature">ByteString select(Boolean next, Number[] sw)</p>
+<p class="signature">ByteString select(Boolean next, Boolean noData, Number[] sw)</p>
+<h3>Description</h3>
+            
+<p>Select application on ICC.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>next</td><td>Used to control parameter P1 in the select command. True
+               will select next application with matching AID. Default is false.</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>noData</td><td>Ignore data returned from card. Default is false.</td>
+</tr>
+<tr>
+<td><code>Number[]</code></td><td>sw</td><td>Array of acceptable SW1/SW2 response codes.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Data returned from card in response to select.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+/*
+var aid = new ByteString("D040000017010101", HEX);
+var card = new Card(_scsh3.reader);
+var crypto = new Crypto();
+
+var application = new GPApplication("profiles/ap_test.xml", aid, card, crypto, 
+                                    new Object());
+
+var resp = application.select();
+assert(resp instanceof ByteString);
+print(resp);
+
+var resp = application.select(false, false);
+assert(resp instanceof ByteString);
+print(resp);
+
+var resp = application.select(false, [ 0x9000 ]);
+assert(resp instanceof ByteString);
+print(resp);
+
+var resp = application.select(true, false, [ 0x6A86 ]);
+assert(resp instanceof ByteString);
+print(resp);
+*/
+
+</pre>
+<h2 id="sendApdu">sendApdu()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, Number[] sw)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, ByteString data)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, ByteString data, Number[] sw)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, Number le)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, Number le, Number[] sw)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, ByteString data, Number le)</p>
+<p class="signature">ByteString sendApdu (Number cla, Number ins, Number p1, Number p2, ByteString data, Number le, Number[] sw)</p>
+<h3>Description</h3>
+<p>Transmit a Command-APDU to the ICC and receive the Response-APDU.</p>
+                     
+<p>The method updates the fields SW, SW1, SW2 and response of the associated card object
+                        with the values received from the ICC.</p>
+                     
+<p>An array of valid return codes can be passed as argument sw. If the SW1/SW2 from the ICC does
+                        not match with one of the entries in the array, then an GPError.CARD_COMM_ERROR exception is raised.</p>
+                     
+<p>The method supports ISO7816-4 extended format. This is automatically used, if the length of the data
+                        argument exceeds 255 or if the argument le exceeds 256.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>cla</td><td>The CLA byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>ins</td><td>The INS byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p1</td><td>The P1 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>p2</td><td>The P2 byte for the Command-APDU</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>The data bytes to be send in the Command-APDU for case 3 or case 4 commands</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>le</td><td>The number of bytes expected in the response. 256 is encoded as '00' in short format.
+                                          65536 is encoded as '0000' in extended format.</td>
+</tr>
+<tr>
+<td><code>Number[]</code></td><td>sw</td><td>Array of acceptable SW1/SW2 return codes</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Response APDU received from ICC</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call or SW array contain a type other than Number</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_COMM_ERROR</td><td>A communication error with the ICC occured</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CARD_INVALID_SW</td><td>The status word return by the ICC does not match one of the expected result</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data for the command APDU exceeds 65536</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>The value given for Le is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+/*
+// Case 1: 0022F3A4 - MANAGE SE
+
+resp = application.sendApdu(0x00, 0x22, 0xF3, 0xA4);
+assert(resp instanceof ByteString);
+print(application.card.SW.toString(16) + " - " + resp);
+
+resp = card.sendApdu(0x00, 0x22, 0xF3, 0xA4, [0x9000]);
+assert(resp instanceof ByteString);
+
+
+// Case 2: 00B201F400 - READ RECORD from EF_STATUS
+
+resp = card.sendApdu(0x00, 0xB2, 0x01, 0x24, 0);
+assert(resp instanceof ByteString);
+print(card.SW.toString(16) + " - " + resp);
+
+assert(resp.length &gt; 0);
+assert(application.card.SW == 0x9000);
+
+resp = card.sendApdu(0x00, 0xB2, 0x01, 0x24, 0, [0x9000]);
+assert(resp.length &gt; 0);
+
+
+// Case 3: 002A90A008 - HASH
+
+resp = application.sendApdu(0x00, 0x2A, 0x90, 0xA0,
+            new ByteString("9000800431323334", HEX));
+assert(resp instanceof ByteString);
+print(application.card.SW.toString(16) + " - " + resp);
+
+assert(card.SW == 0x9000);
+
+resp = application.sendApdu(0x00, 0x2A, 0x90, 0xA0, 
+            new ByteString("9000800431323334", HEX),[0x9000]);
+
+
+// Case 4: 00A40204022F0000 - SELECT EF_STATUS
+
+resp = application.sendApdu(0x00, 0xA4, 0x02, 0x04, new ByteString("EF04", HEX), 0);
+assert(resp instanceof ByteString);
+print(application.card.SW.toString(16) + " - " + resp);
+
+assert(application.card.SW == 0x9000);
+assert(resp.length &gt; 0);
+
+resp = application.sendApdu(0x00, 0xA4, 0x02, 0x04, 
+            new ByteString("EF04", HEX), 0, [0x9000]);
+assert(resp.length &gt; 0);
+*/
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

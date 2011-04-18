@@ -1,0 +1,503 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>GPXML - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>GPXML - Reference Documentation</h1>
+<p>
+      
+<p>Core XML parser for Global Platform Profiles.</p>
+      
+<p>XML profiles are deserialized into a tree of ECMAScript objects. Child elements
+         are created as a property under the parent object with the name of the XML
+         element. Attributes are created as a property with the same name and of type
+         String.</p>
+      
+<p>Namespaces are silently ignored (e.g. gp:Key is stored as property Key).</p>
+      
+<p>If an element contains a value, then the characters are collected into the
+         elementValue property.</p>
+      
+<p>If an element contains CDATA, then the characters are collected into the
+         elementValue property.</p>
+      
+<p>If a Script element is found and there is no explicit script definition using
+         defineScriptElement(), then the content of the element is evaluated as
+         an ECMAScript function without parameter and stored under the Script property
+         of the parent element.</p>
+      
+<p>If a parent element defines the arrayElement and arrayIndex attributes, then
+         client elements with the same name are deserialized as an array.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">GPXML() constructor</a>
+</li>
+<li>
+<a href="#defineArrayElement">defineArrayElement()</a>
+</li>
+<li>
+<a href="#defineScriptElement">defineScriptElement()</a>
+</li>
+<li>
+<a href="#parse">parse()</a>
+</li>
+<li>
+<a href="#parseApplicationProfile">parseApplicationProfile()</a>
+</li>
+</ul>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">GPXML()</p>
+<h3>Description</h3>
+            
+<p>Create a parser object to parse the specified XML file.</p>
+            
+<p>The actual parsing is done using the GPXML.prototype.parse() method.</p>
+        
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var parser = new GPXML();
+
+</pre>
+<h2 id="defineArrayElement">defineArrayElement()</h2>
+<h3>Prototype</h3>
+<p class="signature">defineArrayElement(String path, String arrayElement)</p>
+<p class="signature">defineArrayElement(String path, String arrayElement, String arrayIndex)</p>
+<h3>Description</h3>
+<p>Define which XML child nodes must be deserialized as JavaScript array.</p>
+                     
+<p>This has the same effect as specifying an arrayElement and arrayIndex
+                        attribute at an XML node.</p>
+                     
+<p>Multiple values for arrayElement and arrayIndex can be specified in
+                        a comma separated list.</p>
+                     
+<p>The array can be either indexed by integer ("#") or using
+						an attribute as key value.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>path</td><td>Path to the XML node that contains array elements.</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>arrayElement</td><td>Comma separated list of array elements.</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>arrayIndex</td><td>"#" to index array with integer offset starting at 0 or attribute containing key value.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+parser.defineArrayElement("/Root/Child3/Child4", "Array1");
+parser.defineArrayElement("/Root/Child3/Child5", "Array1", "name");
+parser.defineArrayElement("/Root/Child3/Child6", "Array1,Array2", "#,name");
+
+</pre>
+<h2 id="defineScriptElement">defineScriptElement()</h2>
+<h3>Prototype</h3>
+<p class="signature">defineScriptElement(String path)</p>
+<p class="signature">defineScriptElement(String path, Boolean asFunction)</p>
+<h3>Description</h3>
+<p>Define which XML nodes are to be interpreted as script code.</p>
+                     
+<p>By default all &lt;Script&gt; elements are parsed as script code.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>path</td><td>Path to the XML node that shall be interpreted as script code.</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>asFunction</td><td>if set to true, then the script fragment is treated as function.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+parser.defineScriptElement("/Root/AnonymousFunction/Script");
+parser.defineScriptElement("/Root/Function/Script", true);
+parser.defineScriptElement("/Root/FunctionNoScript", true);
+parser.defineScriptElement("/Root/Script", false);
+parser.defineScriptElement("/Root/PlainScript", false);
+
+</pre>
+<h2 id="parse">parse()</h2>
+<h3>Prototype</h3>
+<p class="signature">Object parse(String filename)</p>
+<p class="signature">Object parse(ByteString file)</p>
+<h3>Description</h3>
+            
+<p>Parse the XML formatted file specified by filename and create
+               a tree of ECMAScript objects.</p>
+            
+<p>The file can be provided as ByteString. If the ByteString starts with
+               1F8B, then it is treated as GZIP file.</p>
+			
+<p>The parse() method without arguments can be used with an instance object,
+			   the other two variants are static methods.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>filename</td><td>File name of XML file. Will be mapped to a physical file by the runtime environment.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Object</code></td><td>Root element of document object model</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Dynamic variant
+var profile = parser.parse("parsertest2.xml");
+dumpxml(profile, "");
+assert(profile);
+assert(profile.rootAttr1 == "rootAttr1");
+assert(profile.rootAttr2 == "rootAttr2");
+assert(profile.Child1);
+assert(profile.Child1.child1Attr1 == "child1Attr1");
+assert(profile.Child1.child1Attr2 == "child1Attr2");
+
+assert(profile.Child2);
+assert(profile.Child2.child2Attr1 == "child2Attr1");
+assert(profile.Child2.elementValue == "child2Value");
+
+assert(profile.Child3);
+assert(profile.Child3.Child4);
+assert(profile.Child3.Child4.Array1);
+assert(profile.Child3.Child4.Array1.length == 3);
+assert(profile.Child3.Child4.Array1[0].name == "a1");
+assert(profile.Child3.Child4.Array1[1].arrayAttr1 == "arrayAttr1");
+assert(profile.Child3.Child4.Array1[2].name == "a2");
+
+assert(profile.Child3);
+assert(profile.Child3.Child5);
+assert(profile.Child3.Child5.Array1);
+assert(profile.Child3.Child5.Array1["a1"].name == "a1");
+assert(profile.Child3.Child5.Array1["a2"].arrayAttr2 == "arrayAttr2");
+assert(profile.Child3.Child5.Array1["a3"].name == "a3");
+
+assert(profile.Child3);
+assert(profile.Child3.Child6);
+assert(profile.Child3.Child6.Array1);
+assert(profile.Child3.Child6.Array1[0].name == "a1");
+assert(profile.Child3.Child6.Array1[1].arrayAttr1 == "arrayAttr1");
+assert(profile.Child3.Child6.Array1[2].name == "a2");
+assert(profile.Child3.Child6.Array2);
+assert(profile.Child3.Child6.Array2["b1"].name == "b1");
+assert(profile.Child3.Child6.Array2["b2"].arrayAttr5 == "arrayAttr5");
+assert(profile.Child3.Child6.Array2["b3"].name == "b3");
+
+assert(profile.AnonymousFunction.Script instanceof Function);
+globalResult = "";
+profile.AnonymousFunction.Script();
+assert(globalResult == "globalResult");
+
+assert(profile.Function.Script instanceof Function);
+assert(profile.Function.Script(1, 2) == 3);
+
+assert(profile.FunctionNoScript.Script instanceof Function);
+assert(profile.FunctionNoScript.Script(1, 2) == 3);
+
+assert(profile.PlainScript.Script instanceof JsScript);
+
+profile.PlainScript.Script.execute(this);
+assert(f(1 ,2) == 3);
+
+// Static variant
+
+var profile = GPXML.parse("parsertest.xml");
+dumpxml(profile, "");
+assert(profile);
+assert(profile.rootAttr1 == "rootAttr1");
+assert(profile.rootAttr2 == "rootAttr2");
+assert(profile.Child1);
+assert(profile.Child1.child1Attr1 == "child1Attr1");
+assert(profile.Child1.child1Attr2 == "child1Attr2");
+
+assert(profile.Child2);
+assert(profile.Child2.child2Attr1 == "child2Attr1");
+assert(profile.Child2.elementValue == "child2Value");
+
+assert(profile.Child3);
+assert(profile.Child3.Child4);
+assert(profile.Child3.Child4.Array1);
+assert(profile.Child3.Child4.Array1.length == 3);
+assert(profile.Child3.Child4.Array1[0].name == "a1");
+assert(profile.Child3.Child4.Array1[1].arrayAttr1 == "arrayAttr1");
+assert(profile.Child3.Child4.Array1[2].name == "a2");
+
+assert(profile.Child3);
+assert(profile.Child3.Child5);
+assert(profile.Child3.Child5.Array1);
+assert(profile.Child3.Child5.Array1["a1"].name == "a1");
+assert(profile.Child3.Child5.Array1["a2"].arrayAttr2 == "arrayAttr2");
+assert(profile.Child3.Child5.Array1["a3"].name == "a3");
+
+assert(profile.AnonymousFunction.Script instanceof Function);
+globalResult = "";
+profile.AnonymousFunction.Script();
+assert(globalResult == "globalResult");
+
+assert(profile.Function.Script instanceof Function);
+assert(profile.Function.Script(1, 2) == 3);
+
+</pre>
+<h2 id="parseApplicationProfile">parseApplicationProfile()</h2>
+<h3>Prototype</h3>
+<p class="signature">Object parse(String filename)</p>
+<h3>Description</h3>
+<p>Parse the XML formatted application profile specified by filename and create
+                        a tree of ECMAScript objects.</p>
+                     
+<p>The elements Key, DataElement, Function and ScriptFragment are
+                        deserialized as arrays.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>filename</td><td>File name of XML file. Will be mapped to a physical file by the runtime environment.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Object</code></td><td>Root element of document object model</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// var profile = GPXML.parseApplicationProfile("appl.xml");
+// dumpxml(profile, "");
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

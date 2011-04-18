@@ -1,0 +1,527 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>TLV - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>TLV - Reference Documentation</h1>
+<p>Implementation of an immutable TLV object with different encoding formats.</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">TLV() constructor</a>
+</li>
+<li>
+<a href="#getL">getL()</a>
+</li>
+<li>
+<a href="#getLV">getLV()</a>
+</li>
+<li>
+<a href="#getTag">getTag()</a>
+</li>
+<li>
+<a href="#getTLV">getTLV()</a>
+</li>
+<li>
+<a href="#getTV">getTV()</a>
+</li>
+<li>
+<a href="#getValue">getValue()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>EMV</td><td>EMV encoding format, which follows ASN.1 / DER encoding rule</td>
+</tr>
+<tr>
+<td>Number</td><td>DGI</td><td>DGI encoding format using a 2 byte tag and a one or three byte length field</td>
+</tr>
+<tr>
+<td>Number</td><td>L16</td><td>L16 encoding format using a 2 byte tag and a two byte length field</td>
+</tr>
+</table>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>encodingMode</td><td>Encoding mode used for TLV object. One of TLV.EMV, TLV.DGI or TLV.L16</td>
+</tr>
+<tr>
+<td>Number</td><td>size</td><td>Combined length of tag, length and value field</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">TLV(Number tag, ByteString value, Number encoding)</p>
+<h3>Description</h3>
+            
+<p>Create a TLV object initialized with the arguments given.</p>
+            
+<p>TLV objects are composed of a tag, a length and a value field.
+               The binary encoding format for the tag and length can be defined
+               with the encoding parameter.</p>
+            
+<p>For EMV encoding the tag field has a variable length of up to 4 bytes. 
+               The length field has a variable length of up to 4 byte. Both fields are
+               encoded as specified as per ASN.1 Basic Encoding Rule (ISO 8825).</p>
+            
+<p>For DGI encoding the tag field has a fixed length of two bytes.
+               The length field contains one byte for values between 0 and 254. The length
+               is encoded in three bytes for values between 255 and 65535, with the first byte
+               set to 'FF'.</p>
+            
+<p>For L16 encoding the tag field has a fixed length of two bytes.
+               The length field is always two byte long and is encoded in big endian / 
+               little endian format.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>tag</td><td>Tag value</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value field of TLV object</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>encoding</td><td>Encoding for tag and length field. Must be one of TLV.EMV, TLV.DGI or TLV.L16.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ENCODING</td><td>The argument encoding is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TAG</td><td>The tag value is invalid for the selected encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.DATA_TOO_LARGE</td><td>The data supplied for the value fields exceeds the maximum length</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.encodingMode == TLV.EMV);
+assert(t.size == 5);
+
+t = new TLV(0x0601, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.encodingMode == TLV.EMV);
+assert(t.size == 6);
+
+try {
+	// Invalid tag for EMV	
+	t = new TLV(0x6FFFFF, new ByteString("2A1234", HEX), TLV.EMV);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+t = new TLV(0x1201, new ByteString("561000", ASCII), TLV.DGI);
+assert(t.encodingMode == TLV.DGI);
+assert(t.size == 9);
+
+t = new TLV(0x12, new ByteString("561000", ASCII), TLV.DGI);
+assert(t.encodingMode == TLV.DGI);
+assert(t.size == 9);
+
+t = new TLV(0x3221, new ByteString("123456", HEX), TLV.L16);
+assert(t.encodingMode == TLV.L16);
+assert(t.size == 7);
+
+t = new TLV(0x32, new ByteString("123456", HEX), TLV.L16);
+assert(t.encodingMode == TLV.L16);
+assert(t.size == 7);
+
+</pre>
+<h2 id="getL">getL()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getL()</p>
+<h3>Description</h3>Return the value of the length field of the TLV object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The length field of the object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.getL().toString(HEX) == "03");
+
+// 130 bytes
+t = new TLV(0x06, new ByteString(
+    "00010203040506070809000102030405060708090001020304050607080900010203040" + 
+    "50607080900010203040506070809000102030405060708090001020304050607080900" +
+    "01020304050607080900010203040506070809000102030405060708090001020304050" +
+    "60708090001020304050607080900010203040506070809", HEX), TLV.EMV);
+assert(t.getL().toString(HEX) == "8182");
+
+// 260 bytes
+t = new TLV(0x06, new ByteString(
+    "00010203040506070809000102030405060708090001020304050607080900010203040" +
+    "50607080900010203040506070809000102030405060708090001020304050607080900" +
+    "01020304050607080900010203040506070809000102030405060708090001020304050" +
+    "60708090001020304050607080900010203040506070809000102030405060708090001" +
+    "02030405060708090001020304050607080900010203040506070809000102030405060" +
+    "70809000102030405060708090001020304050607080900010203040506070809000102" +
+    "03040506070809000102030405060708090001020304050607080900010203040506070" +
+    "80900010203040506070809", HEX), TLV.EMV);
+assert(t.getL().toString(HEX) == "820104");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.L16);
+assert(t.getL().toString(HEX) == "0003");
+
+t = new TLV(0x06, new ByteString(
+    "00010203040506070809000102030405060708090001020304050607080900010203040" +
+    "50607080900010203040506070809000102030405060708090001020304050607080900" +
+    "01020304050607080900010203040506070809000102030405060708090001020304050" +
+    "60708090001020304050607080900010203040506070809000102030405060708090001" +
+    "02030405060708090001020304050607080900010203040506070809000102030405060" +
+    "70809000102030405060708090001020304050607080900010203040506070809000102" +
+    "03040506070809000102030405060708090001020304050607080900010203040506070" +
+    "80900010203040506070809", HEX), TLV.L16);
+assert(t.getL().toString(HEX) == "0104");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.DGI);
+assert(t.getL().toString(HEX) == "03");
+
+t = new TLV(0x06, new ByteString(
+    "00010203040506070809000102030405060708090001020304050607080900010203040" +
+    "50607080900010203040506070809000102030405060708090001020304050607080900" +
+    "01020304050607080900010203040506070809000102030405060708090001020304050" +
+    "60708090001020304050607080900010203040506070809000102030405060708090001" +
+    "02030405060708090001020304050607080900010203040506070809000102030405060" +
+    "70809000102030405060708090001020304050607080900010203040506070809000102" +
+    "03040506070809000102030405060708090001020304050607080900010203040506070" +
+    "80900010203040506070809", HEX), TLV.DGI);
+assert(t.getL().toString(HEX) == "FF0104");
+
+</pre>
+<h2 id="getLV">getLV()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getLV()</p>
+<h3>Description</h3>Return the combined length and value field of the object<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The combined length and value field</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.getLV().toString(HEX) == "032A1234");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.L16);
+assert(t.getLV().toString(HEX) == "00032A1234");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.DGI);
+assert(t.getLV().toString(HEX) == "032A1234");
+
+</pre>
+<h2 id="getTag">getTag()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getTag()</p>
+<h3>Description</h3>Return the value of the tag field as numeric value-<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Numeric value of the tag field</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(typeof(t.getTag()) == "number");
+assert(t.getTag() == 0x06);
+
+t = new TLV(0x9F03, new ByteString("2A1234", HEX), TLV.EMV);
+assert(typeof(t.getTag()) == "number");
+assert(t.getTag() == 0x9F03);
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.L16);
+assert(t.getTag() == 0x06);
+
+t = new TLV(0x061F, new ByteString("2A1234", HEX), TLV.DGI);
+assert(t.getTag() == 0x061F);
+
+</pre>
+<h2 id="getTLV">getTLV()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getTLV()</p>
+<h3>Description</h3>Return the concatenation of tag, length and value as a sequence of byte using the encoding mode
+                     specified in the constructor<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The concatenation of tag, length and value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.getTLV().toString(HEX) == "06032A1234");
+
+t = new TLV(0x1201, new ByteString("561000", ASCII), TLV.DGI);
+assert(t.getTLV().toString(HEX) == "120106353631303030");
+
+t = new TLV(0x3221, new ByteString("123456", HEX), TLV.L16);
+assert(t.getTLV().toString(HEX) == "32210003123456");
+
+</pre>
+<h2 id="getTV">getTV()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getTV()</p>
+<h3>Description</h3>Return the field tag and value of the TLV in the specified encoding format.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Concatenated tag and length field</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.getTV().toString(HEX) == "062A1234");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.L16);
+assert(t.getTV().toString(HEX) == "00062A1234");
+
+t = new TLV(0x061F, new ByteString("2A1234", HEX), TLV.DGI);
+assert(t.getTV().toString(HEX) == "061F2A1234");
+
+</pre>
+<h2 id="getValue">getValue()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getValue()</p>
+<h3>Description</h3>Return the value field of the TLV object<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The value field of the TLV object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.EMV);
+assert(t.getValue().toString(HEX) == "2A1234");
+
+t = new TLV(0x06, new ByteString("2A1234", HEX), TLV.L16);
+assert(t.getValue().toString(HEX) == "2A1234");
+
+t = new TLV(0x061F, new ByteString("2A1234", HEX), TLV.DGI);
+assert(t.getValue().toString(HEX) == "2A1234");
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

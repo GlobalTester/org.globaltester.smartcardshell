@@ -1,0 +1,283 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>JsScript - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>JsScript - Reference Documentation</h1>
+<p>
+<p>Class implementing support for compiling and running script fragments</p>
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">JsScript() constructor</a>
+</li>
+<li>
+<a href="#newDynamicScope">newDynamicScope()</a>
+</li>
+<li>
+<a href="#execute">execute()</a>
+</li>
+</ul>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">JsScript(String filename)</p>
+<p class="signature">JsScript(String filename, Number lineno, String source)</p>
+<h3>Description</h3>Compile script.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>filename</td><td>Name of file containing the script</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>lineno</td><td>Starting line number (1 = first line)</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>source</td><td>The source code</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var scriptsource = 'globalvar = 123; var localvar = 456;function f() { return 1};';
+
+var s = new JsScript("sample", 1, scriptsource);
+
+
+</pre>
+<h2 id="newDynamicScope">newDynamicScope()</h2>
+<h3>Prototype</h3>
+<p class="signature">void newDynamicScope(String constructor)</p>
+<h3>Description</h3>
+            
+<p>Create a new dynamic scope using the given constructor function.</p>
+            
+<p>A dynamic scope inherits all predefined top level functions and properties,
+               but is otherwise a clean top level scope. Use this to create a runtime
+               environment to execute scripts.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>constructor</td><td>The name of the constructor function for the scope</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var scope = JsScript.newDynamicScope("Object");
+
+</pre>
+<h2 id="execute">execute()</h2>
+<h3>Prototype</h3>
+<p class="signature">void execute(Object scope)</p>
+<p class="signature">void execute(Object scope, String cwd)</p>
+<h3>Description</h3>
+            
+<p>Execute script within the defined scope object.</p>
+            
+<p>The caller may specify a current working directory (cwd) which is used
+               when executing the script. If not specified, then the
+               current working directory of the calling script is used.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Object</code></td><td>scope</td><td>The top level scope object for script execution.</td>
+</tr>
+<tr>
+<td><code>Object</code></td><td>cwd</td><td>The current working directory to use. </td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+s.execute(scope);
+
+assert(typeof(globalvar) == "undefined");
+assert(typeof(scope.globalvar) != "undefined");
+
+var thisdir = GPSystem.mapFilename("", GPSystem.CWD);
+var subdir = GPSystem.mapFilename("scriptdir", GPSystem.CWD);
+
+var s = new JsScript(subdir + "/test.js");
+
+// Execute script with current directory of this script
+// The script will set the global variable cwd
+s.execute(this);
+assert(thisdir == cwd);
+
+// Execute script with subdirectory relative to this script
+s.execute(this, subdir);
+assert(subdir == cwd);
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

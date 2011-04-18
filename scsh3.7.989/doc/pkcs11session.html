@@ -1,0 +1,2900 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>PKCS11Session - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>PKCS11Session - Reference Documentation</h1>
+<p>Class implementing support for cryptographic token with PKCS#11 interface</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">PKCS11Session() constructor</a>
+</li>
+<li>
+<a href="#login">login()</a>
+</li>
+<li>
+<a href="#initPIN">initPIN()</a>
+</li>
+<li>
+<a href="#setPIN">setPIN()</a>
+</li>
+<li>
+<a href="#enumerateObjects">enumerateObjects()</a>
+</li>
+<li>
+<a href="#generateKey">generateKey()</a>
+</li>
+<li>
+<a href="#generateKeyPair">generateKeyPair()</a>
+</li>
+<li>
+<a href="#wrapKey">wrapKey()</a>
+</li>
+<li>
+<a href="#unwrapKey">unwrapKey()</a>
+</li>
+<li>
+<a href="#deriveKey">deriveKey()</a>
+</li>
+<li>
+<a href="#signInit">signInit()</a>
+</li>
+<li>
+<a href="#sign">sign()</a>
+</li>
+<li>
+<a href="#signUpdate">signUpdate()</a>
+</li>
+<li>
+<a href="#signFinal">signFinal()</a>
+</li>
+<li>
+<a href="#verifyInit">verifyInit()</a>
+</li>
+<li>
+<a href="#verify">verify()</a>
+</li>
+<li>
+<a href="#verifyUpdate">verifyUpdate()</a>
+</li>
+<li>
+<a href="#verifyFinal">verifyFinal()</a>
+</li>
+<li>
+<a href="#encryptInit">encryptInit()</a>
+</li>
+<li>
+<a href="#encrypt">encrypt()</a>
+</li>
+<li>
+<a href="#encryptUpdate">encryptUpdate()</a>
+</li>
+<li>
+<a href="#encryptFinal">encryptFinal()</a>
+</li>
+<li>
+<a href="#decryptInit">decryptInit()</a>
+</li>
+<li>
+<a href="#decrypt">decrypt()</a>
+</li>
+<li>
+<a href="#decryptUpdate">decryptUpdate()</a>
+</li>
+<li>
+<a href="#decryptFinal">decryptFinal()</a>
+</li>
+<li>
+<a href="#close">close()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_PKCS_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_9796</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_X_509</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD2_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD5_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA1_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD128_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD160_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_PKCS_OAEP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_X9_31_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_X9_31</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA1_RSA_X9_31</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RSA_PKCS_PSS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA1_RSA_PKCS_PSS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DSA_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DSA</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DSA_SHA1</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DH_PKCS_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DH_PKCS_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_X9_42_DH_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_X9_42_DH_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_X9_42_DH_HYBRID_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_X9_42_MQV_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA256_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA384_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA512_RSA_PKCS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA256_RSA_PKCS_PSS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA384_RSA_PKCS_PSS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA512_RSA_PKCS_PSS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC2_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC4_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC4</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES2_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DES3_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CDMF_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD2</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD2_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD2_HMAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD5</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD5_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD5_HMAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA_1</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA_1_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA_1_HMAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD128_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD128_HMAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD160</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD160_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RIPEMD160_HMAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST3_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST5_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CAST128_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_RC5_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_IDEA_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_GENERIC_SECRET_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CONCATENATE_BASE_AND_KEY</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CONCATENATE_BASE_AND_DATA</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_CONCATENATE_DATA_AND_BASE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_XOR_BASE_AND_DATA</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_EXTRACT_KEY_FROM_KEY</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_PRE_MASTER_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_MASTER_KEY_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_KEY_AND_MAC_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_MASTER_KEY_DERIVE_DH</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_TLS_PRE_MASTER_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_TLS_MASTER_KEY_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_TLS_KEY_AND_MAC_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_TLS_MASTER_KEY_DERIVE_DH</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_MD5_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SSL3_SHA1_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD5_KEY_DERIVATION</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_MD2_KEY_DERIVATION</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SHA1_KEY_DERIVATION</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD2_DES_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD5_DES_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD5_CAST_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD5_CAST3_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD5_CAST5_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_MD5_CAST128_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_CAST5_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_CAST128_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_RC4_128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_RC4_40</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_DES3_EDE_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_DES2_EDE_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_RC2_128_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBE_SHA1_RC2_40_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PKCS5_PBKD2</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_PBA_SHA1_WITH_SHA1_HMAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_KEY_WRAP_LYNKS</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_KEY_WRAP_SET_OAEP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_ECB64</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_CBC64</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_OFB64</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_CFB64</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_CFB32</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_CFB16</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_CFB8</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_WRAP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_PRIVATE_WRAP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_SKIPJACK_RELAYX</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_KEA_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_KEA_KEY_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_FORTEZZA_TIMESTAMP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_ECB128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_ECB96</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_CBC128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_COUNTER</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_SHUFFLE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_BATON_WRAP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECDSA_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_EC_KEY_PAIR_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECDSA</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECDSA_SHA1</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECDH1_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECDH1_COFACTOR_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_ECMQV_DERIVE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_ECB128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_CBC128</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_COUNTER</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_SHUFFLE</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_JUNIPER_WRAP</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_FASTHASH</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_KEY_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_ECB</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_CBC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_MAC</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_MAC_GENERAL</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_AES_CBC_PAD</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DSA_PARAMETER_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_DH_PKCS_PARAMETER_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+<tr>
+<td>Number</td><td>CKM_X9_42_DH_PARAMETER_GEN</td><td>PKCS#11 mechanism constant</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">PKCS11Session(PKCS11Provider provider, Number slot)</p>
+<p class="signature">PKCS11Session(PKCS11Provider provider, Number slot, Boolean readWrite)</p>
+<h3>Description</h3>
+            
+<p>Open a new session using the given provider and selected slot.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>PKCS11Provider</code></td><td>provider</td><td>Previously loaded provider</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>slot</td><td>Slot id to use</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>readWrite</td><td>True, if session shall allow write access to token. Default is false.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var p = new PKCS11Provider("C:/usr/local/lsm/bin/lsmpkcs11.dll");
+
+var s = new PKCS11Session(p, 1, false);
+s.close();
+
+</pre>
+<h2 id="login">login()</h2>
+<h3>Prototype</h3>
+<p class="signature">login(String password)</p>
+<p class="signature">login(String password, Boolean so)</p>
+<h3>Description</h3>
+            
+<p>Login into token as user or security officer</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>password</td><td>Password to be used for login</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td><td>so</td><td>True, if login as security officer is requested. Default is false</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as user in a read only session
+var s = new PKCS11Session(p, 1, false);
+s.login("12345678");
+s.close();
+
+// Login as security officer in a read/write session
+var s = new PKCS11Session(p, 1, true);
+s.login("abcdefgh", true);
+s.close();
+
+</pre>
+<h2 id="initPIN">initPIN()</h2>
+<h3>Prototype</h3>
+<p class="signature">initPIN(String password)</p>
+<h3>Description</h3>
+            
+<p>Initialize user PIN.</p>
+            
+<p>The user PIN can be initialized in a read/write session authenticated
+               by the SO PIN.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>password</td><td>The new user PIN</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as security officer in a read/write session
+var s = new PKCS11Session(p, 1, true);
+s.login("abcdefgh", true);
+s.initPIN("12345678");
+s.close();
+
+</pre>
+<h2 id="setPIN">setPIN()</h2>
+<h3>Prototype</h3>
+<p class="signature">setPIN(String oldPIN, String newPIN)</p>
+<h3>Description</h3>
+            
+<p>Change the user PIN.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>oldPIN</td><td>The old user PIN</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>newPIN</td><td>The new user PIN</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as security officer in a read/write session
+var s = new PKCS11Session(p, 1, true);
+s.setPIN("12345678", "12345678");
+s.close();
+
+</pre>
+<h2 id="enumerateObjects">enumerateObjects()</h2>
+<h3>Prototype</h3>
+<p class="signature">enumerateObjects()</p>
+<h3>Description</h3>
+            
+<p>Enumerate all objects available in the session</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Array of PKCS11Objects</code></td><td>Objects found</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as user in a read only session
+var s = new PKCS11Session(p, 1, false);
+s.login("12345678");
+
+var objs = s.enumerateObjects();
+for (var i = 0; i &lt; objs.length; i++) {
+	print(" Class :" + objs[i].getNumberAttribute(PKCS11Object.CKA_CLASS));
+	var label = objs[i].getAttribute(PKCS11Object.CKA_LABEL);
+	if (label) {
+		print(" Label :" + objs[i].getAttribute(PKCS11Object.CKA_LABEL).toString(ASCII));
+	}
+}
+
+s.close();
+
+</pre>
+<h2 id="generateKey">generateKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">PKCS11Object generateKey(Number mechanism, ByteString param, Array keyAttr)</p>
+<h3>Description</h3>
+            
+<p>Call C_GenerateKey() to generate a symmetric key using the mechanism specified with
+               given parameter. The key object is allocated using the attributes from keyAttr.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>param</td><td>Parameter for the generation mechanism</td>
+</tr>
+<tr>
+<td><code>Array</code></td><td>keyAttr</td><td>Array of key attributes (CKA_*)</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>PKCS11Objects</code></td><td>New key object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Generate a 168 bit DES key
+
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES3;
+attr[PKCS11Object.CKA_ENCRYPT] = true;
+attr[PKCS11Object.CKA_DECRYPT] = true;
+attr[PKCS11Object.CKA_LABEL] = "GeneratedDES3Key";
+
+var key = s.generateKey(PKCS11Session.CKM_DES3_KEY_GEN, null, attr);
+
+s.close();
+
+</pre>
+<h2 id="generateKeyPair">generateKeyPair()</h2>
+<h3>Prototype</h3>
+<p class="signature">PKCS11Object[] generateKeyPair(Number mechanism, ByteString param, Array pubAttr, Array priAttr)</p>
+<h3>Description</h3>
+            
+<p>Call C_GenerateKeyPair() to generate a key pair using the mechanism specified with
+               given parameter. Key objects are allocated using the attributes from pubAttr and priAttr.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>param</td><td>Parameter for the generation mechanism</td>
+</tr>
+<tr>
+<td><code>Array</code></td><td>pubAttr</td><td>Array of public key attributes (CKA_*)</td>
+</tr>
+<tr>
+<td><code>Array</code></td><td>priAttr</td><td>Array of private key attributes (CKA_*)</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>PKCS11Objects[]</code></td><td>Array containing the public key object at index 0, the private key
+                                       object at index 1.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Generate a 2048 bit RSA key pair
+
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+var priAttr = new Array();
+priAttr[PKCS11Object.CKA_SIGN] = true;
+priAttr[PKCS11Object.CKA_DECRYPT] = true;
+priAttr[PKCS11Object.CKA_UNWRAP] = true;
+priAttr[PKCS11Object.CKA_SENSITIVE] = true;
+priAttr[PKCS11Object.CKA_ID] = new ByteString("23", HEX);
+priAttr[PKCS11Object.CKA_PRIVATE] = true;
+priAttr[PKCS11Object.CKA_LABEL] = "GeneratedPrivateKey";
+
+var pubAttr = new Array();
+pubAttr[PKCS11Object.CKA_VERIFY] = true;
+pubAttr[PKCS11Object.CKA_ENCRYPT] = true;
+pubAttr[PKCS11Object.CKA_WRAP] = true;
+pubAttr[PKCS11Object.CKA_MODULUS_BITS] = 2048;
+pubAttr[PKCS11Object.CKA_PUBLIC_EXPONENT] = new ByteString("010001", HEX);
+pubAttr[PKCS11Object.CKA_LABEL] = "GeneratedPublicKey";
+
+var keys = s.generateKeyPair(PKCS11Session.CKM_RSA_PKCS_KEY_PAIR_GEN, null, pubAttr, priAttr);
+
+s.close();
+
+</pre>
+<h2 id="wrapKey">wrapKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString wrapKey(Number mechanism, ByteString param, PKCS11Object wrappingKey, PKCS11Object key)</p>
+<h3>Description</h3>
+            
+<p>Call C_WrapKey() to wrap a key using another and the mechanism specified with
+               given parameter.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>param</td><td>Parameter for the generation mechanism</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>wrappingKey</td><td>The wrapping key</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>key</td><td>The key to be wrapped</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The wrapped key</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+// Generate a 56 bit DES key
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_ENCRYPT] = true;
+attr[PKCS11Object.CKA_DECRYPT] = true;
+attr[PKCS11Object.CKA_EXTRACTABLE] = true;
+attr[PKCS11Object.CKA_LABEL] = "GeneratedDESKeyForWrapping";
+
+var key = s.generateKey(PKCS11Session.CKM_DES_KEY_GEN, null, attr);
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_ENCRYPT] = true;
+attr[PKCS11Object.CKA_DECRYPT] = true;
+attr[PKCS11Object.CKA_WRAP] = true;
+attr[PKCS11Object.CKA_UNWRAP] = true;
+attr[PKCS11Object.CKA_LABEL] = "GeneratedDESWrappingKey";
+
+var wrapkey = s.generateKey(PKCS11Session.CKM_DES_KEY_GEN, null, attr);
+
+var wrappedkey = s.wrapKey(PKCS11Session.CKM_DES_ECB, null, wrapkey, key);
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_ENCRYPT] = true;
+attr[PKCS11Object.CKA_DECRYPT] = true;
+attr[PKCS11Object.CKA_TOKEN] = true;
+attr[PKCS11Object.CKA_LABEL] = "UnwrappedDESKey";
+
+s.unwrapKey(PKCS11Session.CKM_DES_ECB, null, wrapkey, wrappedkey, attr);
+
+s.close();
+
+</pre>
+<h2 id="unwrapKey">unwrapKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">PKCS11Object unwrapKey(Number mechanism, ByteString param, PKCS11Object wrappingKey, ByteString wrappedKey, Array keyAttr)</p>
+<h3>Description</h3>
+            
+<p>Call C_UnwrapKey() to unwrap a key using another and the mechanism specified with
+               given parameter.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>param</td><td>Parameter for the generation mechanism</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>wrappingKey</td><td>The wrapping key</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>wrappedKey</td><td>The wrapped key</td>
+</tr>
+<tr>
+<td><code>Array</code></td><td>keyAttr</td><td>Array of key attributes (CKA_*)</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>PKCS11Objects</code></td><td>Unwrapped key object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See wrapKey() for an example
+
+</pre>
+<h2 id="deriveKey">deriveKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">PKCS11Object deriveKey(Number mechanism, ByteString param, PKCS11Object baseKey, Array keyAttr)</p>
+<h3>Description</h3>
+            
+<p>Call C_DeriveKey() to derive one key from another and the mechanism specified with
+               given parameter.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>param</td><td>Parameter for the generation mechanism</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>baseKey</td><td>The base key</td>
+</tr>
+<tr>
+<td><code>Array</code></td><td>keyAttr</td><td>Array of key attributes for the derived key (CKA_*)</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>PKCS11Objects</code></td><td>Derived key object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+// Generate a 56 bit DES key
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_DERIVE] = true;
+attr[PKCS11Object.CKA_LABEL] = "GeneratedDESKeyForDerive";
+
+var key = s.generateKey(PKCS11Session.CKM_DES_KEY_GEN, null, attr);
+
+var attr = new Array();
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_LABEL] = "DerivedDESKey";
+
+var derivedkey = s.deriveKey(PKCS11Session.CKM_SHA1_KEY_DERIVATION, null, key, attr);
+
+s.close();
+
+</pre>
+<h2 id="signInit">signInit()</h2>
+<h3>Prototype</h3>
+<p class="signature">signInit(Number mechanism, PKCS11Object key)</p>
+<p class="signature">signInit(Number mechanism, Key key)</p>
+<p class="signature">signInit(Number mechanism, PKCS11Object key, ByteString parameter)</p>
+<p class="signature">signInit(Number mechanism, Key key, ByteString parameter)</p>
+<h3>Description</h3>
+            
+<p>Call C_SignInit() to start a PKCS#11 signature operation.</p>
+            
+<p>The method accepts keys in two different formats. Either as
+               PKCS11Object or as Key object. The former can be obtained using
+               the PKCS11Session.enumerateObjects() methods, the later using the
+           KeyStore.getKeyFromKeyStore() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>key</td><td>A PKCS11Object</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>A Key object</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>parameter</td><td>Parameter passed with mechanism</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as user in a read/write session
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+// Create RSA private session key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_PRIVATE_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_RSA;
+attr[PKCS11Object.CKA_LABEL] = "MyPrivateRSAKey";
+
+attr[PKCS11Object.CKA_PRIME_1] = new ByteString("c0a0758cdf14256f78d4708c86becdead1b50ad4ad6c5c703e2168fbf37884cb", HEX);
+attr[PKCS11Object.CKA_PRIME_2] = new ByteString("f01734d7960ea60070f1b06f2bb81bfac48ff192ae18451d5e56c734a5aab8a5", HEX);
+attr[PKCS11Object.CKA_EXPONENT_1] = new ByteString("b54bb9edff22051d9ee60f9351a48591b6500a319429c069a3e335a1d6171391", HEX);
+attr[PKCS11Object.CKA_EXPONENT_2] = new ByteString("d3d83daf2a0cecd3367ae6f8ae1aeb82e9ac2f816c6fc483533d8297dd7884cd", HEX);
+attr[PKCS11Object.CKA_COEFFICIENT] = new ByteString("b8f52fc6f38593dabb661d3f50f8897f8106eee68b1bce78a95b132b4e5b5d19", HEX);
+
+attr[PKCS11Object.CKA_MODULUS] = new ByteString("b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX);
+attr[PKCS11Object.CKA_PUBLIC_EXPONENT] = new ByteString("11", HEX);
+
+var prk = new PKCS11Object(s, attr);
+
+
+// Create RSA public key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_PUBLIC_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_RSA;
+attr[PKCS11Object.CKA_LABEL] = "MyPublicRSAKey";
+
+attr[PKCS11Object.CKA_MODULUS] = new ByteString("b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX);
+attr[PKCS11Object.CKA_PUBLIC_EXPONENT] = new ByteString("11", HEX);
+
+var puk = new PKCS11Object(s, attr);
+
+
+// Create RSA public key in SCSH3
+var key = new Key();
+key.setType(Key.PUBLIC);
+key.setComponent(Key.MODULUS, new ByteString("b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX));
+key.setComponent(Key.EXPONENT, new ByteString("11", HEX));
+
+var crypto = new Crypto();
+
+
+// Initiate signing operation
+s.signInit(PKCS11Session.CKM_SHA1_RSA_PKCS, prk);
+
+// Single step signing
+var msg = new ByteString("Hello World", ASCII);
+var signature = s.sign(msg);
+
+print("Signature : " + signature);
+
+
+// Decrypt block with public key
+var plain = crypto.decrypt(key, Crypto.RSA, signature);
+print("Plain = " + plain);
+
+// Verify signature with SCSH3
+assert(crypto.verify(key, Crypto.RSA, msg, signature));
+
+
+// Verify signature with PKCS#11
+s.verifyInit(PKCS11Session.CKM_SHA1_RSA_PKCS, puk);
+
+// Single step verifying
+var msg = new ByteString("Hello World", ASCII);
+assert(s.verify(msg, signature));
+
+
+// Initiate signing operation
+s.signInit(PKCS11Session.CKM_SHA1_RSA_PKCS, prk);
+
+// Multi-Step signing (Step 1)
+var msg = new ByteString("Hello ", ASCII);
+s.signUpdate(msg);
+
+// Multi-Step signing (Step 2)
+var msg = new ByteString("World", ASCII);
+s.signUpdate(msg);
+var signature = s.signFinal();
+
+print("Signature : " + signature);
+
+var plain = crypto.decrypt(key, Crypto.RSA, signature);
+print("Plain = " + plain);
+
+// Verify signature with SCSH3
+var msg = new ByteString("Hello World", ASCII);
+assert(crypto.verify(key, Crypto.RSA, msg, signature));
+
+
+// Initiate verifying operation
+s.verifyInit(PKCS11Session.CKM_SHA1_RSA_PKCS, puk);
+
+// Multi-Step verifying (Step 1)
+var msg = new ByteString("Hello ", ASCII);
+s.verifyUpdate(msg);
+
+// Multi-Step verifying (Step 2)
+var msg = new ByteString("World", ASCII);
+s.verifyUpdate(msg);
+assert(s.verifyFinal(signature));
+
+s.close();
+
+
+</pre>
+<h2 id="sign">sign()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString sign(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_Sign() to finish a PKCS#11 signature operation.</p>
+	
+<p>The method returns the signature.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Message to be signed</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Signature</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="signUpdate">signUpdate()</h2>
+<h3>Prototype</h3>
+<p class="signature">signUpdate(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_SignUpdate() to continue a PKCS#11 signature operation.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Partial message to be signed</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="signFinal">signFinal()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString signFinal()</p>
+<h3>Description</h3>
+            
+<p>Call C_SignFinal() to finish a PKCS#11 signature operation.</p>
+	
+<p>The method returns the signature.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Signature</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="verifyInit">verifyInit()</h2>
+<h3>Prototype</h3>
+<p class="signature">verifyInit(Number mechanism, PKCS11Object key)</p>
+<p class="signature">verifyInit(Number mechanism, Key key)</p>
+<p class="signature">verifyInit(Number mechanism, PKCS11Object key, ByteString parameter)</p>
+<p class="signature">verifyInit(Number mechanism, Key key, ByteString parameter)</p>
+<h3>Description</h3>
+            
+<p>Call C_verifyInit() to start a PKCS#11 signature verification operation.</p>
+            
+<p>The method accepts keys in two different formats. Either as
+               PKCS11Object or as Key object. The former can be obtained using
+               the PKCS11Session.enumerateObjects() methods, the later using the
+           KeyStore.getKeyFromKeyStore() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>key</td><td>A PKCS11Object</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>A Key object</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>parameter</td><td>Parameter passed with mechanism</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="verify">verify()</h2>
+<h3>Prototype</h3>
+<p class="signature">boolean verify(ByteString message, ByteString signature)</p>
+<h3>Description</h3>
+            
+<p>Call C_Verify() to finish a PKCS#11 signature verification operation.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Message to be verified</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>signature</td><td>Signature to be verified</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>boolean</code></td><td>True if the signature is valid</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="verifyUpdate">verifyUpdate()</h2>
+<h3>Prototype</h3>
+<p class="signature">verifyUpdate(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_VerifyUpdate() to continue a PKCS#11 signature verification operation.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Partial message to be verified</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="verifyFinal">verifyFinal()</h2>
+<h3>Prototype</h3>
+<p class="signature">boolean signFinal(ByteString signature)</p>
+<h3>Description</h3>
+            
+<p>Call C_VerifyFinal() to finish a PKCS#11 signature verification operation.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>boolean</code></td><td>True if signature is valid</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.signInit() for a complete example
+
+</pre>
+<h2 id="encryptInit">encryptInit()</h2>
+<h3>Prototype</h3>
+<p class="signature">encryptInit(Number mechanism, PKCS11Object key)</p>
+<p class="signature">encryptInit(Number mechanism, Key key)</p>
+<p class="signature">encryptInit(Number mechanism, PKCS11Object key, ByteString parameter)</p>
+<p class="signature">encryptInit(Number mechanism, Key key, ByteString parameter)</p>
+<h3>Description</h3>
+            
+<p>Call C_EncryptInit() to start a PKCS#11 encryption operation.</p>
+            
+<p>The method accepts keys in two different formats. Either as
+               PKCS11Object or as Key object. The former can be obtained using
+               the PKCS11Session.enumerateObjects() methods, the later using the
+           KeyStore.getKeyFromKeyStore() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>key</td><td>A PKCS11Object</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>A Key object</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>parameter</td><td>Parameter passed with mechanism</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Login as user in a read/write session
+var s = new PKCS11Session(p, 1, true);
+s.login("12345678");
+
+// Define 3 different single DES key values
+var keyval1 = new ByteString("7CA110454A1A6E57", HEX);
+var keyval2 = new ByteString("0131D9619DC1376E", HEX);
+var keyval3 = new ByteString("9DC1376E0131D961", HEX);
+
+// Create crypto object for internal reference
+var crypto = new Crypto();
+
+// Create DES session key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES;
+attr[PKCS11Object.CKA_LABEL] = "MyPrivateDESKey1";
+attr[PKCS11Object.CKA_ID] = new ByteString("0101", HEX);
+attr[PKCS11Object.CKA_TOKEN] = false;
+attr[PKCS11Object.CKA_SENSITIVE] = true;
+attr[PKCS11Object.CKA_EXTRACTABLE] = false;
+attr[PKCS11Object.CKA_VALUE] =  keyval1;
+
+var k1p11 = new PKCS11Object(s, attr);
+
+// Internal reference
+var k1ref = new Key();
+k1ref.setComponent(Key.DES, keyval1);
+
+
+// Create DES2 session key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES2;
+attr[PKCS11Object.CKA_LABEL] = "MyPrivateDESKey2";
+attr[PKCS11Object.CKA_ID] = new ByteString("0102", HEX);
+attr[PKCS11Object.CKA_TOKEN] = false;
+attr[PKCS11Object.CKA_SENSITIVE] = true;
+attr[PKCS11Object.CKA_EXTRACTABLE] = false;
+attr[PKCS11Object.CKA_VALUE] =  keyval1.concat(keyval2);
+
+var k2p11 = new PKCS11Object(s, attr);
+
+// Internal reference
+var k2ref = new Key();
+k2ref.setComponent(Key.DES, keyval1.concat(keyval2));
+
+
+// Create DES3 session key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_SECRET_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_DES3;
+attr[PKCS11Object.CKA_LABEL] = "MyPrivateDESKey3";
+attr[PKCS11Object.CKA_ID] = new ByteString("0103", HEX);
+attr[PKCS11Object.CKA_TOKEN] = false;
+attr[PKCS11Object.CKA_SENSITIVE] = true;
+attr[PKCS11Object.CKA_EXTRACTABLE] = false;
+attr[PKCS11Object.CKA_VALUE] =  keyval1.concat(keyval2).concat(keyval3);
+
+var k3p11 = new PKCS11Object(s, attr);
+
+// Internal reference
+var k3ref = new Key();
+k3ref.setComponent(Key.DES, keyval1.concat(keyval2).concat(keyval3));
+
+
+var message = new ByteString("Hello World !!!!", ASCII);
+var iv = new ByteString("0000000000000000", HEX);
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES_ECB, k1p11);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k1ref, Crypto.DES_ECB, message);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES_ECB, k1p11);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES_ECB, k1p11);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES3_ECB, k2p11);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k2ref, Crypto.DES_ECB, message);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES3_ECB, k2p11);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES3_ECB, k2p11);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES3_ECB, k3p11);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k3ref, Crypto.DES_ECB, message);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES3_ECB, k3p11);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES3_ECB, k3p11);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES_CBC, k1p11, iv);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k1ref, Crypto.DES_CBC, message, iv);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES_CBC, k1p11, iv);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES_CBC, k1p11, iv);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES3_CBC, k2p11, iv);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k2ref, Crypto.DES_CBC, message, iv);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES3_CBC, k2p11, iv);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES3_CBC, k2p11, iv);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+
+// Encrypt with PKCS#11 - single step
+s.encryptInit(PKCS11Session.CKM_DES3_CBC, k3p11, iv);
+var cipher = s.encrypt(message);
+print("Cipher : " + cipher);
+
+// Verify with internal reference
+var ref = crypto.encrypt(k3ref, Crypto.DES_CBC, message, iv);
+print("Ref    : " + ref);
+assert(ref.equals(cipher));
+
+// Decrypt with PKCS#11
+s.decryptInit(PKCS11Session.CKM_DES3_CBC, k3p11, iv);
+var plain = s.decrypt(cipher);
+print("Plain : " + plain.toString(ASCII));
+assert(plain.equals(message));
+
+// Encrypt with PKCS#11 - multi step
+s.encryptInit(PKCS11Session.CKM_DES3_CBC, k3p11, iv);
+var cipher = s.encryptUpdate(message.left(8));
+var cipher = cipher.concat(s.encryptUpdate(message.right(8)));
+
+var l = s.encryptFinal();
+assert(l == null);
+
+print("Cipher : " + cipher);
+assert(ref.equals(cipher));
+
+// Encrypt / decrypt with RSA
+
+// Create RSA private key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_PRIVATE_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_RSA;
+attr[PKCS11Object.CKA_LABEL] = "MyPrivateRSAKey";
+
+attr[PKCS11Object.CKA_PRIME_1] = new ByteString("c0a0758cdf14256f78d4708c86becdead1b50ad4ad6c5c703e2168fbf37884cb", HEX);
+attr[PKCS11Object.CKA_PRIME_2] = new ByteString("f01734d7960ea60070f1b06f2bb81bfac48ff192ae18451d5e56c734a5aab8a5", HEX);
+attr[PKCS11Object.CKA_EXPONENT_1] = new ByteString("b54bb9edff22051d9ee60f9351a48591b6500a319429c069a3e335a1d6171391", HEX);
+attr[PKCS11Object.CKA_EXPONENT_2] = new ByteString("d3d83daf2a0cecd3367ae6f8ae1aeb82e9ac2f816c6fc483533d8297dd7884cd", HEX);
+attr[PKCS11Object.CKA_COEFFICIENT] = new ByteString("b8f52fc6f38593dabb661d3f50f8897f8106eee68b1bce78a95b132b4e5b5d19", HEX);
+
+attr[PKCS11Object.CKA_MODULUS] = new ByteString("b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX);
+attr[PKCS11Object.CKA_PUBLIC_EXPONENT] = new ByteString("11", HEX);
+
+var prk = new PKCS11Object(s, attr);
+
+
+// Create RSA public key
+var attr = new Array();
+
+attr[PKCS11Object.CKA_CLASS] = PKCS11Object.CKO_PUBLIC_KEY;
+attr[PKCS11Object.CKA_KEY_TYPE] = PKCS11Object.CKK_RSA;
+attr[PKCS11Object.CKA_LABEL] = "MyPublicRSAKey";
+
+attr[PKCS11Object.CKA_MODULUS] = new ByteString("b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX);
+attr[PKCS11Object.CKA_PUBLIC_EXPONENT] = new ByteString("11", HEX);
+
+var puk = new PKCS11Object(s, attr);
+
+var message = new ByteString("Hello World !!!!", ASCII);
+
+s.encryptInit(PKCS11Session.CKM_RSA_PKCS, puk);
+var cipher = s.encrypt(message);
+
+print("Cipher = " + cipher);
+
+s.decryptInit(PKCS11Session.CKM_RSA_PKCS, prk);
+var plain = s.decrypt(cipher);
+
+print("Plain = " + plain.toString(ASCII));
+
+
+</pre>
+<h2 id="encrypt">encrypt()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString encrypt(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_Encrypt() to perform a PKCS#11 encryption operation.</p>
+	
+<p>The method returns the cipher text.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Message to be encrypted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Cipher text</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="encryptUpdate">encryptUpdate()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString encryptUpdate(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_EncryptUpdate() to encrypt a block of data in a PKCS#11 encryption operation.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Partial message to be encrypted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Cipher text</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="encryptFinal">encryptFinal()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString encryptFinal()</p>
+<h3>Description</h3>
+            
+<p>Call C_EncryptFinal() to finish a PKCS#11 encryption operation.</p>
+	
+<p>The method returns the last encrypted block or null, depending on the algorithm.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Last encrypted block or null</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="decryptInit">decryptInit()</h2>
+<h3>Prototype</h3>
+<p class="signature">decryptInit(Number mechanism, PKCS11Object key)</p>
+<p class="signature">decryptInit(Number mechanism, Key key)</p>
+<p class="signature">decryptInit(Number mechanism, PKCS11Object key, ByteString parameter)</p>
+<p class="signature">decryptInit(Number mechanism, Key key, ByteString parameter)</p>
+<h3>Description</h3>
+            
+<p>Call C_DecryptInit() to start a PKCS#11 decryption operation.</p>
+            
+<p>The method accepts keys in two different formats. Either as
+               PKCS11Object or as Key object. The former can be obtained using
+               the PKCS11Session.enumerateObjects() methods, the later using the
+           KeyStore.getKeyFromKeyStore() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>mechanism</td><td>A PKCS#11 mechanism as defined by one of the PKCS11Session.CKM_xxx constants</td>
+</tr>
+<tr>
+<td><code>PKCS11Object</code></td><td>key</td><td>A PKCS11Object</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>key</td><td>A Key object</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>parameter</td><td>Parameter passed with mechanism</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="decrypt">decrypt()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString decrypt(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_Decrypt() to perform a PKCS#11 decryption operation.</p>
+	
+<p>The method returns the plain text.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Message to be decrypted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Plain text</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="decryptUpdate">decryptUpdate()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString decryptUpdate(ByteString message)</p>
+<h3>Description</h3>
+            
+<p>Call C_DecryptUpdate() to decrypt a block of data in a PKCS#11 decryption operation.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>message</td><td>Partial message to be decrypted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Plain text</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="decryptFinal">decryptFinal()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString decryptFinal()</p>
+<h3>Description</h3>
+            
+<p>Call C_DecryptFinal() to finish a PKCS#11 decryption operation.</p>
+	
+<p>The method returns the last decrypted block or null, depending on the algorithm.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Last decrypted block or null</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>PKCS#11 operation failed</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// See PKCS11Session.encryptInit() for a complete example
+
+</pre>
+<h2 id="close">close()</h2>
+<h3>Prototype</h3>
+<p class="signature">close()</p>
+<h3>Description</h3>
+            
+<p>Close session</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var s = new PKCS11Session(p, 1, false);
+s.close();
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

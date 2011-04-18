@@ -1,0 +1,145 @@
+<!-- #BeginTemplate "template.dwt" -->
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h2>Changes in version 3.7</h2>
+<ul>
+<li>Added new web connectivity with URLConnection and SOAPConnection classes</li>
+<li>Added new support for XML Signatures</li>
+<li>Improved support for cryptographic modules using PKCS#11</li>
+<li>Enhanced support for Secure Messaging with new algorithms and support for EAC 2.0</li>
+<li>Added new cryptographic primitives</li>
+<li>Added special support in ASN.1 for TLV objects defined in EMV</li>
+<li>Added support for javax.smartcardio in the underlying Opencard Framework</li>
+<li>Added facility to simulate smart cards using scripting objects</li>
+<li>Fixed a lot of minor bugs</li>
+</ul>
+<h2>Changes in version 3.6</h2>
+<ul>
+<li>Added support for AES cipher</li>
+<li>Added support for ECC curves on F2M</li>
+<li>Added support for SHA-2 family</li>
+<li>Restructured code into library and SCSH3 component</li>
+<li>Scripts are now moved to a different <a href="http://www.openscdp.org/scripts/index.html">package</a></li>
+<li>Fixed problem with UTF-8 encodings on command line</li>
+<li>Fixed design flaw in CardFile.sendApdu()</li>
+<li>Fixed a lot of minor bugs</li>
+</ul>
+<h2>Changes in version 3.5</h2>
+<ul>
+<li>Added support for PKCS#11 modules</li>
+<li>Added support for key stores</li>
+<li>Added trace functionality for APDUs exchanged with cards</li>
+<li>Improved scripts for German eGK</li>
+<li>Moved development environment to Java 1.5</li>
+<li>Upgraded to latest version of third party libraries</li>
+<li>Improved documentation</li>
+<li>Fixed all kind of bugs</li>
+</ul>
+<h2>Changes in version 3.4</h2>
+<ul>
+<li>Added support for secure messaging with IsoSecureChannel class</li>
+<li>Added support for secure messaging in Card class</li>
+<li>Added support for secure messaging in CardFile class</li>
+<li>Added full support for Elliptic Curve Cryptography (EC-Keys, ECDSA and ECDH)</li>
+<li>Improved handling of various smart cards in ISO card service</li>
+<li>Upgraded to latest version of third party libraries</li>
+<li>Improved documentation</li>
+<li>Fixed all kind of bugs</li>
+</ul>
+<h2>Changes in version 3.3</h2>
+<ul>
+<li>Added outline node functionality to build explorer like GUIs</li>
+<li>Added support for Global Platform profiles</li>
+<li>Added support for more Global Platform scripting classes</li>
+<li>Added explorer for various smart card applications</li>
+<li>Added basic support for CMS</li>
+<li>Added support for JavaCard applet loading</li>
+<li>Added methods to Key and Crypto classes</li>
+<li>Added card terminal to access JCOP card simulation from IBM JCOP tools</li>
+<li>Improved support for Linux</li>
+<li>Improved documentation</li>
+<li>Fixed all kind of bugs</li>
+</ul>
+<h2>Changes in version 3.2</h2>
+<ul>
+<li>Implementation of Key, Crypto and CRL classes</li>
+<li>CardFile.performCHV() allows PIN verification using OCF mechanisms</li>
+<li>Support for access to native Java classes using LiveConnect added</li>
+<li>Basic support for Linux added (only command line version)</li>
+<li>Streamlined console output in GUIShell</li>
+<li>Replaced crypto provider with new version</li>
+</ul>
+<h2>Changes in version 3.1</h2>
+<ul>
+<li>Graphical user interface</li>
+<li>Management of current working directory, workspace directory and system directory for file lookup</li>
+<li>Persistent configuration information in the _scsh3 object</li>
+<li>Implementation of GPSystem class</li>
+</ul>
+<!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->

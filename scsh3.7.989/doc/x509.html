@@ -1,0 +1,648 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>X509 - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>X509 - Reference Documentation</h1>
+<p>
+<p>Class implementing support for X509 certificates</p>
+                 
+<p>This class provides a wrapper for java.security.cert.X509 objects. All methods
+                 from this Java class are available through the LiveConnect mechanism.</p>
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">X509() constructor</a>
+</li>
+<li>
+<a href="#getNative">getNative()</a>
+</li>
+<li>
+<a href="#getBytes">getBytes()</a>
+</li>
+<li>
+<a href="#getIssuerDNString">getIssuerDNString()</a>
+</li>
+<li>
+<a href="#getSubjectDNString">getSubjectDNString()</a>
+</li>
+<li>
+<a href="#getOCSPResponderURL">getOCSPResponderURL()</a>
+</li>
+<li>
+<a href="#getPublicKey">getPublicKey()</a>
+</li>
+<li>
+<a href="#verify">verify()</a>
+</li>
+<li>
+<a href="#verifyWith">verifyWith()</a>
+</li>
+</ul>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">X509(ByteString dercert)</p>
+<p class="signature">X509(String certfile)</p>
+<h3>Description</h3>Create certificate object from DER encoded certificate or read from file<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>dercert</td><td>DER encoded certificate</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>certfile</td><td>
+<p>Filename of file containing DER encoded certificate</p>
+                  
+<p>Unless an absolute file name is given, the path is relative to the location of the
+                  script in which the constructor is called.</p>
+</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The certificate has an invalid or unrecognized structure</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+
+print("Issuer  : " + root.getIssuerDNString());
+print("Subject : " + root.getSubjectDNString());
+
+bs = new ByteString("\
+MIIGGzCCBAOgAwIBAgIRAS31fRUU00bNe4A4sqZ44wQwDQYJKoZIhvcNAQEFBQAw \
+VDESMBAGA1UEAwwJUm9vdC1DQSAxMTEwLwYDVQQKDChURVNUIC0gSGF1cHR2ZXJi \
+YW5kIMO2c3RlcnIuIFNvemlhbHZlcnMuMQswCQYDVQQGEwJBVDAeFw0wNTA2MjMx \
+NzI3MDJaFw0zMDA2MjMxNzI3MDJaMFYxFDASBgNVBAMMC1N5c3RlbSBDQSAxMTEw \
+LwYDVQQKDChURVNUIC0gSGF1cHR2ZXJiYW5kIMO2c3RlcnIuIFNvemlhbHZlcnMu \
+MQswCQYDVQQGEwJBVDCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAKWL \
+/7+RLD7eqAiqbFtN/3sWgw5nfA3G6vYcVvV4CzXFlzJVk6xtiu/sYlSQK18tbyF4 \
+7DfNuHANV24lutFOoGLuhJkSWbqONcNvplD7a+XIniAdSgSBxcJnXvZ4xJ+Bd5TH \
+U4CXvcqDGpEaEAgnhpiVPoBMHK/r1eMrLsb9+HryCKBrC0dzVPPKX+HAz2wj757x \
+KdlrBva7dFz5pbDDZmifmTko4fj4DQS5quu4MVq2vs1D9km2BZXCgU5Fo6OWoL0a \
+U3B4amLzNA981E2niLovz+18DB340/PlgctE6FaM8XQv9Omoe/nUqImM/J+T8uIp \
+kFCy+1cuhXGRpqRnHvEq88COsvDFI6vKfwd9Duko+IjUzpq3MIa2bXURBU3kDD79 \
+sl1i1uy9Sx6YtwTZBoPIQZP+7WjlZnT4nBpJl2r0qKFKJH3nBJVntlzlSna1gc4u \
+HZBkvrfDnLG/RGGBsiqkzdx0myM8mON/veLbY5Nd+SUBm1bWAw0BSbz+3jBtHQID \
+AQABo4IBZDCCAWAwEwYDVR0jBAwwCoAIRtDR1WyRFs4wEQYDVR0OBAoECEvRRLys \
+X0iFMA4GA1UdDwEB/wQEAwICBDAxBggrBgEFBQcBAQQlMCMwIQYIKwYBBQUHMAGG \
+FWh0dHA6Ly8xNDkuMjM5LjE2LjIwOTCB3gYDVR0fBIHWMIHTMIHQoHOgcYZvbGRh \
+cDovLzE0OS4yMzkuMTYuMjA5L289VEVTVCUyMC0lMjBIYXVwdHZlcmJhbmQlMjAl \
+ZjZzdGVyci4lMjBTb3ppYWx2ZXJzLixjPUFUP2NlcnRpZmljYXRlUmV2b2NhdGlv \
+bkxpc3Q7YmluYXJ5olmkVzBVMRMwEQYDVQQDDApDUkwtU2lnbmVyMTEwLwYDVQQK \
+DChURVNUIC0gSGF1cHR2ZXJiYW5kIMO2c3RlcnIuIFNvemlhbHZlcnMuMQswCQYD \
+VQQGEwJBVDASBgNVHRMBAf8ECDAGAQH/AgEAMA0GCSqGSIb3DQEBBQUAA4ICAQAY \
+P81wkoVpuE6Dtg72snt2KnwURfI1KAD+WgDBKLcSUD+uO2ks7CpRWaqD5WW47lQD \
+KsGwLyRmwEfmNBPh15TMYkTvynUwD3WBaPPr59Hy7QrUcdRU511my0CnS3W+2L4a \
+oLCuyRvlozuIhBHCfSKsYFZwHrT90J+B9NFnlWCGsxg0xsKpatcXsrMOQTlX3dOl \
+5pu9KEoKlryZArD7UDBqMAqKQ9srx1a23AJKREFyJ6a4aW/voZvpoHMsQQPbm8xb \
+vQPZaUUqY7R9g/9ZgVdeDrjEJU8qtptSL1ixVbvmpKM0g+G4tda83VfVY5qeto6E \
+QLmst4yNA/uv5MxCtEu/DthxUScGkY1erV6LMb97u4m4mx87SxKPBhCdZx76BEgU \
+t0bLFAlG63h1bZ3UFcoDR3PSjF1QwUPO6DroCMVpUYRGnli123KQ63lKCOxQqwl+ \
+te7x3uEWKgN8FwUKCLYGnBIiBA2c7igRiyKaOon+43kYt+GAyBvOdH1n/EjHQVHE \
+h3xwWNCsiAn6XFjlL61i0r5dshBl+rWWyUbNpHXqHuPnm8Zn37DXwmvxU9qdc0TA \
+Y8M0uMYAw1rkDoo2zGb2nxAbmmp7L8J2cFE/6TJ6R7gdxY/0uwaIdRHBr844kscO \
+i0dKmGsaCPxCVq5venNSatNMEvOgyEloLGqoq3S+xQ==", BASE64);
+
+ca = new X509(bs);
+
+print("Issuer  : " + ca.getIssuerDNString());
+print("Subject : " + ca.getSubjectDNString());
+
+</pre>
+<h2 id="getNative">getNative()</h2>
+<h3>Prototype</h3>
+<p class="signature">java.security.X509Certificate getNative()</p>
+<h3>Description</h3>
+<p>Return underlying native java.security.X509Certificate object. All methods of the 
+                     Java object are available through the LiveConnect mechanism.</p>
+                     
+<p>For methods with return type byte[], as ByteString object is created.</p>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>java.security.X509Certificate</code></td><td>Native Java object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var root = new X509("root.cer");
+var ncert = root.getNative();
+print("Version: " + ncert.getVersion());
+
+</pre>
+<h2 id="getBytes">getBytes()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getBytes()</p>
+<h3>Description</h3>Return certificate in encoded format<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Encoded certificate</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+bs = root.getBytes();
+root = new X509(bs);
+
+print("Subject : " + root.getSubjectDNString());
+
+</pre>
+<h2 id="getIssuerDNString">getIssuerDNString()</h2>
+<h3>Prototype</h3>
+<p class="signature">String getIssuerDNString()</p>
+<h3>Description</h3>Return a string containing the Issuer Distinguished Name in a human readable form.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>String containing the Issuer DN</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+
+dn = root.getIssuerDNString();
+assert(dn);
+
+print("Issuer  : " + dn);
+
+</pre>
+<h2 id="getSubjectDNString">getSubjectDNString()</h2>
+<h3>Prototype</h3>
+<p class="signature">String getSubjectDNString()</p>
+<h3>Description</h3>Return a string containing the Subject Distinguished Name in a human readable form.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>String containing the Subject DN</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+
+var dn = root.getSubjectDNString();
+assert(dn);
+
+print("Subject : " + dn);
+
+</pre>
+<h2 id="getOCSPResponderURL">getOCSPResponderURL()</h2>
+<h3>Prototype</h3>
+<p class="signature">String getOCSPResponderURL()</p>
+<h3>Description</h3>Return a string containing the URL of the OCSP responder for this certificate.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>String containing the OCSP Responder URL</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+
+url = root.getOCSPResponderURL();
+assert(url);
+
+print("OCSP Responder URL : " + url);
+
+</pre>
+<h2 id="getPublicKey">getPublicKey()</h2>
+<h3>Prototype</h3>
+<p class="signature">Key getPublicKey()</p>
+<p class="signature">Key getPublicKey(Key template)</p>
+<h3>Description</h3>
+<p>Extract public key from certificate.</p>
+                     
+<p>If no template is given, then a new Key object is created. If the key template
+                     is provided, then it will be filled with the appropriate values.</p>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Key</code></td><td>New key object or object provided as template.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_KEY</td><td>The key could not be extracted from the certificate</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var root = new X509("root.cer");
+
+var key = root.getPublicKey();
+assert(key instanceof Key);
+
+assert(key.getType() == Key.PUBLIC);
+assert(key.getSize() == 4096);
+assert(key.getComponent(Key.MODULUS).toString(HEX) == 
+	"D0FC391648CD018C07FD9A9EFCBB0BC88C6D6A72575C4862" +
+	"6A632BAE0E6E8091B22CDEFD952BA19E4AF06B2380C3DCE1" + 
+	"0678FBDD408B7E2E9D8341760079761161C42A0917143E26" +
+	"A787B74426CEC430A55E71DEDB391A501696DF116E21D270" +
+	"6F0B88CC4AEEA2EC5E8032F5E9FA45B6A4DB51346FAC26AF" +
+	"FCB694A6067C0D2F2C9488489BEA5ED0D18B0ABC98A526B2" +
+	"62CDE334873AEC73CF57570A8508BCABE224ED97D84F81B6" +
+	"FF8F1639E8245FDF143664FACF301DB53640262B9F79FFAD" +
+	"12619EAA5A54473D82E8EF876270DAAA5CD57D8557CAA23C" +
+	"64C1FCB508E11261EA65DF4667FD168E797D6B7FC01E668A" + 
+	"3172F906D5A8E45CEB9A7FB8C34FF44230F6DB6CD7415D52" +
+	"9879447908E13E09A5EC323C4C6E0F9FCF3B0E426C76C140" +
+	"0B3AE3945D03DF7037697FC47B944B7DF1D5DFD18F600579" +
+	"0CCB8B82F1D4061F0C837959CF0F091BF072F6F8CA552DFD" +
+	"CF5D998B020025C986BA8934F7B5BC277F12313CE2BA533C" +
+	"84285F95C7ED028D5A4D0CEECE2708AE1C024D27C26627B2" +
+	"F413D9B83C6C82381FD1CBD181A8D453000897F985252BF2" +
+	"9FEC0078BBCB8704E5856B8D46E10C4AB9B63B1A26F68C1B" +
+	"8F9EE48B1B73005ACCC330C4D20EE3479249FAF2CAD17B6C" +
+	"383330549C723C7695D6DF6170E56866FE4F598C8BF3F691" +
+	"04DD5C0CC1BD82FC398B1FA7AF4D5EB4EEC06652CE1DBECE" +
+	"2F1E47E966E60F45");
+assert(key.getComponent(Key.EXPONENT).toString(HEX) == "010001");
+
+
+var key = root.getPublicKey(key);
+assert(key instanceof Key);
+assert(key.getType() == Key.PUBLIC);
+
+var root = new X509("ecdsacert.cer");
+var key = root.getPublicKey();
+assert(key instanceof Key);
+assert(key.getType() == Key.PUBLIC);
+assert(key.getSize() == 192);
+assert(key.getComponent(Key.ECC_QX).toString(HEX) == 
+            "ED5A2BEB600D48E3B3301AE29DCCFA2A2AD85733AD5F09B0");
+assert(key.getComponent(Key.ECC_QY).toString(HEX) == 
+            "6DC91E96758FA281D45787759FA5BEA1A4E2AD7564A062F4");
+
+</pre>
+<h2 id="verify">verify()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void verify(Key publicKey)</p>
+<h3>Description</h3>
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Key</code></td><td>publicKey</td><td>Public key</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>Invalid certificate structure</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>Signature algorithm not supported or provider not found</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>Signature is not valid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_KEY</td><td>The key is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var root = new X509("root.cer");
+var ca = new X509("ca.cer");
+
+var rootKey = root.getPublicKey();
+root.verify(rootKey);
+ca.verify(rootKey);
+
+try	{
+	var caKey = ca.getPublicKey();
+	ca.verify(caKey);
+	assert(false);
+}
+catch(e) {
+	assert(e instanceof GPError);
+	assert(e.error == GPError.CRYPTO_FAILED);
+}
+
+</pre>
+<h2 id="verifyWith">verifyWith()</h2>
+<h3>Prototype</h3>
+<p class="signature">Void verifyWith(X509 superior)</p>
+<h3>Description</h3>Verify if certificate was signed with private key related to superior certificate<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>X509</code></td><td>superior</td><td>Certificate from which the public key will be extracted</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>Invalid certificate structure</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_MECH</td><td>Signature algorithm not supported or provider not found</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.CRYPTO_FAILED</td><td>Signature is not valid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+root = new X509("root.cer");
+ca = new X509("ca.cer");
+root.verifyWith(root);
+ca.verifyWith(root);
+
+try	{
+	ca.verifyWith(ca);
+	assert(false);
+}
+catch(e) {
+	assert(e instanceof GPError);
+	assert(e.error == GPError.CRYPTO_FAILED);
+}
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

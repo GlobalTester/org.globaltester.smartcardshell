@@ -1,0 +1,763 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>OutlineNode - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>OutlineNode - Reference Documentation</h1>
+<p>
+        
+<p>The OutlineNode class provides functions to create an outline tree in the Smart Card Shell.</p>
+        
+<p>The Outline can be used to display hierarchical data. A tree consists of nodes represented
+           by instances of the OutlineNode class. You can create nodes, add child nodes, remove nodes
+           and control the behaviour of the tree using action listeners defined for user objects of
+           nodes.</p>
+        
+<p>The appearance of a node can be changed dynamically. You can change the label, the icon and
+           set a tool-tip text, which is displayed when the user moves the mouse over the node.</p>
+        
+<p>Using the setContextMenu method, you can add context menues to node, which are
+           activated when the user clicks on the node with the right mouse button.</p>
+        
+<p>Any actions on the outline performed by the user are delegated to action listener
+           methods implemented by the user object. These methods (expandListener(), collapseListener(),
+       selectedListener() and actionListener()) are activated on their own threads, so long running
+           actions are possible.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">OutlineNode() constructor</a>
+</li>
+<li>
+<a href="#insert">insert()</a>
+</li>
+<li>
+<a href="#remove">remove()</a>
+</li>
+<li>
+<a href="#show">show()</a>
+</li>
+<li>
+<a href="#setContextMenu">setContextMenu()</a>
+</li>
+<li>
+<a href="#setToolTip">setToolTip()</a>
+</li>
+<li>
+<a href="#setIcon">setIcon()</a>
+</li>
+<li>
+<a href="#setLabel">setLabel()</a>
+</li>
+<li>
+<a href="#setUserObject">setUserObject()</a>
+</li>
+</ul>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Object</td><td>parent</td><td>Parent of this OutlineNode object</td>
+</tr>
+<tr>
+<td>Object[]</td><td>childs</td><td>Childs of this OutlineNode object</td>
+</tr>
+<tr>
+<td>String</td><td>icon</td><td>Name of icon selected with setIcon()</td>
+</tr>
+<tr>
+<td>String</td><td>tooltip</td><td>Tooltip set with setToolTip()</td>
+</tr>
+<tr>
+<td>String[]</td><td>contextMenu</td><td>Context menu set with setContextMenu()</td>
+</tr>
+<tr>
+<td>Object</td><td>userObject</td><td>Object registered as user object in setUserObject()</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">OutlineNode(String name)</p>
+<p class="signature">OutlineNode(String name, boolean expandable)</p>
+<h3>Description</h3>
+            
+<p>Create an OutlineNode object.</p>
+            
+<p>The OutlineNode class is not automatically defined and only available in
+               the Smart Card Shell.</p>
+            
+<p>OutlineNode objects can receive expand(), collapse() selected() and action() events
+               from the outline. If such methods are defined, they overwrite the expandListener(),
+               collapseListener(), selectedListener() or actionListener() methods in a user object.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>name</td><td>Name to show in tree view</td>
+</tr>
+<tr>
+<td><code>boolean</code></td><td>expandable</td><td>Show expander for node, even if the OutlineNode has no childs.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>On or more arguments are not of the expected type</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+cnt = 0;
+
+defineClass("de.cardcontact.scdp.scsh3.OutlineNode");
+
+OutlineNode.prototype.expand = function() { 
+	print("expand called for " + this );
+};
+
+
+OutlineNode.prototype.selected = function() { 
+	print("selected called for " + this );
+};
+
+
+OutlineNode.prototype.collapse = function() { 
+	print("collapse called for " + this );
+};
+
+
+OutlineNode.prototype.action = function(name) { 
+	print("action(" + name + ") called for " + this );
+	
+	if (name == "add") {
+		var node = new OutlineNode("node" + cnt, true);
+		cnt++;
+		
+		node.setContextMenu(["add", "remove", "---", "deselected", "selected", "passed", "failed", "---", "setToolTip", "removeToolTip", "---", "changeLabel"]);
+	
+		this.insert(node);
+	} else if (name == "remove") {
+		this.remove();
+	} else if (name == "setToolTip") {
+		this.setToolTip("Tooltip#" + cnt);
+		cnt++;
+	} else if (name == "removeToolTip") {
+		this.setToolTip();
+	} else if (name == "changeLabel") {
+		this.setLabel("Label#" + cnt);
+		cnt++;
+	} else {
+		this.setIcon(name);
+	}
+};
+
+
+var outline = new OutlineNode("root");
+
+</pre>
+<h2 id="insert">insert()</h2>
+<h3>Prototype</h3>
+<p class="signature">insert()</p>
+<p class="signature">insert(Object child, Number index)</p>
+<p class="signature">insert(Object child)</p>
+<h3>Description</h3>
+            
+<p>Add a child to the outline node. The child must be OutlineNode object or any
+               scriptable object that implements a tree model (e.g. ASN1).</p>
+            
+<p>show() will automatically make the node to the root node of the outline.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Object</code></td><td>child</td><td>Child object to insert</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Position at which to insert the child elements. The last
+              position is assumed, if no index is given.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Insert other node
+var node = new OutlineNode("Testnode");
+outline.insert(node);
+
+// Insert ASN1 structure
+var root = new X509("root.cer");
+bs = root.getBytes();
+var t = new ASN1(bs);
+assert(t instanceof ASN1);
+
+outline.insert(t);
+
+</pre>
+<h2 id="remove">remove()</h2>
+<h3>Prototype</h3>
+<p class="signature">remove()</p>
+<p class="signature">remove(Object child)</p>
+<h3>Description</h3>
+            
+<p>Remove the child object from the node.</p>
+            
+<p>If no child is specified, then the node for which this method is called is
+               removed from the parent node.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Object</code></td><td>child</td><td>Child object to be removed</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+// Insert other node
+var node = new OutlineNode("Remove-Testnode");
+outline.insert(node);
+
+// Insert ASN1 structure
+var root = new X509("root.cer");
+bs = root.getBytes();
+var t = new ASN1(bs);
+assert(t instanceof ASN1);
+
+outline.insert(t);
+
+outline.remove(node);
+outline.remove(t);
+
+</pre>
+<h2 id="show">show()</h2>
+<h3>Prototype</h3>
+<p class="signature">show()</p>
+<p class="signature">show(String title)</p>
+<h3>Description</h3>
+            
+<p>Make tree of outline node visible and allow user interaction.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>title</td><td>Title of outline to display</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.show();
+
+</pre>
+<h2 id="setContextMenu">setContextMenu()</h2>
+<h3>Prototype</h3>
+<p class="signature">setContextMenu(String[] entries)</p>
+<h3>Description</h3>
+            
+<p>Set content of context menu.</p>
+            
+<p>Selected actions trigger an action() method call.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String[]</code></td><td>entries</td><td>Array of context menu entries</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.setContextMenu(["add"]);
+
+</pre>
+<h2 id="setToolTip">setToolTip()</h2>
+<h3>Prototype</h3>
+<p class="signature">setToolTip(String toolTipText)</p>
+<p class="signature">setToolTip()</p>
+<h3>Description</h3>
+            
+<p>Set a text to display as tool tip, which is displayed when the mouse is held over the node.</p>
+            
+<p>If no text is defined, the tool tip is removed.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>toolTipText</td><td>Text to display</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.setToolTip("Press the right mouse button to see context menu");
+
+</pre>
+<h2 id="setIcon">setIcon()</h2>
+<h3>Prototype</h3>
+<p class="signature">setIcon(String iconName)</p>
+<p class="signature">setIcon()</p>
+<h3>Description</h3>
+            
+<p>Change the icon of the node to the named icon or reset to the default.</p>
+            
+<p>The name of the icon is mapped to the file name &lt;iconName&gt;.png and
+               located in the icons directory directly underneath the installation directory.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>iconName</td><td>Name of icon</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.setIcon("selected");
+
+</pre>
+<h2 id="setLabel">setLabel()</h2>
+<h3>Prototype</h3>
+<p class="signature">setLabel(String label)</p>
+<h3>Description</h3>
+            
+<p>Change the label of the node to the given string.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>label</td><td>Label for node</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.setLabel("Changed label");
+
+</pre>
+<h2 id="setUserObject">setUserObject()</h2>
+<h3>Prototype</h3>
+<p class="signature">setUserObject(Object userObject)</p>
+<h3>Description</h3>
+            
+<p>Register a user object for this node. Any events are delegated to this user object if a
+               event method is provided.</p>
+            
+<p>selectedListener(OutlineNode source) is called if the user is selecting the node.</p>
+            
+<p>expandListener(OutlineNode source) is called if the user is expanding the node.</p>
+            
+<p>collapseListener(OutlineNode source) is called if the user is collapsing the node.</p>
+            
+<p>actionListener(OutlineNode source, String action) is called if the user is selecting from the context menu.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Object</code></td><td>userObject</td><td>Object to receive events.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Void</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+outline.setUserObject(this);
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

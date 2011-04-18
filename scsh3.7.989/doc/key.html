@@ -1,0 +1,867 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>Key - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>Key - Reference Documentation</h1>
+<p>
+<p>Implements support for cryptographic keys.</p>
+                 
+<p>Use this class to create cryptographic keys. Key values are either
+                    set in the key profile or defined using the setComponent() method.</p>
+                 
+<p>To use AES with 192 or 256 bit, you will need to install the Java 
+                    Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy
+                    available from the site where you downloaded your Java runtime.
+                    See java.sun.com or Google for details on how to install these
+                    files.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">Key() constructor</a>
+</li>
+<li>
+<a href="#setType">setType()</a>
+</li>
+<li>
+<a href="#getType">getType()</a>
+</li>
+<li>
+<a href="#setSize">setSize()</a>
+</li>
+<li>
+<a href="#getSize">getSize()</a>
+</li>
+<li>
+<a href="#setComponent">setComponent()</a>
+</li>
+<li>
+<a href="#getComponent">getComponent()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>SECRET</td><td>Secret key type in setType() and getType() method</td>
+</tr>
+<tr>
+<td>Number</td><td>PRIVATE</td><td>Private key type in setType() and getType() method</td>
+</tr>
+<tr>
+<td>Number</td><td>PUBLIC</td><td>Public key type in setType() and getType() method</td>
+</tr>
+<tr>
+<td>Number</td><td>DES</td><td>DES secure key component</td>
+</tr>
+<tr>
+<td>Number</td><td>AES</td><td>AES secure key component</td>
+</tr>
+<tr>
+<td>Number</td><td>MODULUS</td><td>RSA key component (modulus)</td>
+</tr>
+<tr>
+<td>Number</td><td>EXPONENT</td><td>RSA key component (exponent)</td>
+</tr>
+<tr>
+<td>Number</td><td>CRT_P</td><td>RSA private key component P</td>
+</tr>
+<tr>
+<td>Number</td><td>CRT_Q</td><td>RSA private key component Q</td>
+</tr>
+<tr>
+<td>Number</td><td>CRT_DP1</td><td>RSA private key component (D mod P^-1)</td>
+</tr>
+<tr>
+<td>Number</td><td>CRT_DQ1</td><td>RSA private key component (D mod P^-1)</td>
+</tr>
+<tr>
+<td>Number</td><td>CRT_PQ</td><td>RSA private key component (Q^-1 mod P)</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_D</td><td>EC private key component</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_QX</td><td>EC public key component, x coordinate of point q</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_QY</td><td>EC public key component, y coordinate of point q</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_CURVE_OID</td><td>Object identifier of named curve</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_A</td><td>Elliptic curve coefficient a</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_B</td><td>Elliptic curve coefficient b</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_GX</td><td>Elliptic curve x coordinate of generator point G</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_GY</td><td>Elliptic curve y coordinate of generator point G</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_N</td><td>Elliptic curve order of base point G</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_H</td><td>Elliptic curve cofactor of generator point G</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_P</td><td>Elliptic curve prime p (Fp)</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_M</td><td>Elliptic curve degree m (F2^m)</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_K1</td><td>Elliptic curve reduction polynom exponent k1 (F2^m)</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_K2</td><td>Elliptic curve reduction polynom exponent k2 (F2^m)</td>
+</tr>
+<tr>
+<td>Number</td><td>ECC_K3</td><td>Elliptic curve reduction polynom exponent k3 (F2^m)</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">Key()</p>
+<p class="signature">Key(String profile)</p>
+<p class="signature">Key(Key otherKey)</p>
+<h3>Description</h3>
+<p>Create an empty key object and set properties from profile or existing key.</p>
+                     
+<p>If no profile or existing key is specified, then an empty key is created.</p>
+                     
+<p>See the examples in the directory ./profiles how to create
+                        XML key profiles.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>profile</td><td>Name of file containing Global Platform key profile</td>
+</tr>
+<tr>
+<td><code>Key</code></td><td>otherKey</td><td>Existing key whose components are copied into the new key</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>On or more arguments are not of the expected type</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+assert(key != null);
+
+var key = new Key("profiles/kp_single_des_1.xml");
+assert(key != null);
+
+assert(key.profile);
+assert(key.profile.UniqueID == "2B0601040181C31F100001");
+assert(key.profile.ProfileVersion == "1.1.0");
+assert(key.profile.ErrataVersion == "0");
+assert(key.profile.Description.elementValue == "Single DES Test Key 1");
+assert(key.profile.Revisions);
+assert(key.profile.Revisions.Revision.length == 1);
+assert(key.profile.Revisions.Revision[0]);
+assert(key.profile.Revisions.Revision[0].Version == "1.0.0");
+assert(key.profile.Revisions.Revision[0].Date == "2005-12-09");
+assert(key.profile.Revisions.Revision[0].Time == "00:00:00");
+assert(key.profile.Revisions.Revision[0].By == "www.openscdp.org");
+assert(key.profile.Revisions.Revision[0].Digest == "00000000");
+assert(key.profile.KeyInfo);
+assert(key.profile.KeyInfo.Name == "SingleDESTest1");
+assert(key.profile.KeyInfo.Type == "SECRET");
+assert(key.profile.KeyInfo.SubType == "DES");
+assert(key.profile.KeyInfo.Size == "64");
+assert(key.profile.KeyInfo.Mode == "TEST");
+assert(key.profile.Attribute);
+assert(key.profile.Attribute.Sensitive == "false");
+assert(key.profile.Attribute.Importable == "true");
+assert(key.profile.Attribute.Exportable == "true");
+assert(key.profile.Usage);
+assert(key.profile.Usage.Encrypt == "true");
+assert(key.profile.Usage.Decrypt == "true");
+assert(key.profile.Usage.DecryptEncrypt == "true");
+assert(key.profile.Usage.Sign == "true");
+assert(key.profile.Usage.Verify == "true");
+assert(key.profile.Usage.Wrap == "true");
+assert(key.profile.Usage.Unwrap == "true");
+assert(key.profile.Usage.UnwrapWrap == "true");
+assert(key.profile.Usage.Derive == "true");
+assert(key.profile.Value);
+assert(key.profile.Value.Format == "DES");
+assert(key.profile.Value.Component);
+assert(key.profile.Value.Component.length == 1);
+assert(key.profile.Value.Component[0].Value == "7CA110454A1A6E57");
+assert(key.profile.Value.Component[0].Encoding == "HEX");
+
+var newkey = new Key(key);
+
+assert(newkey.getType() == Key.SECRET);
+assert(newkey.getSize() == 64);
+assert(newkey.profile == key.profile);
+assert(newkey.getComponent(Key.DES).toString(HEX) == "7CA110454A1A6E57");
+
+
+
+</pre>
+<h2 id="setType">setType()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setType(Number type)</p>
+<h3>Description</h3>
+<p>Set the basic key type to either Key.SECRET, Key.PRIVATE or Key.PUBLIC.</p>
+                     
+<p>If a profile was used to create the key, then the profile.KeyInfo.Type property
+                        is updated accordingly.</p>
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>type</td><td>Type of key. Must be either Key.SECRET, Key.PRIVATE or Key.PUBLIC</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>None</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+
+key.setType(Key.SECRET);
+key.setType(Key.PRIVATE);
+key.setType(Key.PUBLIC);
+
+key = new Key("profiles/kp_single_des_1.xml");
+
+key.setType(Key.SECRET);
+key.setType(Key.PRIVATE);
+key.setType(Key.PUBLIC);
+
+</pre>
+<h2 id="getType">getType()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getType()</p>
+<h3>Description</h3>Get the basic key type which is either Key.SECRET, Key.PRIVATE or Key.PUBLIC.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>The type of the key or the undefined value if the type is not specified</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+
+key.setType(Key.SECRET);
+assert(key.getType() == Key.SECRET);
+
+key = new Key("profiles/kp_single_des_1.xml");
+assert(key.getType() == Key.SECRET);
+
+
+</pre>
+<h2 id="setSize">setSize()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setSize(Number size)</p>
+<h3>Description</h3>
+            
+<p>Set the key size in number of bits for the key, if not already set from the profile.</p>
+            
+<p>This method should be used to specify the key size in a key template passed to the
+               Crypto.generateKeyPair() method.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>size</td><td>Number of bits for key</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>None</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+key.setType(Key.PRIVATE);
+key.setSize(1024);
+
+</pre>
+<h2 id="getSize">getSize()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getSize()</p>
+<h3>Description</h3>Get the size of the key expressed as number of bits<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>The number of bits comprising this key</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+
+key.setType(Key.PUBLIC);
+key.setSize(1024);
+assert(key.getSize() == 1024);
+
+key = new Key("profiles/kp_single_des_1.xml");
+assert(key.getSize() == 64);
+
+
+</pre>
+<h2 id="setComponent">setComponent()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setComponent(Number type, ByteString value)</p>
+<h3>Description</h3>
+            
+<p>Set a component for the cryptographic key.</p>
+            
+<p>For DES keys only the component Key.DES is defined.</p>
+            
+<p>For AES keys only the component Key.AES is defined. If you want to use AES with 192 or 256 bit,
+               then will need to install the Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy
+               available from the site where you downloaded your Java runtime.
+               See java.sun.com or Google for details on how to install these
+               files.</p>
+            
+<p>RSA private keys can be composed in one of two ways, either with Key.MODULUS and Key.EXPONENT or 
+               with Key.CRT_P, Key.CRT_Q, Key.CRT_DP, Key.CRT_DQ and Key.CRT_PQ.</p>
+	
+<p>ECC private and public keys can be composed by specifying the elliptic curve and the private
+               value D or the public point Q, which consists of a x and y coordinate.</p>
+            
+<p>The elliptic curve can be either defined by the object identifier (in binary format)
+               of the named curve or by specifying the individual curve parameter (p, a, b, Gx, Gy, n, h)
+               for Fp or (m, k1, k2, k3, Gx, Gy, n, h) for F2m. </p>
+            
+<p>See the script in tools/eccutils.js for a list of pre-defined curve object identifier.</p>
+            
+<p>All key parameter are interpreted as unsigned big integer.</p>
+            
+<p>If the key type is not yet determined, then the first call
+               of setComponent() will define the key type and subsequent
+               setComponent() calls must only overwrite or extend the key component
+               values already defined. This, however, only works if the key type can
+               be derived from the component supplied (e.g. the key type (Private/Public) can
+               not be automatically determined when specifying the modulus).</p>
+            
+<p>Keys are only constructed from components at the time
+               they are needed by a cryptographic operation. The key itself
+               is then stored as a session value until a subseqent call to
+               setComponent() erases the cached key.</p>
+	
+<p>To allow for the RSA blinding operation, the public key exponent can be defined
+               for RSA CRT private keys. This is done with the Key.EXPONENT component. If no
+               Key.EXPONENT is defined for a RSA CRT private key, then no RSA blinding will be used.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>type</td><td>Component of key provided in value. Must be 
+              one of Key.DES, Key.AES, Key.MODULUS, Key.EXPONENT, Key.CRT_* or Key.ECC_*</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>Value of component identified by type argument</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>None</code></td><td>The method does not return a value</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The value provided for the key component is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+
+// Make key a single length DES key (56 bit)
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E57", HEX));
+assert(key.getSize() == 64);
+
+// Make key a double length DES key (112 bit)
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E570131D9619DC1376E", HEX));
+assert(key.getSize() == 128);
+
+// Make key a triple length DES key (168 bit)
+key.setComponent(Key.DES, 
+            new ByteString("7CA110454A1A6E570131D9619DC1376E9DC1376E0131D961", HEX));
+assert(key.getSize() == 192);
+
+key = new Key("profiles/kp_single_des_1.xml");
+assert(key.getSize() == 64);
+
+// Make key a single length DES key (56 bit) - Overwriting value from profile
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E57", HEX));
+
+// Make key a double length DES key (112 bit)
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E570131D9619DC1376E", HEX));
+
+// Make key a triple length DES key (168 bit)
+key.setComponent(Key.DES, 
+            new ByteString("7CA110454A1A6E570131D9619DC1376E9DC1376E0131D961", HEX));
+
+
+// Make AES key
+
+var key = new Key();
+
+// Make key a 128 bit AES key
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f", HEX));
+assert(key.getSize() == 128);
+
+// Make key a 192 bit AES key
+key.setComponent(Key.AES,
+            new ByteString("000102030405060708090a0b0c0d0e0f1011121314151617", HEX));
+assert(key.getSize() == 192);
+
+// Make key a 256 bit AES key
+key.setComponent(Key.AES, new ByteString("000102030405060708090a0b0c0d0e0f" +
+                                         "101112131415161718191a1b1c1d1e1f", HEX));
+assert(key.getSize() == 256);
+
+
+// Make RSA private key from modulus and private exponent
+
+var key = new Key();
+
+key.setType(Key.PRIVATE);
+
+key.setComponent(Key.MODULUS, new ByteString(
+            "b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9" +
+            "900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX));
+key.setComponent(Key.EXPONENT, new ByteString(
+            "9f66f6b05410cd503b2709e88115d55daced94d1a34d4e32bf824d0dde6028ae" +
+            "79c5f07b580f5dce240d7111f7ddb130a7945cd7d957d1920994da389f490c89", HEX));
+assert(key.getSize() == 512);
+
+
+// Make RSA private key from CRT components
+
+var key = new Key();
+
+key.setType(Key.PRIVATE);
+
+key.setComponent(Key.CRT_P, new ByteString(
+            "c0a0758cdf14256f78d4708c86becdead1b50ad4ad6c5c703e2168fbf37884cb", HEX));
+key.setComponent(Key.CRT_Q, new ByteString(
+            "f01734d7960ea60070f1b06f2bb81bfac48ff192ae18451d5e56c734a5aab8a5", HEX));
+key.setComponent(Key.CRT_DP1, new ByteString(
+            "b54bb9edff22051d9ee60f9351a48591b6500a319429c069a3e335a1d6171391", HEX));
+key.setComponent(Key.CRT_DQ1, new ByteString(
+            "d3d83daf2a0cecd3367ae6f8ae1aeb82e9ac2f816c6fc483533d8297dd7884cd", HEX));
+key.setComponent(Key.CRT_PQ, new ByteString(
+            "b8f52fc6f38593dabb661d3f50f8897f8106eee68b1bce78a95b132b4e5b5d19", HEX));
+assert(key.getSize() == 512);
+
+
+// Make RSA public key from modulus and public exponent
+
+var key = new Key();
+
+key.setType(Key.PUBLIC);
+
+key.setComponent(Key.MODULUS, new ByteString(
+            "b4a7e46170574f16a97082b22be58b6a2a629798419be12872a4bdba626cfae9" +
+            "900f76abfb12139dce5de56564fab2b6543165a040c606887420e33d91ed7ed7", HEX));
+key.setComponent(Key.EXPONENT, new ByteString("11", HEX));
+assert(key.getSize() == 512);
+
+
+// Make ECC private key (Fp) / prime192v1
+
+var key = new Key();
+key.setType(Key.PRIVATE);
+
+// Setting the curve parameter using an object identifer automatically sets all
+// parameter
+key.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+assert(key.getComponent(Key.ECC_P).toString(16).equals(
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF"));
+assert(key.getComponent(Key.ECC_A).toString(16).equals(
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC"));
+assert(key.getComponent(Key.ECC_B).toString(16).equals(
+            "64210519E59C80E70FA7E9AB72243049FEB8DEECC146B9B1"));
+assert(key.getComponent(Key.ECC_GX).toString(16).equals(
+            "188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012"));
+assert(key.getComponent(Key.ECC_GY).toString(16).equals(
+            "07192B95FFC8DA78631011ED6B24CDD573F977A11E794811"));
+assert(key.getComponent(Key.ECC_N).toString(16).equals(
+            "FFFFFFFFFFFFFFFFFFFFFFFF99DEF836146BC9B1B4D22831"));
+assert(key.getComponent(Key.ECC_H).toString(16).equals(
+            "000000000000000000000000000000000000000000000001"));
+
+key.setComponent(Key.ECC_D, new ByteString(
+            "C2C7ACAB793AF41C242456CE64D5B61054629AC23B27A0E0", HEX));
+assert(key.getSize() == 192);
+
+// Make ECC public key (Fp) / prime192v1
+
+var key = new Key();
+key.setType(Key.PUBLIC);
+key.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.1.1", OID));
+key.setComponent(Key.ECC_QX, new ByteString(
+            "BBA0C04725F939ABE6A0D1E9CEB82F336B3A04205C6E5094", HEX));
+key.setComponent(Key.ECC_QY, new ByteString(
+            "FE6D6A3F6F72616D7488113AF4ABA44581ADEE297B984A08", HEX));
+assert(key.getSize() == 192);
+
+
+// Make ECC private key (F2m) / c2m239v1
+
+var key = new Key();
+key.setType(Key.PRIVATE);
+key.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.0.11", OID));
+
+assert(key.getComponent(Key.ECC_M).toString(16).equals("EF"));
+assert(key.getComponent(Key.ECC_K1).toString(16).equals("24"));
+assert(key.getComponent(Key.ECC_K2).toString(16).equals("00"));
+assert(key.getComponent(Key.ECC_K3).toString(16).equals("00"));
+assert(key.getComponent(Key.ECC_B).toString(16).equals(
+            "790408F2EEDAF392B012EDEFB3392F30F4327C0CA3F31FC383C422AA8C16"));
+assert(key.getComponent(Key.ECC_GX).toString(16).equals(
+            "57927098FA932E7C0A96D3FD5B706EF7E5F5C156E16B7E7C86038552E91D"));
+assert(key.getComponent(Key.ECC_GY).toString(16).equals(
+            "61D8EE5077C33FECF6F1A16B268DE469C3C7744EA9A971649FC7A9616305"));
+assert(key.getComponent(Key.ECC_N).toString(16).equals(
+            "2000000000000000000000000000000F4D42FFE1492A4993F1CAD666E447"));
+assert(key.getComponent(Key.ECC_H).toString(16).equals(
+            "000000000000000000000000000000000000000000000000000000000004"));
+
+key.setComponent(Key.ECC_D, new ByteString(
+            "145642755521911534651321230007534120304391871461646461466464667494947990", HEX));
+assert(key.getSize() == 239);
+
+
+// Make ECC public key (F2m) / c2m239v1
+
+var key = new Key();
+key.setType(Key.PUBLIC);
+key.setComponent(Key.ECC_CURVE_OID, new ByteString("1.2.840.10045.3.0.11", OID));
+key.setComponent(Key.ECC_QX, new ByteString(
+            "5894609CCECF9A92533F630DE713A958E96C97CCB8F5ABB5A688A238DEED", HEX));
+key.setComponent(Key.ECC_QY, new ByteString(
+            "6DC2D9D0C94EBFB7D526BA6A61764175B99CB6011E2047F9F067293F57F5", HEX));
+assert(key.getSize() == 239);
+
+</pre>
+<h2 id="getComponent">getComponent()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getComponent(Number type)</p>
+<h3>Description</h3>Return a component of a key. Key components can only be retrieved, if they
+                     are accessible. Key components stored in a HSM are usally not accessible.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>type</td><td>Component of key requested. Must be one of
+              Key.DES, Key.AES, Key.MODULUS, Key.EXPONENT, Key.CRT_* or Key.ECC_*</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The value of the key component or undefined if the component is not defined.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for method invocation</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var key = new Key();
+
+// Make key a single length DES key (56 bit)
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E57", HEX));
+assert(key.getComponent(Key.DES).toString(HEX) == "7CA110454A1A6E57");
+
+// Make key a double length DES key (112 bit)
+key.setComponent(Key.DES, new ByteString("7CA110454A1A6E570131D9619DC1376E", HEX));
+assert(key.getComponent(Key.DES).toString(HEX) == "7CA110454A1A6E570131D9619DC1376E");
+
+// Make key a triple length DES key (168 bit)
+key.setComponent(Key.DES, 
+            new ByteString("7CA110454A1A6E570131D9619DC1376E9DC1376E0131D961", HEX));
+assert(key.getComponent(Key.DES).toString(HEX) == 
+            "7CA110454A1A6E570131D9619DC1376E9DC1376E0131D961");
+
+// Create key from profile
+key = new Key("profiles/kp_single_des_1.xml");
+assert(key.getComponent(Key.DES).toString(HEX) == "7CA110454A1A6E57");
+
+// Change component initialized by profile
+key.setComponent(Key.DES, new ByteString("A110454A1A6E577C", HEX));
+assert(key.getComponent(Key.DES).toString(HEX) == "A110454A1A6E577C");
+
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

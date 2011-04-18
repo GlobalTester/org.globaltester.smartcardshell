@@ -1,0 +1,1190 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>CMSSignedData - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>CMSSignedData - Reference Documentation</h1>
+<p>Class for CMS Signed Data handling</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">CMSSignedData() constructor</a>
+</li>
+<li>
+<a href="#getSignedContent">getSignedContent()</a>
+</li>
+<li>
+<a href="#getSignedDataVersion">getSignedDataVersion()</a>
+</li>
+<li>
+<a href="#getSignedDataDigestAlgorithms">getSignedDataDigestAlgorithms()</a>
+</li>
+<li>
+<a href="#getSignedDataCertificates">getSignedDataCertificates()</a>
+</li>
+<li>
+<a href="#getEContentType">getEContentType()</a>
+</li>
+<li>
+<a href="#getNumberOfSigners">getNumberOfSigners()</a>
+</li>
+<li>
+<a href="#getSignerInfoVersion">getSignerInfoVersion()</a>
+</li>
+<li>
+<a href="#getSignerInfoSIDType">getSignerInfoSIDType()</a>
+</li>
+<li>
+<a href="#isCertificateAvailable">isCertificateAvailable()</a>
+</li>
+<li>
+<a href="#getSignerInfoDigestAlgorithm">getSignerInfoDigestAlgorithm()</a>
+</li>
+<li>
+<a href="#getSignerInfoSignedAttribute">getSignerInfoSignedAttribute()</a>
+</li>
+<li>
+<a href="#getCertificate">getCertificate()</a>
+</li>
+<li>
+<a href="#getSignerInfoSignatureAlgorithm">getSignerInfoSignatureAlgorithm()</a>
+</li>
+<li>
+<a href="#getSignerInfoSignature">getSignerInfoSignature()</a>
+</li>
+<li>
+<a href="#isSignerInfoSignatureValid">isSignerInfoSignatureValid()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>SID_ISSUERANDSERIALNUMBER</td><td>SID object uses issuer and serial number for public key identification</td>
+</tr>
+<tr>
+<td>Number</td><td>SID_SUBJECTKEYIDENTIFIER</td><td>SID uses subject key identifier for public key identification</td>
+</tr>
+<tr>
+<td>String</td><td>ATTR_MESSAGEDIGEST</td><td>Object identifier of CMS attribute message digest</td>
+</tr>
+<tr>
+<td>String</td><td>ATTR_SIGNINGTIME</td><td>Object identifiert of CMS attribute signing time</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">CMS(ByteString encoded)</p>
+<h3>Description</h3>Create a CMS object<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>encoded</td><td>ASN.1 encoded bytestring containing the CMS object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.GPError.INVALID_TYPE</td><td>Argument type is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>Argument contains no valid encoded CMS signed data object</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+encCMS = new ByteString("30 82 05 6d 06 09 2a 86 48 86 f7 0d 01 07 02 a0 82 05 5e 30 82 05 5a 02 01 \
+01 31 0b 30 09 06 05 2b 0e 03 02 1a 05 00 30 1c 06 09 2a 86 48 86 f7 0d 01 07 01 a0 0f 04 0d 48 65 6c \
+6c 6f 20 57 6f 72 6c 64 0d 0a a0 82 03 aa 30 82 03 a6 30 82 02 0e a0 03 02 01 02 02 11 31 7b af d2 33 \
+e0 31 6f a2 d7 83 3a 7a f8 f9 93 d5 30 0d 06 09 2a 86 48 86 f7 0d 01 01 05 05 00 30 54 31 12 30 10 06 \
+03 55 04 03 0c 09 56 53 69 67 20 43 41 20 31 31 31 30 2f 06 03 55 04 0a 0c 28 54 45 53 54 20 2d 20 48 \
+61 75 70 74 76 65 72 62 61 6e 64 20 c3 b6 73 74 65 72 72 2e 20 53 6f 7a 69 61 6c 76 65 72 73 2e 31 0b \
+30 09 06 03 55 04 06 13 02 41 54 30 1e 17 0d 30 35 31 31 30 33 31 30 30 35 34 32 5a 17 0d 31 30 31 31 \
+30 33 31 30 30 35 34 32 5a 30 70 31 1f 30 1d 06 03 55 04 03 0c 16 58 58 58 4f 74 74 6f 20 58 58 58 4f \
+74 74 61 6b 72 69 6e 67 65 72 31 31 30 2f 06 03 55 04 0a 0c 28 54 45 53 54 20 2d 20 48 61 75 70 74 76 \
+65 72 62 61 6e 64 20 c3 b6 73 74 65 72 72 2e 20 53 6f 7a 69 61 6c 76 65 72 73 2e 31 0d 30 0b 06 03 55 \
+04 0b 0c 04 56 53 69 67 31 0b 30 09 06 03 55 04 06 13 02 41 54 30 49 30 13 06 07 2a 86 48 ce 3d 02 01 \
+06 08 2a 86 48 ce 3d 03 01 01 03 32 00 04 bc 10 1e d9 44 4b 6b 3f 13 1c 61 69 94 61 ce 8a 8a ab 2f be \
+a8 7e cf e8 ba 4e 08 69 2c 21 30 3a bd 3b 52 c2 66 3a 6e 92 93 d5 49 ce 75 14 82 59 a3 81 b1 30 81 ae \
+30 13 06 03 55 1d 23 04 0c 30 0a 80 08 46 f9 06 e6 e7 08 0f 24 30 11 06 03 55 1d 0e 04 0a 04 08 4a be \
+a1 1f 28 a5 64 86 30 0e 06 03 55 1d 0f 01 01 ff 04 04 03 02 06 c0 30 16 06 03 55 1d 20 04 0f 30 0d 30 \
+0b 06 09 2a 28 00 0a 01 04 01 66 00 30 31 06 08 2b 06 01 05 05 07 01 01 04 25 30 23 30 21 06 08 2b 06 \
+01 05 05 07 30 01 86 15 68 74 74 70 3a 2f 2f 31 34 39 2e 32 33 39 2e 31 36 2e 32 30 39 30 29 06 03 55 \
+1d 11 04 22 30 20 81 1e 61 6e 64 72 65 61 73 2e 73 63 68 77 69 65 72 40 63 61 72 64 63 6f 6e 74 61 63 \
+74 2e 64 65 30 0d 06 09 2a 86 48 86 f7 0d 01 01 05 05 00 03 82 01 81 00 09 cc ad 93 50 5c 10 1c a5 41 \
+a7 a8 4d 2d bb 35 67 7e e2 31 85 46 ce a0 cb 8c 8c b2 2b 84 a9 32 96 65 03 11 04 78 d4 9f e3 e9 3b a2 \
+9b 6a 42 3b e4 05 c2 23 20 33 27 83 89 aa 06 c2 3e ed e8 11 27 e0 3d d4 5e ba 35 84 04 cf 4e 2a 6e 49 \
+da 3d 32 82 43 94 db e1 43 80 e0 7f 7b 6f d1 ca 36 d8 e3 cf 0f f7 46 bd 94 af a3 99 1b 55 28 53 4f 13 \
+55 96 42 10 c0 2f 87 c9 53 86 e5 d2 bd a2 2b 6a c9 56 43 45 5c cd c9 a0 a8 13 ec 5a 4f 3b 55 72 94 82 \
+6e 63 14 4b ce 2f 7c e9 6c 61 13 e1 de 97 6a 72 f5 c4 a8 b7 5e d0 bf 01 1c 37 c0 3d 3b 74 bc c0 05 08 \
+93 b3 8c 06 07 4b dc ab 3b cd 7e 00 48 42 44 18 89 da f7 c6 c1 dd 0e 27 d7 1a c7 f8 77 80 5f 48 d1 8f \
+17 52 20 2d 02 0e 90 95 68 4c 2e 78 da 0a dd eb 0b a4 6c 4b 7a 7b 6b b0 78 1b 3b 08 f4 80 d0 cb 5f 03 \
+60 4f 08 af db 94 95 ba 15 ac f8 3f 09 12 f7 e2 1d 63 6b 93 07 6b 71 50 f4 fc 35 89 e1 55 68 63 14 de \
+81 0a 53 f4 9a 7b b8 3e 37 51 a7 ad e2 d5 99 36 6e c0 cd 76 af 14 eb 25 3c fa cb 74 f6 f6 6e 91 19 7e \
+dc 33 60 06 5a 9a b4 95 54 4f 48 f3 68 3a 7d 8d e0 b6 e7 93 78 0e 77 be 64 b6 d3 23 14 a1 b2 cc ad 36 \
+8f af b0 72 85 f3 2b 83 e2 11 6c 35 0e 1d 27 38 c9 b5 c0 c5 f5 6f 41 e9 7d 76 9a ef 9f 6a 46 86 53 26 \
+31 82 01 7a 30 82 01 76 02 01 01 30 69 30 54 31 12 30 10 06 03 55 04 03 0c 09 56 53 69 67 20 43 41 20 \
+31 31 31 30 2f 06 03 55 04 0a 0c 28 54 45 53 54 20 2d 20 48 61 75 70 74 76 65 72 62 61 6e 64 20 c3 b6 \
+73 74 65 72 72 2e 20 53 6f 7a 69 61 6c 76 65 72 73 2e 31 0b 30 09 06 03 55 04 06 13 02 41 54 02 11 31 \
+7b af d2 33 e0 31 6f a2 d7 83 3a 7a f8 f9 93 d5 30 09 06 05 2b 0e 03 02 1a 05 00 a0 81 b4 30 23 06 09 \
+2a 86 48 86 f7 0d 01 09 04 31 16 04 14 83 eb 53 1b fd 10 f9 17 77 04 41 c7 f5 48 dc d8 41 e7 0f dd 30 \
+1c 06 09 2a 86 48 86 f7 0d 01 09 05 31 0f 17 0d 30 36 30 31 31 31 31 35 31 38 32 30 5a 30 18 06 09 2a \
+86 48 86 f7 0d 01 09 03 31 0b 06 09 2a 86 48 86 f7 0d 01 07 01 30 28 06 0b 2a 86 48 86 f7 0d 01 09 10 \
+02 04 31 19 30 17 0c 0a 74 65 78 74 2f 70 6c 61 69 6e 06 09 2a 86 48 86 f7 0d 01 07 01 30 2b 06 0b 2a \
+86 48 86 f7 0d 01 09 10 02 13 31 1c 30 1a 30 18 30 16 04 14 88 ab 4d 53 d5 df 3e 59 08 1d 33 23 3f af \
+90 f1 66 88 51 1e 30 0b 06 07 2a 86 48 ce 3d 04 01 05 00 04 37 30 35 02 19 00 ac 2c 31 b1 33 fa 43 f7 \
+2e b8 ca 6b af 5a 02 8e 1e b4 53 a2 1f 4a d0 55 02 18 75 0d 25 89 57 2e f2 31 95 0d e3 94 35 c3 31 75 \
+4f 0a 31 f6 ab b0 04 02", HEX);
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+</pre>
+<h2 id="getSignedContent">getSignedContent()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString[] getSignedContent()</p>
+<h3>Description</h3>Return the encapsulated signed content as a ByteString object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Returns the encapsulated signed content</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+referenceData = new ByteString("48 65 6C 6C 6F 20 57 6F 72 6C 64 0D 0A", HEX);
+assert(t.getSignedContent().equals(referenceData));
+print("Signed content: " + t.getSignedContent());
+
+</pre>
+<h2 id="getSignedDataVersion">getSignedDataVersion()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getSignedDataVersion()</p>
+<h3>Description</h3>Return the encoded version number of the signed data object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Returns the encoded version number</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+assert(t.getSignedDataVersion() == 0 || 
+	   t.getSignedDataVersion() == 1 ||
+	   t.getSignedDataVersion() == 2 ||
+	   t.getSignedDataVersion() == 3 ||
+	   t.getSignedDataVersion() == 4);
+
+print("Signed data version: " + t.getSignedDataVersion());
+
+</pre>
+<h2 id="getSignedDataDigestAlgorithms">getSignedDataDigestAlgorithms()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString[] getSignedDataDigestAlgorithms()</p>
+<h3>Description</h3>Return an array containing the bytestring encoded OIDs of the signed data object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString[]</code></td><td>Array containing the bytestring encoded OIDs</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.USER_DEFINED</td><td>No OID at specified position</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+oids = t.getSignedDataDigestAlgorithms();
+
+assert(oids != null);
+
+print("Number of OIDs: " + oids.length);
+
+for (i = 0; i &lt; oids.length; i++) {
+	print("#" + i+ ": " + oids[i].toString(OID));
+}
+
+</pre>
+<h2 id="getSignedDataCertificates">getSignedDataCertificates()</h2>
+<h3>Prototype</h3>
+<p class="signature">X509[] getSignedDataCertificates()</p>
+<h3>Description</h3>Return an array containing certificates of the signed data object.<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>X509</code></td><td>Array containing the certificates</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+certs = t.getSignedDataCertificates();
+
+assert(certs != null);
+
+print("Number of certificates: " + certs.length);
+
+for (i = 0; i &lt; certs.length; i++) {
+	print("#" + i+ ": " + certs[i].toString());
+}
+
+</pre>
+<h2 id="getEContentType">getEContentType()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getEContentType()</p>
+<h3>Description</h3>Return a bytestring containing the OID of the econtent<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>ByteString containing the OID</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+eContentType = t.getEContentType();
+
+assert(eContentType != null);
+assert(eContentType.toString(OID) == "1.2.840.113549.1.7.1");
+
+print(eContentType.toString(OID));
+
+</pre>
+<h2 id="getNumberOfSigners">getNumberOfSigners()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getNumberOfSigners()</p>
+<h3>Description</h3>Return the number of signer and (respectively) the available signer info objects<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Number of signers</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+assert(ns != null);
+
+print("Number of signers: " + ns);
+	   
+</pre>
+<h2 id="getSignerInfoVersion">getSignerInfoVersion()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getSignerInfoVersion(Number index)</p>
+<h3>Description</h3>Return version number of the specified signer info object<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object for which to retrieve the version number</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Signer info version number</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+// Get all available signer info version numbers
+
+for (i = 0; i &lt; ns; i++) {
+
+	siVersion = t.getSignerInfoVersion(i);
+
+	assert(siVersion != null);
+
+	print("Signer info version [" + i + "]: " + siVersion);
+
+	assert(siVersion == 0 || 
+		   siVersion == 1 ||
+		   siVersion == 2 ||
+		   siVersion == 3 ||
+		   siVersion == 4);	   
+}
+
+try {
+	siVersion = t.getSignerInfoVersion(200);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+</pre>
+<h2 id="getSignerInfoSIDType">getSignerInfoSIDType()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number getSignerInfoSIDType(Number index)</p>
+<h3>Description</h3>Determine and return the type used by the SID<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object for which to determine the SID type</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>SID type</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+sidType = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	sidType = t.getSignerInfoSIDType(i);
+
+	assert(sidType != null);
+
+	print("SID type [" + i + "]: " + sidType);
+
+}
+
+try {
+	sidType = t.getSignerInfoSIDType(200);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+</pre>
+<h2 id="isCertificateAvailable">isCertificateAvailable()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean isCertificateAvailable(Number index)</p>
+<h3>Description</h3>Verify if the certificate specified by the SID is available<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>Indicator if certificate is available</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	available = t.isCertificateAvailable(i);
+
+	assert(available != null);
+
+	print("Certificate for SID of signer info [" + i + "]: " + (available == true ? "available" : "not available"));
+
+}
+
+try {
+	sidType = t.isCertificateAvailable(200);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+</pre>
+<h2 id="getSignerInfoDigestAlgorithm">getSignerInfoDigestAlgorithm()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getSignerInfoDigestAlgorithm()</p>
+<h3>Description</h3>Return a bytestring containing the OID of the signer info digest algorithm.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Array containing the bytestring encoded OIDs</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	oid = t.getSignerInfoDigestAlgorithm(i);
+	
+	assert(oid != null);
+
+	print("OID digest algorithm [" + i + "]: " + oid.toString(OID));
+}
+
+</pre>
+<h2 id="getSignerInfoSignedAttribute">getSignerInfoSignedAttribute()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getSignerInfoSignedAttribute(Number index, Number type)</p>
+<h3>Description</h3>Return a bytestring containing the value field of the signed attribute.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>type</td><td>OID of the signed attribute</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>ByteString containing the value field of the attribute</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+md = t.getSignerInfoSignedAttribute(0, CMSSignedData.ATTR_MESSAGEDIGEST);
+
+assert(md != null);
+
+print("Attribute message digest: " + md.toString());
+st = t.getSignerInfoSignedAttribute(0, CMSSignedData.ATTR_SIGNINGTIME);
+
+// No signing time present
+assert(st != null);
+print("Attribute signing time: " + st.toString(ASCII));
+
+</pre>
+<h2 id="getCertificate">getCertificate()</h2>
+<h3>Prototype</h3>
+<p class="signature">X509 getCertificate(Number index)</p>
+<h3>Description</h3>Get the certificate specified by the SID of the signer info element<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>X509</code></td><td>The specified certificate</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	available = t.isCertificateAvailable(i);
+
+	assert(available != null);
+
+	if (available) {
+		
+		cert = t.getCertificate(i);
+		
+		assert(cert != null);
+	}
+}
+
+try {
+	sidType = t.isCertificateAvailable(200);
+} catch (e) {
+	assert(e instanceof GPError);
+}
+
+</pre>
+<h2 id="getSignerInfoSignatureAlgorithm">getSignerInfoSignatureAlgorithm()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getSignerInfoSignatureAlgorithm()</p>
+<h3>Description</h3>Return a bytestring containing the OID of the signer info digest algorithm.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>ByteString containing the OID</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	oid = t.getSignerInfoSignatureAlgorithm(i);
+	
+	assert(oid != null);
+
+	print("OID digest algorithm [" + i + "]: " + oid.toString(OID));
+}
+
+</pre>
+<h2 id="getSignerInfoSignature">getSignerInfoSignature()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getSignerInfoSignature()</p>
+<h3>Description</h3>Return a bytestring containing the signature<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>ByteString containing the signature</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+for (i = 0; i &lt; ns; i++) {
+
+	signature = t.getSignerInfoSignature(i);
+	
+	assert(signature != null);
+
+	print("Signature [" + i + "]: " + signature.toString());
+}
+
+</pre>
+<h2 id="isSignerInfoSignatureValid">isSignerInfoSignatureValid()</h2>
+<h3>Prototype</h3>
+<p class="signature">Boolean isSignerInfoSignatureValid(Number index)</p>
+<h3>Description</h3>Verify if the signature specified by the SID available<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>index</td><td>Index of the signer info object that specifies the SID</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Boolean</code></td><td>Indicator if signature is valid</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The specified index of the signer info object is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ENCODING</td><td>The encoding of the provided signer certificate is invalid</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.OBJECT_NOT_FOUND</td><td>No suitable signer certificate for verification found within the provided data structure</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+ns = t.getNumberOfSigners();
+
+assert(ns != null);
+
+for (i = 0; i &lt; ns; i++) {
+
+	valid = t.isSignerInfoSignatureValid(i);
+
+	assert(valid != null);
+
+	print("Signer information signature [" + i + "]: " + (valid == true ? "valid" : "invalid"));
+
+}
+
+try {
+	valid = t.isSignerInfoSignatureValid(200);
+} catch (e) {
+    assert(e instanceof GPError);
+}
+
+
+/*
+ * Read a byte string object from file
+ *
+ * The filename is mapped to the location of the script
+ *
+ * name		Name of file
+ *
+ */
+function readFileFromDisk(name) {
+
+	// Map filename
+	var filename = GPSystem.mapFilename(name, GPSystem.CWD);
+	print("Reading " + filename);
+
+	var file = new java.io.FileInputStream(filename);
+	
+	var content = new ByteBuffer();
+	var buffer = new ByteString("                                                                                                                                                                                                                                                                ", ASCII);
+	var len;
+	
+	while ((len = file.read(buffer)) &gt;= 0) {
+		content.append(buffer.bytes(0, len));
+	}
+	
+	file.close();
+	return(content.toByteString());
+}
+
+// Read certificate from disk
+var signerCertificate = readFileFromDisk("dscert.der");
+
+var encCMS = new ByteString("30 82 02 E6 06 09 2A 86 48 86 F7 0D 01 07 02 A0 82 02 D7 30 82 02 D3 02 01 \
+03 31 0F 30 0D 06 09 60 86 48 01 65 03 04 02 01 05 00 30 81 E9 06 06 67 81 08 01 01 01 A0 81 DE 04 81 DB \
+30 81 D8 02 01 00 30 0D 06 09 60 86 48 01 65 03 04 02 01 05 00 30 81 C3 30 25 02 01 01 04 20 51 B6 FC 0E \
+F1 94 6F 3A 86 D2 A4 C9 55 7C 5D 8E CF F1 31 13 B4 13 10 89 C5 C4 8B F7 29 1F FD F5 30 25 02 01 02 04 20 \
+A9 A1 B0 9D FD 59 80 87 AB 3F CE 4A E2 EC 65 B1 A1 52 5B D2 58 BF C2 7D F4 41 9F 8A 65 E5 47 45 30 25 02 \
+01 03 04 20 40 3E 4D 17 C2 6E BC 83 24 11 89 81 61 D8 FD 5D 99 C5 8E E8 65 CB 37 59 B5 29 AA 78 2C 7E DE \
+00 30 25 02 01 0E 04 20 A7 79 07 9D 29 BA E6 C9 AD 7A 5E DE 93 9B 50 06 13 99 6C 9E 41 46 E4 6B D6 E5 B1 \
+BE A6 19 0F C8 30 25 02 01 04 04 20 5F AB AD 4B F8 67 B3 E4 E6 A8 0F 0F EC 22 A3 76 50 5E A3 FF 48 43 48 \
+5B 12 78 C5 90 9F 64 9B 07 31 82 01 CF 30 82 01 CB 02 01 01 30 5A 30 53 31 0B 30 09 06 03 55 04 06 13 02 \
+44 45 31 17 30 15 06 03 55 04 0A 0C 0E 48 4A 50 20 43 6F 6E 73 75 6C 74 69 6E 67 31 17 30 15 06 03 55 04 \
+0B 0C 0E 43 6F 75 6E 74 72 79 20 53 69 67 6E 65 72 31 12 30 10 06 03 55 04 03 0C 09 48 4A 50 20 50 42 20 \
+43 53 02 03 01 60 01 30 0D 06 09 60 86 48 01 65 03 04 02 01 05 00 A0 48 30 15 06 09 2A 86 48 86 F7 0D 01 \
+09 03 31 08 06 06 67 81 08 01 01 01 30 2F 06 09 2A 86 48 86 F7 0D 01 09 04 31 22 04 20 16 38 8D 9D DB 7A \
+4D 02 C0 68 FC 4B B8 2C 01 31 05 BF CA 06 92 8A 6E 76 2D A2 DB 35 C5 20 24 31 30 0D 06 09 2A 86 48 86 F7 \
+0D 01 01 0B 05 00 04 82 01 00 10 DB F9 D0 4B EA 3E 5D E0 F7 5A 2D 78 A6 7D 4F 24 26 F5 E2 E0 DD 4B 38 69 \
+80 B4 1E 8E 0F BF D3 83 DB FD DF 29 0A 8E 17 5E B1 99 73 08 C3 95 D5 49 74 FF 28 A6 E4 2E 1D 4D 56 9A 04 \
+E3 56 E5 26 C4 B3 0B 5E B9 CB CB 2A DA 58 C9 54 B8 44 D3 AE 8B A3 ED 82 1D AD 50 AC 85 E0 A9 F6 EB E8 D7 \
+5F 5D 4E 8E 3A DD 24 BD B0 BE 57 0E 0C 50 38 BF F8 67 6F 32 79 32 3B 10 B6 1C C2 1C 82 F6 EB 5E D8 B2 B4 \
+49 05 85 2D 1A 79 D7 7E 0A 49 AB 63 6B E8 2E 79 0C BD 8A 9E 72 73 77 6E 04 5F E5 14 7A 1E 6B E7 9C 47 3E \
+A1 F3 3E 7E 68 DC CC E9 61 71 EC ED 90 1E 3C 5F 7C 63 6F BB 9D 64 03 C1 1D B3 A0 00 87 39 7A BB F9 2B D3 \
+50 FC 59 50 3D D1 1E 26 77 F2 B0 87 C9 79 75 30 1F C9 5D 4D 95 9F 77 16 3F 3F D0 D4 17 1D AE B0 22 77 16 \
+2D 03 A6 A0 28 76 F0 08 1B 78 19 9C 70 5F 89 AD 9A 38 B1 75 06", HEX);
+
+t = new CMSSignedData(encCMS);
+assert(t != null);
+
+valid = t.isSignerInfoSignatureValid(0, signerCertificate);
+
+assert(valid != null);
+
+print("Signer information signature [" + i + "]: " + (valid == true ? "valid" : "invalid"));
+
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

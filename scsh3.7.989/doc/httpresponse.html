@@ -1,0 +1,665 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>HttpResponse - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>HttpResponse - Reference Documentation</h1>
+<p>
+        
+<p>Class implementing the response passed to a scripting servlet.</p>
+        
+<p>Instances of this class wrap the HttpServletResponse from the Servlet API and allow
+           scripts easy access to properties of an outgoing HTTP response.</p>
+        
+<p>Instances of this class can not be created directly, but are passed as
+           argument to the handleRequest() method.</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">HttpResponse() constructor</a>
+</li>
+<li>
+<a href="#setContentType">setContentType()</a>
+</li>
+<li>
+<a href="#setCharacterEncoding">setCharacterEncoding()</a>
+</li>
+<li>
+<a href="#setContentLength">setContentLength()</a>
+</li>
+<li>
+<a href="#setStatus">setStatus()</a>
+</li>
+<li>
+<a href="#write">write()</a>
+</li>
+<li>
+<a href="#print">print()</a>
+</li>
+<li>
+<a href="#println">println()</a>
+</li>
+</ul>
+<h2>Constants</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>SC_CONTINUE</td><td>Status code (100) indicating the client can continue.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_SWITCHING_PROTOCOLS</td><td>Status code (101) indicating the server is switching protocols according to Upgrade header.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_OK</td><td>Status code (200) indicating the request succeeded normally.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_CREATED</td><td>Status code (201) indicating the request succeeded and created a new resource on the server.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_ACCEPTED</td><td>Status code (202) indicating that a request was accepted for processing, but was not completed.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NON_AUTHORITATIVE_INFORMATION</td><td>Status code (203) indicating that the meta information presented by the client did not originate from the server.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NO_CONTENT</td><td>Status code (204) indicating that the request succeeded but that there was no new information to return.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_RESET_CONTENT</td><td>Status code (205) indicating that the agent SHOULD reset the document view which caused the request to be sent.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_PARTIAL_CONTENT</td><td>Status code (206) indicating that the server has fulfilled the partial GET request for the resource.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_MULTIPLE_CHOICES</td><td>Status code (300) indicating that the requested resource corresponds to any one of a set of representations, each with its own specific location.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_MOVED_PERMANENTLY</td><td>Status code (301) indicating that the resource has permanently moved to a new location, and that future references should use a new URI with their requests.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_FOUND</td><td>Status code (302) indicating that the resource reside temporarily under a different URI.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_MOVED_TEMPORARILY</td><td>Status code (302) indicating that the resource has temporarily moved to another location, but that future references should still use the original URI to access the resource.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_SEE_OTHER</td><td>Status code (303) indicating that the response to the request can be found under a different URI.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NOT_MODIFIED</td><td>Status code (304) indicating that a conditional GET operation found that the resource was available and not modified.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_USE_PROXY</td><td>Status code (305) indicating that the requested resource MUST be accessed through the proxy given by the Location field.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_TEMPORARY_REDIRECT</td><td>Status code (307) indicating that the requested resource resides temporarily under a different URI.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_BAD_REQUEST</td><td>Status code (400) indicating the request sent by the client was syntactically incorrect.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_UNAUTHORIZED</td><td>Status code (401) indicating that the request requires HTTP authentication.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_PAYMENT_REQUIRED</td><td>Status code (402) reserved for future use.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_FORBIDDEN</td><td>Status code (403) indicating the server understood the request but refused to fulfill it.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NOT_FOUND</td><td>Status code (404) indicating that the requested resource is not available.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_METHOD_NOT_ALLOWED</td><td>Status code (405) indicating that the method specified in the Request-Line is not allowed for the resource identified by the Request-URI.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NOT_ACCEPTABLE</td><td>Status code (406) indicating that the resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_PROXY_AUTHENTICATION_REQUIRED</td><td>Status code (407) indicating that the client MUST first authenticate itself with the proxy.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_REQUEST_TIMEOUT</td><td>Status code (408) indicating that the client did not produce a request within the time that the server was prepared to wait.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_CONFLICT</td><td>Status code (409) indicating that the request could not be completed due to a conflict with the current state of the resource.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_GONE</td><td>Status code (410) indicating that the resource is no longer available at the server and no forwarding address is known.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_LENGTH_REQUIRED</td><td>Status code (411) indicating that the request cannot be handled without a defined Content-Length.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_PRECONDITION_FAILED</td><td>Status code (412) indicating that the precondition given in one or more of the request-header fields evaluated to false when it was tested on the server.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_REQUEST_ENTITY_TOO_LARGE</td><td>Status code (413) indicating that the server is refusing to process the request because the request entity is larger than the server is willing or able to process.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_REQUEST_URI_TOO_LONG</td><td>Status code (414) indicating that the server is refusing to service the request because the Request-URI is longer than the server is willing to interpret.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_UNSUPPORTED_MEDIA_TYPE</td><td>Status code (415) indicating that the server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_REQUESTED_RANGE_NOT_SATISFIABLE</td><td>Status code (416) indicating that the server cannot serve the requested byte range.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_EXPECTATION_FAILED</td><td>Status code (417) indicating that the server could not meet the expectation given in the Expect request header.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_INTERNAL_SERVER_ERROR</td><td>Status code (500) indicating an error inside the HTTP server which prevented it from fulfilling the request.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_NOT_IMPLEMENTED</td><td>Status code (501) indicating the HTTP server does not support the functionality needed to fulfill the request.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_BAD_GATEWAY</td><td>Status code (502) indicating that the HTTP server received an invalid response from a server it consulted when acting as a proxy or gateway.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_SERVICE_UNAVAILABLE</td><td>Status code (503) indicating that the HTTP server is temporarily overloaded, and unable to handle the request.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_GATEWAY_TIMEOUT</td><td>Status code (504) indicating that the server did not receive a timely response from the upstream server while acting as a gateway or proxy.</td>
+</tr>
+<tr>
+<td>Number</td><td>SC_HTTP_VERSION_NOT_SUPPORTED</td><td>Status code (505) indicating that the server does not support or refuses to support the HTTP protocol version that was used in the request message.</td>
+</tr>
+</table>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>javax.servlet.http.HttpServletResponse</td><td>nativeResponse</td><td>The native HttpServletResponse object</td>
+</tr>
+</table>
+<h2 id="setContentType">setContentType()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setContentType(String contentType)</p>
+<h3>Description</h3>
+            
+<p>Set the content type for the response.</p>
+            
+<p>See also javax.servlet.http.HttpServletResponse.setContentType.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>contentType</td><td>The content type</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="setCharacterEncoding">setCharacterEncoding()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setCharacterEncoding(String encoding)</p>
+<h3>Description</h3>
+            
+<p>Set the character encoding for the response.</p>
+            
+<p>See also javax.servlet.http.HttpServletResponse.setCharacterEncoding.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>encoding</td><td>The desired character encoding for the response</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="setContentLength">setContentLength()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setContentLength(Number length)</p>
+<h3>Description</h3>
+            
+<p>Set the content length for the response entity.</p>
+            
+<p>See also javax.servlet.http.HttpServletResponse.setContentLength.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>length</td><td>The number of bytes in the response's entity</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="setStatus">setStatus()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setStatus(Number code)</p>
+<h3>Description</h3>
+            
+<p>Set the status code for the response entity.</p>
+            
+<p>See also javax.servlet.http.HttpServletResponse.setStatus.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>code</td><td>The status code, e.g. any of the SC_ constants defined above</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="write">write()</h2>
+<h3>Prototype</h3>
+<p class="signature">void write(ByteString data)</p>
+<h3>Description</h3>
+            
+<p>Write binary data as part of the response.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>data</td><td>Binary data to be written to the response stream</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="print">print()</h2>
+<h3>Prototype</h3>
+<p class="signature">void print(String data)</p>
+<h3>Description</h3>
+            
+<p>Write String data as part of the response.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>data</td><td>Text data to be written to the response stream</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+<h2 id="println">println()</h2>
+<h3>Prototype</h3>
+<p class="signature">void println(String data)</p>
+<h3>Description</h3>
+            
+<p>Write String data followed by CR/LF as part of the response.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>data</td><td>Text data to be written to the response stream</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

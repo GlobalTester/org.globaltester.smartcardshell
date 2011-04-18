@@ -1,0 +1,393 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="icao.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>icao.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'icao.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/*
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2009 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  Register of predefined object identifier for ICAO applications
+ */</span>
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao"</span>, <span class="literal">"2.23.136"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao-mrtd"</span>, <span class="literal">"id-icao 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao-mrtd-security"</span>, <span class="literal">"id-icao-mrtd 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao-ldsSecurityObject"</span>, <span class="literal">"id-icao-mrtd-security 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao-cscaMasterList"</span>, <span class="literal">"id-icao-mrtd-security 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-icao-cscaMasterListSigningKey"</span>, <span class="literal">"id-icao-mrtd-security 3"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"bsi-de"</span>, <span class="literal">"itu-t(0) identified-organization(4) etsi(0) reserved(127) etsi-identified-organization(0) 7"</span>);
+
+<span class="comment">// ECC from TR 03111</span>
+ASN1.defineObjectIdentifier(<span class="literal">"id-ecc"</span>, <span class="literal">"bsi-de algorithms(1) 1"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"ansi-X9-62"</span>, <span class="literal">"iso(1) member-body(2) us(840) 10045"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-publicKeyType"</span>, <span class="literal">"ansi-X9-62 keyType(2)"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ecPublicKey"</span>, <span class="literal">"id-publicKeyType 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-fieldType"</span>, <span class="literal">"ansi-X9-62 fieldType(1)"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"prime-field"</span>, <span class="literal">"id-fieldType 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ecSigType"</span>, <span class="literal">"ansi-X9-62 signatures(4)"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-ecTLVKeyFormat"</span>, <span class="literal">"id-ecc keyType(2) 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ecTLVPublicKey"</span>, <span class="literal">"id-ecTLVKeyFormat unrestricted(1)"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-signatures"</span>, <span class="literal">"id-ecc signatures(4) 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-SHA1"</span>, <span class="literal">"ecdsa-plain-signatures 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-SHA224"</span>, <span class="literal">"ecdsa-plain-signatures 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-SHA256"</span>, <span class="literal">"ecdsa-plain-signatures 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-SHA384"</span>, <span class="literal">"ecdsa-plain-signatures 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-SHA512"</span>, <span class="literal">"ecdsa-plain-signatures 5"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecdsa-plain-RIPEMD160"</span>, <span class="literal">"ecdsa-plain-signatures 6"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg"</span>, <span class="literal">"id-ecc key-establishment(5) 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF"</span>, <span class="literal">"ecka-eg 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-SHA1"</span>, <span class="literal">"ecka-eg-X963KDF 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-SHA224"</span>, <span class="literal">"ecka-eg-X963KDF 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-SHA256"</span>, <span class="literal">"ecka-eg-X963KDF 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-SHA384"</span>, <span class="literal">"ecka-eg-X963KDF 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-SHA512"</span>, <span class="literal">"ecka-eg-X963KDF 5"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-X963KDF-RIPEMD160"</span>, <span class="literal">"ecka-eg-X963KDF 6"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-SessionKDF"</span>, <span class="literal">"ecka-eg 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-SessionKDF-3DES"</span>, <span class="literal">"ecka-eg-SessionKDF 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-SessionKDF-AES128"</span>, <span class="literal">"ecka-eg-SessionKDF 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-SessionKDF-AES192"</span>, <span class="literal">"ecka-eg-SessionKDF 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-eg-SessionKDF-AES256"</span>, <span class="literal">"ecka-eg-SessionKDF 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh"</span>, <span class="literal">"id-ecc key-establishment(5) 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF"</span>, <span class="literal">"ecka-dh 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-SHA1"</span>, <span class="literal">"ecka-dh-X963KDF 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-SHA224"</span>, <span class="literal">"ecka-dh-X963KDF 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-SHA256"</span>, <span class="literal">"ecka-dh-X963KDF 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-SHA384"</span>, <span class="literal">"ecka-dh-X963KDF 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-SHA512"</span>, <span class="literal">"ecka-dh-X963KDF 5"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-X963KDF-RIPEMD160"</span>, <span class="literal">"ecka-dh-X963KDF 6"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-SessionKDF"</span>, <span class="literal">"ecka-dh 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-SessionKDF-3DES"</span>, <span class="literal">"ecka-dh-SessionKDF 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-SessionKDF-AES128"</span>, <span class="literal">"ecka-dh-SessionKDF 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-SessionKDF-AES192"</span>, <span class="literal">"ecka-dh-SessionKDF 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ecka-dh-SessionKDF-AES256"</span>, <span class="literal">"ecka-dh-SessionKDF 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"ecStdCurvesAndGeneration"</span>, <span class="literal">"iso(1) identified-organization(3) teletrust(36) algorithm(3) signature-algorithm(3) ecSign(2) ecStdCurvesAndGeneration(8)"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"ellipticCurve"</span>, <span class="literal">"ecStdCurvesAndGeneration 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"versionOne"</span>, <span class="literal">"ellipticCurve 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP160r1"</span>, <span class="literal">"versionOne 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP160t1"</span>, <span class="literal">"versionOne 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP192r1"</span>, <span class="literal">"versionOne 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP192t1"</span>, <span class="literal">"versionOne 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP224r1"</span>, <span class="literal">"versionOne 5"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP224t1"</span>, <span class="literal">"versionOne 6"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP256r1"</span>, <span class="literal">"versionOne 7"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP256t1"</span>, <span class="literal">"versionOne 8"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP320r1"</span>, <span class="literal">"versionOne 9"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP320t1"</span>, <span class="literal">"versionOne 10"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP384r1"</span>, <span class="literal">"versionOne 11"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP384t1"</span>, <span class="literal">"versionOne 12"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP512r1"</span>, <span class="literal">"versionOne 13"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"brainpoolP512t1"</span>, <span class="literal">"versionOne 14"</span>);
+
+
+<span class="comment">// PACE from TR 03110 (EAC 2.0)</span>
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-GM"</span>, <span class="literal">"id-PACE 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-GM-3DES-CBC-CBC"</span>, <span class="literal">"id-PACE-DH-GM 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-GM-AES-CBC-CMAC-128"</span>, <span class="literal">"id-PACE-DH-GM 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-GM-AES-CBC-CMAC-192"</span>, <span class="literal">"id-PACE-DH-GM 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-GM-AES-CBC-CMAC-256"</span>, <span class="literal">"id-PACE-DH-GM 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-GM"</span>, <span class="literal">"id-PACE 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-GM-3DES-CBC-CBC"</span>, <span class="literal">"id-PACE-ECDH-GM 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-GM-AES-CBC-CMAC-128"</span>, <span class="literal">"id-PACE-ECDH-GM 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-GM-AES-CBC-CMAC-192"</span>, <span class="literal">"id-PACE-ECDH-GM 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-GM-AES-CBC-CMAC-256"</span>, <span class="literal">"id-PACE-ECDH-GM 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-IM"</span>, <span class="literal">"id-PACE 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-IM-3DES-CBC-CBC"</span>, <span class="literal">"id-PACE-DH-IM 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-IM-AES-CBC-CMAC-128"</span>, <span class="literal">"id-PACE-DH-IM 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-IM-AES-CBC-CMAC-192"</span>, <span class="literal">"id-PACE-DH-IM 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-DH-IM-AES-CBC-CMAC-256"</span>, <span class="literal">"id-PACE-DH-IM 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-IM"</span>, <span class="literal">"id-PACE 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-IM-3DES-CBC-CBC"</span>, <span class="literal">"id-PACE-ECDH-IM 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-IM-AES-CBC-CMAC-128"</span>, <span class="literal">"id-PACE-ECDH-IM 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-IM-AES-CBC-CMAC-192"</span>, <span class="literal">"id-PACE-ECDH-IM 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PACE-ECDH-IM-AES-CBC-CMAC-256"</span>, <span class="literal">"id-PACE-ECDH-IM 4"</span>);
+
+
+<span class="comment">// CA from TR 03110 (EAC 2.0)</span>
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 3"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-DH"</span>, <span class="literal">"id-CA 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-DH-3DES-CBC-CBC"</span>, <span class="literal">"id-CA-DH 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-DH-AES-CBC-CMAC-128"</span>, <span class="literal">"id-CA-DH 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-DH-AES-CBC-CMAC-192"</span>, <span class="literal">"id-CA-DH 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-DH-AES-CBC-CMAC-256"</span>, <span class="literal">"id-CA-DH 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-ECDH"</span>, <span class="literal">"id-CA 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-ECDH-3DES-CBC-CBC"</span>, <span class="literal">"id-CA-ECDH 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-ECDH-AES-CBC-CMAC-128"</span>, <span class="literal">"id-CA-ECDH 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-ECDH-AES-CBC-CMAC-192"</span>, <span class="literal">"id-CA-ECDH 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CA-ECDH-AES-CBC-CMAC-256"</span>, <span class="literal">"id-CA-ECDH 4"</span>);
+
+
+<span class="comment">// CA from TR 03110 (EAC 2.0)</span>
+ASN1.defineObjectIdentifier(<span class="literal">"id-PK"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 1 "</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-PK-DH"</span>, <span class="literal">"id-PK 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PK-ECDH"</span>, <span class="literal">"id-PK 2"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 2"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-RSA"</span>, <span class="literal">"id-TA 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-RSA-v1-5-SHA-1"</span>, <span class="literal">"id-TA-RSA 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-RSA-v1-5-SHA-256"</span>, <span class="literal">"id-TA-RSA 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-RSA-PSS-SHA-1"</span>, <span class="literal">"id-TA-RSA 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-RSA-PSS-SHA-256"</span>, <span class="literal">"id-TA-RSA 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA"</span>, <span class="literal">"id-TA 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA-SHA-1"</span>, <span class="literal">"id-TA-ECDSA 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA-SHA-224"</span>, <span class="literal">"id-TA-ECDSA 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA-SHA-256"</span>, <span class="literal">"id-TA-ECDSA 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA-SHA-384"</span>, <span class="literal">"id-TA-ECDSA 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-TA-ECDSA-SHA-512"</span>, <span class="literal">"id-TA-ECDSA 5"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 5"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-DH"</span>, <span class="literal">"id-RI 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-DH-SHA-1"</span>, <span class="literal">"id-RI-DH 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-DH-SHA-224"</span>, <span class="literal">"id-RI-DH 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-DH-SHA-256"</span>, <span class="literal">"id-RI-DH 3"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-ECDH"</span>, <span class="literal">"id-RI 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-ECDH-SHA-1"</span>, <span class="literal">"id-RI-ECDH 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-ECDH-SHA-224"</span>, <span class="literal">"id-RI-ECDH 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-RI-ECDH-SHA-256"</span>, <span class="literal">"id-RI-ECDH 3"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-CI"</span>, <span class="literal">"bsi-de protocols(2) smartcard(2) 6"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-auxiliaryData"</span>, <span class="literal">"bsi-de applications(3) mrtd(1) 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-DateOfBirth"</span>, <span class="literal">"id-auxiliaryData 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-DateOfExpiry"</span>, <span class="literal">"id-auxiliaryData 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CommunityID"</span>, <span class="literal">"id-auxiliaryData 3"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-extensions"</span>, <span class="literal">"bsi-de applications(3) mrtd(1) 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-description"</span>, <span class="literal">"id-extensions 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-plainFormat"</span>, <span class="literal">"id-description 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-htmlFormat"</span>, <span class="literal">"id-description 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-pdfFormat"</span>, <span class="literal">"id-description 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-sector"</span>, <span class="literal">"id-extensions 2"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-roles"</span>, <span class="literal">"bsi-de applications(3) mrtd(1) 2"</span>);
+
+<span class="comment">// From BSI/TG-03129</span>
+ASN1.defineObjectIdentifier(<span class="literal">"id-DefectList"</span>, <span class="literal">"bsi-de applications(3) mrtd(1) 5"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-AuthDefect"</span>, <span class="literal">"id-DefectList 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CertRevoked"</span>, <span class="literal">"id-AuthDefect 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CertReplaced"</span>, <span class="literal">"id-AuthDefect 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ChipAuthKeyRevoked"</span>, <span class="literal">"id-AuthDefect 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ActiveAuthKeyRevoked"</span>, <span class="literal">"id-AuthDefect 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ActiveAuthKeyRevoked"</span>, <span class="literal">"id-AuthDefect 4"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-ePassportDefect"</span>, <span class="literal">"id-DefectList 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ePassportDGMalformed"</span>, <span class="literal">"id-ePassportDefect 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-SODInvalid"</span>, <span class="literal">"id-ePassportDefect 2"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-eIDDefect"</span>, <span class="literal">"id-DefectList 3"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-eIDDGMalformed"</span>, <span class="literal">"id-eIDDefect 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-eIDIntegrity"</span>, <span class="literal">"id-eIDDefect 2"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-DocumentDefect"</span>, <span class="literal">"id-DefectList 4"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-CardSecurityMalformed"</span>, <span class="literal">"id-DocumentDefect 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ChipSecurityMalformed"</span>, <span class="literal">"id-DocumentDefect 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-PowerDownReq"</span>, <span class="literal">"id-DocumentDefect 3"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-ListContentDescription"</span>, <span class="literal">"bsi-de applications(3) mrtd(1) 6"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-IS"</span>, <span class="literal">"id-roles 1"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-AT"</span>, <span class="literal">"id-roles 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-ST"</span>, <span class="literal">"id-roles 3"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-eID"</span>, <span class="literal">"bsi-de applications(3) 2"</span>);
+ASN1.defineObjectIdentifier(<span class="literal">"id-SecurityObject"</span>, <span class="literal">"id-eID 1"</span>);
+
+ASN1.defineObjectIdentifier(<span class="literal">"id-BlackList"</span>, <span class="literal">"id-eID 2"</span>);
+
+
+ASN1.defineObjectIdentifier(<span class="literal">"standardizedDomainParameter"</span>, <span class="literal">"bsi-de algorithms(1) 2"</span>);
+
+<span class="comment">// ASN1.defineObjectIdentifier("", "");</span>
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Dec  3 18:14:23 2010</div>
+</body>
+</html>

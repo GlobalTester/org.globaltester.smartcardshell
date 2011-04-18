@@ -1,0 +1,112 @@
+<!-- #BeginTemplate "template.dwt" -->
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3 - Installation</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h1>Installing the Smart Card Shell</h1>
+<p>The Smart Card Shell is a Java program that can be installed on most operating
+   systems for which a Java runtime is available. During development, the shell
+   is tested on Windows and Debian Linux.</p>
+<h2>Requirements</h2>
+<h3>Java Runtime</h3>
+<p>The Smart Card Shell requires a Java Runtime Environment (JRE), which is version 1.4 at minimum.
+   The PC must fullfil the usual requirements of an office system.</p>
+<h3>Card Reader</h3>
+<p>You will need a contact or contactless smart card reader with PC/SC
+   or CT-API driver. PC/SC readers are supported by the default installation.</p>
+<p>For CT-API card readers you will need to enter the correct CT-API DLL or shared object
+   into the OCF configuration file. See the <a href="configuration.html">configuration documentation</a> for
+   supported readers and special configuration options.</p>
+<h2>Installing on Windows</h2>
+<p>The Smart Card Shell can be installed on any Windows version with a working Java Runtime Environment.</p>
+<p>There are two installation options:</p>
+<ul>
+<li>Installing from a .MSI file using the Windows Installer or</li>
+<li>Unpacking from a .ZIP file</li>
+</ul>
+<p>If you install from an .MSI file, then all the required entries in the start menu are created automatically.</p>
+<p>If you do not have installation privileges for your PC or just don't like to use the installer,
+   then the software is available in a .ZIP archive. This archive is basically a snapshot of a working
+   installation and can be put into any directory you like.</p>
+<p>The console version of the shell can be started with the SCSH3.EXE, the graphical version with
+   the SCSH3GUI.EXE file.</p>
+<h2>Installing on Linux</h2>
+<p>To use the Smart Card Shell on Linux you will need the PC/SC subsystem available from the
+   <a href="http://www.musclecard.com/">MUSCLE</a> project. You can also use a CT-API driver,
+   if a Linux version is available for your reader.</p>
+<p>To install the Smart Card Shell on Linux you will need to unpack the .ZIP file into a
+   directory of your choice.</p>
+<p>Shell scripts are provided to start the console and graphical version of the Smart Card Shell.</p>
+<h2>Selecting a Working Directory</h2>
+<p>When you start the Smart Card Shell, it will ask you for a working directory.
+   Please select a directory which you will use to store the scripts you are writing.</p>
+<p>If you do not select a working directory, then the shell will use the installation
+   directory (usually "c:\Program Files\CardContact\Smart Card Shell 3") as default. In most cases this is
+   not convenient, so please try and select your own working directory.</p>
+<p>The working directory will be used to store the configuration options (e.g. selected card reader).
+   You can use different working directories, e.g. one for each project.</p>
+<!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->

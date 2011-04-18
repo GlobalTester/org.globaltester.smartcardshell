@@ -1,0 +1,6 @@
+#!/bin/sh
+java -Djava.library.path=./lib -classpath 'lib/*' de.cardcontact.scdp.scsh3.GUIShell
+
+
+
+

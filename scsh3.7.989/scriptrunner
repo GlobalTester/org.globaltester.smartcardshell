@@ -1,0 +1,22 @@
+#!/bin/sh
+
+echo $0
+
+INSTALLDIR=$(dirname $0)
+WORKSPACE=`pwd`
+
+cd ${INSTALLDIR}
+
+MYCLASSPATH=
+for i in `ls ./lib/*.jar`
+do
+    MYCLASSPATH=${MYCLASSPATH}:${i}
+done
+
+java -cp "${MYCLASSPATH}" -Djava.library.path=./lib -Dscdp.workspace=${WORKSPACE} de.cardcontact.scdp.engine.ScriptRunner $*
+
+RC=$?
+
+cd ${WORKSPACE}
+
+exit ${RC}

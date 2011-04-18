@@ -1,0 +1,534 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="TestGroup.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>TestGroup.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		Core elements of a test group containing individual test cases<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="TestGroup.html">TestGroup</a></b></td>
+    <td><p>Abstract base class implementing a group of test cases.</p>
+ <p>Actual test group objects are derived from this base class.</p>
+ <p>Each test case is created as a method of this object.</p>
+ </td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2006 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * <span class="attrib">@fileoverview</span> Core elements of a test group containing individual test cases
+ */</span>
+
+
+
+<span class="comment">/**
+ * Create a test group object containing test cases.
+ * 
+ * <span class="attrib">@class</span>
+ * &lt;p&gt;Abstract base class implementing a group of test cases.&lt;/p&gt;
+ * &lt;p&gt;Actual test group objects are derived from this base class.&lt;/p&gt;
+ * &lt;p&gt;Each test case is created as a method of this object.&lt;/p&gt;
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {String} name the name of the test group
+ * <span class="attrib">@param</span> {Object} parameter the parameter object for this group of tests
+ */</span>
+<span class="reserved">function</span> TestGroup(name, parameter) {
+
+	<span class="reserved">this</span>.name = name;
+	<span class="reserved">this</span>.parameter = parameter;
+<span class="comment">//	this.logfile = new String("--- TestGroup " + name + "\n");</span>
+	<span class="reserved">this</span>.marker = null;
+	
+<span class="comment">//	print("TestGroup constructor called");</span>
+}
+
+
+
+<span class="comment">/**
+ * Log a text message.
+ * 
+ * <span class="attrib">@param</span> {String} message the message to add to the log
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.log = <span class="reserved">function</span>(message) {
+	GPSystem.trace(message);
+<span class="comment">//	this.logfile += message + "\n";</span>
+<span class="comment">//	print(message);</span>
+}
+
+
+
+<span class="comment">/**
+ * Setup method called before invoking each individual test case.
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.setUp = <span class="reserved">function</span>() {
+<span class="comment">//	this.log("TestGroup.setUp() called");</span>
+}
+
+
+
+<span class="comment">/**
+ * Teardown method called after invocation of a test case.
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.tearDown = <span class="reserved">function</span>() {
+<span class="comment">//	this.log("TestGroup.tearDown() called");</span>
+}
+
+
+
+<span class="comment">/**
+ * Verify that the given assertion evaluates to true. Throw an exception if result is false.
+ * 
+ * <span class="attrib">@param</span> {Boolean} result true if assertion is valid
+ * <span class="attrib">@param</span> {String} message the message to log in case result is false
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.assertTrue = <span class="reserved">function</span>(result, message) {
+	<span class="reserved">if</span> (!result) {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.marker) {
+			throw new Error(<span class="literal">"Assertion failed for ["</span> + <span class="reserved">this</span>.marker + <span class="literal">"]: "</span> + message);
+		} <span class="reserved">else</span> {
+			throw new Error(<span class="literal">"Assertion failed: "</span> + message);
+		}
+	}
+}
+
+
+
+<span class="comment">/**
+ * Verify that the given values are equal. Throw an exception if not.
+ * 
+ * <span class="attrib">@param</span> {Any} first the first argument
+ * <span class="attrib">@param</span> {Any} second the second argument
+ * <span class="attrib">@param</span> {String} message the message to log in case result is false
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.assertEquals = <span class="reserved">function</span>(first, second, message) {
+	<span class="reserved">if</span> (first != second) {
+		<span class="reserved">if</span> (<span class="reserved">this</span>.marker) {
+			throw new Error(<span class="literal">"Assertion failed for ["</span> + <span class="reserved">this</span>.marker + <span class="literal">"]: "</span> + message);
+		} <span class="reserved">else</span> {
+			throw new Error(<span class="literal">"Assertion failed: "</span> + message);
+		}
+	}
+}
+
+
+
+<span class="comment">/**
+ * Sets a marker used to identify a context in which an assertion failed.
+ * 
+ * &lt;p&gt;A context can be a certain iteration
+ * or group of assertions. A marker allows to further identify the area of a problem.&lt;/p&gt;
+ * 
+ * <span class="attrib">@param</span> {String} marker the marker to set
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.setMarker = <span class="reserved">function</span>(marker) {
+	<span class="reserved">this</span>.marker = marker;
+}
+
+
+
+<span class="comment">/**
+ * Returns the name of test group.
+ * 
+ * <span class="attrib">@type</span> String
+ * <span class="attrib">@return</span> the name of the test group
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.getName = <span class="reserved">function</span>() {
+		<span class="reserved">return</span> <span class="reserved">this</span>.name;
+}
+
+
+
+<span class="comment">/**
+ * Returns a list of tests as sorted array of test case names.
+ * 
+ * <span class="attrib">@type</span> String[]
+ * <span class="attrib">@return</span> the sorted array of test case names
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.getTestCaseNames = <span class="reserved">function</span>() {
+	var tests = new Array();
+	
+	<span class="reserved">for</span> (f in <span class="reserved">this</span>) {
+		<span class="reserved">if</span> (f.substr(0, 4) == <span class="literal">"case"</span>) {
+			<span class="reserved">if</span> (<span class="reserved">this</span>[f] instanceof Function) {
+				tests.push(f.substr(4));
+			}
+		}
+	}
+
+	tests.sort();
+	<span class="reserved">return</span> tests;
+}
+
+
+
+<span class="comment">/**
+ * Returns a specific test case function.
+ * 
+ * <span class="attrib">@param</span> {String} name the test case name
+ * <span class="attrib">@type</span> Function
+ * <span class="attrib">@return</span> the test case method
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.getTestCase = <span class="reserved">function</span>(name) {
+	<span class="reserved">return</span> <span class="reserved">this</span>[<span class="literal">"case"</span> + name];
+}
+
+
+
+<span class="comment">/**
+ * Returns a list of test procedure names referenced by a test case.
+ * 
+ * <span class="attrib">@param</span> {String} test case name
+ * <span class="attrib">@type</span> String[]
+ * <span class="attrib">@return</span> a list of test procedure names or undefined
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.getUsedTestProceduresForTestCase = <span class="reserved">function</span>(name) {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.constructor.<span class="reserved">prototype</span>.usedProcedures) {
+		<span class="reserved">return</span> <span class="reserved">this</span>.constructor.<span class="reserved">prototype</span>.usedProcedures[name];
+	} <span class="reserved">else</span> {
+		<span class="reserved">return</span> undefined;
+	}
+}
+
+
+
+<span class="comment">/**
+ * Run a named test procedure.
+ * 
+ * &lt;p&gt;This method is called by code in a test case to run a test procedure.&lt;/p&gt;
+ * &lt;p&gt;This method uses the test runner to create a new instance of the test procedure object.
+ * All test steps in the procedure are executed and the test procedure object is returned to
+ * the caller for further processing of test results.&lt;/p&gt;
+ * 
+ * <span class="attrib">@param</span> {String} name the test procedure name
+ * <span class="attrib">@param</span> {Object} param the parameter object to pass to the execution of the test procedure
+ * <span class="attrib">@type</span> TestProcedure
+ * <span class="attrib">@return</span> the test procedure object
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.runTestProcedure = <span class="reserved">function</span>(name, param) {
+	<span class="reserved">if</span> (!<span class="reserved">this</span>.testRunner) {
+		throw new GPError(<span class="literal">"TestGroup"</span>, GPError.INVALID_USAGE, 0, <span class="literal">"No test runner defined"</span>);
+	}
+	var proc = <span class="reserved">this</span>.testRunner.getTestProcedure(name);
+	var test = new proc(name, <span class="reserved">this</span>, param);
+	test.run();
+	
+	<span class="reserved">return</span> test; 
+}
+
+
+
+<span class="comment">/**
+ * Report progress of passed steps in a test procedure to the test runner. This method is used internally.
+ * 
+ * <span class="attrib">@private</span>
+ * <span class="attrib">@param</span> {String} procedure the procedure name
+ * <span class="attrib">@param</span> {String} step the step name
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.reportProgress = <span class="reserved">function</span>(procedure, step) {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.testRunner) {
+		var runner = <span class="reserved">this</span>.testRunner;
+		var uniqueName = <span class="reserved">this</span>.currentTestCase + <span class="literal">"/"</span> + procedure + <span class="literal">"/"</span> + step;
+		runner.hasPassed(uniqueName, null);
+	}
+}
+
+
+
+<span class="comment">/**
+ * Initialize a test run. This method is used internally.
+ * <span class="attrib">@private</span>
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.initTestRun = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.marker = null;
+}
+
+
+
+<span class="comment">/**
+ * Run a single test case. This method is called internally. Use {<span class="attrib">@link</span> #runTestCase} for running a single test case.
+ * 
+ * <span class="attrib">@private</span>
+ * <span class="attrib">@type</span> boolean
+ * <span class="attrib">@return</span> true if test passed
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.runTestCaseInternal = <span class="reserved">function</span>(casename, runner) {
+	var result = false;
+	<span class="reserved">this</span>.currentTestCase = <span class="reserved">this</span>.name + <span class="literal">"/"</span> + casename;
+	<span class="reserved">this</span>.testRunner = runner;
+
+<span class="comment">//	this.logfile = "";</span>
+
+	var starttime = new Date();
+	GPSystem.markTrace();
+	logentry = <span class="literal">"+ TestCase "</span> + <span class="reserved">this</span>.currentTestCase + <span class="literal">" started "</span> + starttime;
+	print(logentry);
+	<span class="reserved">this</span>.log(logentry);
+	try {
+		<span class="reserved">this</span>.setUp();
+		var func = <span class="reserved">this</span>.getTestCase(casename);
+		func.call(<span class="reserved">this</span>);
+		<span class="reserved">this</span>.tearDown();
+		var endtime = new Date();
+		logentry = <span class="literal">"+ TestCase "</span> + <span class="reserved">this</span>.currentTestCase + <span class="literal">" completed on "</span> + endtime + <span class="literal">" after "</span> + (endtime.valueOf() - starttime.valueOf()) + <span class="literal">" ms"</span>;
+		print(logentry);
+		<span class="reserved">this</span>.log(logentry);
+		<span class="reserved">if</span> (runner) {
+			var logfile = GPSystem.copyTrace();
+			runner.hasPassed(<span class="reserved">this</span>.currentTestCase, logfile);
+		}
+		result = true;
+	}
+	catch(e) {
+		var endtime = new Date();
+		logentry = <span class="literal">"+ TestCase "</span> + <span class="reserved">this</span>.currentTestCase + <span class="literal">" failed on "</span> + endtime + <span class="literal">" after "</span> + (endtime.valueOf() - starttime.valueOf()) + <span class="literal">" ms"</span>;
+		print(logentry);
+		<span class="reserved">this</span>.log(logentry);
+		
+		logentry = <span class="literal">"  ### - "</span> + e;
+		print(logentry);
+		<span class="reserved">this</span>.log(logentry);
+		<span class="reserved">for</span> (j in e) {
+			logentry = <span class="literal">"  ### "</span> + j + <span class="literal">" = "</span> + e[j];
+			print(logentry);
+			<span class="reserved">this</span>.log(logentry);
+		}
+		
+		<span class="reserved">if</span> (runner) {
+			var logfile = GPSystem.copyTrace();
+			runner.hasFailed(<span class="reserved">this</span>.currentTestCase, logfile);
+		}
+	}
+	<span class="reserved">return</span> result;
+}
+
+
+
+<span class="comment">/**
+ * Runs all tests in a test group.
+ * 
+ * &lt;p&gt;This method can be used to run a test group without a test runner. In that case leave the runner
+ * argument empty or null.&lt;/p&gt;
+ * 
+ * <span class="attrib">@param</span> {TestRunner} runner the test runner to report progress or undefined or null
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.run = <span class="reserved">function</span>(runner) {
+	<span class="reserved">this</span>.initTestRun();
+	
+	var tests = <span class="reserved">this</span>.getTestCaseNames();
+	
+	var startgroup = new Date();
+	var logentry = <span class="literal">"TestGroup "</span> + <span class="reserved">this</span>.name + <span class="literal">" started "</span> + startgroup;
+	var failures = 0;
+	print(logentry);
+	<span class="reserved">this</span>.log(logentry);
+	
+	<span class="reserved">for</span> (var i = 0; i &lt; tests.length; i++) {
+		var uniqueName = <span class="reserved">this</span>.name + <span class="literal">"/"</span> + tests[i];
+		
+		<span class="reserved">if</span> (runner) {
+			<span class="reserved">if</span> (!runner.isEnabled(uniqueName))
+				continue;
+		}
+		
+		<span class="reserved">if</span> (!<span class="reserved">this</span>.runTestCaseInternal(tests[i], runner)) {
+			failures++;
+		}
+	}
+
+	var endgroup = new Date();
+	logentry = <span class="literal">"TestGroup "</span> + <span class="reserved">this</span>.name + <span class="literal">" completed on "</span> + endgroup + <span class="literal">" with "</span> + failures + <span class="literal">" failed tests"</span>;
+	print(logentry);
+	<span class="reserved">this</span>.log(logentry);
+}
+
+
+
+<span class="comment">/**
+ * Run a single test in a test group, optionally using a test runner.
+ * 
+ * <span class="attrib">@param</span> {String} casename the name of the test case
+ * <span class="attrib">@param</span> {TestRunner} the test runner object or undefined or null
+ */</span>
+TestGroup.<span class="reserved">prototype</span>.runTestCase = <span class="reserved">function</span>(casename, runner) {
+	<span class="reserved">this</span>.initTestRun();
+	<span class="reserved">this</span>.runTestCaseInternal(casename, runner);
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Dec  3 18:14:23 2010</div>
+</body>
+</html>

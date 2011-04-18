@@ -1,0 +1,728 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>URLConnection - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>URLConnection - Reference Documentation</h1>
+<p>
+        
+<p>Class implementing an URL connection to a resource. This class can be used to
+           put, get, post or delete local and remote resources (CRUD operations).</p>
+    
+</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">URLConnection() constructor</a>
+</li>
+<li>
+<a href="#setConnectTimeout">setConnectTimeout()</a>
+</li>
+<li>
+<a href="#setReadTimeout">setReadTimeout()</a>
+</li>
+<li>
+<a href="#setTLSKeyStores">setTLSKeyStores()</a>
+</li>
+<li>
+<a href="#get">get()</a>
+</li>
+<li>
+<a href="#getAsByteString">getAsByteString()</a>
+</li>
+<li>
+<a href="#post">post()</a>
+</li>
+<li>
+<a href="#put">put()</a>
+</li>
+<li>
+<a href="#deleteResource">deleteResource()</a>
+</li>
+<li>
+<a href="#toString">toString()</a>
+</li>
+</ul>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>responseCode</td><td>The HTTP response code</td>
+</tr>
+<tr>
+<td>String</td><td>responseMessage</td><td>The HTTP response message</td>
+</tr>
+<tr>
+<td>String</td><td>contentEncoding</td><td>The encoding format for the content</td>
+</tr>
+<tr>
+<td>String</td><td>contentLength</td><td>The length of the content</td>
+</tr>
+<tr>
+<td>String</td><td>contentType</td><td>The content type</td>
+</tr>
+<tr>
+<td>Date</td><td>date</td><td>The date form the header field</td>
+</tr>
+<tr>
+<td>Date</td><td>expiration</td><td>The expiration from the header field</td>
+</tr>
+<tr>
+<td>Date</td><td>lastModified</td><td>The date of last modification from the header field</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">URLConnection(String url)</p>
+<h3>Description</h3>Create a connection object to access a resource identified by the URL.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>url</td><td>URL of the resource to access</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var cwd = GPSystem.mapFilename("urltest.dat", GPSystem.CWD);
+
+var urlConnection = new URLConnection("file:" + cwd);
+
+</pre>
+<h2 id="setConnectTimeout">setConnectTimeout()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setConnectTimeout(Number ms)</p>
+<h3>Description</h3>
+            
+<p>Sets the number of milliseconds to wait for a connect to the remote system.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>ms</td><td>The timeout in milliseconds</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+urlConnection.setConnectTimeout(10000);		// 10 seconds
+
+</pre>
+<h2 id="setReadTimeout">setReadTimeout()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setReadTimeout(Number ms)</p>
+<h3>Description</h3>
+            
+<p>Sets the number of milliseconds to wait for a response from the remote system.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>ms</td><td>The timeout in milliseconds</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+urlConnection.setReadTimeout(10000);		// 10 seconds
+
+</pre>
+<h2 id="setTLSKeyStores">setTLSKeyStores()</h2>
+<h3>Prototype</h3>
+<p class="signature">void setTLSKeyStores(KeyStore truststore, KeyStore keystore, String keypassword)</p>
+<h3>Description</h3>
+            
+<p>Sets the key stores to be used for TLS connections.</p>
+            
+<p>The trust store contains CA certificates that can be used to verify
+               the server certificate.</p>
+            
+<p>The key store contains the private key, certificate and CA certificates 
+               to be used for TLS client authentication.</p>
+            
+<p>Setting a TLS key store only has an effect for connections using 
+               transport layer security (e.g. https).</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>KeyStore</code></td><td>truststore</td><td>The keystore containing trusted certificates for server authentication</td>
+</tr>
+<tr>
+<td><code>KeyStore</code></td><td>keystore</td><td>An optional key store containing the private key and certificates for TLS client authentication</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>keypassword</td><td>The password to recover the private key</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var truststore = new KeyStore("SUN", "jks", "truststore", "openscdp");
+var keystore = new KeyStore("SUN", "jks", "clientkeystore", "openscdp");
+
+var urlConnection = new URLConnection("https://localhost:8443");
+
+urlConnection.setTLSKeyStores(truststore, keystore, "openscdp");
+
+var page = urlConnection.get();
+
+</pre>
+<h2 id="get">get()</h2>
+<h3>Prototype</h3>
+<p class="signature">String get()</p>
+<h3>Description</h3>
+            
+<p>Read from the resource the full content as string.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>The content of the resource as string</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var urlConnection = new URLConnection("file:" + cwd);
+var page = urlConnection.get();
+assert(page.equals("Hello World\n"));
+
+</pre>
+<h2 id="getAsByteString">getAsByteString()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString getAsByteString()</p>
+<h3>Description</h3>
+            
+<p>Read from the resource the full content as binary content.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>The content of the resource as bytestring</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var urlConnection = new URLConnection("file:" + cwd);
+var page = urlConnection.getAsByteString();
+assert(page.equals(new ByteString("48656C6C6F20576F726C640D0A", HEX)));
+
+</pre>
+<h2 id="post">post()</h2>
+<h3>Prototype</h3>
+<p class="signature">String post(String str)</p>
+<h3>Description</h3>
+            
+<p>Write the text to the resource and receive response.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>str</td><td>The content to write</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var url = "http://localhost:8080/";
+var urlConnection = new URLConnection(url + "admin?restart");
+
+var page = urlConnection.get();
+print("GET:\n" + page);
+print(urlConnection.responseCode + " - " + urlConnection.responseMessage);
+print("ContentEncoding : " + urlConnection.contentEncoding);
+print("ContentLength : " + urlConnection.contentLength);
+print("ContentType : " + urlConnection.contentType);
+print("Date : " + urlConnection.date);
+print("Expiration : " + urlConnection.expiration);
+print("Last Modified : " + urlConnection.lastModified);
+
+assert(urlConnection.responseCode == 200);
+
+
+var urlConnection = new URLConnection(url + "admin");
+
+var script = "GPSystem.trace(\"Hello World\");\n";
+
+var result = urlConnection.post(script);
+print("POST:\n" + result);
+
+var result = urlConnection.post(script);
+print("POST:\n" + result);
+
+
+var urlConnection = new URLConnection(url + "admin");
+
+var page = urlConnection.get();
+print("GET:\n" + page);
+
+
+</pre>
+<h2 id="put">put()</h2>
+<h3>Prototype</h3>
+<p class="signature">String put(String str)</p>
+<h3>Description</h3>
+            
+<p>Write the text to the resource and receive response.</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>str</td><td>The content to write</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var url = "http://localhost:8080/";
+var urlConnection = new URLConnection(url + "admin?restart");
+
+var page = urlConnection.get();
+print("GET:\n" + page);
+
+
+var urlConnection = new URLConnection(url + "admin");
+
+var script = "GPSystem.trace(\"Hello World\");\n";
+
+var result = urlConnection.put(script);
+print("PUT:\n" + result);
+
+var result = urlConnection.put(script);
+print("PUT:\n" + result);
+
+
+var urlConnection = new URLConnection(url + "admin");
+
+var page = urlConnection.get();
+print("GET:\n" + page);
+
+
+</pre>
+<h2 id="deleteResource">deleteResource()</h2>
+<h3>Prototype</h3>
+<p class="signature">void deleteResource()</p>
+<h3>Description</h3>
+            
+<p>Delete the resource.</p>
+            
+<p>The delete operation only works for connections using HTTP.</p>
+            
+<p>The method is not named "delete" because delete is a reserved name
+               in the Rhino JavaScript implementation.</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code></code></td><td></td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+var url = "http://localhost:8080/";
+
+var urlConnection = new URLConnection(url + "admin");
+
+urlConnection.deleteResource();
+
+
+</pre>
+<h2 id="toString">toString()</h2>
+<h3>Prototype</h3>
+<p class="signature">String toString()</p>
+<h3>Description</h3>
+            
+<p>Return the URL as string</p>
+        
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>The URL</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+assert(urlConnection.toString() == url + "admin");
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        

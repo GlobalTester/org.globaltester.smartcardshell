@@ -1,0 +1,225 @@
+<!-- #BeginTemplate "template.dwt" -->
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3 - Getting Started</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h1>Getting Started</h1>
+<p>At this point you should have installed the Smart Card Shell. If not, please have a look
+   at the <a href="installation.html">installation instructions</a>.</p>
+<p>After you started the Smart Card Shell and selected a working directory, you will see
+   a window divided into two panes. The left pane will be empty and the right pane will show a
+   text area, which works as a console and is the main user interface of the Smart Card Shell.</p>
+<p>The left pane is called the outline. It will be filled with informations generated when you
+   run scripts. You can drag the divider between the two panes and change the amount of space
+   allocated to the outline and the text area.</p>
+<p>To end the shell, you can either enter "quit" into the text area or select "Exit" from the "File"
+   menu.</p>
+<h2>Quick Start</h2>
+<p>Insert a smart card into your reader and enter:</p>
+<pre>
+&gt r
+</pre>
+<p>If everythings is installed correctly, then you should see the Answer to Reset (ATR) for your card.</p>
+<p>If you feel like more, try</p>
+<pre>
+&gt load("tools/explore.js");
+</pre>
+<p>and see for yourself.</p>
+<h2>Understanding the Shell Concept</h2>
+<p>The Smart Card Shell uses a JavaScript interpreter and compiler to execute scripts. JavaScript is a
+typeless, object-oriented programming language commonly used in web browsers for active HTML pages.
+The language syntax is very similar to Java and C.</p>
+<p>The shell is directly connected to the JavaScript interpreter, so any input in the text area
+must be valid JavaScript code. Whenever you enter a command into the shell, this command is evaluated
+by the interpreter, executed and the resulting value displayed to the user. Give it a try and enter:</p>
+<pre>
+&gt 1000 + 2000
+</pre>
+<p>After pressing ENTER the shell will display</p>
+<pre>
+3000
+&gt
+</pre>
+<p>and is ready to accept the next command.</p>
+<p>Invoking functions is as simple. To print something on the command line or from within a script
+   you can invoke the print() function. The print() function will print all passed arguments separated
+   by a whitespace and a final line break.</p>
+<pre>
+&gt print("Value", 100, 200);
+</pre>
+<p>will result in</p>
+<pre>
+Value 100 200
+&gt
+</pre>
+<p>When entering a function name without parentheses, the shell will invoke this function with the
+   result of the previous command as argument. This can be quite handy, if you define functions which
+   shall continue processing on the output of the previous function. However this functionality is
+   only available when entering commands in the shell. When writing scripts, you need to store the result
+   in a variable instead.</p>
+<p>The help() function can be invoked with or without parentheses and it will display a short help text.
+   The function itself is defined in the CONFIG.JS script, which is run as the initial configuration
+   script when you start the shell.</p>
+<p>Don't be surprised, if only a few commands are build-in commands. Most of the time you will write and
+   use scripts to do something with the Smart Card Shell.</p>
+<p>Variables can be assigned a value without prior declaration. The script interpreter will take
+   care of the best storage type and any conversion necessary.</p>
+<p>You can define global and local variables. Global variables are created when you first assign
+   a value to it:</p>
+<pre>
+&gt globalVariable = "Test";
+</pre>
+   creates a global variable named <code>globalVariable</code> and with a string value "Test". Local variable are
+   declared with a <code>var</code> prefix:
+<pre>
+&gt var localVariable = "Hello";
+</pre>
+<p>Local variables are only valid within the function in which they are defined.</p>
+
+<h2>Running Scripts</h2>
+<p>Most of the time you will run scripts that are either supplied with the Smart Card Shell or
+   which you developed for your own purpose. A script can be compiled and executed using the
+   <code>load()</code> method build into the scripting enviroment.</p>
+<p>The <code>load()</code> method accepts a string as the script name:</p>
+<pre>
+&gt load("tools/explore.js");
+</pre>
+<p>Remember, that all commands entered in the shell must be valid JavaScript code.
+   Specifying a full path requires you to escape the backslash character with an
+   additional backslash, because this notation is required for string literals:</p>
+<pre>
+&gt load("c:\\myscripts\\explore.js");
+</pre>
+<p>For your own convenience and better portability to other operating systems, we
+   recommend to use the forward slash instead. This does not need to be escaped:</p>
+<pre>
+&gt load("c:/myscripts/explore.js");
+</pre>
+<p>You can also run scripts from the "File" / "Run Script" menu or by entering CTRL-R.</p>
+<p>The shell is using a simple scheme to map file names used in scripts to files in
+   the operating environment. As a rule of thumb, all file names are resolved relative to
+   the location of the script which is currently running. If a file cannot be found relative
+   to the location of the script, then in turn the working directory and the installation directory is
+   searched. See <a href="filelocation.html">Locating Files</a> for details.</p>
+<p>The scripts supplied with the Smart Card Shell are located in directories underneath the
+   installation directory (Usually "c:\Program Files\CardContact\Smart Card Shell 3"). The <code>tools</code>
+   directory contains a number of scripts that provide support for common tasks. Other directories
+   contain script for specific card applications (e.g. <a href="icaomrtd.html">ICAO MRTD</a>,
+   <a href="emv.html">EMV</a>, <a href="geldkarte.html">GeldKarte</a>, <a href="egk.html">eGK</a>
+   and <a href="hpc.html">HPC</a>)</p>
+
+<h2>Selecting a Card Reader</h2>
+<p>Unless you explicitly selected a card reader from the "Options" / "Reader Configuration", the shell will
+   use the first card reader in the system as default reader. Once you select a card reader, the JavaScript
+   variable <code>_scsh3.reader</code> will be set to the name of the reader. You can reference this
+   <a href="settings.html">configuration variable</a> in your own scripts.</p>
+
+<h2>Defining and Using Objects</h2>
+<p>JavaScript supports object-oriented programming, but uses prototype objects rather than
+   classes. A prototype object contains the common properties of all instances of the same object.
+   Common properties can be, for example, constants and methods.</p>
+<p>Objects are created using the <code>new</code> operator. Following the new operator you can define a function
+   that acts as a constructor. You can pass arguments to this function to initialize the newly created object.</p>
+<p>Constructor functions in JavaScript are similar to classes in Java. By defining a constructor function
+   and assigning other functions to the prototype of a constructor you can build your own objects and
+   methods. The following code shows the concept:</p>
+<pre>
+//
+// Define constructor and class Point
+//
+function Point(x, y) {
+        this.x = x;
+        this.y = y;
+}
+
+//
+// Define method add() and assign to the prototype object, making it available
+// for all instances created with the Point constructor function
+//
+Point.prototype.add = function(x, y) {
+        this.x += x;
+        this.y += y;
+}
+
+//
+// Define a toString() method
+//
+Point.prototype.toString = function() {
+        return("y = " + this.x + ", y = " + this.y);
+}
+
+var p = new Point(10, 20);
+
+p.add(20, 10);
+print(p);
+</pre>
+
+<p>The Smart Card Shell supports a large number of predefined classes (aka constructor functions) and methods
+   to work with smart cards, cryptographic material, data structures and PKI services. See the main page for
+   a complete reference of Global Platform and shell scripting classes.</p>
+
+<!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->

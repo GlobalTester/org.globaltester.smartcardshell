@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileStructure arrayElement="EF" arrayIndex="#">
+    <EF fid="2F00" format="asn1" name="EF_DIR" />
+    <EF fid="2F01" format="asn1" name="EF_ATR" />
+    <EF fid="0030" format="asn1" name="EF_ARR" />
+    <EF fid="5030" format="asn1" name="EF_5030" />
+    <EF fid="5031" format="asn1" name="EF_OD" />
+    <EF fid="5032" format="asn1" name="EF_CIAInfo" />
+    <EF fid="5033" format="asn1" name="EF_5033" />
+    <EF fid="5034" format="asn1" name="EF_5034" />
+    <EF fid="5035" format="asn1" name="EF_PrKD" />
+    <EF fid="5036" format="asn1" name="EF_PuKD" />
+    <EF fid="5037" format="asn1" name="EF_AOD" />
+    <EF fid="5038" format="asn1" name="EF_CD" />
+    <EF fid="5039" format="asn1" name="EF_DCOD" />
+</FileStructure>    

@@ -1,0 +1,858 @@
+<!-- #BeginTemplate "template.dwt" -->
+        <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- #BeginEditable "TITLE" -->
+                <title>ByteBuffer - Reference Documentation</title>
+                    <!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css">
+<meta name="author" content="Andreas Schwier">
+</head>
+<body>
+<div align="left"><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80" border="0"></a></div>
+<div id="navigator">
+    <p><b>Smart Card<br>Shell 3</b></p>
+    <a href="index.html">Home</a><br><br>
+    <a href="gperror.html">GPError</a><br>
+    <a href="gpsystem.html">GPSystem</a><br>
+    <a href="bytestring.html">ByteString</a><br>
+    <a href="bytebuffer.html">ByteBuffer</a><br>
+    <a href="tlv.html">TLV</a><br>
+    <a href="tlvlist.html">TLVList</a><br>
+    <a href="card.html">Card</a><br>
+    <a href="atr.html">Atr</a><br>
+    <a href="key.html">Key</a><br>
+    <a href="crypto.html">Crypto</a><br>
+    <a href="application.html">Application</a><br>
+    <a href="gpapplication.html">GPApplication</a><br>
+    <a href="gpsecuritydomain.html">GPSecDomain</a><br>
+    <br>
+    <a href="asn1.html">ASN1</a><br>
+    <a href="cardfile.html">CardFile</a><br>
+    <a href="isosecurechannel.html">IsoSecureChannel</a><br>
+    <a href="applicationfactory.html">ApplFactory</a><br>
+    <a href="gpxml.html">GPXML</a><br>
+    <a href="jsscript.html">JsScript</a><br>
+    <a href="cardsimulationadapter.html">CardSim</a><br>
+    <br>
+    <a href="x509.html">X509</a><br>
+    <a href="crl.html">CRL</a><br>
+    <a href="keystore.html">KeyStore</a><br>
+    <a href="cmssigneddata.html">CMSSignedData</a><br>
+    <a href="cmsgenerator.html">CMSGenerator</a><br>
+    <a href="xmlsignature.html">XMLSignature</a><br>
+    <a href="ocspquery.html">OCSPQuery</a><br>
+    <a href="ldap.html">LDAP</a><br>
+    <a href="soapconnection.html">SOAP</a><br>
+    <a href="urlconnection.html">URLConnection</a><br>
+    <br>
+    <a href="pkcs11provider.html">PKCS11Provider</a><br>
+    <a href="pkcs11session.html">PKCS11Session</a><br>
+    <a href="pkcs11object.html">PKCS11Object</a><br>
+    <br>
+    <a href="outlinenode.html">OutlineNode</a><br>
+    <a href="dialog.html">Dialog</a><br>
+    <br>
+    <a href="jsdoc/index.html">Tools</a><br>
+    <br>
+    <a href="http://www.openscdp.org">OpenSCDP</a><br>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+                <h1>ByteBuffer - Reference Documentation</h1>
+<p>Implementation of a mutuable byte buffer.</p>
+<h2>Index of Methods</h2>
+<ul>
+<li>
+<a href="#Constructor">ByteBuffer() constructor</a>
+</li>
+<li>
+<a href="#toString">toString()</a>
+</li>
+<li>
+<a href="#append">append()</a>
+</li>
+<li>
+<a href="#byteAt">byteAt()</a>
+</li>
+<li>
+<a href="#clear">clear()</a>
+</li>
+<li>
+<a href="#copy">copy()</a>
+</li>
+<li>
+<a href="#find">find()</a>
+</li>
+<li>
+<a href="#insert">insert()</a>
+</li>
+<li>
+<a href="#toByteString">toByteString()</a>
+</li>
+</ul>
+<h2>Properties</h2>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="120">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td>Number</td><td>length</td><td>Number of bytes in the ByteBuffer</td>
+</tr>
+</table>
+<h2 id="Constructor">Constructor</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteBuffer()</p>
+<p class="signature">ByteBuffer(String stringValue, Number encoding)</p>
+<p class="signature">ByteBuffer(ByteString byteString)</p>
+<h3>Description</h3>
+<p>Create a empty ByteBuffer object or a ByteBuffer object containing the data from stringValue decoded
+            according to format defined in argument encoding or a ByteBuffer object containing the ByteString object passed as
+            argument</p>
+            
+<p>The following encoding formats can be used for the stringValue argument:</p>
+            
+<p>HEX - A string containing hexadecimal characters and arbitrary delimiters.</p>
+            
+<p>ASCII - A string containing ASCII characters and characters from Latin-1.</p>
+            
+<p>UTF8 - A string containing Unicode characters.</p>
+            
+<p>BASE64 - A string containing BASE-64 encoded data.</p>
+            
+<p>OID - A string containing an object identifier in dotted notation or
+               separated by blanks (This is a proprietary extension to Global Platform Scripting).</p>
+        
+<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>String</code></td><td>stringValue</td><td>String containing the encoded binary data</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>encoding</td><td>Encoding format. Must be one of HEX, ASCII, UTF8,
+            BASE64 or OID</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>byteString</td><td>ByteString object with data</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ENCODING</td><td>The argument encoding contains an unknown encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_DATA</td><td>The argument stringValue contains characters not compatible with the encoding format</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments given</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer();
+
+assert(x != null);
+assert(x instanceof ByteBuffer);
+
+
+x = new ByteBuffer("1234", HEX);
+
+assert(x.length == 2);
+assert(x.toString() == "12 34");
+
+
+x = new ByteBuffer("0x1234 56.78.90+AB#cd'EF", HEX);
+
+assert(x.length == 8);
+assert(x.toString() == "12 34 56 78 90 AB CD EF");
+
+
+x = new ByteBuffer("1234ABCD&Auml;&Ouml;&Uuml;&szlig;", ASCII);
+
+assert(x.length == 12);
+assert(x.toString() == "31 32 33 34 41 42 43 44 C4 D6 DC DF");
+
+
+x = new ByteBuffer("1234ABCD&Auml;&Ouml;&Uuml;&szlig;", UTF8);
+
+assert(x.length == 16);
+assert(x.toString() == "31 32 33 34 41 42 43 44 C3 84 C3 96 C3 9C C3 9F");
+
+
+x = new ByteBuffer("SGVsbG8gV29ybGQ=", BASE64);
+
+assert(x.length == 11);
+assert(x.toString(ASCII) == "Hello World");
+
+
+x = new ByteBuffer(new ByteString("1234", HEX));
+
+assert(x.length == 2);
+assert(x.toString() == "12 34");
+
+
+x = new ByteBuffer("1.2.840.113549.1.1.2", OID);
+
+assert(x.length == 9);
+assert(x.toString(OID) == "1.2.840.113549.1.1.2");
+assert(x.toString(HEX) == "2A864886F70D010102"); 
+
+
+x = new ByteBuffer("1 2 840 113549 1 1 2", OID);
+
+assert(x.toString(HEX) == "2A864886F70D010102"); 
+
+
+</pre>
+<h2 id="toString">toString()</h2>
+<h3>Prototype</h3>
+<p class="signature">String toString(Number encoding)</p>
+<h3>Description</h3>Return string containing binary data in given encoding<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>encoding</td><td>Encoding to present the binary data in. Must be one of ASCII, HEX, UTF8, BASE64 or CN.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>String</code></td><td>String representing data from ByteBuffer</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("41 42 43", HEX);
+assert(x.toString(HEX) == "414243");
+
+x = new ByteBuffer("41 42 43 C4 D6 DC DF", HEX);
+assert(x.toString(ASCII) == "ABC&Auml;&Ouml;&Uuml;&szlig;");
+
+x = new ByteBuffer("C3 84 C3 96 C3 9C C3 9F", HEX);
+assert(x.toString(UTF8) == "&Auml;&Ouml;&Uuml;&szlig;");
+
+x = new ByteBuffer("Hello World", ASCII);
+assert(x.toString(BASE64) == "SGVsbG8gV29ybGQ=");
+
+</pre>
+<h2 id="append">append()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteBuffer append(ByteBuffer byteBuffer)</p>
+<p class="signature">ByteBuffer append(ByteString byteString)</p>
+<p class="signature">ByteBuffer append(Number byteValue)</p>
+<p class="signature">ByteBuffer append(String stringValue)</p>
+<h3>Description</h3>Append to the ByteBuffer at the end the content of the ByteBuffer or ByteString object, the ASCII encoded string or the byte
+                     given as argument.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytebuffer.html">ByteBuffer</a></code></td><td>byteBuffer</td><td>ByteBuffer object to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>byteString</td><td>ByteString object to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>stringValue</td><td>String containing ASCII characters to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>byteValue</td><td>Single byte value</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteBuffer</code></td><td>Returns the ByteBuffer object this method is applied to</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer();
+
+x.append(new ByteBuffer("ABC", ASCII));
+assert(x.toString() == "41 42 43");
+
+x.append("123");
+assert(x.toString() == "41 42 43 31 32 33");
+
+x.append(new ByteString("ABC", ASCII));
+assert(x.toString() == "41 42 43 31 32 33 41 42 43");
+
+str = 0x20;
+x.append(str);
+assert(x.toString() == "41 42 43 31 32 33 41 42 43 20");
+
+</pre>
+<h2 id="byteAt">byteAt()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number byteAt(Number offset)</p>
+<h3>Description</h3>Return the byte at the zero based offset in the ByteBuffer<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Value of byte as unsigned integer</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>Argument offset is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("123ABC&Auml;&Ouml;&Uuml;", ASCII);
+assert(typeof(x.byteAt(0) == "number"));
+assert(x.byteAt(0) == 0x31);
+assert(x.byteAt(3) == 0x41);
+assert(x.byteAt(6) == 0xC4);
+
+</pre>
+<h2 id="clear">clear()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteBuffer clear()</p>
+<p class="signature">ByteBuffer clear(Number offset)</p>
+<p class="signature">ByteBuffer clear(Number offset, Number length)</p>
+<h3>Description</h3>Clears the area specified by offset and length in the ByteBuffer. Bytes behind the cleared area
+                     are moved to offset. If length is missing, then the remaining length from offset to the end
+                     of the ByteBuffer is cleared. If offset and length are missing from the argument list, then
+                     the whole ByteBuffer is cleared.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>The zero based offset in the ByteBuffer where the clear operation is started.
+                     Zero is assumed if offset is missing.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>length</td><td>The length of the area to be cleared. If length is missing, then the maximum
+                     number of bytes up to the end of the ByteBuffer is assumed.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteBuffer</code></td><td>The ByteBuffer object the method is applied to</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>Argument offset is out of range</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>Argument length is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("123456", ASCII);
+
+x.clear(2, 2);
+assert(x.toString(ASCII) == "1256");
+
+x.clear(2);
+assert(x.toString(ASCII) == "12");
+
+x.clear();
+assert(x.length == 0);
+
+</pre>
+<h2 id="copy">copy()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteBuffer copy(Number offset, ByteBuffer byteBuffer)</p>
+<p class="signature">ByteBuffer copy(Number offset, ByteString byteString)</p>
+<p class="signature">ByteBuffer copy(Number offset, Number byteValue)</p>
+<p class="signature">ByteBuffer copy(Number offset, String stringValue)</p>
+<h3>Description</h3>Copy the bytes from the argument into the ByteBuffer at offset and replace the bytes contained.
+                     The length of the ByteBuffer is not changed.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset at which the bytes from the argument are copied to</td>
+</tr>
+<tr>
+<td><code><a href="bytebuffer.html">ByteBuffer</a></code></td><td>byteBuffer</td><td></td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>byteString</td><td></td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>byteValue</td><td>Value of a single unsigned byte</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>stringValue</td><td>ASCII encoded string</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteBuffer</code></td><td>The ByteBuffer object this method is applied to</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The argument offset is out of range</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>The offset plus the length of the argument exceeds the end of the
+                 ByteBuffer</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("123456", ASCII);
+
+x.copy(0, "AB");
+assert(x.toString(ASCII) == "AB3456");
+
+y = new ByteBuffer("CD", ASCII);
+x.copy(2, y);
+assert(x.toString(ASCII) == "ABCD56");
+
+y = new ByteString("EF", ASCII);
+x.copy(4, y);
+assert(x.toString(ASCII) == "ABCDEF");
+
+</pre>
+<h2 id="find">find()</h2>
+<h3>Prototype</h3>
+<p class="signature">Number find(ByteString value)</p>
+<p class="signature">Number find(ByteString value, Number offset)</p>
+<h3>Description</h3>Find the first occurence of the value starting at offset.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>value</td><td>ByteString to locate in ByteBuffer</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset to start search at. Zero is assumed if argument is missing.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>Number</code></td><td>Zero based offset at which the ByteString is found or -1 if the ByteString is not found.</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>Argument offset is out of range</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("ABCDABCD", ASCII);
+y = new ByteString("BC", ASCII);
+
+assert(x.find(y) == 1);
+assert(x.find(y, 2) == 5);
+assert(x.find(y, -2) == 1);
+
+y = new ByteString("CD", ASCII);
+assert(x.find(y, 4) == 6);
+
+y = new ByteString("CD", ASCII);
+assert(x.find(y, 6) == 6);
+
+y = new ByteString("CB", ASCII);
+assert(x.find(y) == -1);
+
+y = new ByteString("BCDE", ASCII);
+assert(x.find(y) == -1);
+
+y = new ByteString("", ASCII);
+assert(x.find(y) == 0);
+
+x = new ByteBuffer("", ASCII);
+y = new ByteString("", ASCII);
+assert(x.find(y) == 0);
+assert(x.find(y, 0) == 0);
+
+</pre>
+<h2 id="insert">insert()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteBuffer insert(Number offset, ByteBuffer byteBuffer)</p>
+<p class="signature">ByteBuffer insert(Number offset, ByteString byteString)</p>
+<p class="signature">ByteBuffer insert(Number offset, Number byteValue)</p>
+<p class="signature">ByteBuffer insert(Number offset, String stringValue)</p>
+<h3>Description</h3>Insert the bytes from the argument at offset.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset at which the bytes are inserted</td>
+</tr>
+<tr>
+<td><code><a href="bytebuffer.html">ByteBuffer</a></code></td><td>byteBuffer</td><td>ByteBuffer object to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code><a href="bytestring.html">ByteString</a></code></td><td>byteString</td><td>ByteString object to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code>String</code></td><td>stringValue</td><td>String containing ASCII characters to be appended to ByteBuffer</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>byteValue</td><td>Single byte value</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteBuffer</code></td><td>Returns the ByteBuffer object this method is applied to</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The argument offset is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("123456", ASCII);
+
+x.insert(0, "AB");
+assert(x.toString(ASCII) == "AB123456");
+
+y = new ByteBuffer("CD", ASCII);
+x.insert(2, y);
+assert(x.toString(ASCII) == "ABCD123456");
+
+y = new ByteString("EF", ASCII);
+x.insert(10, y);
+assert(x.toString(ASCII) == "ABCD123456EF");
+
+x.insert(1, 0x31);
+assert(x.toString(ASCII) == "A1BCD123456EF");
+
+</pre>
+<h2 id="toByteString">toByteString()</h2>
+<h3>Prototype</h3>
+<p class="signature">ByteString toByteString()</p>
+<p class="signature">ByteString toByteString(Number offset)</p>
+<p class="signature">ByteString toByteString(Number offset, Number count)</p>
+<h3>Description</h3>Return all or a fraction of the ByteBuffer as ByteString.<h3>Arguments</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<th>Type</th><th>Name</th><th>Description</th>
+</tr>
+<tr>
+<td><code>Number</code></td><td>offset</td><td>Zero based offset in ByteBuffer. Default is 0.</td>
+</tr>
+<tr>
+<td><code>Number</code></td><td>count</td><td>Number of bytes to return. Default is all.</td>
+</tr>
+</table>
+<h3>Return</h3>
+<table>
+<colgroup>
+<col width="100">
+<col>
+</colgroup>
+<tr>
+<td><code>ByteString</code></td><td>Bytes as ByteString object</td>
+</tr>
+</table>
+<h3>Exceptions</h3>
+<table class="content">
+<colgroup>
+<col width="100">
+<col width="200">
+<col>
+</colgroup>
+<tr>
+<th>Name</th><th>Value</th><th>Description</th>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.ARGUMENTS_MISSING</td><td>Too few arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_ARGUMENTS</td><td>Too many arguments in call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_TYPE</td><td>Type of argument is invalid for call</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_INDEX</td><td>The argument offset is out of range</td>
+</tr>
+<tr>
+<td>GPError</td><td>GPError.INVALID_LENGTH</td><td>The argument count is out of range</td>
+</tr>
+</table>
+<h3>Example</h3>
+<pre>
+
+x = new ByteBuffer("123456", ASCII);
+
+y = x.toByteString();
+assert(y.toString(ASCII) == "123456");
+
+y = x.toByteString(3);
+assert(y.toString(ASCII) == "456");
+
+y = x.toByteString(2, 2);
+assert(y.toString(ASCII) == "34");
+
+y = x.toByteString(6, 0);
+assert(y.toString(ASCII) == "");
+
+</pre>
+                    <!-- #EndEditable -->
+<br>
+<p class="copyright">&copy; Copyright 2003 - 2010 <a href="http://www.cardcontact.de">CardContact</a>
+Software & System Consulting, Minden, Germany</p>
+</div>
+
+</body>
+</html><!-- #EndTemplate -->
+        
