@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import opencard.core.service.CardServiceException;
+import opencard.core.service.SmartCard;
+import opencard.core.terminal.CardTerminalException;
 import opencard.core.util.OpenCardConfigurationProvider;
 import opencard.core.util.OpenCardPropertyLoadingException;
 
@@ -39,6 +42,44 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 			System.setProperty("OpenCard.loaderClassName",
 					"opencard.opt.util.OpenCardPropertyFileLoader");
 		}
+	}
+
+	/**
+	 * re-initialize the OpenCardFramework to use values from plugin preferences
+	 * 
+	 * @throws CardTerminalException
+	 * @throws ClassNotFoundException
+	 * @throws CardServiceException
+	 * @throws OpenCardPropertyLoadingException
+	 */
+	public static void restartAndInitializeOCF() throws CardTerminalException,
+			OpenCardPropertyLoadingException, CardServiceException,
+			ClassNotFoundException {
+
+		SmartCard.shutdown();
+
+		String configSource = Platform.getPreferencesService().getString(
+				Activator.PLUGIN_ID,
+				PreferenceConstants.OCF_CONFIGURATION_SOURCE, "", null);
+
+		if ((configSource
+				.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file))
+				|| (configSource
+						.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences))) {
+			// use this PropertyLoader that sets properties according to eclipse
+			// preferences
+			System.setProperty("OpenCard.loaderClassName",
+					PreferencesPropertyLoader.class.getCanonicalName());
+		}
+
+		else {
+			// use default implementation that loads properties from property
+			// file
+			System.setProperty("OpenCard.loaderClassName",
+					"opencard.opt.util.OpenCardPropertyFileLoader");
+		}
+
+		SmartCard.start();
 	}
 
 	@Override
