@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
-import org.globaltester.smartcardshell.GPScriptRunner;
+import org.globaltester.smartcardshell.ScriptRunner;
 
 public class SmartCardShellView extends ViewPart {
 
@@ -21,12 +21,12 @@ public class SmartCardShellView extends ViewPart {
 	private StyledText sTxtConsoleOut;
 	private Text txtConsoleInput;
 
-	private GPScriptRunner scriptRunner;
+	private ScriptRunner scriptRunner;
 	private Label lblPrompt;
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
-		scriptRunner = new GPScriptRunner();
+		scriptRunner = new ScriptRunner();
 		scriptRunner.setPromptString("scsh");
 		scriptRunner.init();
 	}
