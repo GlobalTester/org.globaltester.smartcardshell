@@ -19,31 +19,38 @@ import org.junit.Test;
 public class ScshSmokeTest {
 
 	@BeforeClass
-	public static void setUp() {
-		//initialize OCF
+	public static void setUp() throws Exception {
+		// make sure OCF is initialized with test values
+		SmartCard.shutdown();
+
+		// initialize OCF
 		System.setProperty("OpenCard.loaderClassName",
-				org.globaltester.smartcardshell.test.TestPropertyLoader.class.getName());
+				org.globaltester.smartcardshell.test.TestPropertyLoader.class
+						.getName());
 	}
-	
+
 	@Test
 	public void terminalsAvailable() throws Exception {
 
-		//Start OCF, check for terminals and shutdown OCF
+		// Start OCF, check for terminals and shutdown OCF
 		SmartCard.start();
 		boolean terminalsAvailable = CardTerminalRegistry.getRegistry()
 				.getCardTerminals().hasMoreElements();
-		
+
 		CardTerminal testTerminal = null;
-		if (terminalsAvailable){
-			testTerminal = (CardTerminal) CardTerminalRegistry.getRegistry().getCardTerminals().nextElement();
+		if (terminalsAvailable) {
+			testTerminal = (CardTerminal) CardTerminalRegistry.getRegistry()
+					.getCardTerminals().nextElement();
 		}
 		SmartCard.shutdown();
 
-		//asserts
+		// asserts
 		assertTrue("No card terminals available", terminalsAvailable);
 		assertNotNull("First CardTerminal not available", testTerminal);
-		assertEquals("Name of CardTerminal does not match", "Name", testTerminal.getName());
-		assertEquals("Name of CardTerminal does not match", "Type", testTerminal.getType());
+		assertEquals("Name of CardTerminal does not match", "Name",
+				testTerminal.getName());
+		assertEquals("Name of CardTerminal does not match", "Type",
+				testTerminal.getType());
 
 	}
 

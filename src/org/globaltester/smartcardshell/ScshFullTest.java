@@ -24,7 +24,10 @@ public class ScshFullTest {
 			(byte) 0x0C, (byte) 0x02, (byte) 0x3F, (byte) 0x00 };
 
 	@BeforeClass
-	public static void setUp() {
+	public static void setUp() throws Exception {
+		// make sure OCF is initialized with test values
+		SmartCard.shutdown();
+
 		// initialize OCF
 		System.setProperty("OpenCard.loaderClassName",
 				org.globaltester.smartcardshell.test.TestPropertyLoader.class
