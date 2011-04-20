@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GlobalTester SmartCardShell Integration
-Bundle-SymbolicName: org.globaltester.smartcardshell
+Bundle-SymbolicName: org.globaltester.smartcardshell;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.globaltester.smartcardshell.Activator
 Bundle-Vendor: HJP Consulting GmbH
@@ -19,4 +19,5 @@ Bundle-ClassPath: .,
  scsh3.7.989/lib/xmldsig.jar
 Export-Package: opencard.core,
  opencard.core.service,
- org.globaltester.smartcardshell
+ org.globaltester.smartcardshell,
+ org.globaltester.smartcardshell.preferences

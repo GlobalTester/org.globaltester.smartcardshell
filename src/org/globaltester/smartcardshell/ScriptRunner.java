@@ -11,7 +11,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import de.cardcontact.scdp.js.GPRuntime;
 import de.cardcontact.scdp.js.GPTracer;
 
-public class GPScriptRunner extends ImporterTopLevel implements GPRuntime {
+public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	private static final long serialVersionUID = -1490363545404798195L;
 	private Context context;
