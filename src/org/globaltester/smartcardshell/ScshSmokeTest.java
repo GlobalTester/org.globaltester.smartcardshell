@@ -7,6 +7,8 @@ import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
+import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,7 +21,7 @@ import org.junit.Test;
 public class ScshSmokeTest {
 
 	@BeforeClass
-	public static void setUp() throws Exception {
+	public static void setUpClass() throws Exception {
 		// make sure OCF is initialized with test values
 		SmartCard.shutdown();
 
@@ -27,6 +29,12 @@ public class ScshSmokeTest {
 		System.setProperty("OpenCard.loaderClassName",
 				org.globaltester.smartcardshell.test.TestPropertyLoader.class
 						.getName());
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		new PreferenceInitializer().initializeDefaultPreferences();
+		PreferencesPropertyLoader.restartAndInitializeOCF();
 	}
 
 	@Test
@@ -42,7 +50,6 @@ public class ScshSmokeTest {
 			testTerminal = (CardTerminal) CardTerminalRegistry.getRegistry()
 					.getCardTerminals().nextElement();
 		}
-		SmartCard.shutdown();
 
 		// asserts
 		assertTrue("No card terminals available", terminalsAvailable);

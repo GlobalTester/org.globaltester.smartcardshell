@@ -9,6 +9,8 @@ import opencard.core.terminal.ResponseAPDU;
 import opencard.core.util.HexString;
 import opencard.opt.util.PassThruCardService;
 
+import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -24,14 +26,22 @@ public class ScshFullTest {
 			(byte) 0x0C, (byte) 0x02, (byte) 0x3F, (byte) 0x00 };
 
 	@BeforeClass
-	public static void setUp() throws Exception {
+	public static void setUpClass() throws Exception {
 		// make sure OCF is initialized with test values
-		SmartCard.shutdown();
+		if (SmartCard.isStarted()) {
+			SmartCard.shutdown();
+		}
 
 		// initialize OCF
 		System.setProperty("OpenCard.loaderClassName",
 				org.globaltester.smartcardshell.test.TestPropertyLoader.class
 						.getName());
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		new PreferenceInitializer().initializeDefaultPreferences();
+		PreferencesPropertyLoader.restartAndInitializeOCF();
 	}
 
 	@Test
@@ -48,9 +58,6 @@ public class ScshFullTest {
 		// prepare and transmit command
 		CommandAPDU command = new CommandAPDU(CMD_APDU_SELECT_MF);
 		ResponseAPDU response = ptcs.sendCommandAPDU(command);
-
-		// shutdown OCF
-		SmartCard.shutdown();
 
 		// asserts
 		assertNotNull("No response received", response);
