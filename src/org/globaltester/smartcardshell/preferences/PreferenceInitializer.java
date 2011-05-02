@@ -1,5 +1,7 @@
 package org.globaltester.smartcardshell.preferences;
 
+import java.io.File;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -20,21 +22,22 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		Preferences preferences = new DefaultScope()
 				.getNode(Activator.PLUGIN_ID);
-		
+
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
-		
+
 		IPath pluginDir = Activator.getPluginDir();
-		String configPath = pluginDir.toPortableString() + "config.js";;
-		preferences.put(PreferenceConstants.OCF_PROPERTIES_FILE,
-				configPath);
-		
+		String configPath = pluginDir.toPortableString()
+				+ Activator.SCSH_FOLDER + File.separator
+				+ "opencard.properties";
+		preferences.put(PreferenceConstants.OCF_PROPERTIES_FILE, configPath);
 
 		preferences.put(PreferenceConstants.OCF_OPENCARD_SERVICES,
 				"de.cardcontact.opencard.factory.IsoCardServiceFactory "
 						+ "opencard.opt.util.PassThruCardServiceFactory");
-		preferences.put(PreferenceConstants.OCF_OPENCARD_TERMINALS,
-				"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL");
+		preferences
+				.put(PreferenceConstants.OCF_OPENCARD_TERMINALS,
+						"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL");
 		// "com.hjp.opencard.terminal.socketterminal.SocketCardTerminalFactory|SocketCardTerminal|Socket|9876|localhost"
 
 		try {

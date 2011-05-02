@@ -16,7 +16,8 @@ Bundle-ClassPath: .,
  scsh3.7.989/lib/ocf-cc.jar,
  scsh3.7.989/lib/scdp4j.jar,
  scsh3.7.989/lib/scsh3.jar,
- scsh3.7.989/lib/xmldsig.jar
+ scsh3.7.989/lib/xmldsig.jar,
+ scsh3.7.989/lib/opensc-java.jar
 Export-Package: opencard.core,
  opencard.core.service,
  org.globaltester.smartcardshell,

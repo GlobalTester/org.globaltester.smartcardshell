@@ -14,6 +14,8 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 
 	public static final String PLUGIN_ID = "org.globaltester.smartcardshell";
+
+	public static final String SCSH_FOLDER = "scsh3.7.989";
 	
 	private static BundleContext context;
 
