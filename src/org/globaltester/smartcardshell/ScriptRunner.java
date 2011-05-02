@@ -92,19 +92,23 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			Function funObj) {
 
 		String str = "";
-		
+
 		for (int i = 0; i < args.length; i++) {
 			// Convert the arbitrary JavaScript value into a string form.
-			str = str.concat(Context.toString(args[i])+" ");
+			str = str.concat(Context.toString(args[i]) + " ");
 		}
-		
+
 		if (thisObj instanceof GPRuntime) {
-			((GPRuntime) thisObj).getTracer().trace(ScriptRunner.class.getName(), GPTracer.LogLevel.INFO, str);
+			GPTracer tr = ((GPRuntime) thisObj).getTracer();
+			if (tr != null) {
+				tr.trace(ScriptRunner.class.getName(), GPTracer.LogLevel.INFO,
+						str);
+			}
 		} else {
 			System.out.println(str);
 		}
 	}
-	
+
 	/**
 	 * Create ScriptRunner
 	 * 
@@ -218,7 +222,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	public GPTracer getTracer() {
 		return tracer;
 	}
-	
+
 	public void setTracer(GPTracer tr) {
 		tracer = tr;
 	}
