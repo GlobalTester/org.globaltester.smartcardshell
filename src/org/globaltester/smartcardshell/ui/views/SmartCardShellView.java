@@ -26,7 +26,7 @@ public class SmartCardShellView extends ViewPart {
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
-		scriptRunner = new ScriptRunner();
+		scriptRunner = new ScriptRunner(System.getProperty("user.dir"));
 		scriptRunner.setPromptString("scsh");
 		scriptRunner.init();
 	}
