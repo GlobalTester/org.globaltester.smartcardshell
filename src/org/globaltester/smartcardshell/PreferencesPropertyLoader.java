@@ -123,13 +123,24 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 
 		// set properties from file contents
 		Properties props = new Properties();
+		FileInputStream inputStream = null;
 		try {
-			props.load(new FileInputStream(fileName));
+			inputStream = new FileInputStream(fileName);
+			props.load(inputStream);
 		} catch (FileNotFoundException e) {
 			loadingImpossible("Properties file can not be found: "
 					+ e.getMessage());
 		} catch (IOException e) {
 			loadingImpossible("Properties file can not used: " + e.getMessage());
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					// ignore this, if the stream can not be closed it does not
+					// need to be closed
+				}
+			}
 		}
 		System.setProperties(props);
 
