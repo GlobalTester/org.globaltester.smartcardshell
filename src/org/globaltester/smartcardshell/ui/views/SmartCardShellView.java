@@ -1,6 +1,8 @@
 package org.globaltester.smartcardshell.ui.views;
 
+
 import opencard.core.OpenCardException;
+import org.mozilla.javascript.Context;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -23,12 +25,15 @@ public class SmartCardShellView extends ViewPart {
 
 	private ScriptRunner scriptRunner;
 	private Label lblPrompt;
+	private Context cx;
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
-		scriptRunner = new ScriptRunner(System.getProperty("user.dir"));
+		
+		cx = Context.enter();
+		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.setPromptString("scsh");
-		scriptRunner.init();
+		
 	}
 
 	public void createPartControl(Composite parent) {
@@ -40,7 +45,7 @@ public class SmartCardShellView extends ViewPart {
 		// widget for console output
 		sTxtConsoleOut = new StyledText(mainComp, SWT.READ_ONLY | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		sTxtConsoleOut.setText(scriptRunner.reset());
+		sTxtConsoleOut.setText(scriptRunner.getBanner());
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 2, 1));
@@ -80,7 +85,7 @@ public class SmartCardShellView extends ViewPart {
 		// execute the command in ScriptRunner and print output to widget
 		String output;
 		try {
-			output = scriptRunner.executeCommand(cmd);
+			output = scriptRunner.executeCommand(cx, cmd);
 		} catch (Exception e) {
 			output = e.getMessage();
 		}
@@ -92,5 +97,14 @@ public class SmartCardShellView extends ViewPart {
 	@Override
 	public void setFocus() {
 		txtConsoleInput.setFocus();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		// exit ECMAScript context
+		cx = null;
+		Context.exit();
 	}
 }
