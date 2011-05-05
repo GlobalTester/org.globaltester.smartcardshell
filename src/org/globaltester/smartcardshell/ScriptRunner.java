@@ -16,17 +16,18 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import de.cardcontact.scdp.engine.VersionInfo;
 import de.cardcontact.scdp.js.GPRuntime;
 import de.cardcontact.scdp.js.GPTracer;
+import de.cardcontact.tlv.ObjectIdentifier;
 
 public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	private static final long serialVersionUID = -1490363545404798195L;
-	private Context context;
 	private int interactiveLineNo = 0;
 	private String promptString = "interactive";
 	private File currentWorkingDir;
-	private GPTracer tracer;
+	private transient GPTracer tracer;
 
 	/**
 	 * Load and execute script files
@@ -115,49 +116,56 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * @param scriptPath
 	 *            path where the scripts could be found
 	 */
-	public ScriptRunner(String scriptPath) {
+	public ScriptRunner(Context cx, String scriptPath) {
+		super(cx);
 		currentWorkingDir = new File(scriptPath);
-		init();
+		init(cx);
 	}
 
 	/**
 	 * Initialization of this shell. Create required functions, classes,
 	 * variables and set the environment.
 	 */
-	public String init() {
+	private void init(Context cx) {
 		assert (SmartCard.isStarted());
 
 		// Initialize ECMAScript environment
-		context = Context.enter();
-		context.setWrapFactory(new GTWrapFactory());
-		context.initStandardObjects(this);
+		cx.setWrapFactory(new GTWrapFactory());
+		cx.initStandardObjects(this);
 
 		// define functions
 		String[] names = { "print", "load", "defineClass" };
 		defineFunctionProperties(names, ScriptRunner.class,
 				ScriptableObject.DONTENUM);
+		
+		//define variables
+		setEnvironment(cx);
+	}
 
-		// set environment variables to be used during script execution
-		setEnvironment();
-
+	/**
+	 * Return the Banner including version information
+	 */
+	public String getBanner() {
 		return "GlobalTester SmartCardShell\n"
 				+ "version "
 				+ Platform.getBundle("org.globaltester.smartcardshell")
 						.getVersion();
 	}
 
-	public String reset() {
-		// reset context
-		if (context != null) {
-			Context.exit();
-			context = null;
-		}
-
+	/**
+	 * Reset the initialization of this shell
+	 * @param cx
+	 * @return
+	 */
+	public String reset(Context cx) {
 		// reset internal variables
 		interactiveLineNo = 0;
 
-		// init all required values
-		return init();
+		// init the context
+		init(cx);
+		
+		//return the banner
+		return getBanner();
 	}
 
 	/**
@@ -165,19 +173,23 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * number will be set dynamically to reflect "number" of interactive
 	 * commands
 	 * 
+	 * @param cx
+	 *            ECMAScript context to execute command in
 	 * @param cmd
 	 *            ECMAScript code to be executed
 	 * @return
 	 */
-	public String executeCommand(String cmd) {
-		return executeCommand(cmd, getPromptString(), interactiveLineNo++);
+	public String executeCommand(Context cx, String cmd) {
+		return executeCommand(cx, cmd, getPromptString(), interactiveLineNo++);
 	}
 
 	/**
 	 * Execute a command in the scope of this ScriptRunner
 	 * 
 	 * SourceName and lineNo will be used as reference in error/warning messages
-	 * 
+	 *
+	 * @param cx
+	 *            ECMAScript context to execute command in
 	 * @param cmd
 	 *            ECMAScript code to be executed
 	 * @param sourceName
@@ -186,8 +198,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            line number in the source file
 	 * @return
 	 */
-	public String executeCommand(String cmd, String sourceName, int lineNo) {
-		Object result = context.evaluateString(this, cmd, sourceName, lineNo,
+	public String executeCommand(Context cx, String cmd, String sourceName, int lineNo) {
+		Object result = cx.evaluateString(this, cmd, sourceName, lineNo,
 				null);
 		String resultString = Context.toString(result);
 		return resultString;
@@ -207,8 +219,11 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	@Override
 	public byte[] getSystemID() {
-		// unique system ID is not supported
-		return null;
+		String str = VersionInfo.SYSTEMIDBASE + ".0." + VersionInfo.MAJOR + "."
+				+ VersionInfo.MINOR + "." + VersionInfo.BUILD + ".0";
+		ObjectIdentifier oid = new ObjectIdentifier(str);
+		return oid.getValue();
+
 	}
 
 	@Override
@@ -280,8 +295,11 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * config.js (depending on preferences), setting required variables,
 	 * definition of reader name and invocation of extensions to do their setup
 	 * 
+	 * @param cx
+	 *            ECMAScript context to execute commands in
+	 * 
 	 */
-	public void setEnvironment() {
+	public void setEnvironment(Context cx) {
 
 		// execute SCSH config.js
 		String sCSHconfigFile = Activator.getPluginDir().toPortableString()
@@ -293,7 +311,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 					sCSHconfigFile, null);
 		}
 		File f = new File(sCSHconfigFile);
-		evaluateFile(context, f.getAbsolutePath());
+		evaluateFile(cx, f.getAbsolutePath());
 
 		// //readerBuffer
 		// int readerBuffer = store

@@ -21,4 +21,5 @@ Bundle-ClassPath: .,
 Export-Package: opencard.core,
  opencard.core.service,
  org.globaltester.smartcardshell,
- org.globaltester.smartcardshell.preferences
+ org.globaltester.smartcardshell.preferences,
+ org.mozilla.javascript
