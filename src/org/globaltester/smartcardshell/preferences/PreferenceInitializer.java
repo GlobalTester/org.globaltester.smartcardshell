@@ -40,6 +40,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 						"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL");
 		// "com.hjp.opencard.terminal.socketterminal.SocketCardTerminalFactory|SocketCardTerminal|Socket|9876|localhost"
 
+		preferences.put(PreferenceConstants.OCF_READER, "");
+		preferences.putBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT,
+				false);
+
 		try {
 			// Forces the application to save the preferences
 			preferences.flush();

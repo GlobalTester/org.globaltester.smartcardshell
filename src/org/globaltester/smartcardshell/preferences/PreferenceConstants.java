@@ -34,6 +34,10 @@ public class PreferenceConstants {
 	// opencard properties
 	public static final String OCF_OPENCARD_SERVICES = "org.globaltester.smartcardshell.ocf.opencard.services";
 	public static final String OCF_OPENCARD_TERMINALS = "org.globaltester.smartcardshell.ocf.opencard.terminals";
+	
+	// reader selection properties
+	public static final String OCF_READER = "org.globaltester.smartcardshell.ocf.reader";
+	public static final String OCF_MANUAL_READERSELECT = "org.globaltester.smartcardshell.ocf.reader.manualselect";
 
 	// path to configuration file needed by smart card shell
 	public static final String JS_CONF_MANUAL = "org.globaltester.smartcardshell.js.conf.manual";

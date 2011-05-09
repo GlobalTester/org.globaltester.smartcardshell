@@ -5,8 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
 
 import opencard.core.service.SmartCard;
+import opencard.core.terminal.CardTerminal;
+import opencard.core.terminal.CardTerminalRegistry;
 
 import org.eclipse.core.runtime.Platform;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
@@ -137,8 +140,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		String[] names = { "print", "load", "defineClass" };
 		defineFunctionProperties(names, ScriptRunner.class,
 				ScriptableObject.DONTENUM);
-		
-		//define variables
+
+		// define variables
 		setEnvironment(cx);
 	}
 
@@ -154,6 +157,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	/**
 	 * Reset the initialization of this shell
+	 * 
 	 * @param cx
 	 * @return
 	 */
@@ -163,8 +167,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		// init the context
 		init(cx);
-		
-		//return the banner
+
+		// return the banner
 		return getBanner();
 	}
 
@@ -187,7 +191,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * Execute a command in the scope of this ScriptRunner
 	 * 
 	 * SourceName and lineNo will be used as reference in error/warning messages
-	 *
+	 * 
 	 * @param cx
 	 *            ECMAScript context to execute command in
 	 * @param cmd
@@ -198,9 +202,9 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            line number in the source file
 	 * @return
 	 */
-	public String executeCommand(Context cx, String cmd, String sourceName, int lineNo) {
-		Object result = cx.evaluateString(this, cmd, sourceName, lineNo,
-				null);
+	public String executeCommand(Context cx, String cmd, String sourceName,
+			int lineNo) {
+		Object result = cx.evaluateString(this, cmd, sourceName, lineNo, null);
 		String resultString = Context.toString(result);
 		return resultString;
 	}
@@ -340,37 +344,43 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		// + "\";";
 		// exec(cmdBufferRFE);
 		//
-		// boolean manualReaderSetting =
-		// storeTM.getBoolean(PreferenceConstants.P_MANUALREADERSETTINGS);
-		//
-		// String currentReaderName = "";
-		// if (manualReaderSetting) {
-		// String selectedReader =
-		// storeTM.getString(PreferenceConstants.P_READER);
-		//
-		// CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
-		// Enumeration<?> ctlist = ctr.getCardTerminals();
-		//
-		// while (ctlist.hasMoreElements()) {
-		// CardTerminal ct = (CardTerminal) ctlist.nextElement();
-		// currentReaderName = ct.getName();
-		// if (currentReaderName.equals(selectedReader)) {
-		// break;
-		// }
-		// currentReaderName = "";
-		// }
-		//
-		// } else {
-		// currentReaderName = "";
-		// }
-		//
-		// String cmdReader = "_reader = \"" + currentReaderName + "\";";
-		// exec(cmdReader);
-		//
-		// String cmdManualReader = "_manualReader = " + manualReaderSetting +
-		// ";";
-		// exec(cmdManualReader);
-		//
+
+		//set the _reader and _manualReader variables
+		boolean manualReaderSetting = Platform.getPreferencesService()
+				.getBoolean(Activator.PLUGIN_ID,
+						PreferenceConstants.OCF_MANUAL_READERSELECT, false,
+						null);
+
+		String currentReaderName = "";
+		if (manualReaderSetting) {
+			//get selected reader name from preferences
+			String selectedReader = Platform.getPreferencesService().getString(
+					Activator.PLUGIN_ID, PreferenceConstants.OCF_READER, "",
+					null);
+
+			//make sure that selected reader is available
+			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
+			Enumeration<?> ctlist = ctr.getCardTerminals();
+			while (ctlist.hasMoreElements()) {
+				CardTerminal ct = (CardTerminal) ctlist.nextElement();
+				currentReaderName = ct.getName();
+				if (currentReaderName.equals(selectedReader)) {
+					break;
+				}
+				currentReaderName = "";
+			}
+
+		} else {
+			currentReaderName = "";
+		}
+
+		
+		String cmdReader = "_reader = \"" + currentReaderName + "\";";
+		executeCommand(cx, cmdReader);
+
+		String cmdManualReader = "_manualReader = " + manualReaderSetting + ";";
+		executeCommand(cx, cmdManualReader);
+
 		// boolean allowEmptyReader =
 		// storeTM.getBoolean(PreferenceConstants.P_ALLOW_EMPTY_READER);
 		// String cmdEmptyReader = "_allowEmptyReader = " + allowEmptyReader +
