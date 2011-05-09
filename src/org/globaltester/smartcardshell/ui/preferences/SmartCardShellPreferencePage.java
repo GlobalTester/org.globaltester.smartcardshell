@@ -1,6 +1,7 @@
 package org.globaltester.smartcardshell.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -20,13 +21,16 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
 	private Group grpOcfProperties;
-	private Group grpEcmaScriptProperties;
-	
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
 	private StringFieldEditor sfeOpenCardServices;
 	private StringFieldEditor sfeOpenCardTerminals;
-	
+
+	private Group grpReaderSelection;
+	private BooleanFieldEditor bfeManualReaderSettings;
+	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
+
+	private Group grpEcmaScriptProperties;
 
 	public SmartCardShellPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -49,14 +53,19 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				GridData.FILL, true, false);
 
 		// create fieldEditors for OCF properties
-		String[][] configOptions={
-				{"opencard.properties",PreferenceConstants.OCF_CONFIGURATION_SOURCE_default},
-				{"Configuration file",PreferenceConstants.OCF_CONFIGURATION_SOURCE_file},
-				{"Eclipse preferences",PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences}};
-		rgfeConfigSource = new RadioGroupFieldEditor(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
-					"Configuration source\n", 1, configOptions, grpOcfProperties);
+		String[][] configOptions = {
+				{ "opencard.properties",
+						PreferenceConstants.OCF_CONFIGURATION_SOURCE_default },
+				{ "Configuration file",
+						PreferenceConstants.OCF_CONFIGURATION_SOURCE_file },
+				{
+						"Eclipse preferences",
+						PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences } };
+		rgfeConfigSource = new RadioGroupFieldEditor(
+				PreferenceConstants.OCF_CONFIGURATION_SOURCE,
+				"Configuration source\n", 1, configOptions, grpOcfProperties);
 		addField(rgfeConfigSource);
-			
+
 		gdGrpOcfProperties.horizontalSpan = columns;
 		grpOcfProperties.setLayoutData(gdGrpOcfProperties);
 		grpOcfProperties.setLayout(new GridLayout(columns, false));
@@ -65,21 +74,41 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				PreferenceConstants.OCF_PROPERTIES_FILE, "scshConfig path",
 				grpOcfProperties);
 		addField(sfeScshConfigPath);
-		
+
 		sfeOpenCardServices = new StringFieldEditor(
 				PreferenceConstants.OCF_OPENCARD_SERVICES, "OpenCard.Services",
 				grpOcfProperties);
 		addField(sfeOpenCardServices);
-		
+
 		sfeOpenCardTerminals = new StringFieldEditor(
-				PreferenceConstants.OCF_OPENCARD_TERMINALS, "OpenCard.Terminals",
-				grpOcfProperties);
+				PreferenceConstants.OCF_OPENCARD_TERMINALS,
+				"OpenCard.Terminals", grpOcfProperties);
 		addField(sfeOpenCardTerminals);
-		
-		//create group for ECMA
+
+		// create group for reader selection
+		grpReaderSelection = new Group(getFieldEditorParent(), SWT.NONE);
+		grpReaderSelection.setText("Card reader");
+		GridData gdGrpReaderSelection = new GridData(GridData.FILL,
+				GridData.FILL, true, false);
+		gdGrpReaderSelection.horizontalSpan = 2;
+		grpReaderSelection.setLayoutData(gdGrpReaderSelection);
+		grpReaderSelection.setLayout(new GridLayout(2, false));
+
+		// manual settings of terminals
+		bfeManualReaderSettings = new BooleanFieldEditor(
+				PreferenceConstants.OCF_MANUAL_READERSELECT,
+				"Manual setting of card terminal", grpReaderSelection);
+		addField(bfeManualReaderSettings);
+
+		orsfeReaderSelection = new OcfReaderSelectionFieldEditor(
+				PreferenceConstants.OCF_READER, "Reader selection", 1,
+				grpReaderSelection);
+		addField(orsfeReaderSelection);
+
+		// create group for ECMA
 		grpEcmaScriptProperties = new Group(parent, SWT.NONE);
 		grpEcmaScriptProperties.setText("ECMAScript environment");
-		
+
 	}
 
 	public void init(IWorkbench workbench) {
