@@ -1,9 +1,13 @@
 package org.globaltester.smartcardshell.ui.views;
 
-
 import opencard.core.OpenCardException;
-import org.mozilla.javascript.Context;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
@@ -11,11 +15,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.globaltester.smartcardshell.ScriptRunner;
+import org.mozilla.javascript.Context;
 
 public class SmartCardShellView extends ViewPart {
 
@@ -26,17 +37,21 @@ public class SmartCardShellView extends ViewPart {
 	private ScriptRunner scriptRunner;
 	private Label lblPrompt;
 	private Context cx;
+	
+	private Action execFileAction;
+	protected Shell parentShell;
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
-		
+
 		cx = Context.enter();
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.setPromptString("scsh");
-		
 	}
 
 	public void createPartControl(Composite parent) {
+		//store the shell of parent composite for future reference
+		parentShell = parent.getShell();
 
 		// use main composite to get rid of outer influence
 		Composite mainComp = new Composite(parent, SWT.NONE);
@@ -49,10 +64,10 @@ public class SmartCardShellView extends ViewPart {
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 2, 1));
-		
+
 		lblPrompt = new Label(mainComp, SWT.NONE);
 		lblPrompt.setBackground(sTxtConsoleOut.getBackground());
-		lblPrompt.setText(scriptRunner.getPromptString()+">");
+		lblPrompt.setText(scriptRunner.getPromptString() + ">");
 
 		// widget for command input
 		txtConsoleInput = new Text(mainComp, SWT.NONE);
@@ -69,10 +84,14 @@ public class SmartCardShellView extends ViewPart {
 
 			}
 		});
-		
-		//make common white background
+
+		// make common white background
 		mainComp.setBackground(sTxtConsoleOut.getBackground());
 
+		//setup actions, menus etc
+		makeActions();
+		hookContextMenu();
+		contributeToActionBars();
 	}
 
 	protected void executeCommand(String cmd) {
@@ -93,7 +112,63 @@ public class SmartCardShellView extends ViewPart {
 		sTxtConsoleOut.setTopIndex(sTxtConsoleOut.getLineCount());
 
 	}
+	
+	private void fillLocalPullDown(IMenuManager manager) {
+		manager.add(execFileAction);
+//		manager.add(new Separator());
+//		manager.add(dummyAction);
+	}
 
+	private void fillContextMenu(IMenuManager manager) {
+		manager.add(execFileAction);
+		// Other plug-ins can contribute their actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+
+	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(execFileAction);
+//		manager.add(dummyAction);
+	}
+
+	private void makeActions() {
+		execFileAction = new Action() {
+			public void run() {
+				FileDialog fileDialog = new FileDialog(parentShell);
+//				fileDialog.setFilterPath("/etc");
+				fileDialog.setFilterExtensions(new String[] { "*.js", "*" });
+				fileDialog.setFilterNames(new String[] { "JavaScript files (*.js)", "All files (*)" });
+				fileDialog.setText("FileDialog");
+				String selectedFile = fileDialog.open();
+				if (selectedFile != null) {
+				    scriptRunner.evaluateFile(cx, selectedFile);
+				}
+				
+			}
+		};
+		execFileAction.setText("Import card configuration");
+		execFileAction.setToolTipText("Import card configuration");
+		execFileAction.setImageDescriptor(PlatformUI.getWorkbench()
+				.getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+
+	}
+	
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				SmartCardShellView.this.fillContextMenu(manager);
+			}
+		});
+	}
+
+	private void contributeToActionBars() {
+		IActionBars bars = getViewSite().getActionBars();
+		fillLocalPullDown(bars.getMenuManager());
+		fillLocalToolBar(bars.getToolBarManager());
+	}
+	
 	@Override
 	public void setFocus() {
 		txtConsoleInput.setFocus();
@@ -102,9 +177,10 @@ public class SmartCardShellView extends ViewPart {
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+
 		// exit ECMAScript context
 		cx = null;
 		Context.exit();
 	}
+
 }
