@@ -172,12 +172,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 					switch (e.type) {
 					case SWT.Selection:
 
-						//create buttons
-						createReaderRadioButtons(radioBox);
-						radioBox.pack();
-						
-						//select the correct button
-						doLoad();
+						updateReaderList();
 						break;
 					}
 				}
@@ -185,6 +180,15 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 		}
 
 		return btnRefresh;
+	}
+
+	public void updateReaderList() {
+		//create buttons
+		createReaderRadioButtons(radioBox);
+		radioBox.pack();
+		
+		//select the correct button
+		doLoad();
 	}
 
 	@Override
@@ -272,7 +276,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 				Button radio = radioButtons[i];
 				boolean selection = false;
 				if (((String) radio.getData()).equals(this.value)) {
-					selection = true;
+					selection = true && !found; //select this button if no other button is already selected
 					found = true;
 				}
 				radio.setSelection(selection);

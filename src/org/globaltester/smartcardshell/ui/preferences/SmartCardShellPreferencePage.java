@@ -1,11 +1,14 @@
 package org.globaltester.smartcardshell.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,6 +23,7 @@ import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
+	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of GlobalTester to take effect.";
 	private Group grpOcfProperties;
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
@@ -108,11 +112,33 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		// create group for ECMA
 		grpEcmaScriptProperties = new Group(parent, SWT.NONE);
 		grpEcmaScriptProperties.setText("ECMAScript environment");
-
 	}
 
 	public void init(IWorkbench workbench) {
 
+	}
+
+	@Override
+	public boolean performOk() {
+		boolean result = super.performOk();
+		if (OCF_WARNING.equals(this.getMessage())){
+			MessageDialog.openWarning(getShell(), "", OCF_WARNING);
+		}
+		return result;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+
+		// add warning to this dialog if one of the OCF properties changes
+		if ((rgfeConfigSource.equals(event.getSource()))
+				|| (sfeScshConfigPath.equals(event.getSource()))
+				|| (sfeOpenCardServices.equals(event.getSource()))
+				|| (sfeOpenCardTerminals.equals(event.getSource()))) {
+			this.setMessage(OCF_WARNING, PreferencePage.WARNING);
+		}
+
+		super.propertyChange(event);
 	}
 
 }
