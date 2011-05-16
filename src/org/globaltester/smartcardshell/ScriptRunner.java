@@ -148,7 +148,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	/**
 	 * Return the Banner including version information
 	 */
-	public String getBanner() {
+	public static String getBanner() {
 		return "GlobalTester SmartCardShell\n"
 				+ "version "
 				+ Platform.getBundle("org.globaltester.smartcardshell")
