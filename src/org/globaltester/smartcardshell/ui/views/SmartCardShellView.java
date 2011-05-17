@@ -60,7 +60,7 @@ public class SmartCardShellView extends ViewPart {
 		// widget for console output
 		sTxtConsoleOut = new StyledText(mainComp, SWT.READ_ONLY | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		sTxtConsoleOut.setText(scriptRunner.getBanner());
+		sTxtConsoleOut.setText(ScriptRunner.getBanner());
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 2, 1));
