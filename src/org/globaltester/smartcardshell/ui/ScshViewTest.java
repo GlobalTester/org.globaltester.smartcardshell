@@ -17,6 +17,9 @@ public class ScshViewTest {
 
 	@BeforeClass
 	public static void setUp() {
+		// use EN_US keyboard layout, this is the only one natively supported by
+		// SWTBot this makes typeText possible for "simple characters",
+		// special chars will still produce errors
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 	}
 
@@ -27,15 +30,19 @@ public class ScshViewTest {
 	 */
 	@Test
 	public void testExecuteCommand() throws Exception {
+		//get the GUI elements
 		String scshBanner = ScriptRunner.getBanner();
 		SWTBotStyledText scshOut = bot.styledText(scshBanner);
 		SWTBotText scshCommand = bot.textWithLabel("scsh>");
 		assertNotNull(scshOut);
 		assertNotNull(scshCommand);
 
+		//enter and execute a command
 		scshCommand.setFocus();
 		scshCommand.setText("5+9;");
 		scshCommand.typeText("\n");
+		
+		//assert the correct result
 		assertEquals(scshBanner + "\nscsh(2)> 5+9;\n14", scshOut.getText());
 	}
 }
