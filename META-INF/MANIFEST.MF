@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: GlobalTestr SmartCardShell UI
+Bundle-Name: GlobalTester SmartCardShell UI
 Bundle-SymbolicName: org.globaltester.smartcardshell.ui;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.globaltester.smartcardshell.ui.Activator
