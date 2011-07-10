@@ -111,6 +111,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		} else {
 			System.out.println(str);
 		}
+		//TODO remove debugging output below
+		System.out.println("aaa "+str);
 	}
 
 	/**
