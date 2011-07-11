@@ -12,6 +12,7 @@ import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
 import org.eclipse.core.runtime.Platform;
+import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -101,6 +102,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			// Convert the arbitrary JavaScript value into a string form.
 			str = str.concat(Context.toString(args[i]) + " ");
 		}
+		
+		TestLogger.info(str);
 
 		if (thisObj instanceof GPRuntime) {
 			GPTracer tr = ((GPRuntime) thisObj).getTracer();
@@ -111,8 +114,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		} else {
 			System.out.println(str);
 		}
-		//TODO remove debugging output below
-		System.out.println("aaa "+str);
+		
 	}
 
 	/**
