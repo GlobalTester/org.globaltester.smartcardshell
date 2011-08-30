@@ -144,9 +144,19 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		String[] names = { "print", "load", "defineClass" };
 		defineFunctionProperties(names, ScriptRunner.class,
 				ScriptableObject.DONTENUM);
-
-		// define variables
+		
+		//define variables
 		setEnvironment(cx);
+		
+		//define AssertionError
+		String cmd = "defineClass(\"org.globaltester.smartcardshell.gp.AssertionError\")"; 
+		executeCommand(cx, cmd, "", -1);
+				
+		//load helper
+		String jsHelperFile = Activator.getPluginDir().toPortableString()
+		+ "jsHelper" + File.separator + "defineAsserts.js";
+		File f = new File(jsHelperFile);
+		evaluateFile(cx, f.getAbsolutePath());
 	}
 
 	/**
