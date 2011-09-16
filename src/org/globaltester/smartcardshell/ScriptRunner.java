@@ -331,11 +331,12 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		File f = new File(sCSHconfigFile);
 		evaluateFile(cx, f.getAbsolutePath());
 
-		// //readerBuffer
-		// int readerBuffer = store
-		// .getInt(org.globaltester.preferences.PreferenceConstants.P_READBUFFER);
-		// String cmdBuffer = "_readBuffer = \"" + readerBuffer + "\";";
-		// exec(cmdBuffer);
+		//readerBuffer
+		//int readerBuffer = store.getInt(org.globaltester.preferences.PreferenceConstants.P_READBUFFER);
+		//int readerBuffer = 223;
+		// String cmdReadBuffer = "_readBuffer = \"" + readerBuffer + "\";";
+		// executeCommand(cx, cmdReadBuffer);
+		//
 		//
 		// IPreferenceStore storeTM =
 		// org.globaltester.testmanager.Activator.getDefault().getPreferenceStore();
