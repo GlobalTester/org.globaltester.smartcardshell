@@ -1,0 +1,20 @@
+<project>
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
+
+	<!-- properties that need to be configured -->
+	<property name="findbugs.home" value="findbugs-1.3.9" />
+	<property name="targetplatform.dir" value="${basedir}/../.gt3_target_platform/plugins/" />
+
+	<target name="findbugs">
+		<findbugs home="${findbugs.home}" output="xml" outputFile="findbugs.xml">
+			<auxClasspath>
+				<fileset dir="${targetplatform.dir}">
+					<include name="**/*.jar" />
+					<include name="**/*.class" />
+				</fileset>
+			</auxClasspath>
+			<sourcePath path="${basedir}/src/" />
+			<class location="${basedir}/bin/" />
+		</findbugs>
+	</target>
+</project>
