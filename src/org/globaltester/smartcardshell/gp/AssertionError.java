@@ -62,8 +62,8 @@ public class AssertionError extends ScriptableObject {
 	 */
 	public AssertionError(String className, int error, int reason, String message, String expectedValue, String receivedValue) {
         put("className", this, className);
-        put("error", this, new Integer(error));
-        put("reason", this, new Integer(reason));
+        put("error", this, Integer.valueOf(error));
+        put("reason", this, Integer.valueOf(reason));
         put("message", this, message);
         put("name", this, "AssertionError");
         put("expectedValue", this, expectedValue);
