@@ -3,14 +3,16 @@
 <plugin>
    <extension
          point="org.eclipse.ui.views">
-         <view id="org.globaltester.smartcardshell.ui.views.SmartCardShellView"
-             name="SmartCardShell View"
-          class="org.globaltester.smartcardshell.ui.views.SmartCardShellView"/>         
+         <view
+               category="org.globaltester.core.ui.category.globaltester"
+               class="org.globaltester.smartcardshell.ui.views.SmartCardShellView"
+               id="org.globaltester.smartcardshell.ui.views.SmartCardShellView"
+               name="SmartCardShell View"/>         
    </extension>
    <extension point="org.eclipse.ui.perspectiveExtensions"> 
         <perspectiveExtension 
             targetID="org.globaltester.core.ui.perspective.GlobalTesterPerspective">
-            <view id="org.globaltester.smartcardshell.ui.views.SmartCardShellView" relative="org.globaltester.core.ui.perspective.GlobalTesterPerspective.right" relationship="stack"/> 
+            <view id="org.globaltester.smartcardshell.ui.views.SmartCardShellView" relationship="stack"/> 
         </perspectiveExtension> 
     </extension>
    <extension
