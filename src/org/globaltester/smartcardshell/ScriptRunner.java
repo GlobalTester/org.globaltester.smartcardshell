@@ -154,7 +154,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				
 		//load helper
 		String jsHelperFile = Activator.getPluginDir().toPortableString()
-		+ "jsHelper" + File.separator + "defineAsserts.js";
+		+ "jsHelper" + File.separator + "AllHelpers.js";
 		File f = new File(jsHelperFile);
 		evaluateFile(cx, f.getAbsolutePath());
 	}
