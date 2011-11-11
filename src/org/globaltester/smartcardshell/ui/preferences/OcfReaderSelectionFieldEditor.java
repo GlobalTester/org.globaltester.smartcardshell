@@ -248,7 +248,6 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
 			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getShell();
 			MessageDialog.openError(shell, "GlobalTester",
