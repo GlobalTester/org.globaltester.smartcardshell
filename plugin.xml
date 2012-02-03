@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.globaltester.smartcardshell.protocols" name="ScshProtocol" schema="schema/org.globaltester.smartcardshell.protocols.exsd"/>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
