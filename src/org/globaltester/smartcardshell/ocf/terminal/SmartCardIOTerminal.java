@@ -25,6 +25,9 @@
 
 package org.globaltester.smartcardshell.ocf.terminal;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
 import javax.smartcardio.CardChannel;
@@ -48,6 +51,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	private final static Tracer ctracer = new Tracer(SmartCardIOTerminal.class);
 
 	private boolean polling;
+	private boolean powerdownRequired;
 	private javax.smartcardio.CardTerminal ct;
 	private javax.smartcardio.Card card;
 	
@@ -59,6 +63,8 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 
 		this.ct = ct;
 		this.card = null;
+		this.powerdownRequired=false;
+		
 		addSlots(1);
 	}
 
@@ -96,27 +102,14 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	}
 
 
-
 	@Override
 	protected CardID internalReset(int slot, int ms)
 			throws CardTerminalException {
-		// TODO Auto-generated method stub
-		return getCardID(slot);
-	}
-
-
-
-	@Override
-	protected CardID internalReset(int slot, boolean warm)
-			throws CardTerminalException {
-		// TODO Auto-generated method stub
-
+	
 		disconnect(true);
-//		sendTerminalCommand(new byte[]{0x31, 0x00, 0x04});
+
 		return getCardID(slot);
 	}
-
-
 
 	@Override
 	protected ResponseAPDU internalSendAPDU(int slot, CommandAPDU capdu, int ms)
@@ -140,7 +133,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			throw new CardTerminalException("CardException in transmit(): " + ce.getMessage());
 		}
 		
-		
+		powerdownRequired = true;
 		return new ResponseAPDU(dst);
 	}
 
@@ -228,24 +221,72 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 		}
 	}
 
-
-
 	/**
 	 * Disconnect from card
 	 * 
-	 * @param reset reset card if set to true
+	 * @param reset
+	 *            reset card if set to true
 	 * @throws CardTerminalException
 	 */
 	private void disconnect(boolean reset) throws CardTerminalException {
 		if (this.card != null) {
-			try	{
-				this.card.disconnect(reset);
-			}
-			catch(CardException ce) {
-				ctracer.error("disconnect", ce);
-				throw new CardTerminalException("Error connecting to card: " + ce.getMessage());
-			}
-			finally {
+
+			try {
+				// this.card.disconnect(reset);
+
+				Class<?> cl;
+				Field f;
+				Method m;
+
+				// read cardId
+				Object cardId;
+				cl = Class.forName("sun.security.smartcardio.CardImpl");
+				f = cl.getDeclaredField("cardId");
+				f.setAccessible(true);
+				cardId = f.get(this.card);
+
+				// read disposition
+				Object disposition;
+				cl = Class.forName("sun.security.smartcardio.PCSC");
+				f = cl.getDeclaredField("SCARD_UNPOWER_CARD");
+				// f = cl.getDeclaredField("SCARD_RESET_CARD");
+				// f = cl.getDeclaredField("SCARD_LEAVE_CARD");
+				f.setAccessible(true);
+				disposition = f.get(null);
+
+				// Execute SCardDisconnect
+				cl = Class.forName("sun.security.smartcardio.PCSC");
+				m = cl.getDeclaredMethod("SCardDisconnect", Long.TYPE,
+						Integer.TYPE);
+				m.setAccessible(true);
+				m.invoke(null, cardId, disposition);
+
+			// } catch(CardException ce) {
+				// ctracer.error("disconnect", ce);
+				// throw new CardTerminalException("Error connecting to card: "
+				// + ce.getMessage());
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
 				this.card = null;
 			}
 		}
