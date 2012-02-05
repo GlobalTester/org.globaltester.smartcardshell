@@ -4,9 +4,12 @@
 
 //Card.prototype.gt = new function(){};
 
-Card.prototype.gt_sendCommand = function(command) {
-	//TODO implement optional secure messaging here
-	return this.gt_sendPlain(command);
+Card.prototype.gt_sendCommand = function(cmdAPDU) {
+	return this.gt_SecureMessaging_sendCommand(cmdAPDU);
+}
+
+Card.prototype.gt_sendSM = function(cmdAPDU) {
+	return this.gt_SecureMessaging_sendSM(cmdAPDU);
 }
 
 Card.prototype.gt_sendPlain = function (command){

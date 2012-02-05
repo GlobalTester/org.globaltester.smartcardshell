@@ -6,14 +6,19 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
+import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ImporterTopLevel;
@@ -27,6 +32,8 @@ import de.cardcontact.tlv.ObjectIdentifier;
 
 public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
+	public static final String PROTOCOLS_EXTENSION_POINT = "org.globaltester.smartcardshell.protocols";
+	
 	private static final long serialVersionUID = -1490363545404798195L;
 	private int interactiveLineNo = 0;
 	private String promptString = "interactive";
@@ -157,6 +164,61 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		+ "jsHelper" + File.separator + "AllHelpers.js";
 		File f = new File(jsHelperFile);
 		evaluateFile(cx, f.getAbsolutePath());
+		
+		//handle extension points
+		initExtensionPoints(cx);
+	}
+
+	/**
+	 * Create functions defined by protocols wihtin the given Context. 
+	 * @param cx the context to install the protocols into
+	 */
+	private void initExtensionPoints(Context cx) {
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(PROTOCOLS_EXTENSION_POINT);
+		try {
+			for (IConfigurationElement curConfigElem : config) {
+				System.out.println("Evaluating extension");
+				final Object o = curConfigElem.createExecutableExtension("class");
+				if (o instanceof IScshProtocolProvider) {
+					IScshProtocolProvider curProtocolProvider = (IScshProtocolProvider) o;
+					
+					String protocolName = curConfigElem.getAttribute("name");
+					for (Iterator<String> commandIter = curProtocolProvider.getCommands().iterator(); commandIter
+							.hasNext();) {
+						//extract name of current command
+						String curCommand = commandIter.next();
+						
+						//extract list of parameters
+						String paramList = "";
+						Iterator<String> paramIter = curProtocolProvider.getParams(curCommand).iterator();
+						while ((paramIter != null) &&( paramIter
+								.hasNext())) {
+							paramList += ", "+ paramIter.next();
+						}
+						if (paramList.length()>0) {
+							paramList = paramList.substring(2);
+						}
+						
+						//extract implementation of current command
+						String implementation = curProtocolProvider.getImplementation(curCommand);
+						
+						//build and execute the command
+						String cmd = "";
+						cmd += "Card.prototype.gt_"+protocolName+"_"+curCommand+" = function("+paramList+") {\n";
+						cmd += implementation + "\n";
+						cmd += "}\n";
+						executeCommand(cx, cmd, "", -1);
+					}
+					
+				}
+			}
+		} catch (CoreException ex) {
+			// Extension could not be loaded into ECMAScript
+			// log CoreException to eclipse log
+			GtErrorLogger.log(Activator.PLUGIN_ID, ex);
+		}
+
 	}
 
 	/**

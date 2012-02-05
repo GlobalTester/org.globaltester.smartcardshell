@@ -50,29 +50,11 @@
    <element name="protocol">
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="command"/>
          </choice>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
                   The optional name of this protocol
-               </documentation>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <element name="command">
-      <annotation>
-         <documentation>
-            a elementary command that is provided by this protocol
-         </documentation>
-      </annotation>
-      <complexType>
-         <attribute name="name" type="string">
-            <annotation>
-               <documentation>
-                  
                </documentation>
             </annotation>
          </attribute>
@@ -82,7 +64,7 @@
                   The class that provides the implementation of the command and the required user interface hooks for interactive usage
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.globaltester.smarcardshell.protocols.IScshProtocol"/>
+                  <meta.attribute kind="java" basedOn=":org.globaltester.smartcardshell.protocols.IScshProtocol"/>
                </appinfo>
             </annotation>
          </attribute>
