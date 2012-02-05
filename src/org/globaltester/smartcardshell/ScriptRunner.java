@@ -178,7 +178,6 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				.getConfigurationElementsFor(PROTOCOLS_EXTENSION_POINT);
 		try {
 			for (IConfigurationElement curConfigElem : config) {
-				System.out.println("Evaluating extension");
 				final Object o = curConfigElem.createExecutableExtension("class");
 				if (o instanceof IScshProtocolProvider) {
 					IScshProtocolProvider curProtocolProvider = (IScshProtocolProvider) o;
