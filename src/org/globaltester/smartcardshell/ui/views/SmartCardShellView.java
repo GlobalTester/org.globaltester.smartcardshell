@@ -10,6 +10,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -25,6 +27,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.mozilla.javascript.Context;
 
@@ -40,6 +43,7 @@ public class SmartCardShellView extends ViewPart {
 	
 	private Action execFileAction;
 	protected Shell parentShell;
+	protected CommandHistory cmdHistory = new CommandHistory();
 
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
@@ -79,12 +83,37 @@ public class SmartCardShellView extends ViewPart {
 				String cmd = txtConsoleInput.getText();
 				txtConsoleInput.setText("");
 
+				//put the command in the command history
+				cmdHistory.append(cmd);
+				
 				// execute the command and show output
 				executeCommand(cmd);
 
 			}
 		});
-
+		
+		//keyListener to handle CommandHistory
+		txtConsoleInput.addKeyListener(new KeyListener() {
+			public void keyReleased(KeyEvent e) {
+				
+			}
+			
+			public void keyPressed(KeyEvent e) {
+				switch (e.keyCode) {
+					case SWT.ARROW_UP:
+						txtConsoleInput.setText(cmdHistory.getPreviousCmd());
+						break;
+					case SWT.ARROW_DOWN:
+						txtConsoleInput.setText(cmdHistory.getNextCmd());
+						break;
+					default:
+						if (cmdHistory.isLastCommand()) {
+							cmdHistory.setLastCommand(txtConsoleInput.getText());
+						}
+				}
+			}
+		});
+		
 		// make common white background
 		mainComp.setBackground(sTxtConsoleOut.getBackground());
 
