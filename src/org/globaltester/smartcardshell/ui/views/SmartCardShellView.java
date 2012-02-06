@@ -31,7 +31,9 @@ import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.mozilla.javascript.Context;
 
-public class SmartCardShellView extends ViewPart {
+import de.cardcontact.scdp.js.GPTracer;
+
+public class SmartCardShellView extends ViewPart implements GPTracer {
 
 	public static final String ID = "org.globaltester.smartcardshell.ui.views.SmartCardShellView";
 	private StyledText sTxtConsoleOut;
@@ -51,6 +53,7 @@ public class SmartCardShellView extends ViewPart {
 		cx = Context.enter();
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.setPromptString("scsh");
+		scriptRunner.setTracer(this);
 	}
 
 	public void createPartControl(Composite parent) {
@@ -210,6 +213,29 @@ public class SmartCardShellView extends ViewPart {
 		// exit ECMAScript context
 		cx = null;
 		Context.exit();
+	}
+
+	@Override
+	public String copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return true;
+	}
+
+	@Override
+	public void mark() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean trace(String className, LogLevel logLevel, Object obj) {
+		sTxtConsoleOut.append(obj.toString()+"\n");
+		return true;
 	}
 
 }
