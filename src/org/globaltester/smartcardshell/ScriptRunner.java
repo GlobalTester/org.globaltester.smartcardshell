@@ -167,6 +167,10 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		
 		//handle extension points
 		initExtensionPoints(cx);
+		
+		//init card variable 
+		cmd = "card = new Card(_reader);";
+		executeCommand(cx, cmd, "", -1);
 	}
 
 	/**
