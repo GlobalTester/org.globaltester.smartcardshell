@@ -78,9 +78,11 @@ public class CommandHistory {
 	 * @param cmd
 	 */
 	public void append(String cmd) {
-		setLastCommand(cmd);
-		commands.add("");
-		historyPointer = commands.size() - 1;
+		if ((cmd != null)&&(cmd.trim().length()>0)) {
+			setLastCommand(cmd);
+			commands.add("");
+			historyPointer = commands.size() - 1;
+		}
 	}
 
 }
