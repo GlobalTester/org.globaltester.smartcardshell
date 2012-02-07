@@ -22,6 +22,7 @@ import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -33,7 +34,7 @@ import de.cardcontact.tlv.ObjectIdentifier;
 public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	public static final String PROTOCOLS_EXTENSION_POINT = "org.globaltester.smartcardshell.protocols";
-	
+
 	private static final long serialVersionUID = -1490363545404798195L;
 	private int interactiveLineNo = 0;
 	private String promptString = "interactive";
@@ -109,7 +110,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			// Convert the arbitrary JavaScript value into a string form.
 			str = str.concat(Context.toString(args[i]) + " ");
 		}
-		
+
 		TestLogger.info(str);
 
 		if (thisObj instanceof GPRuntime) {
@@ -121,7 +122,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		} else {
 			System.out.println(str);
 		}
-		
+
 	}
 
 	/**
@@ -151,69 +152,80 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		String[] names = { "print", "load", "defineClass" };
 		defineFunctionProperties(names, ScriptRunner.class,
 				ScriptableObject.DONTENUM);
-		
-		//define variables
+
+		// define variables
 		setEnvironment(cx);
-		
-		//define AssertionError
-		String cmd = "defineClass(\"org.globaltester.smartcardshell.gp.AssertionError\")"; 
+
+		// define AssertionError
+		String cmd = "defineClass(\"org.globaltester.smartcardshell.gp.AssertionError\")";
 		executeCommand(cx, cmd, "", -1);
-				
-		//load helper
+
+		// load helper
 		String jsHelperFile = Activator.getPluginDir().toPortableString()
-		+ "jsHelper" + File.separator + "AllHelpers.js";
+				+ "jsHelper" + File.separator + "AllHelpers.js";
 		File f = new File(jsHelperFile);
 		evaluateFile(cx, f.getAbsolutePath());
-		
-		//handle extension points
+
+		// handle extension points
 		initExtensionPoints(cx);
-		
-		//init card variable 
-		cmd = "card = new Card(_reader);";
-		executeCommand(cx, cmd, "", -1);
+
+		// init card variable
+		try {
+			cmd = "card = new Card(_reader);";
+			executeCommand(cx, cmd, "", -1);
+		} catch (JavaScriptException e) {
+			// ignore if card could not be opened, this will be displayed by the
+			// UI or caught be by test execution before
+		}
 	}
 
 	/**
-	 * Create functions defined by protocols wihtin the given Context. 
-	 * @param cx the context to install the protocols into
+	 * Create functions defined by protocols wihtin the given Context.
+	 * 
+	 * @param cx
+	 *            the context to install the protocols into
 	 */
 	private void initExtensionPoints(Context cx) {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(PROTOCOLS_EXTENSION_POINT);
 		try {
 			for (IConfigurationElement curConfigElem : config) {
-				final Object o = curConfigElem.createExecutableExtension("class");
+				final Object o = curConfigElem
+						.createExecutableExtension("class");
 				if (o instanceof IScshProtocolProvider) {
 					IScshProtocolProvider curProtocolProvider = (IScshProtocolProvider) o;
-					
+
 					String protocolName = curConfigElem.getAttribute("name");
-					for (Iterator<String> commandIter = curProtocolProvider.getCommands().iterator(); commandIter
-							.hasNext();) {
-						//extract name of current command
+					for (Iterator<String> commandIter = curProtocolProvider
+							.getCommands().iterator(); commandIter.hasNext();) {
+						// extract name of current command
 						String curCommand = commandIter.next();
-						
-						//extract list of parameters
+
+						// extract list of parameters
 						String paramList = "";
-						Iterator<String> paramIter = curProtocolProvider.getParams(curCommand).iterator();
-						while ((paramIter != null) &&( paramIter
-								.hasNext())) {
-							paramList += ", "+ paramIter.next();
+						Iterator<String> paramIter = curProtocolProvider
+								.getParams(curCommand).iterator();
+						while ((paramIter != null) && (paramIter.hasNext())) {
+							paramList += ", " + paramIter.next();
 						}
-						if (paramList.length()>0) {
+						if (paramList.length() > 0) {
 							paramList = paramList.substring(2);
 						}
-						
-						//extract implementation of current command
-						String implementation = curProtocolProvider.getImplementation(curCommand);
-						
-						//build and execute the command
+
+						// extract implementation of current command
+						String implementation = curProtocolProvider
+								.getImplementation(curCommand);
+
+						// build and execute the command
 						String cmd = "";
-						cmd += "Card.prototype.gt_"+protocolName+"_"+curCommand+" = function("+paramList+") {\n";
+						cmd += "Card.prototype.gt_" + protocolName + "_"
+								+ curCommand + " = function(" + paramList
+								+ ") {\n";
 						cmd += implementation + "\n";
 						cmd += "}\n";
 						executeCommand(cx, cmd, "", -1);
 					}
-					
+
 				}
 			}
 		} catch (CoreException ex) {
@@ -396,9 +408,10 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		File f = new File(sCSHconfigFile);
 		evaluateFile(cx, f.getAbsolutePath());
 
-		//readerBuffer
-		//int readerBuffer = store.getInt(org.globaltester.preferences.PreferenceConstants.P_READBUFFER);
-		//int readerBuffer = 223;
+		// readerBuffer
+		// int readerBuffer =
+		// store.getInt(org.globaltester.preferences.PreferenceConstants.P_READBUFFER);
+		// int readerBuffer = 223;
 		// String cmdReadBuffer = "_readBuffer = \"" + readerBuffer + "\";";
 		// executeCommand(cx, cmdReadBuffer);
 		//
@@ -425,7 +438,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		// exec(cmdBufferRFE);
 		//
 
-		//set the _reader and _manualReader variables
+		// set the _reader and _manualReader variables
 		boolean manualReaderSetting = Platform.getPreferencesService()
 				.getBoolean(Activator.PLUGIN_ID,
 						PreferenceConstants.OCF_MANUAL_READERSELECT, false,
@@ -433,12 +446,12 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		String currentReaderName = "";
 		if (manualReaderSetting) {
-			//get selected reader name from preferences
+			// get selected reader name from preferences
 			String selectedReader = Platform.getPreferencesService().getString(
 					Activator.PLUGIN_ID, PreferenceConstants.OCF_READER, "",
 					null);
 
-			//make sure that selected reader is available
+			// make sure that selected reader is available
 			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
 			Enumeration<?> ctlist = ctr.getCardTerminals();
 			while (ctlist.hasMoreElements()) {
@@ -454,7 +467,6 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			currentReaderName = "";
 		}
 
-		
 		String cmdReader = "_reader = \"" + currentReaderName + "\";";
 		executeCommand(cx, cmdReader);
 
