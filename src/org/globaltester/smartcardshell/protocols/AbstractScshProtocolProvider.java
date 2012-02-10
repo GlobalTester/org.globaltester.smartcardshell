@@ -10,7 +10,7 @@ import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 
 public abstract class AbstractScshProtocolProvider implements IScshProtocolProvider {
 
-	private static ArrayList<ScshCommand> commands;
+	private ArrayList<ScshCommand> commands;
 
 	@Override
 	public void setInitializationData(IConfigurationElement config,
