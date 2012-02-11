@@ -537,7 +537,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * @param filename
 	 *            file to load and execute
 	 */
-	public void evaluateFile(Context cx, String filename) {
+	public String evaluateFile(Context cx, String filename) {
+		String retVal = "undefined";
 
 		FileReader in = null;
 		GPRuntime gpr = (GPRuntime) ScriptableObject.getTopLevelScope(this);
@@ -556,7 +557,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		} catch (Exception e) {
 			this.currentWorkingDir = oldCWD;
 			Context.reportError(e.toString());
-			return;
+			return e.getMessage();
 		}
 
 		try {
@@ -565,6 +566,9 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 			if (result != Context.getUndefinedValue()) {
 				put("lastresult", this, result);
+				retVal  = result.toString();
+			} else {
+				retVal = "undefined";
 			}
 		} catch (IOException e) {
 			Context.reportError(e.toString());
@@ -576,6 +580,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				Context.reportError(e.toString());
 			}
 		}
+		return retVal;
 	}
 
 }
