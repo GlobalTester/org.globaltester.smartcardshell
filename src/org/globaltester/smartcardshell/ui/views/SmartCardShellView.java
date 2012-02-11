@@ -34,6 +34,8 @@ import org.mozilla.javascript.Context;
 import de.cardcontact.scdp.js.GPTracer;
 
 public class SmartCardShellView extends ViewPart implements GPTracer {
+	
+	private static String RETURN_PROMPT = "#> ";
 
 	public static final String ID = "org.globaltester.smartcardshell.ui.views.SmartCardShellView";
 	private StyledText sTxtConsoleOut;
@@ -140,7 +142,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		} catch (Exception e) {
 			output = e.getMessage();
 		}
-		sTxtConsoleOut.append(output);
+		sTxtConsoleOut.append(RETURN_PROMPT+output);
 		sTxtConsoleOut.setTopIndex(sTxtConsoleOut.getLineCount());
 
 	}
@@ -172,7 +174,15 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 				fileDialog.setText("FileDialog");
 				String selectedFile = fileDialog.open();
 				if (selectedFile != null) {
-				    scriptRunner.evaluateFile(cx, selectedFile);
+					String result = "";
+					try {
+						result = scriptRunner.evaluateFile(cx, selectedFile);
+					} catch (RuntimeException e) {
+						result = e.getMessage();
+						throw e;
+					} finally {
+						sTxtConsoleOut.append(RETURN_PROMPT+result);
+					}
 				}
 				
 			}
