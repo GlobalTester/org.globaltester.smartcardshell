@@ -12,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -61,6 +62,9 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public void createPartControl(Composite parent) {
 		//store the shell of parent composite for future reference
 		parentShell = parent.getShell();
+		
+		//monospaced font to make sure indentation is displayed correctly
+		Font mono = new Font(parent.getDisplay(), "Courier", 10, SWT.NONE);
 
 		// use main composite to get rid of outer influence
 		Composite mainComp = new Composite(parent, SWT.NONE);
@@ -73,16 +77,19 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		sTxtConsoleOut.setEditable(false);
 		sTxtConsoleOut.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 2, 1));
+		sTxtConsoleOut.setFont(mono);
 
 		lblPrompt = new Label(mainComp, SWT.NONE);
 		lblPrompt.setBackground(sTxtConsoleOut.getBackground());
 		lblPrompt.setText(scriptRunner.getPromptString() + ">");
+		lblPrompt.setFont(mono);
 
 		// widget for command input
 		txtConsoleInput = new Text(mainComp, SWT.NONE);
 		txtConsoleInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		mainComp.setTabList(new Control[] { txtConsoleInput });
+		txtConsoleInput.setFont(mono);
 		txtConsoleInput.addListener(SWT.DefaultSelection, new Listener() {
 			public void handleEvent(Event e) {
 				String cmd = txtConsoleInput.getText();
