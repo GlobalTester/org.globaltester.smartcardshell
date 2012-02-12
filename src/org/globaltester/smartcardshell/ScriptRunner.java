@@ -216,11 +216,14 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 						String implementation = curProtocolProvider
 								.getImplementation(curCommand);
 
+						String functionName = "gt_" + protocolName + "_"
+								+ curCommand;
 						// build and execute the command
 						String cmd = "";
-						cmd += "Card.prototype.gt_" + protocolName + "_"
-								+ curCommand + " = function(" + paramList
-								+ ") {\n";
+						cmd += "Card.prototype." + functionName
+								+ " = function(" + paramList + ") {\n";
+//TODO following line should be optional (by preference)
+						cmd += "print(\"calling "+functionName+"\");\n";
 						cmd += implementation + "\n";
 						cmd += "}\n";
 						executeCommand(cx, cmd, "", -1);
@@ -566,7 +569,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 			if (result != Context.getUndefinedValue()) {
 				put("lastresult", this, result);
-				retVal  = result.toString();
+				retVal = result.toString();
 			} else {
 				retVal = "undefined";
 			}

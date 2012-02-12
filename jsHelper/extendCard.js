@@ -22,3 +22,5 @@ Card.prototype.gt_sendPlain = function (command){
 	print ("SW: "+this.SW.toString(HEX) + "   (" + this.SWMSG + ")");
 	return resp;
 }
+
+Card.prototype.gt_mrz = "P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<<<<<<<<<C11T002JM4D<<9608122F1310317<<<<<<<<<<<<<<<6";
