@@ -8,6 +8,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.globaltester.smartcardshell.ScriptRunner;
+import org.globaltester.smartcardshell.ui.views.SmartCardShellView;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,6 +44,7 @@ public class ScshViewTest {
 		scshCommand.typeText("\n");
 		
 		//assert the correct result
-		assertEquals(scshBanner + "\nscsh(2)> 5+9;\n14", scshOut.getText());
+		System.out.println(scshOut.getText());
+		assertEquals(scshBanner + "\nscsh(2)> 5+9;\n"+SmartCardShellView.RETURN_PROMPT+"14", scshOut.getText());
 	}
 }
