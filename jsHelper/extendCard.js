@@ -25,8 +25,11 @@ Card.prototype.gt_sendPlain = function (command){
 
 Card.prototype.gt_reset = function () {
 	print("Reseting chip");
-	var atr = card.reset(Card.RESET_COLD);
+	var atr = this.reset(Card.RESET_COLD);
 	print (atr);
+	
+	this.gt_SecureMessaging_resetSM();
+	
 	return atr;
 }
 
