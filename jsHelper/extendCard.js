@@ -12,10 +12,6 @@ Card.prototype.gt_sendSM = function(cmdAPDU) {
 	return this.gt_SecureMessaging_sendSM(cmdAPDU);
 }
 
-Card.prototype.gt_selectAID = function(cmdAPDU) {
-	return this.gt_ISO7816_selectAID(cmdAPDU);
-}
-
 Card.prototype.gt_sendPlain = function (command){
 	encodedResp = new ByteString("", HEX);
 	logCmdApdu = "=> Command APDU [\n"+HexString.dump(command)+"\n] C-APDU";
