@@ -200,8 +200,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 							.getCommands().iterator(); commandIter.hasNext();) {
 						
 						String cmd = "";
-						cmd = "card = new Card(_reader);";
-						executeCommand(cx, cmd, "", -1);
+//						cmd = "card = new Card(_reader);";
+//						executeCommand(cx, cmd, "", -1);
 						
 						// extract name of current command
 						String curCommand = commandIter.next();
