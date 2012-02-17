@@ -29,17 +29,17 @@ function assertStatusWord(validSW, receivedSW, rating) {
 		for (var i = 0; i < validSW.length; i++) {
 			if (validSW[i].toLowerCase() == receivedSW.toLowerCase()) {
 				match = true;
-				print ("Actual and expected return codes match. Ok!\n");
+				print ("Actual and expected return codes match. Okay.");
 				break;
 			}
 		}
 		if (!match) {				
 			if (rating.toUpperCase() == WARNING) {
-				print ("Test warning: The actual and expected returncodes do not match!\n");
+				print ("Test warning: The actual and expected returncodes do not match!");
 				throw new AssertionError("SHELL", WARNING, 1, "Unexpected status word reveived!", validSW, receivedSW);
 			}
 			else {
-				print("Test failure: The actual and expected returncodes do not match!\n");
+				print("Test failure: The actual and expected returncodes do not match!");
 				throw new AssertionError("SHELL", FAILURE, 2, "Unexpected status word received!", validSW, receivedSW);
 			}	
 		}
@@ -58,15 +58,15 @@ function assertResponse(expectedResp, receivedResp, rating) {
 
 		if (expectedResp == NO_DATA) {
 			if (receivedResp.length == 0) {
-				print ("Actual and expected response match. Ok!\n");	
+				print ("Actual and expected response match. Okay.");	
 			}
 			else {
 				if (rating.toUpperCase() == WARNING) {
-					print ("Test warning: The actual and expected response do not match!\n");
+					print ("Test warning: The actual and expected response do not match!");
 					throw new AssertionError("SHELL", WARNING_TEXT, 1, "Unexpected response received!", expectedResp, receivedResp);
 				}
 				else {
-					print("Test failure: The actual and expected response do not match!\n");
+					print("Test failure: The actual and expected response do not match!");
 					throw new AssertionError("SHELL", FAILURE_TEXT, 2, "Unexpected response received!", expectedResp, receivedResp);
 				}
 			}
@@ -74,15 +74,15 @@ function assertResponse(expectedResp, receivedResp, rating) {
 		}
 	
 		if (expectedResp.toString() == receivedResp.toString()) {
-			print ("Actual and expected response match. Ok!");
+			print ("Actual and expected response match. Okay.");
 		}
 		else {
 			if (rating.toUpperCase() == WARNING) {
-				print ("Test warning: The actual and expected response do not match!\n");
+				print ("Test warning: The actual and expected response do not match!");
 				throw new AssertionError("SHELL", WARNING_TEXT, 1, "Unexpected response received!", expectedResp, receivedResp);
 			}
 			else {
-				print("Test failure: The actual and expected response do not match!\n");
+				print("Test failure: The actual and expected response do not match!n");
 				throw new AssertionError("SHELL", FAILURE_TEXT, 2, "Unexpected response received!", expectedResp, receivedResp);
 			}	
 		}
@@ -132,7 +132,7 @@ function assertMatchValue(expectedValue, receivedValue, rating) {
 		}	
 		
 	} else {
-		print("Value matched. OK!");
+		print("Value matched. Okay.");
 	}
 }
 
@@ -175,7 +175,7 @@ function assertNotMatchValue(value, receivedValue, rating) {
 		}	
 		
 	} else {
-		print("Value does not match. OK!");
+		print("Value does not match. Okay.");
 	}
 }
 
@@ -197,7 +197,7 @@ function assertRange(expectedMin, expectedMax, value, rating) {
 			throw new AssertionError("SHELL", FAILURE, 2, "Value " + value.toString(HEX) + " does not match expected range!", expectedMin+" - "+expectedMax, value);
 		}	
 	} else {
-		print("Value within range. OK!");
+		print("Value within range. Okay");
 	}
 	
 }
@@ -218,7 +218,7 @@ function assertLessOrEqual(maxValue, value, rating) {
 			throw new AssertionError("SHELL", FAILURE, 2, "Value " + value + " is not less or equal than expected value " + maxValue + "!", "<= "+maxValue, value);
 		}	
 	} else {
-		print("Value is less or equal. OK!");
+		print("Value is less or equal. Okay.");
 	}
 }
 
@@ -238,13 +238,13 @@ function assertBiggerOrEqual(minValue, value, rating) {
 			throw new AssertionError("SHELL", FAILURE, 2, "Value " + value + " is not bigger or equal than expected value " + minValue + "!", ">= "+minValue, value);
 		}	
 	} else {
-		print("Value is bigger or equal. OK!");
+		print("Value is bigger or equal. Okay.");
 	}
 }
 
 function assertSMResponse(rating) {
 	if (checkSMEncoding()) {
-		print ("RAPDU is SM encoded. OK");
+		print ("RAPDU is SM encoded. Okay.");
 	} else {
 		if (rating == WARNING) { 
 			assertWarning("Response APDU should be SM encoded!");		
@@ -256,7 +256,7 @@ function assertSMResponse(rating) {
 
 function assertPlainResponse(rating) {
 	if (!checkSMEncoding()) {
-		print ("RAPDU is plain response. OK");
+		print ("RAPDU is plain response. Okay.");
 	} else {
 		if (rating == WARNING) { 
 			assertWarning("Response APDU should be in plain!");		
