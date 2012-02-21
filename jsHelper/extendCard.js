@@ -33,10 +33,10 @@ Card.prototype.gt_reset = function () {
 	return atr;
 }
 
-Card.prototype.gt_getCardConfig = function (protocol, param) {
+Card.prototype.gt_getCardConfig = function (protocol, key) {
 	if (this.gt_cardConfig == undefined) {
 	    print("gt_cardConfig is not defined yet, will be created now");
 	    this.gt_cardConfig = new Packages.org.globaltester.cardconfiguration.CardConfig();
 	}
-	return this.gt_cardConfig.get(protocol, param);
+	return this.gt_cardConfig.get(protocol, key);
 }
