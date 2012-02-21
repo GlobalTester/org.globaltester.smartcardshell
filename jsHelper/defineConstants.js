@@ -3,6 +3,7 @@
  */ 
 
 HexString = new Packages.de.cardcontact.tlv.HexString();
+ByteUtil = new Packages.org.globaltester.util.ByteUtil();
 
 SW_NoError = new Array("9000");
 SW_NormalProcessing = new Array("90", "61");
