@@ -275,7 +275,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            ECMAScript context to execute command in
 	 * @param cmd
 	 *            ECMAScript code to be executed
-	 * @return
+	 * @return String representation of the execution result
 	 */
 	public String executeCommand(Context cx, String cmd) {
 		return executeCommand(cx, cmd, getPromptString(), interactiveLineNo++);
@@ -294,7 +294,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            name/location of the source file
 	 * @param lineNo
 	 *            line number in the source file
-	 * @return
+	 * @return String representation of the execution result
 	 */
 	public String executeCommand(Context cx, String cmd, String sourceName,
 			int lineNo) {

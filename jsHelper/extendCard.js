@@ -33,5 +33,10 @@ Card.prototype.gt_reset = function () {
 	return atr;
 }
 
-
-Card.prototype.gt_mrz = "P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<<<<<<<<<C11T002JM4D<<9608122F1310317<<<<<<<<<<<<<<<6";
+Card.prototype.gt_getCardConfig = function (protocol, param) {
+	if (this.gt_cardConfig == undefined) {
+	    print("gt_cardConfig is not defined yet, will be created now");
+	    this.gt_cardConfig = new Packages.org.globaltester.cardconfiguration.CardConfig();
+	}
+	return this.gt_cardConfig.get(protocol, param);
+}
