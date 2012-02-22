@@ -1,20 +1,6 @@
 /*
  * Define some constants for GlobalTester
- */ 
-
-// Define response without data
-NO_DATA = new String("NODATA");
-
-
-// Maximum number of bytes encoding the length
-MAX_LENGTH_BYTES = 3;
-
-// Define names of failure, warning
-FAILURE_TEXT = new String("Failure");
-WARNING_TEXT = new String("Warning");
-FAILURE = new String("F");
-WARNING = new String("W");
-
+ */
 	
 function assertStatusWord(validSW, receivedSW, rating) { 
 			
