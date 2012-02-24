@@ -1,9 +1,6 @@
 /*
  * Define some constants for GlobalTester
  */
-
-//define constants
-MAX_LENGTH_BYTES = 3;
  
 //define classes for a short method call in scripts
 HexString = new Packages.de.cardcontact.tlv.HexString();
