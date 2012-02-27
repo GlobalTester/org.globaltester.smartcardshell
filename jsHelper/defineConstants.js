@@ -3,10 +3,10 @@
  */
  
 //define classes for a short method call in scripts
-HexString = new Packages.de.cardcontact.tlv.HexString();
-ByteUtil  = new Packages.org.globaltester.util.ByteUtil();
-TLVUtil   = new Packages.org.globaltester.util.TLVUtil();
-//MRZUtil   = new Packages.org.globaltester.smartcardshell.protocols.bac.MRZ();
+var HexString = new Packages.de.cardcontact.tlv.HexString();
+var ByteUtil  = new Packages.org.globaltester.util.ByteUtil();
+var TLVUtil   = new Packages.org.globaltester.util.TLVUtil();
+var MRZUtil   = new Packages.org.globaltester.smartcardshell.protocols.bac.MRZ("dummy");
 
 //define aqivalent cases for return codes
 SW_NoError = new Array("9000");
