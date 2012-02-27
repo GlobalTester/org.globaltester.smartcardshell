@@ -6,7 +6,6 @@
 var HexString = new Packages.de.cardcontact.tlv.HexString();
 var ByteUtil  = new Packages.org.globaltester.util.ByteUtil();
 var TLVUtil   = new Packages.org.globaltester.util.TLVUtil();
-var MRZUtil   = new Packages.org.globaltester.smartcardshell.protocols.bac.MRZ("dummy");
 
 //define aqivalent cases for return codes
 SW_NoError = new Array("9000");
