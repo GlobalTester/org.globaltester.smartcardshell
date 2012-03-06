@@ -55,6 +55,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 
 		cx = Context.enter();
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
+		scriptRunner.init(cx);
 		scriptRunner.setPromptString("scsh");
 		scriptRunner.setTracer(this);
 	}
