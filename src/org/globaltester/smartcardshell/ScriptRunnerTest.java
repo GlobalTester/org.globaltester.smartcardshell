@@ -44,6 +44,7 @@ public class ScriptRunnerTest {
 		// init JS ScriptRunner and Context
 		Context cx = Context.enter();
 		ScriptRunner sr = new ScriptRunner(cx, "");
+		sr.init(cx);
 
 		String result = sr.executeCommand(cx,
 				"card.gt_getCardConfig(\"ICAO9303\",\"MRZ\")");
