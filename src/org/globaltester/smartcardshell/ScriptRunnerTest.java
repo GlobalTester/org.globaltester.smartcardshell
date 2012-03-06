@@ -2,8 +2,10 @@ package org.globaltester.smartcardshell;
 
 import static org.junit.Assert.assertEquals;
 
+import static org.globaltester.cardconfiguration.CardConfigManager.DEFAULT_CARD_CONFIG;
 import opencard.core.service.SmartCard;
 
+import org.globaltester.cardconfiguration.CardConfigManager;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -45,6 +47,7 @@ public class ScriptRunnerTest {
 		Context cx = Context.enter();
 		ScriptRunner sr = new ScriptRunner(cx, "");
 		sr.init(cx);
+		sr.initCard(cx, "card", CardConfigManager.get(DEFAULT_CARD_CONFIG));
 
 		String result = sr.executeCommand(cx,
 				"card.gt_getCardConfig(\"ICAO9303\",\"MRZ\")");
