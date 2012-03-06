@@ -177,7 +177,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 * object.
 	 * 
 	 * @param cx
-	 *            JS-Context to create the varaible in
+	 *            JS-Context to create the variable in
 	 * @param varName
 	 *            name of the variable in the context
 	 * @param cardConfig
@@ -187,20 +187,34 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		if (isValidVariableName(varName)) {
 
-			// init card variable
+			
 			try {
-				String cmd = varName + "= new Card(_reader);";
+				// init card variable
+				String cmd = varName + " = new Card(_reader);";
 				executeCommand(cx, cmd, "", -1);
+
+				//import CardConfig into Scriptable
+				Object wrappedOut = Context.javaToJS(cardConfig, this);
+				ScriptableObject.putProperty(this, "tmp", wrappedOut);
+				
+				// set CardConfig as member variable
+				cmd = varName + ".gt_cardConfig = tmp;";
+				executeCommand(cx, cmd, "", -1);
+				
+				ScriptableObject.deleteProperty(this,"tmp");
+				
 			} catch (JavaScriptException e) {
 				// ignore if card could not be opened, this will be displayed by
-				// the
-				// UI or caught be by test execution before
+				// the UI or caught be by test execution before
 			}
+			
+			
 		} else {
 			throw new RuntimeException(
-					"The given variable name might can not be used within automated " +
-					"initialization of card variable. Please use only the following " +
-					"characters when constructing the identifier: " + JS_IDENTIFIER_CHARS);
+					"The given variable name can not be used within automated "
+							+ "initialization of card variable. Please use only the following "
+							+ "characters when constructing the identifier: "
+							+ JS_IDENTIFIER_CHARS);
 		}
 	}
 
