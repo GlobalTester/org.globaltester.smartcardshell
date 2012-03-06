@@ -15,6 +15,7 @@ import opencard.core.terminal.CardTerminalRegistry;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.globaltester.cardconfiguration.CardConfig;
 import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
@@ -32,6 +33,8 @@ import de.cardcontact.scdp.js.GPTracer;
 import de.cardcontact.tlv.ObjectIdentifier;
 
 public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
+
+	private static final String JS_IDENTIFIER_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789_$";
 
 	public static final String PROTOCOLS_EXTENSION_POINT = "org.globaltester.smartcardshell.protocols";
 
@@ -134,14 +137,13 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	public ScriptRunner(Context cx, String scriptPath) {
 		super(cx);
 		currentWorkingDir = new File(scriptPath);
-		init(cx);
 	}
 
 	/**
 	 * Initialization of this shell. Create required functions, classes,
 	 * variables and set the environment.
 	 */
-	private void init(Context cx) {
+	public void init(Context cx) {
 		assert (SmartCard.isStarted());
 
 		// Initialize ECMAScript environment
@@ -168,15 +170,59 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		// handle extension points
 		initExtensionPoints(cx);
+	}
 
-		// init card variable
-		try {
-			cmd = "card = new Card(_reader);";
-			executeCommand(cx, cmd, "", -1);
-		} catch (JavaScriptException e) {
-			// ignore if card could not be opened, this will be displayed by the
-			// UI or caught be by test execution before
+	/**
+	 * Create a card variable in the given Context and assign the CardConfig
+	 * object.
+	 * 
+	 * @param cx
+	 *            JS-Context to create the varaible in
+	 * @param varName
+	 *            name of the variable in the context
+	 * @param cardConfig
+	 *            CardConfig object to be associated
+	 */
+	public void initCard(Context cx, String varName, CardConfig cardConfig) {
+
+		if (isValidVariableName(varName)) {
+
+			// init card variable
+			try {
+				String cmd = varName + "= new Card(_reader);";
+				executeCommand(cx, cmd, "", -1);
+			} catch (JavaScriptException e) {
+				// ignore if card could not be opened, this will be displayed by
+				// the
+				// UI or caught be by test execution before
+			}
+		} else {
+			throw new RuntimeException(
+					"The given variable name might can not be used within automated " +
+					"initialization of card variable. Please use only the following " +
+					"characters when constructing the identifier: " + JS_IDENTIFIER_CHARS);
 		}
+	}
+
+	/**
+	 * Check whether the given variable name is a harmless identifier name for
+	 * JS. This is done pessimistic and restricts the names to latin letters and
+	 * digits plus very few other characters. These restrictions only apply to
+	 * variable names automatically handled by GT to ensure that no user input
+	 * will violate the constructed commands.
+	 * 
+	 * @param varName
+	 * @return
+	 */
+	private static boolean isValidVariableName(String varName) {
+		// if name contains invalid characters return false
+		for (int i = 0; i < varName.length(); i++) {
+			if (!JS_IDENTIFIER_CHARS
+					.contains(varName.subSequence(i, i + 1)))
+				return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -222,8 +268,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 						String cmd = "";
 						cmd += "Card.prototype." + functionName
 								+ " = function(" + paramList + ") {\n";
-//TODO following line should be optional (by preference)
-						cmd += "print(\"calling "+functionName+"\");\n";
+						// TODO following line should be optional (by preference)
+						cmd += "print(\"calling " + functionName + "\");\n";
 						cmd += implementation + "\n";
 						cmd += "}\n";
 						executeCommand(cx, cmd, "", -1);
