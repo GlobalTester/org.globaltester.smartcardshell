@@ -194,8 +194,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				executeCommand(cx, cmd, "", -1);
 
 				//import CardConfig into Scriptable
-				Object wrappedOut = Context.javaToJS(cardConfig, this);
-				ScriptableObject.putProperty(this, "tmp", wrappedOut);
+				Object wrappedCardConfig = Context.javaToJS(cardConfig, this);
+				ScriptableObject.putProperty(this, "tmp", wrappedCardConfig);
 				
 				// set CardConfig as member variable
 				cmd = varName + ".gt_cardConfig = tmp;";
