@@ -114,4 +114,8 @@ public interface IScshProtocolProvider extends IExecutableExtension{
 	 */
 	public String getHelpParam(String command, String parameter);
 
+	public String getName();
+
+	public void setName(String attribute);
+
 }

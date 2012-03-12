@@ -11,6 +11,7 @@ import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 public abstract class AbstractScshProtocolProvider implements IScshProtocolProvider {
 
 	private ArrayList<ScshCommand> commands;
+	private String name;
 
 	@Override
 	public void setInitializationData(IConfigurationElement config,
@@ -111,6 +112,16 @@ public abstract class AbstractScshProtocolProvider implements IScshProtocolProvi
 		}
 		//command could not be found
 		return null;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String newName) {
+		name = newName;
 	}
 
 }

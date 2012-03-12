@@ -12,11 +12,8 @@ import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.globaltester.cardconfiguration.CardConfig;
-import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
@@ -35,8 +32,6 @@ import de.cardcontact.tlv.ObjectIdentifier;
 public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 	private static final String JS_IDENTIFIER_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789_$";
-
-	public static final String PROTOCOLS_EXTENSION_POINT = "org.globaltester.smartcardshell.protocols";
 
 	private static final long serialVersionUID = -1490363545404798195L;
 	private int interactiveLineNo = 0;
@@ -246,55 +241,43 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            the context to install the protocols into
 	 */
 	private void initExtensionPoints(Context cx) {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(PROTOCOLS_EXTENSION_POINT);
-		try {
-			for (IConfigurationElement curConfigElem : config) {
-				final Object o = curConfigElem
-						.createExecutableExtension("class");
-				if (o instanceof IScshProtocolProvider) {
-					IScshProtocolProvider curProtocolProvider = (IScshProtocolProvider) o;
+		//XXX
+		for (IScshProtocolProvider curProtocolProvider : ProtocolExtensions.getInstance().getAllAvailableProtocols()) {
+			
+			for (Iterator<String> commandIter = curProtocolProvider
+					.getCommands().iterator(); commandIter.hasNext();) {
+				// extract name of current command
+				String curCommand = commandIter.next();
 
-					String protocolName = curConfigElem.getAttribute("name");
-					for (Iterator<String> commandIter = curProtocolProvider
-							.getCommands().iterator(); commandIter.hasNext();) {
-						// extract name of current command
-						String curCommand = commandIter.next();
-
-						// extract list of parameters
-						String paramList = "";
-						Iterator<String> paramIter = curProtocolProvider
-								.getParams(curCommand).iterator();
-						while ((paramIter != null) && (paramIter.hasNext())) {
-							paramList += ", " + paramIter.next();
-						}
-						if (paramList.length() > 0) {
-							paramList = paramList.substring(2);
-						}
-
-						// extract implementation of current command
-						String implementation = curProtocolProvider
-								.getImplementation(curCommand);
-
-						String functionName = "gt_" + protocolName + "_"
-								+ curCommand;
-						// build and execute the command
-						String cmd = "";
-						cmd += "Card.prototype." + functionName
-								+ " = function(" + paramList + ") {\n";
-						// TODO following line should be optional (by preference)
-						cmd += "print(\"calling " + functionName + "\");\n";
-						cmd += implementation + "\n";
-						cmd += "}\n";
-						executeCommand(cx, cmd, "", -1);
-					}
-
+				// extract list of parameters
+				String paramList = "";
+				Iterator<String> paramIter = curProtocolProvider
+						.getParams(curCommand).iterator();
+				while ((paramIter != null) && (paramIter.hasNext())) {
+					paramList += ", " + paramIter.next();
 				}
+				if (paramList.length() > 0) {
+					paramList = paramList.substring(2);
+				}
+
+				// extract implementation of current command
+				String implementation = curProtocolProvider
+						.getImplementation(curCommand);
+
+				String functionName = "gt_" + curProtocolProvider.getName() + "_"
+						+ curCommand;
+				// build and execute the command
+				String cmd = "";
+				cmd += "Card.prototype." + functionName
+						+ " = function(" + paramList + ") {\n";
+				// TODO following line should be optional (by
+				// preference)
+				cmd += "print(\"calling " + functionName + "\");\n";
+				cmd += implementation + "\n";
+				cmd += "}\n";
+				executeCommand(cx, cmd, "", -1);
 			}
-		} catch (CoreException ex) {
-			// Extension could not be loaded into ECMAScript
-			// log CoreException to eclipse log
-			GtErrorLogger.log(Activator.PLUGIN_ID, ex);
+			
 		}
 
 	}
