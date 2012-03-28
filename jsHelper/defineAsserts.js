@@ -188,6 +188,24 @@ function assertRange(expectedMin, expectedMax, value, rating) {
 	
 }
 
+function assertLess(maxValue, value, rating) {
+	
+	print("Expected max value: "+maxValue);
+	print("Received value:     "+value);
+	
+	if (value >= maxValue) {
+
+		if (rating == WARNING) {
+			print("WARNING: Value " + value + " is not less than expected value " + maxValue + "!");		
+			throw new AssertionError("SHELL", WARNING, 1, "Value " + value + " is not less than expected value " + maxValue + "!", "< "+maxValue, value);
+		} else {
+			print("ERROR: Value " + value + " is not less than expected value " + maxValue + "!");		
+			throw new AssertionError("SHELL", FAILURE, 2, "Value " + value + " is not less than expected value " + maxValue + "!", "< "+maxValue, value);
+		}	
+	} else {
+		print("Value is less. Okay.");
+	}
+}
 
 function assertLessOrEqual(maxValue, value, rating) {
 	
@@ -208,6 +226,24 @@ function assertLessOrEqual(maxValue, value, rating) {
 	}
 }
 
+function assertBigger(minValue, value, rating) {
+	
+	print("Expected min value: "+minValue);
+	print("Received value:     "+value);
+
+	if (value <= minValue) {
+
+		if (rating == WARNING) { 
+			print("WARNING: Value " + value + " is not bigger than expected value " + minValue + "!");		
+			throw new AssertionError("SHELL", WARNING, 1, "Value " + value + " is not bigger than expected value " + minValue + "!", "> "+minValue, value);
+		} else {
+			print("ERROR: Value " + value + " is not bigger than expected value " + minValue + "!");		
+			throw new AssertionError("SHELL", FAILURE, 2, "Value " + value + " is not bigger than expected value " + minValue + "!", "> "+minValue, value);
+		}	
+	} else {
+		print("Value is bigger. Okay.");
+	}
+}
 
 function assertBiggerOrEqual(minValue, value, rating) {
 	
