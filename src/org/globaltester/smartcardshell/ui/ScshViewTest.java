@@ -9,6 +9,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.globaltester.smartcardshell.ui.views.SmartCardShellView;
+import org.globaltester.swtbot.SwtBotHelper;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,11 +19,16 @@ public class ScshViewTest {
 	private SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
 	@BeforeClass
-	public static void setUp() {
+	public static void runBeforeClass() {
 		// use EN_US keyboard layout, this is the only one natively supported by
 		// SWTBot this makes typeText possible for "simple characters",
 		// special chars will still produce errors
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+	}
+	
+	@Before
+	public void runBefore() {
+		SwtBotHelper.resetWorkbenchState(bot);
 	}
 
 	/**
