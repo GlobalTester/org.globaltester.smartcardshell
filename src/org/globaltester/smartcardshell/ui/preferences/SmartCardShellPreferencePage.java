@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.globaltester.core.ui.preferences.PropertyFieldEditor;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
@@ -27,14 +29,12 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private Group grpOcfProperties;
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
-	private StringFieldEditor sfeOpenCardServices;
-	private StringFieldEditor sfeOpenCardTerminals;
+	private PropertyFieldEditor pfeOpenCardServices;
+	private PropertyFieldEditor pfeOpenCardTerminals;
 
 	private Group grpReaderSelection;
 	private BooleanFieldEditor bfeManualReaderSettings;
 	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
-
-	private Group grpEcmaScriptProperties;
 
 	public SmartCardShellPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -49,6 +49,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		// get common values
 		Composite parent = getFieldEditorParent();
 		int columns = ((GridLayout) parent.getLayout()).numColumns + 1;
+		columns = 3;
 
 		// create group for OCF properties
 		grpOcfProperties = new Group(parent, SWT.NONE);
@@ -58,12 +59,11 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 
 		// create fieldEditors for OCF properties
 		String[][] configOptions = {
-				{ "opencard.properties",
+				{ "Default opencard.properties",
 						PreferenceConstants.OCF_CONFIGURATION_SOURCE_default },
-				{ "Configuration file",
+				{ "User specified opencard.properties",
 						PreferenceConstants.OCF_CONFIGURATION_SOURCE_file },
-				{
-						"Eclipse preferences",
+				{ "Eclipse preferences",
 						PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences } };
 		rgfeConfigSource = new RadioGroupFieldEditor(
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE,
@@ -74,27 +74,27 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		grpOcfProperties.setLayoutData(gdGrpOcfProperties);
 		grpOcfProperties.setLayout(new GridLayout(columns, false));
 
-		sfeScshConfigPath = new StringFieldEditor(
-				PreferenceConstants.OCF_PROPERTIES_FILE, "scshConfig path",
+		sfeScshConfigPath = new FileFieldEditor(
+				PreferenceConstants.OCF_PROPERTIES_FILE, "OpenCard.properties",
 				grpOcfProperties);
 		addField(sfeScshConfigPath);
 
-		sfeOpenCardServices = new StringFieldEditor(
+		pfeOpenCardServices = new PropertyFieldEditor(
 				PreferenceConstants.OCF_OPENCARD_SERVICES, "OpenCard.Services",
 				grpOcfProperties);
-		addField(sfeOpenCardServices);
+		addField(pfeOpenCardServices);
 
-		sfeOpenCardTerminals = new StringFieldEditor(
+		pfeOpenCardTerminals = new PropertyFieldEditor(
 				PreferenceConstants.OCF_OPENCARD_TERMINALS,
 				"OpenCard.Terminals", grpOcfProperties);
-		addField(sfeOpenCardTerminals);
+		addField(pfeOpenCardTerminals);
 
 		// create group for reader selection
 		grpReaderSelection = new Group(getFieldEditorParent(), SWT.NONE);
 		grpReaderSelection.setText("Card reader");
 		GridData gdGrpReaderSelection = new GridData(GridData.FILL,
 				GridData.FILL, true, false);
-		gdGrpReaderSelection.horizontalSpan = 2;
+		gdGrpReaderSelection.horizontalSpan = 3;
 		grpReaderSelection.setLayoutData(gdGrpReaderSelection);
 		grpReaderSelection.setLayout(new GridLayout(2, false));
 
@@ -109,9 +109,6 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				grpReaderSelection);
 		addField(orsfeReaderSelection);
 
-		// create group for ECMA
-		grpEcmaScriptProperties = new Group(parent, SWT.NONE);
-		grpEcmaScriptProperties.setText("ECMAScript environment");
 	}
 
 	public void init(IWorkbench workbench) {
@@ -133,8 +130,8 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		// add warning to this dialog if one of the OCF properties changes
 		if ((rgfeConfigSource.equals(event.getSource()))
 				|| (sfeScshConfigPath.equals(event.getSource()))
-				|| (sfeOpenCardServices.equals(event.getSource()))
-				|| (sfeOpenCardTerminals.equals(event.getSource()))) {
+				|| (pfeOpenCardServices.equals(event.getSource()))
+				|| (pfeOpenCardTerminals.equals(event.getSource()))) {
 			this.setMessage(OCF_WARNING, PreferencePage.WARNING);
 		}
 
