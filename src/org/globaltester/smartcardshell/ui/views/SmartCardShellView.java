@@ -195,8 +195,8 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 				
 			}
 		};
-		execFileAction.setText("Import card configuration");
-		execFileAction.setToolTipText("Import card configuration");
+		execFileAction.setText("Execute file...");
+		execFileAction.setToolTipText("Execute file...");
 		execFileAction.setImageDescriptor(PlatformUI.getWorkbench()
 				.getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
