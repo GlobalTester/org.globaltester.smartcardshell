@@ -9,6 +9,7 @@ import opencard.core.terminal.ResponseAPDU;
 import opencard.core.util.HexString;
 import opencard.opt.util.PassThruCardService;
 
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

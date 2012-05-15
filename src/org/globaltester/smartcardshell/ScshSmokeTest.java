@@ -7,6 +7,7 @@ import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

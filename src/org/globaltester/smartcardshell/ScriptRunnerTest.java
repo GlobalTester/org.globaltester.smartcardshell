@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import opencard.core.service.SmartCard;
 
 import org.globaltester.cardconfiguration.CardConfig;
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

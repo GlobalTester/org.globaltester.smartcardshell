@@ -8,6 +8,7 @@ import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalRegistry;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.globaltester.smartcardshell.test.TestPropertyLoader;
