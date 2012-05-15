@@ -1,4 +1,4 @@
-package org.globaltester.smartcardshell;
+package org.globaltester.smartcardshell.ocf;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +13,7 @@ import opencard.core.util.OpenCardPropertyLoadingException;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
 public class PreferencesPropertyLoader implements OpenCardConfigurationProvider {

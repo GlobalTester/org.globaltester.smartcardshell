@@ -8,7 +8,8 @@ Bundle-Vendor: HJP Consulting GmbH
 Require-Bundle: org.eclipse.core.runtime,
  org.globaltester.core;bundle-version="3.0.0",
  org.globaltester.logging;bundle-version="3.0.0",
- org.globaltester.cardconfiguration;bundle-version="3.0.0"
+ org.globaltester.cardconfiguration;bundle-version="3.0.0",
+ org.eclipse.ui.workbench;bundle-version="3.6.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 DynamicImport-Package: *
@@ -116,6 +117,7 @@ Export-Package: de.cardcontact.scdp.cardsim,
  org.bouncycastle.x509.extension,
  org.bouncycastle.x509.util,
  org.globaltester.smartcardshell,
+ org.globaltester.smartcardshell.ocf,
  org.globaltester.smartcardshell.preferences,
  org.globaltester.smartcardshell.protocols,
  org.jcprev.xml.dsig.internal,

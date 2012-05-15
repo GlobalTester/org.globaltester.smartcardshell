@@ -3,17 +3,19 @@ package org.globaltester.smartcardshell;
 import java.io.IOException;
 import java.net.URL;
 
-import opencard.core.service.SmartCard;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.osgi.framework.BundleActivator;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.globaltester.smartcardshell.ocf.OCFWrapper;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class Activator extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.globaltester.smartcardshell";
+	
+	// The shared instance
+	private static Activator plugin;
 
 	public static final String SCSH_FOLDER = "scsh3.7.989";
 	
@@ -32,11 +34,12 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
+		super.start(bundleContext);
 		Activator.setContext(bundleContext);
+		plugin = this;
 		
 		//set up the OpenCardFramework
-		PreferencesPropertyLoader.initOCF();
-		SmartCard.start();
+		OCFWrapper.start();
 	}
 
 	/*
@@ -44,8 +47,10 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
+		plugin = null;
 		Activator.setContext(null);
-		SmartCard.shutdown();
+		OCFWrapper.shutdown();
+		super.stop(bundleContext);
 	}
 	
 	/**
@@ -61,6 +66,10 @@ public class Activator implements BundleActivator {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 }
