@@ -2,8 +2,11 @@ package org.globaltester.smartcardshell.ui.preferences;
 
 import java.util.Enumeration;
 
+import opencard.core.service.CardServiceException;
 import opencard.core.terminal.CardTerminal;
+import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalRegistry;
+import opencard.core.util.OpenCardPropertyLoadingException;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
@@ -21,6 +24,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.smartcardshell.ocf.OCFWrapper;
+import org.globaltester.smartcardshell.ui.Activator;
 
 public class OcfReaderSelectionFieldEditor extends FieldEditor {
 
@@ -30,6 +36,8 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 	private Composite radioBox;
 	private Button[] radioButtons;
 	private Button btnRefresh;
+	private boolean refreshEnabled = true;
+	private boolean enabled = true;
 
 	/**
 	 * Creates a field editor that displays available readers and allows
@@ -71,7 +79,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 		control = getRadioBoxControl(parent);
 		gd = new GridData();
 		gd.horizontalSpan = numColumns;
-		gd.heightHint = 200;
+//		gd.heightHint = 200;
 		control.setLayoutData(gd);
 
 		control = getRefreshButtonControl(parent);
@@ -183,12 +191,29 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 	}
 
 	public void updateReaderList() {
+		//restart OCF
+		try {
+			OCFWrapper.restart();
+		} catch (CardTerminalException e) {
+			GtErrorLogger.log(Activator.PLUGIN_ID, e);
+		} catch (OpenCardPropertyLoadingException e) {
+			GtErrorLogger.log(Activator.PLUGIN_ID, e);
+		} catch (CardServiceException e) {
+			GtErrorLogger.log(Activator.PLUGIN_ID, e);
+		} catch (ClassNotFoundException e) {
+			GtErrorLogger.log(Activator.PLUGIN_ID, e);
+		}
+		
 		//create buttons
 		createReaderRadioButtons(radioBox);
 		radioBox.pack();
 		
 		//select the correct button
 		doLoad();
+		
+		//reorder layout
+		parent.pack();
+		parent.layout();
 	}
 
 	@Override
@@ -220,8 +245,12 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 	@Override
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
+		this.enabled = enabled;
 		for (int i = 0; i < radioButtons.length; i++) {
 			radioButtons[i].setEnabled(enabled);
+		}
+		if (btnRefresh != null) {
+			btnRefresh.setEnabled(enabled && refreshEnabled);
 		}
 
 	}
@@ -296,6 +325,13 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 
 	public Composite getParent() {
 		return parent;
+	}
+
+	public void setRefreshEnabled(boolean newRefreshEnabled) {
+		refreshEnabled = newRefreshEnabled;
+		if (btnRefresh != null) {
+			btnRefresh.setEnabled(enabled && refreshEnabled);
+		}
 	}
 
 }
