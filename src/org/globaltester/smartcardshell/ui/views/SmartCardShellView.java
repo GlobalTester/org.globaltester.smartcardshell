@@ -252,14 +252,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 
 	@Override
 	public boolean trace(String className, LogLevel logLevel, Object obj) {
-		final String s = obj.toString();
-		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				sTxtConsoleOut.append(s+"\n");
-			}
-		});
+		sTxtConsoleOut.append(obj.toString()+"\n");
 		return true;
 	}
 
