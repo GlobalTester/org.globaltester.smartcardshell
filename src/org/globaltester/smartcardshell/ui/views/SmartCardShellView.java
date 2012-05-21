@@ -9,6 +9,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -247,12 +248,16 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	@Override
 	public void mark() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public boolean trace(String className, LogLevel logLevel, Object obj) {
-		sTxtConsoleOut.append(obj.toString()+"\n");
+		try {
+			sTxtConsoleOut.append(obj.toString() + "\n");
+		} catch (SWTException e) {
+			//this indicates access to the tracer from outside of this view
+			//this can be silently ignored
+		}
 		return true;
 	}
 
