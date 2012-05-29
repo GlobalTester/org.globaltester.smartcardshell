@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.help.toc">
       <tocProvider
-            class="org.globaltester.smartcardshell.doc.ScshCommandTocProvider">
+            class="org.globaltester.smartcardshell.help.ScshCommandTocProvider">
       </tocProvider>
    </extension>
 

@@ -1,4 +1,4 @@
-package org.globaltester.smartcardshell.doc;
+package org.globaltester.smartcardshell.help;
 
 import org.eclipse.help.AbstractTocProvider;
 import org.eclipse.help.ITocContribution;
