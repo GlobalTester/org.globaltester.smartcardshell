@@ -7,7 +7,7 @@ import org.globaltester.help.Toc;
 import org.globaltester.help.Topic;
 import org.globaltester.smartcardshell.ProtocolExtensions;
 
-public class ScshCommandReferenceToc extends Toc{
+public class ScshCommandReferenceToc extends Toc {
 
 	private static ScshCommandReferenceToc instance;
 
@@ -24,22 +24,20 @@ public class ScshCommandReferenceToc extends Toc{
 
 	private static void initializeInstance() {
 		instance = new ScshCommandReferenceToc("SCSH commands", "asfd");
-		
-		//create main topic with href to static content
-		Topic t = new Topic("SmartCardShell command reference", "html/user/reference/ScshCommandReference.html");
+
+		// create main topic with href to static content
+		Topic t = new Topic("SmartCardShell command reference",
+				"html/user/reference/ScshCommandReference.html");
 		instance.addTopic(t);
-		
-		//FIXME create subTopics for each protocol
-		t.addSubtopic(new Topic("sample","wrongURL"));
-		
-		IConfigurationElement[] configElements = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(ProtocolExtensions.PROTOCOLS_EXTENSION_POINT);
-			for (IConfigurationElement curConfigElem : configElements) {
-					t.addSubtopic(new Topic(curConfigElem.getAttribute("name"), "wrongURL"));
-//					t.addSubtopic(new ProtocolReferenceTopic(curConfigElem));
-			}
-		
-		
+
+		// create subTopics for each protocol
+		IConfigurationElement[] configElements = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
+						ProtocolExtensions.PROTOCOLS_EXTENSION_POINT);
+		for (IConfigurationElement curConfigElem : configElements) {
+			t.addSubtopic(new ProtocolReferenceTopic(curConfigElem));
+		}
+
 	}
 
 	private void addTopic(Topic t) {
@@ -47,6 +45,5 @@ public class ScshCommandReferenceToc extends Toc{
 			topics.add(t);
 		}
 	}
-
 
 }

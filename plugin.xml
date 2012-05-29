@@ -7,5 +7,11 @@
             class="org.globaltester.smartcardshell.help.ScshCommandTocProvider">
       </tocProvider>
    </extension>
+   <extension
+         point="org.eclipse.help.contentProducer">
+      <contentProducer
+            producer="org.globaltester.smartcardshell.help.ContentProducer">
+      </contentProducer>
+   </extension>
 
 </plugin>
