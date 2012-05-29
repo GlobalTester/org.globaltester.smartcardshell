@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Smart Card Shell command reference</title>
+</head>
+<body>
+
+	<h1>Smart Card Shell command reference</h1>
+	<p>Both the SmartCardShellView and the script tags within test
+		specifications use the SmartCardShell provided by CardContact as
+		execution environment. The Smart Card Shell uses JavaScript as command
+		and script language provided by the Mozilla Rhino Engine.</p>
+	<p>
+		Several GlobalPlatform and OpenSCDP scripting classes are already
+		included. These are well documented by the authors at <a
+			href="http://www.openscdp.org/scsh3/">http://www.openscdp.org/scsh3/</a>.
+	</p>
+	<p>
+		Additionally HJP Consulting GmbH extends instances of the
+		<code>Card</code>
+		class with special methods to allow easier access to commands and
+		protocols. Which commands and protocols you can use depends on the set
+		of available plug-ins. Each plug-in providing additional functionality
+		also extends this help section and you will find a description of the
+		available commands in the subsections of this chapter.
+	</p>
+	<p>
+		In general GlobalTester extends the functionality using methods and
+		fields using the form of
+		<code>card.gt_&lt;protocol&gt;_&lt;method&gt;(param, param, ...)</code>
+		. Details on parameters, return values etc. can be found in the
+		corresponding sections of this documentation.
+	</p>
+</body>
+</html>

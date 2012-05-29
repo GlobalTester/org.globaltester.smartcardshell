@@ -5,6 +5,7 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
+	public static final String PLUGIN_ID = "org.globaltester.smartcardshell.doc";
 	private static BundleContext context;
 
 	static BundleContext getContext() {

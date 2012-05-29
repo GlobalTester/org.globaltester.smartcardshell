@@ -11,8 +11,7 @@ public class ScshCommandTocProvider extends AbstractTocProvider {
 
 	@Override
 	public ITocContribution[] getTocContributions(String locale) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ITocContribution[]{ScshCommandReferenceTocContrib.getInstance()};
 	}
 
 }
