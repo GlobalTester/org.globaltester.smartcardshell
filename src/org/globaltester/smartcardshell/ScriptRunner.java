@@ -241,7 +241,6 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            the context to install the protocols into
 	 */
 	private void initExtensionPoints(Context cx) {
-		//XXX
 		for (IScshProtocolProvider curProtocolProvider : ProtocolExtensions.getInstance().getAllAvailableProtocols()) {
 			
 			for (Iterator<String> commandIter = curProtocolProvider
