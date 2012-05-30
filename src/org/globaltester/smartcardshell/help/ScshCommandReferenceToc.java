@@ -6,6 +6,7 @@ import org.eclipse.help.IToc;
 import org.globaltester.help.Toc;
 import org.globaltester.help.Topic;
 import org.globaltester.smartcardshell.ProtocolExtensions;
+import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 
 public class ScshCommandReferenceToc extends Toc {
 
@@ -35,7 +36,14 @@ public class ScshCommandReferenceToc extends Toc {
 				.getExtensionRegistry().getConfigurationElementsFor(
 						ProtocolExtensions.PROTOCOLS_EXTENSION_POINT);
 		for (IConfigurationElement curConfigElem : configElements) {
-			t.addSubtopic(new ProtocolReferenceTopic(curConfigElem));
+
+			String curProtocolName = curConfigElem.getAttribute("name");
+			IScshProtocolProvider curProtocol = ProtocolExtensions.getInstance().get(
+					curProtocolName);
+			if ((curProtocol != null) && (curProtocol.getCommands() != null)
+					&& (curProtocol.getCommands().size() > 0)) {
+				t.addSubtopic(new ProtocolReferenceTopic(curConfigElem));
+			}
 		}
 
 	}
