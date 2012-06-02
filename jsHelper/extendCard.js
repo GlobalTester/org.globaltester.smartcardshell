@@ -2,8 +2,6 @@
  * Define GlobalTester specific extensions to Card object
  */ 
 
-//Card.prototype.gt = new function(){};
-
 Card.prototype.gt_sendCommand = function(cmdAPDU) {
 	return this.gt_SecureMessaging_sendCommand(cmdAPDU);
 }
