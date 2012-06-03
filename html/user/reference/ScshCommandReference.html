@@ -28,9 +28,77 @@
 	<p>
 		In general GlobalTester extends the functionality using methods and
 		fields using the form of
-		<code>card.gt_&lt;protocol&gt;_&lt;method&gt;(param, param, ...)</code>
+		<code>card.gt_&lt;protocol&gt;_&lt;method&gt;(param, param,
+			...)</code>
 		. Details on parameters, return values etc. can be found in the
 		corresponding sections of this documentation.
 	</p>
+	<p>Additionally there are a few methods in the card object that are
+		not directly associated with a protocol. These add GlobalTester
+		specific logging for APDU transfer and some shortcuts for handling of
+		secure messaging.</p>
+
+	<h2>Command summary</h2>
+	<table>
+		<tr>
+			<td><a href="#gt_reset"><code>card.gt_reset()</code> </a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perform
+				a cold reset on the card.</td>
+		</tr>
+		<tr>
+			<td><a href="#gt_sendPlain"><code>card.gt_sendPlain(cmdAPDU)</code>
+			</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send an APDU to the card and
+				receive the response.</td>
+		</tr>
+		<tr>
+			<td><a
+				href="scshprotocols/SecureMessaging.html#gt_SecureMessaging_sendSM"><code>card.gt_sendSM(cmdAPDU)</code>
+			</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shortcut for <a
+				href="scshprotocols/SecureMessaging.html#gt_SecureMessaging_sendSM">card.gt_SecureMessagign_sendSM()</a>.
+				Wraps the given plain APDU in valid secure messaging, transmits
+				SM-APDU to the card and processes the response</td>
+		</tr>
+		<tr>
+			<td><a
+				href="scshprotocols/SecureMessaging.html#gt_SecureMessaging_sendCommand"><code>card.gt_sendCommand(cmdAPDU)</code>
+			</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shortcut for <a
+				href="scshprotocols/SecureMessaging.html#gt_SecureMessaging_sendSM">card.gt_SecureMessagign_sendCommand()</a>.
+				Sends an APDU to the card, depending on the current state of
+				secure messaging SM is used or not.</td>
+		</tr>
+	</table>
+	<h2>Command details</h2>
+	<h3>
+		<a name="gt_reset">reset</a>
+	</h3>
+	<code>card.gt_reset()</code>
+	<p>Perform a cold reset on the card and reset secure messaging
+		state.</p>
+	<p>
+		<b>Returns:</b><br />ATR as returned by the card
+	</p>
+	<hr />
+	<h3>
+		<a name="gt_sendPlain">sendPlain</a>
+	</h3>
+	<code>card.gt_sendPlain(cmdAPDU)</code>
+	<p>
+		Send an APDU to the card and receive the response. The APDU and the
+		response are logged within GlobalTester logging mechanisms. <br />
+		Beside logging the call is forwarded to the original card.sendPlain,
+		which transmits the APDU, receives the response and updates fields of
+		the card object. The fields SW, SW1, SW2 and response are updated with
+		the values returned by card.
+	</p>
+	<p>
+		<b>Parameters:</b><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>cmdAPDU</code>
+		- ByteString(byte[]) containing the plain CommandAPDU to be
+		transmitted<br />
+	</p>
+	<p>
+		<b>Returns:</b><br />Response as returned by the card
+	</p>
+	<hr />
+
 </body>
 </html>

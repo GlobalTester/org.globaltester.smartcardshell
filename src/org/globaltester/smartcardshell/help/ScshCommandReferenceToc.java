@@ -24,7 +24,7 @@ public class ScshCommandReferenceToc extends Toc {
 	}
 
 	private static void initializeInstance() {
-		instance = new ScshCommandReferenceToc("SCSH commands", "asfd");
+		instance = new ScshCommandReferenceToc("SCSH commands", "html/user/reference/ScshCommandReference.html");
 
 		// create main topic with href to static content
 		Topic t = new Topic("SmartCardShell command reference",

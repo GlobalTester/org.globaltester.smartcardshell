@@ -25,7 +25,7 @@ public class ProtocolReferenceTopic extends Topic {
 
 		IScshProtocolProvider pExt = ProtocolExtensions.getInstance().get(name);
 
-		href = "html/user/refernce/scshprotocols/" + name + ".html";
+		href = "html/user/reference/scshprotocols/" + name + ".html";
 		String title = "";
 
 		StringBuffer helpPageContent = new StringBuffer();
@@ -52,8 +52,9 @@ public class ProtocolReferenceTopic extends Topic {
 		helpPageContent.append("\t\t<table>\n");
 		for (String curCommand : pExt.getCommands()) {
 			helpPageContent.append("\t\t<tr>");
-			helpPageContent.append("<td>"
-					+ getCommandCodeBlock(pExt, curCommand) + "<br/>");
+			helpPageContent.append("<td><a href=\"#"
+					+ getCommandAnchor(pExt, curCommand) + "\">"
+					+ getCommandCodeBlock(pExt, curCommand) + "</a><br/>");
 			helpPageContent.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 					+ pExt.getHelp(curCommand) + "</td>");
 			helpPageContent.append("</tr>");
@@ -95,7 +96,9 @@ public class ProtocolReferenceTopic extends Topic {
 	private String getDetailedCommandBlock(IScshProtocolProvider pExt,
 			String curCommand) {
 		StringBuffer commandBlock = new StringBuffer();
-		commandBlock.append("<h3>" + curCommand + "</h3>");
+		commandBlock.append("<h3><a name=\""
+				+ getCommandAnchor(pExt, curCommand) + "\">" + curCommand
+				+ "</a></h3>");
 		commandBlock.append(getCommandCodeBlock(pExt, curCommand));
 		commandBlock.append("<p>" + pExt.getHelp(curCommand) + "</p>");
 
@@ -103,7 +106,9 @@ public class ProtocolReferenceTopic extends Topic {
 		if ((params != null) && (params.size() > 0)) {
 			commandBlock.append("<p><b>Parameters:</b><br/>");
 			for (String curParam : params) {
-				commandBlock.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"+curParam+"</code> - " + pExt.getHelpParam(curCommand, curParam)+"<br/>");	
+				commandBlock.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"
+						+ curParam + "</code> - "
+						+ pExt.getHelpParam(curCommand, curParam) + "<br/>");
 			}
 			commandBlock.append("</p>");
 		}
@@ -116,5 +121,18 @@ public class ProtocolReferenceTopic extends Topic {
 		}
 
 		return commandBlock.toString();
+	}
+
+	/**
+	 * Build anchor identifier for the detailed description of the given
+	 * command.
+	 * 
+	 * @param pExt
+	 * @param curCommand
+	 * @return
+	 */
+	private String getCommandAnchor(IScshProtocolProvider pExt,
+			String curCommand) {
+		return "gt_" + pExt.getName() + "_" + curCommand;
 	}
 }
