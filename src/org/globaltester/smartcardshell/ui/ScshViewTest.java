@@ -1,57 +1,30 @@
 package org.globaltester.smartcardshell.ui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.globaltester.smartcardshell.ScriptRunner;
+import org.eclipse.core.runtime.CoreException;
 import org.globaltester.smartcardshell.ui.views.SmartCardShellView;
-import org.globaltester.swtbot.SwtBotHelper;
+import org.globaltester.swtbot.uihelper.GlobalTesterUiHelper;
+import org.globaltester.swtbot.uihelper.ScshViewUiHelper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ScshViewTest {
-
-	private SWTWorkbenchBot bot = new SWTWorkbenchBot();
-
-	@BeforeClass
-	public static void runBeforeClass() {
-		// use EN_US keyboard layout, this is the only one natively supported by
-		// SWTBot this makes typeText possible for "simple characters",
-		// special chars will still produce errors
-		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
-	}
 	
 	@Before
-	public void runBefore() {
-		SwtBotHelper.resetWorkbenchState(bot);
+	public void runBefore() throws CoreException {
+		GlobalTesterUiHelper.init();
 	}
 
 	/**
 	 * Test execution of a simple command using the command input text field
+	 * @throws InterruptedException 
 	 * 
 	 * @throws Exception
 	 */
 	@Test
-	public void testExecuteCommand() throws Exception {
-		//get the GUI elements
-		String scshBanner = ScriptRunner.getBanner();
-		SWTBotStyledText scshOut = bot.styledText(scshBanner);
-		SWTBotText scshCommand = bot.textWithLabel("scsh>");
-		assertNotNull(scshOut);
-		assertNotNull(scshCommand);
-
-		//enter and execute a command
-		scshCommand.setFocus();
-		scshCommand.setText("5+9;");
-		scshCommand.typeText("\n");
-		
-		//assert the correct result
-		System.out.println(scshOut.getText());
-		assertEquals(scshBanner + "\nscsh(2)> 5+9;\n"+SmartCardShellView.RETURN_PROMPT+"14", scshOut.getText());
+	public void testExecuteCommand() {
+		ScshViewUiHelper view = GlobalTesterUiHelper.focusScshView();
+		view.executeCommand("5+9;");
+		String expectedResult = "\nscsh(2)> 5+9;\n"+SmartCardShellView.RETURN_PROMPT+"14";
+		view.consoleContainsString(expectedResult);
 	}
 }
