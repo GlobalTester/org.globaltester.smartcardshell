@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ScshViewTest {
-	
+	String expectedResult = SmartCardShellView.RETURN_PROMPT+"14";
+	String command = "5+9;";
 	@Before
 	public void runBefore() throws CoreException {
 		GlobalTesterUiHelper.init();
@@ -23,8 +24,7 @@ public class ScshViewTest {
 	@Test
 	public void testExecuteCommand() {
 		ScshViewUiHelper view = GlobalTesterUiHelper.focusScshView();
-		view.executeCommand("5+9;");
-		String expectedResult = "\nscsh(2)> 5+9;\n"+SmartCardShellView.RETURN_PROMPT+"14";
-		view.consoleContainsString(expectedResult);
+		view.executeCommand(command);
+		view.consoleContainsString("\nscsh(2)> " + command + "\n" + expectedResult);
 	}
 }
