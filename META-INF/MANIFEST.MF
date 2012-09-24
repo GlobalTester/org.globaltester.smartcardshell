@@ -137,4 +137,3 @@ Export-Package: de.cardcontact.scdp.cardsim,
  org.mozilla.javascript.xml,
  org.mozilla.javascript.xml.impl.xmlbeans,
  org.mozilla.javascript.xmlimpl
-Eclipse-ExtensibleAPI: true
