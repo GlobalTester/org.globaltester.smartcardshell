@@ -1,6 +1,10 @@
 package org.globaltester.smartcardshell.ui;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.eclipse.core.runtime.CoreException;
+import org.globaltester.junit.JUnitHelper;
 import org.globaltester.smartcardshell.ui.views.SmartCardShellView;
 import org.globaltester.swtbot.uihelper.GlobalTesterUiHelper;
 import org.globaltester.swtbot.uihelper.ScshViewUiHelper;
@@ -26,5 +30,15 @@ public class ScshViewTest {
 		ScshViewUiHelper view = GlobalTesterUiHelper.focusScshView();
 		view.executeCommand(command);
 		view.consoleContainsString("\nscsh(2)> " + command + "\n" + expectedResult);
+	}
+	
+	@Test
+	public void testExecuteJsFile() throws IOException{
+		File script = JUnitHelper.createTemporaryFile("script");
+		JUnitHelper.copyPluginFiles(script, Activator.PLUGIN_ID + ".test", "files", "testscript.js");
+		ScshViewUiHelper view = GlobalTesterUiHelper.focusScshView();
+		view.executeScriptByToolbar(script);
+		view.consoleContainsString(expectedResult);
+
 	}
 }
