@@ -34,6 +34,7 @@
 <stringAttribute key="product" value="org.globaltester.rcp.product"/>
 <booleanAttribute key="run_in_ui_thread" value="false"/>
 <setAttribute key="selected_features">
+<setEntry value="org.globaltester.platform:default"/>
 <setEntry value="org.globaltester.rcp.product.test:default"/>
 <setEntry value="org.globaltester.rcp.product:default"/>
 </setAttribute>
