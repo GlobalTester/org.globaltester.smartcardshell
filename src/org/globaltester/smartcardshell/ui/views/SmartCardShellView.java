@@ -19,7 +19,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -29,6 +28,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.globaltester.core.ui.DialogOptions;
+import org.globaltester.core.ui.GtUiHelper;
 import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.mozilla.javascript.Context;
@@ -176,12 +177,12 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	private void makeActions() {
 		execFileAction = new Action() {
 			public void run() {
-				FileDialog fileDialog = new FileDialog(parentShell);
+				DialogOptions dialogOptions = new DialogOptions();
 //				fileDialog.setFilterPath("/etc");
-				fileDialog.setFilterExtensions(new String[] { "*.js", "*" });
-				fileDialog.setFilterNames(new String[] { "JavaScript files (*.js)", "All files (*)" });
-				fileDialog.setText("FileDialog");
-				String selectedFile = fileDialog.open();
+				dialogOptions.setFilterExtensions(new String[] { "*.js", "*" });
+				dialogOptions.setFilterNames(new String[] { "JavaScript files (*.js)", "All files (*)" });
+				dialogOptions.setText("FileDialog");
+				String selectedFile = GtUiHelper.openDirectoryDialog(parentShell, dialogOptions);
 				if (selectedFile != null) {
 					String result = "";
 					try {
@@ -190,7 +191,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 						result = e.getMessage();
 						throw e;
 					} finally {
-						sTxtConsoleOut.append(RETURN_PROMPT+result);
+						sTxtConsoleOut.append("\n" + RETURN_PROMPT+result);
 					}
 				}
 				
