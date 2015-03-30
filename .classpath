@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
-	   <accessrules>
-            <accessrule kind="accessible" pattern="javax/smartcardio/**"/>
-            <accessrule kind="accessible" pattern="sun/security/smartcardio/**"/>
-        </accessrules>
-    </classpathentry>
+		<accessrules>
+			<accessrule kind="accessible" pattern="javax/smartcardio/**"/>
+			<accessrule kind="accessible" pattern="sun/security/smartcardio/**"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/bcprov-jdk16-145-CC.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/js.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/js.jar" sourcepath="C:/Develop/rhino1_7R4/src"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/ocf-cc.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scdp4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scsh3.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/xmldsig.jar"/>
 	<classpathentry kind="lib" path="scsh3.7.989/lib/opensc-java.jar"/>
+	<classpathentry kind="lib" path="C:/Develop/eclipse-SDK-3.6.2-gt-dev-default/plugins/org.eclipse.wst.jsdt.debug.rhino.debugger_1.0.1.v201008170101.jar"/>
+	<classpathentry kind="lib" path="C:/Develop/eclipse-SDK-3.6.2-gt-dev-default/plugins/org.eclipse.wst.jsdt.debug.rhino_1.0.2.v201109150205.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
