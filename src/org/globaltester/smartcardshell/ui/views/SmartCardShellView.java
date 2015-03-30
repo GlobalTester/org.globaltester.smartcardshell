@@ -33,6 +33,7 @@ import org.globaltester.core.ui.GtUiHelper;
 import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 
 import de.cardcontact.scdp.js.GPTracer;
 
@@ -55,7 +56,11 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
 
-		cx = Context.enter();
+		// init JS ScriptRunner and Context (factory is needed for listener for
+		// debugger)
+		ContextFactory factory = new ContextFactory();
+		cx = factory.enterContext();
+		
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.init(cx);
 		scriptRunner.setPromptString("scsh");
@@ -186,7 +191,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 				if (selectedFile != null) {
 					String result = "";
 					try {
-						result = scriptRunner.evaluateFile(cx, selectedFile);
+						result = scriptRunner.evaluateAndDebugFile(cx, selectedFile, false);
 					} catch (RuntimeException e) {
 						result = e.getMessage();
 						throw e;
