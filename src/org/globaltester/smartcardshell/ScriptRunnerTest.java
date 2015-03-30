@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 
 /**
  * Test on the implementaiton of the SkriptRunner
@@ -42,8 +43,11 @@ public class ScriptRunnerTest {
 	@Test
 	public void testInitialCardConfig() throws Exception {
 
-		// init JS ScriptRunner and Context
-		Context cx = Context.enter();
+		// init JS ScriptRunner and Context (factory is needed for listener for
+		// debugger)
+		ContextFactory factory = new ContextFactory();
+		Context cx = factory.enterContext();
+
 		ScriptRunner sr = new ScriptRunner(cx, "");
 		sr.init(cx);
 		sr.initCard(cx, "card", new CardConfig());
