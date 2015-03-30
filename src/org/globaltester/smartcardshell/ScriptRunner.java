@@ -17,12 +17,16 @@ import org.globaltester.cardconfiguration.CardConfig;
 import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Function;
-import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.JavaScriptException;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+
+import org.mozilla.javascript.*; //TODO should this be restricted to necessary libs?
+import org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger;
+
+//import org.mozilla.javascript.Context;
+//import org.mozilla.javascript.Function;
+//import org.mozilla.javascript.ImporterTopLevel;
+//import org.mozilla.javascript.JavaScriptException;
+//import org.mozilla.javascript.Scriptable;
+//import org.mozilla.javascript.ScriptableObject;
 
 import de.cardcontact.scdp.engine.VersionInfo;
 import de.cardcontact.scdp.js.GPRuntime;
@@ -56,7 +60,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		ScriptRunner shell = (ScriptRunner) getTopLevelScope(thisObj);
 		for (int i = 0; i < args.length; i++) {
-			shell.evaluateFile(cx, Context.toString(args[i]));
+			shell.evaluateAndDebugFile(cx, Context.toString(args[i]), false);
 		}
 	}
 
@@ -161,7 +165,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		String jsHelperFile = Activator.getPluginDir().toPortableString()
 				+ "jsHelper" + File.separator + "AllHelpers.js";
 		File f = new File(jsHelperFile);
-		evaluateFile(cx, f.getAbsolutePath());
+		evaluateAndDebugFile(cx, f.getAbsolutePath(), false); //check TODO anke
 
 		// handle extension points
 		initExtensionPoints(cx);
@@ -235,7 +239,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	}
 
 	/**
-	 * Create functions defined by protocols wihtin the given Context.
+	 * Create functions defined by protocols within the given Context.
 	 * 
 	 * @param cx
 	 *            the context to install the protocols into
@@ -451,7 +455,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 					sCSHconfigFile, null);
 		}
 		File f = new File(sCSHconfigFile);
-		evaluateFile(cx, f.getAbsolutePath());
+		evaluateAndDebugFile(cx, f.getAbsolutePath(), false);
 
 		// readerBuffer
 		// int readerBuffer =
@@ -623,6 +627,105 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				in.close();
 			} catch (Exception e) {
 				Context.reportError(e.toString());
+			}
+		}
+		return retVal;
+	}
+
+	/**
+	 * Load and evaluate file
+	 * 
+	 * @param cx
+	 *            current context
+	 * @param filename
+	 *            file to load and execute
+	 */
+	public String evaluateAndDebugFile(Context cx, String filename, boolean debugMode) {
+
+		//TODO only for first test: delete this!
+		debugMode = true;
+		//filename = "C:/Users/koelzer/eclipse/globalTesterWorkspace/plugins/org.globaltester.smartcardshell/jsHelper/PrintTest.xml.js";
+		
+		String retVal = "undefined";
+
+		FileReader in = null;
+		RhinoDebugger debugger = null;
+		GPRuntime gpr = (GPRuntime) ScriptableObject.getTopLevelScope(this);
+		String fullfilename = gpr.mapFilename(filename, GPRuntime.AUTO);
+
+		if (fullfilename == null) {
+			Context.reportError("File " + filename + " not found");
+		}
+
+		File oldCWD = this.currentWorkingDir;
+		File scriptfile = new File(fullfilename);
+		this.currentWorkingDir = scriptfile.getParentFile();
+
+		try {
+			in = new FileReader(scriptfile);
+		} catch (Exception e) {
+			this.currentWorkingDir = oldCWD;
+			Context.reportError(e.toString());
+			return e.getMessage();
+		}
+
+		if (debugMode) {
+			// suspend=y: the debugger should start up in suspended mode, meaning it
+			// will not continue execution until a client connects to it
+			// trace=y: status should be reported to the Eclipse console
+			// simply delete this if you do not want traces
+			// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
+			String rhino = "transport=socket,suspend=y,address=9000";
+
+			debugger = new RhinoDebugger(rhino);
+			try {
+				debugger.start();
+				System.out.println("Debugger started ...");
+				ContextFactory facto=cx.getFactory();
+				if (facto != null)
+					facto.addListener(debugger);
+				else {
+					System.err
+					.println("Error while starting the Rhino JavaScript Debugger. " + 
+							 "No factory given for context!");
+					debugMode = false; //do not continue doing debug actions
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.err
+						.println("Error while starting the Rhino JavaScript Debugger.");
+				e.printStackTrace(); //TODO: this should be sent to the user. popup? 
+			}
+		}
+		
+		try {
+			Object result = cx.evaluateReader(this, in,
+					scriptfile.getAbsolutePath(), 1, null);
+
+			if (result != Context.getUndefinedValue()) {
+				put("lastresult", this, result);
+				retVal = result.toString();
+			} else {
+				retVal = "undefined";
+			}
+		} catch (IOException e) {
+			Context.reportError(e.toString());
+		} finally {
+			this.currentWorkingDir = oldCWD;
+			try {
+				in.close();
+			} catch (Exception e) {
+				Context.reportError(e.toString());
+			}
+		}
+		
+		if (debugMode) {
+			try {
+				debugger.stop();
+			} catch (Exception e) {
+				System.err
+						.println("Error while stopping the Rhino JavaScript Debugger.");
+				e.printStackTrace();
 			}
 		}
 		return retVal;
