@@ -15,7 +15,5 @@
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scsh3.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/xmldsig.jar"/>
 	<classpathentry kind="lib" path="scsh3.7.989/lib/opensc-java.jar"/>
-	<classpathentry kind="lib" path="C:/Develop/eclipse-SDK-3.6.2-gt-dev-default/plugins/org.eclipse.wst.jsdt.debug.rhino.debugger_1.0.1.v201008170101.jar"/>
-	<classpathentry kind="lib" path="C:/Develop/eclipse-SDK-3.6.2-gt-dev-default/plugins/org.eclipse.wst.jsdt.debug.rhino_1.0.2.v201109150205.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
