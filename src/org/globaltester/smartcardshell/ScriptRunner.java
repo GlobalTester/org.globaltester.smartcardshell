@@ -641,11 +641,6 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 *            file to load and execute
 	 */
 	public String evaluateAndDebugFile(Context cx, String filename, boolean debugMode) {
-
-		//TODO only for first test: delete this!
-		debugMode = true;
-		//filename = "C:/Users/koelzer/eclipse/globalTesterWorkspace/plugins/org.globaltester.smartcardshell/jsHelper/PrintTest.xml.js";
-		
 		String retVal = "undefined";
 
 		FileReader in = null;
