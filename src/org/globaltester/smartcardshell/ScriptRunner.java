@@ -60,7 +60,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		ScriptRunner shell = (ScriptRunner) getTopLevelScope(thisObj);
 		for (int i = 0; i < args.length; i++) {
-			shell.evaluateAndDebugFile(cx, Context.toString(args[i]), false);
+//			shell.evaluateAndDebugFile(cx, Context.toString(args[i]), false);
+			shell.evaluateFile(cx, Context.toString(args[i]));
 		}
 	}
 
@@ -159,13 +160,14 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		// define AssertionError
 		String cmd = "defineClass(\"org.globaltester.smartcardshell.gp.AssertionError\")";
-		executeCommand(cx, cmd, "", -1);
+		executeCommand(cx, cmd, null, -1); //do not send "" as source filename, since Rhino debugger crashes in that case
 
 		// load helper
 		String jsHelperFile = Activator.getPluginDir().toPortableString()
 				+ "jsHelper" + File.separator + "AllHelpers.js";
 		File f = new File(jsHelperFile);
-		evaluateAndDebugFile(cx, f.getAbsolutePath(), false); //check TODO anke
+//		evaluateAndDebugFile(cx, f.getAbsolutePath(), false); //check TODO anke
+		evaluateFile(cx, f.getAbsolutePath());
 
 		// handle extension points
 		initExtensionPoints(cx);
@@ -190,7 +192,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			try {
 				// init card variable
 				String cmd = varName + " = new Card(_reader);";
-				executeCommand(cx, cmd, "", -1);
+				executeCommand(cx, cmd, null, -1); //do not send "" as source filename, since Rhino debugger crashes in that case
 
 				//import CardConfig into Scriptable
 				Object wrappedCardConfig = Context.javaToJS(cardConfig, this);
@@ -198,7 +200,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				
 				// set CardConfig as member variable
 				cmd = varName + ".gt_cardConfig = tmp;";
-				executeCommand(cx, cmd, "", -1);
+				executeCommand(cx, cmd, null, -1); //do not send "" as source filename, since Rhino debugger crashes in that case
 				
 				ScriptableObject.deleteProperty(this,"tmp");
 				
@@ -278,7 +280,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 				cmd += "print(\"calling " + functionName + "\");\n";
 				cmd += implementation + "\n";
 				cmd += "}\n";
-				executeCommand(cx, cmd, "", -1);
+				executeCommand(cx, cmd, null, -1); //source filename must be set to null, otherwise Rhino debugger crashes
 			}
 			
 		}
@@ -455,7 +457,8 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 					sCSHconfigFile, null);
 		}
 		File f = new File(sCSHconfigFile);
-		evaluateAndDebugFile(cx, f.getAbsolutePath(), false);
+//		evaluateAndDebugFile(cx, f.getAbsolutePath(), false);
+		evaluateFile(cx, f.getAbsolutePath());
 
 		// readerBuffer
 		// int readerBuffer =
@@ -644,7 +647,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 		String retVal = "undefined";
 
 		FileReader in = null;
-		RhinoDebugger debugger = null;
+//		RhinoDebugger debugger = null;
 		GPRuntime gpr = (GPRuntime) ScriptableObject.getTopLevelScope(this);
 		String fullfilename = gpr.mapFilename(filename, GPRuntime.AUTO);
 
@@ -664,34 +667,34 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			return e.getMessage();
 		}
 
-		if (debugMode) {
-			// suspend=y: the debugger should start up in suspended mode, meaning it
-			// will not continue execution until a client connects to it
-			// trace=y: status should be reported to the Eclipse console
-			// simply delete this if you do not want traces
-			// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
-			String rhino = "transport=socket,suspend=y,address=9000";
+//		if (debugMode) {
+//			// suspend=y: the debugger should start up in suspended mode, meaning it
+//			// will not continue execution until a client connects to it
+//			// trace=y: status should be reported to the Eclipse console
+//			// simply delete this if you do not want traces
+//			// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
+//			String rhino = "transport=socket,suspend=y,address=9000";
 
-			debugger = new RhinoDebugger(rhino);
-			try {
-				debugger.start();
-				System.out.println("Debugger started ...");
-				ContextFactory facto=cx.getFactory();
-				if (facto != null)
-					facto.addListener(debugger);
-				else {
-					System.err
-					.println("Error while starting the Rhino JavaScript Debugger. " + 
-							 "No factory given for context!");
-					debugMode = false; //do not continue doing debug actions
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.err
-						.println("Error while starting the Rhino JavaScript Debugger.");
-				e.printStackTrace(); //TODO: this should be sent to the user. popup? 
-			}
-		}
+//			debugger = new RhinoDebugger(rhino);
+//			try {
+//				debugger.start();
+//				System.out.println("Debugger started ...");
+//				ContextFactory facto=cx.getFactory();
+//				if (facto != null)
+//					facto.addListener(debugger);
+//				else {
+//					System.err
+//					.println("Error while starting the Rhino JavaScript Debugger. " + 
+//							 "No factory given for context!");
+//					debugMode = false; //do not continue doing debug actions
+//				}
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				System.err
+//						.println("Error while starting the Rhino JavaScript Debugger.");
+//				e.printStackTrace(); //TODO: this should be sent to the user. popup? 
+//			}
+//		}
 		
 		try {
 			Object result = cx.evaluateReader(this, in,
@@ -714,15 +717,15 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 			}
 		}
 		
-		if (debugMode) {
-			try {
-				debugger.stop();
-			} catch (Exception e) {
-				System.err
-						.println("Error while stopping the Rhino JavaScript Debugger.");
-				e.printStackTrace();
-			}
-		}
+//		if (debugMode) {
+//			try {
+//				debugger.stop();
+//			} catch (Exception e) {
+//				System.err
+//						.println("Error while stopping the Rhino JavaScript Debugger.");
+//				e.printStackTrace();
+//			}
+//		}
 		return retVal;
 	}
 
