@@ -191,7 +191,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 				if (selectedFile != null) {
 					String result = "";
 					try {
-						result = scriptRunner.evaluateAndDebugFile(cx, selectedFile, false);
+						result = scriptRunner.evaluateFile(cx, selectedFile);
 					} catch (RuntimeException e) {
 						result = e.getMessage();
 						throw e;
