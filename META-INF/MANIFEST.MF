@@ -10,15 +10,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.globaltester.logging;bundle-version="3.0.0",
  org.globaltester.cardconfiguration;bundle-version="3.0.0",
  org.eclipse.ui.workbench;bundle-version="3.6.2",
- org.eclipse.wst.jsdt.debug.rhino;bundle-version="1.0.1",
- org.eclipse.wst.jsdt.debug.rhino.debugger;bundle-version="1.0.1"
+ org.mozilla.javascript;bundle-version="1.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 DynamicImport-Package: *
 Bundle-ClassPath: .,
  scsh3.7.989/lib/bcmail-jdk15-143-CC.jar,
  scsh3.7.989/lib/bcprov-jdk16-145-CC.jar,
- scsh3.7.989/lib/js.jar,
  scsh3.7.989/lib/ocf-cc.jar,
  scsh3.7.989/lib/scdp4j.jar,
  scsh3.7.989/lib/scsh3.jar,
@@ -123,19 +121,4 @@ Export-Package: de.cardcontact.scdp.cardsim,
  org.globaltester.smartcardshell.preferences,
  org.globaltester.smartcardshell.protocols,
  org.jcprev.xml.dsig.internal,
- org.jcprev.xml.dsig.internal.dom,
- org.mozilla.classfile,
- org.mozilla.javascript,
- org.mozilla.javascript.debug,
- org.mozilla.javascript.jdk13,
- org.mozilla.javascript.jdk15,
- org.mozilla.javascript.optimizer,
- org.mozilla.javascript.regexp,
- org.mozilla.javascript.serialize,
- org.mozilla.javascript.tools,
- org.mozilla.javascript.tools.idswitch,
- org.mozilla.javascript.tools.jsc,
- org.mozilla.javascript.tools.shell,
- org.mozilla.javascript.xml,
- org.mozilla.javascript.xml.impl.xmlbeans,
- org.mozilla.javascript.xmlimpl
+ org.jcprev.xml.dsig.internal.dom
