@@ -126,7 +126,12 @@ defineClass("de.cardcontact.scdp.gp.GPAtr");
 defineClass("de.cardcontact.scdp.gp.Card");
 defineClass("de.cardcontact.scdp.gp.GPKey");
 defineClass("de.cardcontact.scdp.gp.GPCrypto");
-defineClass("de.cardcontact.scdp.gp.GPXML");
+
+//TODO AKR: the next line is commented out because it causes an org.mozilla.javascript.EvaluatorException: 
+//"jsFunction_parse": name "parse" is already in use".
+//check if this must be replaced somehow!
+//defineClass("de.cardcontact.scdp.gp.GPXML");
+
 defineClass("de.cardcontact.scdp.gp.GPTLV");
 defineClass("de.cardcontact.scdp.gp.GPTLVList");
 defineClass("de.cardcontact.scdp.gp.Application");
