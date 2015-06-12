@@ -31,6 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.globaltester.core.ui.DialogOptions;
 import org.globaltester.core.ui.GtUiHelper;
 import org.globaltester.smartcardshell.CommandHistory;
+import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
 import org.globaltester.smartcardshell.ScriptRunner;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -56,10 +57,8 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
 
-		// init JS ScriptRunner and Context (factory is needed for listener for
-		// debugger)
-		ContextFactory factory = new ContextFactory();
-		cx = factory.enterContext();
+		// init JS ScriptRunner and Context
+		Context cx = RhinoJavaScriptAccess.activateContext(false);
 		
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.init(cx);
@@ -145,7 +144,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 
 	protected void executeCommand(String cmd) {
 
-		// print promt and command in output widget
+		// print prompt and command in output widget
 		sTxtConsoleOut.append("\n" + scriptRunner.getInteractivePrompt() + "> "
 				+ cmd + "\n");
 		sTxtConsoleOut.setTopIndex(sTxtConsoleOut.getLineCount());
@@ -237,7 +236,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 
 		// exit ECMAScript context
 		cx = null;
-		Context.exit();
+		RhinoJavaScriptAccess.closeContext();
 	}
 
 	@Override
