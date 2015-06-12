@@ -49,6 +49,8 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	private ScriptRunner scriptRunner;
 	private Label lblPrompt;
 	private Context cx;
+	private RhinoJavaScriptAccess rhinoAccess = null;
+
 	
 	private Action execFileAction;
 	protected Shell parentShell;
@@ -57,8 +59,10 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
 
+		rhinoAccess = new RhinoJavaScriptAccess();
+
 		// init JS ScriptRunner and Context
-		Context cx = RhinoJavaScriptAccess.activateContext(false);
+		Context cx = rhinoAccess.activateContext(false);
 		
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.init(cx);
@@ -235,8 +239,9 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		super.dispose();
 
 		// exit ECMAScript context
+		rhinoAccess.closeContext();
 		cx = null;
-		RhinoJavaScriptAccess.closeContext();
+		rhinoAccess = null;
 	}
 
 	@Override
