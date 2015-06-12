@@ -18,7 +18,7 @@ public class RhinoJavaScriptAccess {
 	 * If a JavaScript debugger is active, this member stores a reference to it. 
 	 * Otherwise it is set to null.
 	 */
-	static protected RhinoDebugger debugger = null;
+	protected RhinoDebugger debugger = null;
 	
 	/**
 	 * Port number for socket communication. This is static because it must be 
@@ -70,7 +70,7 @@ public class RhinoJavaScriptAccess {
 	 * Otherwise it is set to null.
 
 	 */
-	static protected ContextFactory contextFactory = null;
+	protected ContextFactory contextFactory = null;
 
 	/**
 	 * Pure constructor (does nothing special)
@@ -82,7 +82,7 @@ public class RhinoJavaScriptAccess {
 	/**
 	 * @return the contextFactory
 	 */
-	static public ContextFactory getContextFactory() {
+	public ContextFactory getContextFactory() {
 		return contextFactory;
 	}
 
@@ -90,14 +90,14 @@ public class RhinoJavaScriptAccess {
 	 * @param contextFactory
 	 *            the contextFactory to set
 	 */
-	static public void setContextFactory(ContextFactory contextFact) {
+	public void setContextFactory(ContextFactory contextFact) {
 		contextFactory = contextFact;
 	}
 
 	/**
 	 * @return the debugger
 	 */
-	static public RhinoDebugger getDebugger() {
+	public RhinoDebugger getDebugger() {
 		return debugger;
 	}
 
@@ -105,7 +105,7 @@ public class RhinoJavaScriptAccess {
 	 * @param debugger
 	 *            the debugger to set
 	 */
-	static public void setDebugger(RhinoDebugger rhDebugger) {
+	public void setDebugger(RhinoDebugger rhDebugger) {
 		debugger = rhDebugger;
 	}
 
@@ -132,7 +132,7 @@ public class RhinoJavaScriptAccess {
 	 * @param debugMode indicates if the debugger should be started or not
 	 * @return the activated context
 	 */
-	static public Context activateContext(boolean debugMode) {
+	public Context activateContext(boolean debugMode) {
 		Context cx = null;
 
 		if (contextFactory == null) {
@@ -151,7 +151,7 @@ public class RhinoJavaScriptAccess {
 	/**
 	 * Stops the JavaScript debugger, if any is active, and exits the current context.
 	 */
-	static public void closeContext() {
+	public void closeContext() {
 		stopJSDebugger();
 		Context.exit();
 	}
@@ -162,7 +162,7 @@ public class RhinoJavaScriptAccess {
 	 * created, compare {@link #getCompositeClassLoaderForProtocols()}.
 	 * @return the {@link #contextFactory}
 	 */
-	static protected ContextFactory createContextFactory() {
+	protected ContextFactory createContextFactory() {
 
 		if (contextFactory == null) {
 			contextFactory = new ContextFactory();
@@ -178,16 +178,12 @@ public class RhinoJavaScriptAccess {
 		return contextFactory;
 	}
 
-	static public void startDebugging() {
+	public void startDebugging() {
 		try {
-//			RhinoDebugLaunchManager launchMan = new RhinoDebugLaunchManager();
-//			launchMan.readDebugLaunchConfiguration();
-			// TODO use correct port number! startJSDebugger(launchMan.getPortNo());
 			startJSDebugger(standardPortNum);
 
 			if (debugger != null) {
 				contextFactory.addListener(debugger);
-				//launchMan.startDebugLaunchConfiguration();
 			}
 		} catch (Exception exc) {
 			if (debugger != null)
@@ -200,7 +196,7 @@ public class RhinoJavaScriptAccess {
 		}
 	}
 
-	static protected void startJSDebugger(String portNum) {
+	protected void startJSDebugger(String portNum) {
 
 		System.out.println("Trying to start Rhino debugger ...");
 
@@ -210,15 +206,11 @@ public class RhinoJavaScriptAccess {
 		// simply delete this if you do not want traces
 		// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
 		String rhino = "transport=socket,suspend=y,address=" + portNum;
-		// suspend must be "no" here, because the debug launch is started
-		// programmatically
-		// directly behind startJSDebugger(); waiting must be prevented
-		// therefore!
 
 		try {
 			// TODO write some log message somewhere??
 			debugger = new RhinoDebugger(rhino);
-			// System.out.println("Please, activate Rhino JS launch now!");
+			// create debuggerStartedObject which is used in debug command handler
 			debuggerStartedObj = new Object(); 
 			debugger.start();
 			System.out.println("Debugger started!");
@@ -235,7 +227,7 @@ public class RhinoJavaScriptAccess {
 	/**
 	 * If there is an active JavaScript debugger, it is stopped.
 	 */
-	static protected void stopJSDebugger() {
+	protected void stopJSDebugger() {
 		if (debugger == null)
 			return;
 
