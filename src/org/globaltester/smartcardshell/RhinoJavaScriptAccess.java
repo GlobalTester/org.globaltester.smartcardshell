@@ -166,11 +166,8 @@ public class RhinoJavaScriptAccess {
 
 		if (contextFactory == null) {
 			contextFactory = new ContextFactory();
-			// TODO here we could add an appropriate class loader to avoid the
+			// here we add an appropriate class loader to avoid the
 			// class load problem of org.mozilla.javascript plugin
-			// factory.initApplicationClassLoader(getClass().getClassLoader());
-
-			// factory.initApplicationClassLoader(new ClassLoader() {});
 			contextFactory
 					.initApplicationClassLoader(getCompositeClassLoaderForProtocols());
 		}
