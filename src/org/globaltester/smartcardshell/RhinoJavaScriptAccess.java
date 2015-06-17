@@ -15,6 +15,14 @@ import org.mozilla.javascript.ContextFactory;
 public class RhinoJavaScriptAccess {
 
 	/**
+	 * This interface class is used for {@link #debuggerStartedObj} and serves 
+	 * as a place holder which can be filled with
+	 * functionality in later versions if needed to make some debugger information 
+	 * accessible.
+	 */
+	interface IDebuggerInfo {}
+	
+	/**
 	 * If a JavaScript debugger is active, this member stores a reference to it. 
 	 * Otherwise it is set to null.
 	 */
@@ -25,10 +33,10 @@ public class RhinoJavaScriptAccess {
 	 * settable from modules which do not have access to the debugger object.
 	 */
 	static protected String standardPortNum = "9000";
+	//TODO debuggers should additionally get an individual port number 
 	
 	/**
-	 * @see #standardPortNum
-	 * @return the standardPortNum
+	 * @return {@link #standardPortNum}
 	 */
 	public static String getStandardPortNum() {
 		return standardPortNum;
@@ -44,26 +52,18 @@ public class RhinoJavaScriptAccess {
 
 
 	/**
-	 * If this object is null no debugger has been started yet. This is static because it must be 
+	 * If this object with anonymous interface type is null, no debugger has been
+	 * started yet. This is static because it must be 
 	 * gettable from modules which do not have access to the debugger object.
 	 */
-	static protected Object debuggerStartedObj = null; //TODO how use this object correctly?
+	static protected IDebuggerInfo debuggerStartedObj = null; //TODO how use this object correctly?
 
 	/**
-	 * @return the debuggerStartedObj
+	 * @return {@link #debuggerStartedObj}
 	 */
-	public static Object getDebuggerStartedObj() {
+	public static IDebuggerInfo getDebuggerStartedObj() {
 		return debuggerStartedObj;
 	}
-
-// currently not useful:
-//	/**
-//	 * @param debuggerStartedObj the debuggerStartedObj to set
-//	 */
-//	public static void setDebuggerStartedObj(Object debuggerStartedObj) {
-//		RhinoJavaScriptAccess.debuggerStartedObj = debuggerStartedObj;
-//	}
-
 
 	/**
 	 * If a JavaScript context is active, this member stores a reference to its factory. 
@@ -95,7 +95,7 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
-	 * @return the debugger
+	 * @return {@link #debugger}
 	 */
 	public RhinoDebugger getDebugger() {
 		return debugger;
@@ -103,7 +103,7 @@ public class RhinoJavaScriptAccess {
 
 	/**
 	 * @param debugger
-	 *            the debugger to set
+	 *            the {@link #debugger} to set
 	 */
 	public void setDebugger(RhinoDebugger rhDebugger) {
 		debugger = rhDebugger;
@@ -208,7 +208,7 @@ public class RhinoJavaScriptAccess {
 			// TODO write some log message somewhere??
 			debugger = new RhinoDebugger(rhino);
 			// create debuggerStartedObject which is used in debug command handler
-			debuggerStartedObj = new Object(); 
+			debuggerStartedObj = new IDebuggerInfo() {};
 			debugger.start();
 			System.out.println("Debugger started!");
 		} catch (Exception e) {
