@@ -59,4 +59,27 @@ public class ScriptRunnerTest {
 		rhinoAccess.closeContext();
 	}
 
+	/**
+	 * Tests if the class loaders for smartcardshell protocol extensions
+	 * were properly loaded using BAC as an example.
+	 * @throws Exception if the "new" statement could not properly be executed (or sth. went
+	 * wrong when activating the context) 
+	 */
+	@Test
+	public void testProtocolClassLoader() throws Exception {
+
+		RhinoJavaScriptAccess rhinoAccess = new RhinoJavaScriptAccess();
+		
+		// init JS ScriptRunner and Context
+		Context cx = rhinoAccess.activateContext(false);
+
+		ScriptRunner sr = new ScriptRunner(cx, "");
+
+		// If the class loader for BAC was not activated, this will throw an exception:
+		String s = "new Packages.org.globaltester.smartcardshell.protocols.bac.BAC();";
+		String result = sr.executeCommand(cx, s);
+
+		rhinoAccess.closeContext();
+	}
+
 }
