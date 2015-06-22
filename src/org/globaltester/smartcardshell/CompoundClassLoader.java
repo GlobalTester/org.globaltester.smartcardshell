@@ -2,60 +2,68 @@ package org.globaltester.smartcardshell;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
+
 
 /**
  * This class loader is used in GT for collecting several class loaders of protocol
  * extensions and create a compound class loader from them. Thus all these classes
  * can be loaded explicitly. This is used e.g.
  * to avoid the "DynamicImport" of classes formerly used in smartcardshell.
-   */
+ * 
+ * The actual loading is executed by the standard method java.lang.ClassLoader.loadClass().
+ * 
+ * @author koelzer
+ **/
 public class CompoundClassLoader extends ClassLoader {
+	
+	/**
+	 * List of class loaders which shall be activated
+	 */
+	protected List<ClassLoader> loaderList = Collections.synchronizedList(new ArrayList<ClassLoader>());
 
     /**
-     * Collection of class loaders which shall be activated.
+     * Adds some basic class loaders to the {@link #loaderList}
      */
-    private final List loaderList = Collections.synchronizedList(new ArrayList());
-
     public CompoundClassLoader() {
-        add(Object.class.getClassLoader()); // standard loader
-        add(getClass().getClassLoader()); // class loader for this class
+        addClass(Object.class.getClassLoader()); // basic class loader
+        addClass(getClass().getClassLoader()); // class loader for this class
     }
 
     /**
-     * Adds a class loader if it was not already contained in the list of class loaders
-     * @param classLoader
+     * Adds a class loader to {@link #loaderList} if it is not already contained
+     * @param loader
      */
-    public void add(ClassLoader classLoader) {
-        if (classLoader != null) {
-        	if (! loaderList.contains(classLoader))
-        		loaderList.add(0, classLoader);
-        }
-    }
-
+   	public void addClass(ClassLoader loader) {
+        if (loader != null) {
+        	if (! loaderList.contains(loader))
+        		loaderList.add(0, loader);
+        }		
+	}
+   	
     /** 
      * Loads all classes which were added to {@link #loaderList} using the standard loadClass method.
      * @see java.lang.ClassLoader#loadClass(java.lang.String)
      */
     @Override
-    public Class loadClass(String name) throws ClassNotFoundException {
-        for (Iterator iterator = loaderList.iterator(); iterator.hasNext();) {
-            ClassLoader classLoader = (ClassLoader) iterator.next();
+    public Class<?> loadClass(String className) throws ClassNotFoundException {
+        for (Iterator<ClassLoader> iterator = loaderList.iterator(); iterator.hasNext();) {
+            ClassLoader classLoader = iterator.next();
             try {
-                return classLoader.loadClass(name);
+                return classLoader.loadClass(className);
             } catch (ClassNotFoundException notFound) {
                 // nothing special to do
             }
         }
-        // One more thing to try: the context class loader associated with the current thread. Often used in j2ee servers.
-        // Note: The contextClassLoader cannot be added to the classLoaders list as this could be 
-        // a different thread
+              
+        // if loading using the classLoader list above was not successful, use the context
+        // class loader from the current thread
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         if (contextClassLoader != null) {
-            return contextClassLoader.loadClass(name);
+            return contextClassLoader.loadClass(className);
         } else {
-            throw new ClassNotFoundException(name);
+            throw new ClassNotFoundException(className);
         }
     }
 }
