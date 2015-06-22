@@ -18,14 +18,12 @@ import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 
-import org.mozilla.javascript.*; //TODO should this be restricted to necessary functionality?
-//import org.mozilla.javascript.Context;
-//import org.mozilla.javascript.Function;
-//import org.mozilla.javascript.ImporterTopLevel;
-//import org.mozilla.javascript.JavaScriptException;
-//import org.mozilla.javascript.Scriptable;
-//import org.mozilla.javascript.ScriptableObject;
-
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.JavaScriptException;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 import de.cardcontact.scdp.engine.VersionInfo;
 import de.cardcontact.scdp.js.GPRuntime;
