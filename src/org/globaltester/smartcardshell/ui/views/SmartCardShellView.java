@@ -59,11 +59,11 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public SmartCardShellView() throws OpenCardException,
 			ClassNotFoundException {
 
+		// activate Rhino JS Context
 		rhinoAccess = new RhinoJavaScriptAccess();
-
-		// init JS ScriptRunner and Context
 		Context cx = rhinoAccess.activateContext(false);
 		
+		// init JS ScriptRunner
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.init(cx);
 		scriptRunner.setPromptString("scsh");
@@ -238,8 +238,8 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	public void dispose() {
 		super.dispose();
 
-		// exit ECMAScript context
-		rhinoAccess.closeContext();
+		// exit JavaScript context
+		rhinoAccess.exitContext();
 		cx = null;
 		rhinoAccess = null;
 	}
