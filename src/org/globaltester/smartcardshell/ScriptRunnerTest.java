@@ -71,10 +71,11 @@ public class ScriptRunnerTest {
 	@Test
 	public void testProtocolClassLoader() throws Exception {
 
-		// init JS ScriptRunner and Context
+		// activate Rhino JS Context
 		RhinoJavaScriptAccess rhinoAccess = new RhinoJavaScriptAccess();
 		Context cx = rhinoAccess.activateContext(false);
 
+		// init JS ScriptRunner
 		ScriptRunner sr = new ScriptRunner(cx, "");
 
 		// If the class loader for BAC was not activated, this will throw an exception:
