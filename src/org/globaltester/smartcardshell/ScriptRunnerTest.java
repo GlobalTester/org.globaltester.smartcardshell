@@ -42,10 +42,11 @@ public class ScriptRunnerTest {
 	@Test
 	public void testInitialCardConfig() throws Exception {
 
-		// init JS ScriptRunner and Context
+		// activate Rhino JS Context
 		RhinoJavaScriptAccess rhinoAccess = new RhinoJavaScriptAccess();
 		Context cx = rhinoAccess.activateContext(false);
 
+		// init JS ScriptRunner
 		ScriptRunner sr = new ScriptRunner(cx, "");
 		sr.init(cx);
 		sr.initCard(cx, "card", new CardConfig());
