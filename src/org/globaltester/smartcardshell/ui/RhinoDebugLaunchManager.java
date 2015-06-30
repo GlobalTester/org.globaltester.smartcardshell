@@ -13,40 +13,149 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.debug.ui.DebugUITools;
+import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
 
 
 /**
- * This class implements an interface to the Rhino JavaScript debugger. The
- * Rhino debugger can be started. A Rhino debug launch configuration can be
- * started automatically. Debug configuration settings for this can be read from
- * file.
+ * For Rhino JavaScript debugging two threads are needed. One is the debugger
+ * thread, one the debugger launch thread. These two threads communicate with
+ * one another using a socket. RhinoDebugLaunchManager provides functionality
+ * for reading a launch configuration from the file system, setting the port
+ * number for the socket communication and starting the debugger launch thread.
+ * The realization of the thread communication is currently done in
+ * {@link org.globaltester.testrunner.ui.commands.DebugTestCommandHandler}.
+ * See also {@link org.globaltester.smartcardshell.RhinoJavaScriptAccess} for
+ * details on the debugger thread.<br>
+ * 
+ * Usage: Call {@link #readDebugLaunchConfiguration()} to read the launch
+ * configuration from the file system. Then communicate this port number using
+ * {@link RhinoJavaScriptAccess#setStandardPortNum(String)}. The launch can then
+ * be started using {@link #startDebugLaunchConfiguration()}. Thread
+ * synchronisation must implemented for these two processes analogous to
+ * ->DebugTestCommandHandler (see above).
  * 
  * @author koelzer
  *
  */
 public class RhinoDebugLaunchManager extends LaunchManager {
-
-	/**
-	 * Name for the standard launch configuration file, stored on the file system under the default Eclipse
-	 * launch configuraton path.
-	 */
-	protected String standardLaunchConfigFileName = "runJSDebugger";
 	
 	/**
-	 * This stores the configuration information read from {@link #standardLaunchConfigFileName}
+	 * Name for the standard launch configuration file, stored on the file
+	 * system under the default Eclipse launch configuraton path. Programmers
+	 * can decide to use a different name and change this value (see
+	 * {@link #setStandardLaunchConfigFileName(String)}).
 	 */
-	protected LaunchConfiguration stdLConfig = null;
+	protected static String standardLaunchConfigFileName = "runJSDebugger";
+	
+	/**
+	 * Attribute name for the key under which the port number ({@link #portNo})
+	 * is stored in the {@link #standardLaunchConfigFileName}.
+	 */
+	protected final static String PORT_KEY = "port";
+	
+	/**
+	 * This stores the configuration information read from
+	 * {@link #standardLaunchConfigFileName}. Since the configuration may be
+	 * changed by the user at runtime, this can be different for different
+	 * instances.
+	 */
+	protected LaunchConfiguration launchConfig = null;
 
 	/**
-	 * Port number for the socket communication of the Rhino debugger thread and its debug launch thread. 
+	 * Port number for the socket communication of the Rhino debugger thread and
+	 * its debug launch thread. This value for this is currently set from the
+	 * launch configuration file given by {@link #standardLaunchConfigFileName}.
 	 */
 	protected String portNo = "9000";
 
 	/**
-	 * Name of the key under which the port number ({@link #portNo}) is stored in the {@link #standardLaunchConfigFileName}.
+	 * Constructor for Rhino debug launch management which only calls
+	 * the constructor of its super class.
+	 * @see LaunchManager
 	 */
-	protected final static String PORT_KEY = "port";
+	public RhinoDebugLaunchManager() {
+		super();
+	}
 	
+	/**
+	 * @return the {@link #standardLaunchConfigFileName}
+	 */
+	public static String getStandardLaunchConfigFileName() {
+		return standardLaunchConfigFileName;
+	}
+
+	/**
+	 * sets {@link #standardLaunchConfigFileName}
+	 * @param standardLaunchConfigFileName - new value
+	 */
+	public static void setStandardLaunchConfigFileName(String newStandardLaunchConfigFileName) {
+		standardLaunchConfigFileName = newStandardLaunchConfigFileName;
+	}
+
+	/**
+	 * Checks the given configuration {@link #launchConfig} for the attribute
+	 * {@link #PORT_KEY} and sets {@link #portNo} with its value. If this is not
+	 * successful, the value will stay unchanged (it is initially set to a
+	 * default value).
+	 */
+	protected void setPortNumFromConfig() {
+		if (launchConfig == null) {
+			System.err.println("Variable launchConfig for launch configuration is unset in class " + 
+								getClass().getCanonicalName() + "!");
+			System.err.println("Debug configuration settings cannot be read from it!");
+			return;
+		}
+		
+		try {
+			Map<String, String> argumentMap = new HashMap<String, String> ();
+			Map<String, String> defaultMap = new HashMap<String, String> ();
+			defaultMap.put("", "");
+			argumentMap = launchConfig.getAttribute("argument_map", defaultMap);
+			if (argumentMap.equals(defaultMap)) {
+				System.err.println("No argument map found for Rhino debug configuration settings!");
+				System.err.println("Port number could not be extracted!");	
+			}			
+			else if (argumentMap.containsKey(PORT_KEY)) {
+				portNo = argumentMap.get(PORT_KEY);
+				System.out.println("Port number is " + portNo + "!");
+			}	
+			else {
+				System.err.println("Port number could not be extracted from Rhino debug configuration settings!");
+				System.err.println("Key \"" + PORT_KEY + "\" was not found!");
+			}
+		} catch (CoreException e) {
+			System.err.println("No valid argument map found for Rhino debug configuration settings! Port number stays set to default value.");
+			e.printStackTrace();
+		}
+		
+		// If the port number could not be set properly, we try to communicate using
+		// the default value.
+		// NOTE: we could also throw an exception in that case
+		System.out.println("Port number for thread communication between Rhino JavaScript debugger and its launch configuration is set to " + portNo + "!");
+	}
+
+	/**
+	 * Checks the standard Eclipse debug launch configuration path in order to
+	 * find the standard Rhino configuration named
+	 * {@link #standardLaunchConfigFileName}
+	 * 
+	 * @return the found configuration, null if nothing found.
+	 */
+	protected ILaunchConfiguration findLocalStandardLaunchConfiguration() {
+		
+		// retrieve launch configurations from file system and check if our 
+		// standard config exists there
+		List<ILaunchConfiguration> validConfigs = new ArrayList<ILaunchConfiguration>(20);
+		List<ILaunchConfiguration> configs = findLocalLaunchConfigurations();
+		verifyConfigurations(configs, validConfigs);
+
+		for (ILaunchConfiguration curConfig:validConfigs) {
+			if (curConfig.getName().equals(getStandardLaunchConfigFileName())) {
+				return curConfig;
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * @return {@link #portNo}
@@ -56,39 +165,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	}
 
 	/**
-	 * sets {@link #portNo}
-	 * @param portNo
-	 */
-	public void setPortNo(String portNo) {
-		this.portNo = portNo;
-	}
-
-	/**
-	 * @return the {@link #standardLaunchConfigFileName}
-	 */
-	public String getStandardLaunchConfigFileName() {
-		return standardLaunchConfigFileName;
-	}
-
-	/**
-	 * sets {@link #standardLaunchConfigFileName}
-	 * @param standardLaunchConfigFileName - new value
-	 */
-	public void setStandardLaunchConfigFileName(String standardLaunchConfigFileName) {
-		this.standardLaunchConfigFileName = standardLaunchConfigFileName;
-	}
-
-	/**
-	 * Constructor for Rhino debug launch management.
-	 * @see LaunchManager
-	 */
-	public RhinoDebugLaunchManager() {
-		super();
-	}
-	
-	/**
-	 * Reads the configuration settings from the file system using {@link #findLocalStandardLaunchConfiguration()}.
-	 * @throws Exception if no configuration file could be found. 
+	 * Reads the configuration settings from the file system using
+	 * {@link #findLocalStandardLaunchConfiguration()}.
+	 * 
+	 * @throws Exception if no configuration file could be found
 	 */
 	public void readDebugLaunchConfiguration() throws Exception {
 		//TODO which exception class should be thrown?
@@ -99,7 +179,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			// no path set
 			Exception exc = new Exception("No path found for JavaScript debug launch. " + 
 					"LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH in class LaunchManager must be set correctly!");
-			//TODO AKR use a builtin launch configuration instead!
+			//NOTE: we could use a builtin launch configuration instead!
 			throw exc;
 			
 		}
@@ -120,17 +200,12 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		}
 		
 		//TODO AKR this cast should usually always work. But maybe there should be some meaningful "else" case?
-		/*
-		 * if stdConfig is LaunchC
-		 * then setPort(stdConfig)
-		 * else defaultPort();
-		 * */
 		if (stdConfig instanceof LaunchConfiguration) {
-			stdLConfig = (LaunchConfiguration) stdConfig;
+			launchConfig = (LaunchConfiguration) stdConfig;
 			setPortNumFromConfig();
 
 			//just for logging:
-			Map<String, Object> attrs = stdLConfig.getAttributes();
+			Map<String, Object> attrs = launchConfig.getAttributes();
 			System.out.println("Rhino debug configuration settings:");
 			System.out.println(attrs);
 		}
@@ -140,80 +215,24 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			System.err.println("Will try to continue execution nevertheless!");
 		}
 	}		
-
 	
 	/**
-	 * Starts a new Rhino debug launch using the standard configuration settings given by {@link #stdLConfig}.
-	 * @throws Exception if the standard configuration was not properly set before this call.
+	 * Starts a new Rhino debug launch using the standard configuration settings
+	 * given by {@link #launchConfig}.
+	 * 
+	 * @throws Exception
+	 *             if the standard configuration was not properly set before
+	 *             this call.
 	 */
 	public void startDebugLaunchConfiguration() throws Exception {
-		if (stdLConfig == null) {
+		if (launchConfig == null) {
 			// no configuration found
-			Exception exc = new Exception("Standard configuration was not correctly initialized!\n");
+			Exception exc = new Exception("Standard configuration was not correctly initialized!\n" +
+										  "Make sure the launch configuration file " + standardLaunchConfigFileName +
+										  " exists on the standard launch configuration path.");
 			throw exc;			
 		}
 		
-		DebugUITools.launch(stdLConfig, ILaunchManager.DEBUG_MODE);
-
-	}
-
-	/**
-	 * Checks the given configuration {@link #stdLConfig} for the attribute
-	 * {@link #PORT_KEY} and sets {@link #portNo} with its value.
-	 */
-	private void setPortNumFromConfig() {
-		if (stdLConfig == null) {
-			System.err.println("Variable stdLConfig for launch configuration is unset in class " + getClass().getCanonicalName() + "!");
-			System.err.println("Debug configuration settings cannot be read from it!");
-			return;
-		}
-		
-		try {
-			Map<String, String> argumentMap = new HashMap<String, String> ();
-			Map<String, String> defaultMap = new HashMap<String, String> ();
-			defaultMap.put("", "");
-			argumentMap = stdLConfig.getAttribute("argument_map", defaultMap);
-			if (argumentMap.equals(defaultMap)) {
-				System.err.println("No argument map found for Rhino debug configuration settings!");
-				System.err.println("Port number could not be extracted!");	
-			}			
-			else if (argumentMap.containsKey(PORT_KEY)) {
-				portNo = argumentMap.get(PORT_KEY);
-				System.out.println("Port number is " + portNo + "!");
-				//TODO should we test if the port number is in a valid range?
-			}	
-			else {
-				System.err.println("Port number could not be extracted from Rhino debug configuration settings!");
-				System.err.println("Key \"" + PORT_KEY + "\" was not found!");
-			}
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			System.err.println("No valid argument map found for Rhino debug configuration settings! Port number stays set to default value.");
-			e.printStackTrace();
-		}
-		
-		System.out.println("Port number for thread communication between Rhino JavaScript debugger and its launch configuration is set to " + portNo + "!");
-	}
-
-	/**
-	 * Checks the standard Eclipse debug launch configuration path in order to
-	 * find the standard Rhino configuration named
-	 * {@link #standardLaunchConfigFileName}
-	 * 
-	 * @return the found configuration, null if nothing found.
-	 */
-	protected ILaunchConfiguration findLocalStandardLaunchConfiguration() {
-		
-		// retrieve launch configurations from disk and check if our standard config exists there
-		List<ILaunchConfiguration> validConfigs = new ArrayList<ILaunchConfiguration>(20);
-		List<ILaunchConfiguration> configs = findLocalLaunchConfigurations();
-		verifyConfigurations(configs, validConfigs);
-
-		for (ILaunchConfiguration curConfig:validConfigs) {
-			if (curConfig.getName().equals(getStandardLaunchConfigFileName())) {
-				return curConfig;
-			}
-		}
-		return null;
+		DebugUITools.launch(launchConfig, ILaunchManager.DEBUG_MODE);
 	}
 }
