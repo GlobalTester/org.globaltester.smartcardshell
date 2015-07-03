@@ -31,6 +31,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.ViewPart;
 import org.globaltester.core.ui.DialogOptions;
 import org.globaltester.core.ui.GtUiHelper;
+import org.globaltester.logging.logger.GTLogger;
 import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.CommandHistory;
@@ -78,6 +79,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 					"A problem occurred when trying to read the JavaScript debug launch configuration."
 							+ info);
 			
+			GTLogger.getInstance().error(info);
 			// TODO amay: is this the correct activator?
 			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
 		}
