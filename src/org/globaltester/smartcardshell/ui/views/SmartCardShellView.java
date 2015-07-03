@@ -27,9 +27,12 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.ViewPart;
 import org.globaltester.core.ui.DialogOptions;
 import org.globaltester.core.ui.GtUiHelper;
+import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
 import org.globaltester.smartcardshell.ScriptRunner;
@@ -61,13 +64,33 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 
 		// activate Rhino JS Context
 		rhinoAccess = new RhinoJavaScriptAccess();
-		Context cx = rhinoAccess.activateContext(false);
+		Context cx = null;
+		try {
+			cx = rhinoAccess.activateContext(false);
+		} catch (Exception exc) {
+			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
+					+ exc.getLocalizedMessage();
+			// probably a JavaScript debugger exception
+			// TODO how can I test this?
+			GtUiHelper
+			.openErrorDialog(
+					parentShell,
+					"A problem occurred when trying to read the JavaScript debug launch configuration."
+							+ info);
+			
+			// TODO amay: is this the correct activator?
+			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
+		}
 		
-		// init JS ScriptRunner
-		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
-		scriptRunner.init(cx);
-		scriptRunner.setPromptString("scsh");
-		scriptRunner.setTracer(this);
+		if (cx != null) { // in this case the context could be activted
+						  // even if there was an exception. Execution can 
+						  // be continued.
+			// init JS ScriptRunner
+			scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
+			scriptRunner.init(cx);
+			scriptRunner.setPromptString("scsh");
+			scriptRunner.setTracer(this);
+		}
 	}
 
 	public void createPartControl(Composite parent) {
@@ -239,7 +262,9 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		super.dispose();
 
 		// exit JavaScript context
-		rhinoAccess.exitContext();
+		if (cx != null) // could be null if an exception was thrown while 
+						// activating the context
+			rhinoAccess.exitContext();
 		cx = null;
 		rhinoAccess = null;
 	}
