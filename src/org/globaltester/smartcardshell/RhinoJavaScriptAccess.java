@@ -1,6 +1,8 @@
 package org.globaltester.smartcardshell;
 
 import org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger;
+import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.logging.logger.JSDebugLogger;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -141,60 +143,49 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
+	 * 
 	 * Makes some necessary settings for the Rhino debugger thread: socket
 	 * number, traces on/off, suspend yes/no. Then the debugger is started and
 	 * {@link #debuggerStartedObj} is created to inform other modules about
-	 * this.
-	 * 
-	 * @param curPortNum
-	 *            port number for socket to be used by the debugger thread
+	 * this. Besides this a listener for the debugger is added to the context 
+	 * factory.
+	 * @throws Exception if the debugger could not be started
 	 */
-	protected void startJSDebugger(String curPortNum) {
-
-		System.out.println("Trying to start Rhino debugger ...");
-
-		// suspend=y: the debugger should start up in suspended mode, meaning it
-		// will not continue execution until a client connects to it
-		// trace=y: status should be reported to the Eclipse console
-		// simply delete this if you do not want traces
-		// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
-		String rhino = "transport=socket,suspend=y,address=" + curPortNum;
-
+	protected void startJSDebugger() throws Exception {
 		try {
-			// TODO write some log message somewhere??
+			// suspend=y: the debugger should start up in suspended mode, meaning it
+			// will not continue execution until a client connects to it
+			// trace=y: status should be reported to the Eclipse console
+			// simply delete this if you do not want traces
+			// String rhino = "transport=socket,suspend=y,trace=y,address=9000";
+			String rhino = "transport=socket,suspend=y,address=" + portNum;
+
+			String info = "Trying to start Rhino debugger with settings "
+					+ rhino + " ...";
+			JSDebugLogger.info(info);
+
 			debugger = new RhinoDebugger(rhino);
 			// create debuggerStartedObject which is used in debug command
 			// handler
-			debuggerStartedObj = new IDebuggerInfo() {
-			};
+			debuggerStartedObj = new IDebuggerInfo() {};
+
 			debugger.start();
-			System.out.println("Debugger started!");
-		} catch (Exception e) {
-			// TODO print where??
-			System.err
-					.println("Error while starting the Rhino JavaScript debugger.");
-			e.printStackTrace();
-			debugger = null;
-		}
-	}
-
-	/**
-	 * Starts the debugger thread (see {@link #startJSDebugger(String)}) and
-	 * adds a listener for the debugger to the context factory.
-	 */
-	protected void startDebugging() {
-		try {
-			startJSDebugger(portNum);
-
+			JSDebugLogger.info("Debugger thread started!");
+					
 			if (debugger != null) {
 				contextFactory.addListener(debugger);
 			}
 		} catch (Exception exc) {
 			stopJSDebugger();
-			System.err // TODO send this info to the calling modules
-					.println("JavaScript Rhino debugger could not be started!");
-			System.err.println("Reason:\n" + exc.getMessage());
+			String info = ("JavaScript Rhino debugger could not be started!\n") +
+							"Reason:\n" + exc.getMessage();
+			JSDebugLogger.error(info);
+			System.err.println("Rhino Debugger Start Exception:");
 			exc.printStackTrace();
+
+			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
+			Exception newExc = new Exception(info, exc);
+			throw newExc;
 		}
 	}
 
@@ -211,10 +202,14 @@ public class RhinoJavaScriptAccess {
 			debuggerStartedObj = null;
 			debugger.stop();
 			debugger = null;
-		} catch (Exception e) {
-			System.err
-					.println("Error while stopping the Rhino JavaScript debugger.");
-			e.printStackTrace();
+		} catch (Exception exc) {
+			JSDebugLogger.error("Error while stopping the Rhino JavaScript debugger. Reason:\n " 
+								+ exc.getMessage());
+			//e.printStackTrace();
+			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
+			// NOTE: this exception is not send to the UI since
+			// there seems currently not to be a need to inform the user
+			// explicitly.
 		}
 	}
 
@@ -243,15 +238,18 @@ public class RhinoJavaScriptAccess {
 	 * @param newDebugMode
 	 *            indicates if the debugger should be started or not
 	 * @return the activated context
+	 * @throws Exception if the debugger could not be started
 	 */
-	public Context activateContext(boolean newDebugMode) {
+	public Context activateContext(boolean newDebugMode) throws Exception {
 		Context cx = null;
 
 		if (newDebugMode) {
 			debugMode = true;
-			startDebugging();
+			startJSDebugger();
 		}
 
+		// TODO could we do this first, before calling debugger?? this would allow continuing
+		// execution
 		// this always delivers the current context (if none is there, it will
 		// be generated)
 		cx = contextFactory.enterContext();
