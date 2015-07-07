@@ -183,8 +183,8 @@ public class RhinoJavaScriptAccess {
 			System.err.println("Rhino Debugger Start Exception:");
 			exc.printStackTrace();
 
-			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
 			Exception newExc = new Exception(info, exc);
+			GtErrorLogger.log(Activator.PLUGIN_ID, newExc);
 			throw newExc;
 		}
 	}
@@ -203,10 +203,11 @@ public class RhinoJavaScriptAccess {
 			debugger.stop();
 			debugger = null;
 		} catch (Exception exc) {
-			JSDebugLogger.error("Error while stopping the Rhino JavaScript debugger. Reason:\n " 
-								+ exc.getMessage());
+			String info = "Error while stopping the Rhino JavaScript debugger. Reason:\n " 
+					+ exc.getMessage();
+			JSDebugLogger.error(info);
 			//e.printStackTrace();
-			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
+			GtErrorLogger.log(Activator.PLUGIN_ID, new Exception(info, exc));
 			// NOTE: this exception is not send to the UI since
 			// there seems currently not to be a need to inform the user
 			// explicitly.
@@ -243,16 +244,23 @@ public class RhinoJavaScriptAccess {
 	public Context activateContext(boolean newDebugMode) throws Exception {
 		Context cx = null;
 
+		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + newDebugMode +  "\n");
 		if (newDebugMode) {
 			debugMode = true;
 			startJSDebugger();
 		}
 
-		// TODO could we do this first, before calling debugger?? this would allow continuing
+		// TODO could we do "enter" first, before calling debugger?? this would allow continuing
 		// execution
+		
 		// this always delivers the current context (if none is there, it will
 		// be generated)
 		cx = contextFactory.enterContext();
+		if (cx != null)
+			JSDebugLogger.error("Activating JavaScript context finished successfully!\n");
+		else 
+			JSDebugLogger.error("Activating JavaScript context finished without valid context!\n");
+		
 		return cx;
 	}
 
