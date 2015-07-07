@@ -12,7 +12,12 @@ import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.swt.widgets.Display;
+import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.logging.logger.JSDebugLogger;
+import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
 
 
@@ -100,9 +105,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 */
 	protected void setPortNumFromConfig() {
 		if (launchConfig == null) {
-			System.err.println("Variable launchConfig for launch configuration is unset in class " + 
-								getClass().getCanonicalName() + "!");
-			System.err.println("Debug configuration settings cannot be read from it!");
+			String error = "Variable launchConfig for launch configuration is unset in class " + 
+							getClass().getCanonicalName() + "!\n" +  
+						   "Debug configuration settings cannot be read from it!\n";
+			JSDebugLogger.error(error);
 			return;
 		}
 		
@@ -112,26 +118,34 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			defaultMap.put("", "");
 			argumentMap = launchConfig.getAttribute("argument_map", defaultMap);
 			if (argumentMap.equals(defaultMap)) {
-				System.err.println("No argument map found for Rhino debug configuration settings!");
-				System.err.println("Port number could not be extracted!");	
+				JSDebugLogger.error("No argument map found for Rhino debug configuration settings!\n");
+				JSDebugLogger.error("Port number could not be extracted!\n");	
 			}			
 			else if (argumentMap.containsKey(PORT_KEY)) {
 				portNo = argumentMap.get(PORT_KEY);
-				System.out.println("Port number is " + portNo + "!");
+				JSDebugLogger.info("Port number is " + portNo + "!\n");
 			}	
 			else {
-				System.err.println("Port number could not be extracted from Rhino debug configuration settings!");
-				System.err.println("Key \"" + PORT_KEY + "\" was not found!");
+				JSDebugLogger.error("Port number could not be extracted from Rhino debug configuration settings!\n");
+				JSDebugLogger.error("Key \"" + PORT_KEY + "\" was not found!\n");
 			}
-		} catch (CoreException e) {
-			System.err.println("No valid argument map found for Rhino debug configuration settings! Port number stays set to default value.");
-			e.printStackTrace();
+		} catch (CoreException exc) {
+			String error = "No valid argument map found for Rhino debug " +
+						  "configuration settings! Port number stays set to default value.\n";  
+			JSDebugLogger.error(error);
+			//exc.printStackTrace();
+			Exception newExc = new Exception(error, exc);
+			GtErrorLogger.log(Activator.PLUGIN_ID, newExc);
+
 		}
 		
 		// If the port number could not be set properly, we try to communicate using
 		// the default value.
 		// NOTE: we could also throw an exception in that case
-		System.out.println("Port number for thread communication between Rhino JavaScript debugger and its launch configuration is set to " + portNo + "!");
+		String info = "Port number for thread communication between Rhino " +
+					  "JavaScript debugger and its launch configuration is set to " + 
+					  portNo + "!\n";
+		JSDebugLogger.info(info);;
 	}
 
 	/**
@@ -171,8 +185,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @throws Exception if no configuration file could be found
 	 */
 	public void readDebugLaunchConfiguration() throws Exception {
-		//TODO which exception class should be thrown?
-		
+
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
 		IPath containerPath = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
 		if (containerPath == null) {
@@ -193,26 +206,29 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		ILaunchConfiguration stdConfig = findLocalStandardLaunchConfiguration();
 		if (stdConfig == null) {
 			// no configuration found
-			Exception exc = new Exception("Standard configuration launch file " + standardLaunchConfigFileName + " for Rhino debugger missing or invalid!\n"
-					            + "File was looked for in directory "
-								+ containerPath.toOSString());
+			Exception exc = new Exception("Standard launch configuration file " + 
+							standardLaunchConfigFileName + " " +
+							"for Rhino debugger missing or invalid!\n" +
+							"File was looked for in directory " +
+							containerPath.toOSString());
+			// TODO amay: call GTErrorLogger where exception is thrown or caught?
 			throw exc;
 		}
 		
-		//TODO AKR this cast should usually always work. But maybe there should be some meaningful "else" case?
 		if (stdConfig instanceof LaunchConfiguration) {
 			launchConfig = (LaunchConfiguration) stdConfig;
 			setPortNumFromConfig();
 
-			//just for logging:
+			//print logging
 			Map<String, Object> attrs = launchConfig.getAttributes();
-			System.out.println("Rhino debug configuration settings:");
-			System.out.println(attrs);
+			String info = "Rhino debug configuration settings:" + attrs + "\n";
+			JSDebugLogger.info(info);
 		}
 		else {
-			System.err.println("Something wrong with Rhino debug configuration: wrong type - check this!");
-			System.err.println("Trying to connect debugger to port " + getPortNo() + "!");
-			System.err.println("Will try to continue execution nevertheless!");
+			String error =  "Something wrong with Rhino debug configuration: wrong type - check this!\n" +
+							"Trying to connect debugger to port " + getPortNo() + "!\n" +
+							"Will try to continue execution nevertheless!\n";
+			JSDebugLogger.error(error);
 		}
 	}		
 	
@@ -227,12 +243,29 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	public void startDebugLaunchConfiguration() throws Exception {
 		if (launchConfig == null) {
 			// no configuration found
-			Exception exc = new Exception("Standard configuration was not correctly initialized!\n" +
-										  "Make sure the launch configuration file " + standardLaunchConfigFileName +
-										  " exists on the standard launch configuration path.");
+			String error = "Standard configuration was not correctly initialized!\n" +
+					  "Make sure the launch configuration file " + standardLaunchConfigFileName +
+					  " exists on the standard launch configuration path.\n";
+			Exception exc = new Exception(error);
+			JSDebugLogger.error(error);
 			throw exc;			
 		}
 		
+		// TODO this can be deleted as soon as we are sure there are no more thread problems
+		if (Display.findDisplay(Thread.currentThread()) == null) {
+			System.out.println("Thread is not UI in RhinoDebugLaunchManager.startDebugLaunchConfiguration");
+		} else {
+			System.out.println("Thread is UI in RhinoDebugLaunchManager.startDebugLaunchConfiguration");
+		}
+
+		// make this thread a UI thread; otherwise there will be null pointer
+		// exceptions when accessing the active workbench window in 
+		// DebugUIPlugin.launchInBackground()
+		final Display display = DebugUIPlugin.getStandardDisplay(); 
+								// currently same as PlatformUI.getWorkbench().getDisplay()
+		display.asyncExec(Thread.currentThread());
+		
+		// start launch
 		DebugUITools.launch(launchConfig, ILaunchManager.DEBUG_MODE);
 	}
 }
