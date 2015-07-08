@@ -257,7 +257,7 @@ public class RhinoJavaScriptAccess {
 		// be generated)
 		cx = contextFactory.enterContext();
 		if (cx != null)
-			JSDebugLogger.error("Activating JavaScript context finished successfully!\n");
+			JSDebugLogger.info("Activating JavaScript context finished successfully!\n");
 		else 
 			JSDebugLogger.error("Activating JavaScript context finished without valid context!\n");
 		
