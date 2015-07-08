@@ -12,7 +12,6 @@ import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
-import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.swt.widgets.Display;
 import org.globaltester.logging.logger.GtErrorLogger;
@@ -220,9 +219,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			setPortNumFromConfig();
 
 			//print logging
-			Map<String, Object> attrs = launchConfig.getAttributes();
-			String info = "Rhino debug configuration settings:" + attrs + "\n";
-			JSDebugLogger.info(info);
+			// TODO uncomment this! 
+			// Map<String, Object> attrs = launchConfig.getAttributes();
+			// String info = "Rhino debug configuration settings:" + attrs + "\n";
+			// JSDebugLogger.info(info);
 		}
 		else {
 			String error =  "Something wrong with Rhino debug configuration: wrong type - check this!\n" +
@@ -257,13 +257,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		} else {
 			System.out.println("Thread is UI in RhinoDebugLaunchManager.startDebugLaunchConfiguration");
 		}
-
-		// make this thread a UI thread; otherwise there will be null pointer
-		// exceptions when accessing the active workbench window in 
-		// DebugUIPlugin.launchInBackground()
-		final Display display = DebugUIPlugin.getStandardDisplay(); 
-								// currently same as PlatformUI.getWorkbench().getDisplay()
-		display.asyncExec(Thread.currentThread());
 		
 		// start launch
 		DebugUITools.launch(launchConfig, ILaunchManager.DEBUG_MODE);
