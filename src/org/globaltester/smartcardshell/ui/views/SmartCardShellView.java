@@ -72,7 +72,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
 					+ exc.getLocalizedMessage();
 			// probably a JavaScript debugger exception
-			// TODO how can I test this?
+			// TODO amay how can I test this?
 			GtUiHelper
 			.openErrorDialog(
 					parentShell,
