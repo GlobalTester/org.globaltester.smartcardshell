@@ -21,7 +21,7 @@ public class CompoundClassLoader extends ClassLoader {
 	/**
 	 * List of class loaders which shall be activated
 	 */
-	protected List<ClassLoader> loaderList = Collections.synchronizedList(new ArrayList<ClassLoader>());
+	protected final List<ClassLoader> loaderList = Collections.synchronizedList(new ArrayList<ClassLoader>());
 
     /**
      * Adds some basic class loaders to the {@link #loaderList}
