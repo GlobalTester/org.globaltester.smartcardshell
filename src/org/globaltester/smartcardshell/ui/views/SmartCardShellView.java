@@ -33,10 +33,10 @@ import org.globaltester.core.ui.DialogOptions;
 import org.globaltester.core.ui.GtUiHelper;
 import org.globaltester.logging.logger.GTLogger;
 import org.globaltester.logging.logger.GtErrorLogger;
-import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.CommandHistory;
 import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
 import org.globaltester.smartcardshell.ScriptRunner;
+import org.globaltester.smartcardshell.ui.Activator;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 
@@ -71,22 +71,17 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		} catch (Exception exc) {
 			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
 					+ exc.getLocalizedMessage();
-			// probably a JavaScript debugger exception
-			// TODO amay how can I test this?
-			GtUiHelper
-			.openErrorDialog(
-					parentShell,
-					"A problem occurred when trying to read the JavaScript debug launch configuration."
-							+ info);
+			// probably a JavaScript debugger exception;
+			// As long as JavaScript debugging is not supported for SmartCardShellView,
+			// (which is currently the case) we do not really expect exceptions here.
+			GtUiHelper.openErrorDialog(parentShell, info);
 			
 			GTLogger.getInstance().error(info);
-			// TODO amay: is this the correct activator?
 			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
 		}
 		
-		if (cx != null) { // in this case the context could be activted
-						  // even if there was an exception. Execution can 
-						  // be continued.
+		if (cx != null) { // the context could be activated and
+						  // execution can be continued.
 			// init JS ScriptRunner
 			scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 			scriptRunner.init(cx);
