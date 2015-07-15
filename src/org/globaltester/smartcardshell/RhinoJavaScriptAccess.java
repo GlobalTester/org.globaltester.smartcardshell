@@ -22,10 +22,13 @@ public class RhinoJavaScriptAccess {
 
 	/**
 	 * Port number for socket communication between the debugger thread and the
-	 * debugger launch thread. This class variable is settable from
-	 * modules which do not have access to the RhinoJavaScriptAccess and
-	 * debugger objects. It is used for initializing the {@link #portNum} value
-	 * in new RhinoJavaScriptAccess instances.
+	 * debugger launch thread. This class variable is settable from modules
+	 * which do not have access to the RhinoJavaScriptAccess and debugger
+	 * objects. It is used for initializing the {@link #portNum} value in new
+	 * RhinoJavaScriptAccess instances.<br>
+	 * Hint: Since it is read as a string from the configuration file, and set
+	 * as a string when setting up the socket communication, this is not
+	 * declared as an integer.
 	 */
 	static protected String standardPortNum = "9000";
 
@@ -149,9 +152,9 @@ public class RhinoJavaScriptAccess {
 	 * {@link #debuggerStartedObj} is created to inform other modules about
 	 * this. Besides this a listener for the debugger is added to the context 
 	 * factory.
-	 * @throws Exception if the debugger could not be started
+	 * @throws RuntimeException if the debugger could not be started
 	 */
-	protected void startJSDebugger() throws Exception {
+	protected void startJSDebugger() throws RuntimeException {
 		try {
 			// suspend=y: the debugger should start up in suspended mode, meaning it
 			// will not continue execution until a client connects to it
@@ -175,15 +178,15 @@ public class RhinoJavaScriptAccess {
 			if (debugger != null) {
 				contextFactory.addListener(debugger);
 			}
-		} catch (Exception exc) {
+		} catch (Exception exc) { // probably comes from debugger.start()
 			stopJSDebugger();
 			String info = ("JavaScript Rhino debugger could not be started!\n") +
 							"Reason:\n" + exc.getMessage();
 			JSDebugLogger.error(info);
-			System.err.println("Rhino Debugger Start Exception:");
-			exc.printStackTrace();
+//			System.err.println("Rhino Debugger Start Exception:");
+//			exc.printStackTrace();
 
-			Exception newExc = new Exception(info, exc);
+			RuntimeException newExc = new RuntimeException(info, exc);
 			GtErrorLogger.log(Activator.PLUGIN_ID, newExc);
 			throw newExc;
 		}
@@ -202,15 +205,16 @@ public class RhinoJavaScriptAccess {
 			debuggerStartedObj = null;
 			debugger.stop();
 			debugger = null;
-		} catch (Exception exc) {
+		} catch (Exception exc) { // probably coming from debugger.stop()
 			String info = "Error while stopping the Rhino JavaScript debugger. Reason:\n " 
 					+ exc.getMessage();
 			JSDebugLogger.error(info);
 			//e.printStackTrace();
-			GtErrorLogger.log(Activator.PLUGIN_ID, new Exception(info, exc));
+			GtErrorLogger.log(Activator.PLUGIN_ID, new RuntimeException(info, exc));
 			// NOTE: this exception is not send to the UI since
 			// there seems currently not to be a need to inform the user
 			// explicitly.
+			// TODO should anything else be done here?
 		}
 	}
 
@@ -243,16 +247,13 @@ public class RhinoJavaScriptAccess {
 	 */
 	public Context activateContext(boolean newDebugMode) throws Exception {
 		Context cx = null;
-
+		
 		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + newDebugMode +  "\n");
 		if (newDebugMode) {
 			debugMode = true;
 			startJSDebugger();
 		}
 
-		// TODO could we do "enter" first, before calling debugger?? this would allow continuing
-		// execution
-		
 		// this always delivers the current context (if none is there, it will
 		// be generated)
 		cx = contextFactory.enterContext();
