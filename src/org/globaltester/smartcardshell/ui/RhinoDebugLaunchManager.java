@@ -49,14 +49,16 @@ import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
  *
  */
 public class RhinoDebugLaunchManager extends LaunchManager {
-	//TODO update comments for exceptions
 	
-	protected final static String launchConfigurationXMLText = 
+	protected final static String prePortNumXMLText = 
 	"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 	"<launchConfiguration type=\"org.eclipse.wst.jsdt.debug.core.launchConfigurationType\">\n" +
 	"<mapAttribute key=\"argument_map\">\n" +
 	"<mapEntry key=\"host\" value=\"localhost\"/>\n" +
-	"<mapEntry key=\"port\" value=\"9000\"/>\n" +
+	"<mapEntry key=\"port\" value=\"";
+		// "9000" +
+	protected final static String postPortNumXMLText = 
+			"\"/>\n" +
 	"</mapAttribute>\n" +
 	"<stringAttribute key=\"connector_id\" value=\"rhino.attaching.connector\"/>\n" +
 	"<stringAttribute key=\"org.eclipse.debug.core.source_locator_id\" " + 
@@ -67,8 +69,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			"sourceContainers duplicates=&quot;true&quot;&gt;&#13;&#10;&lt;" +
 			"container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; " +
 			"encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;" +
-			"&amp;#13;&amp;#10;&amp;lt;folder nest=&amp;quot;false&amp;quot; path=&amp;quot;" +
-			"/GlobalTester Sample TestSpecification/TestCases" +
+			"&amp;#13;&amp;#10;&amp;lt;folder nest=&amp;quot;false&amp;quot; path=&amp;quot;";
+	
+			//"/GlobalTester Sample TestSpecification/TestCases" +
+	protected final static String postRhinoSourceLookupPathXMLText = 
 			"&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; " +
 			"typeId=&quot;org.eclipse.debug.core.containerType.folder&quot;" +
 			"/&gt;&#13;&#10;&lt;/sourceContainers&gt;&#13;&#10;&lt;" +
@@ -84,7 +88,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	protected static String standardLaunchConfigFileName = "runJSDebugger";
 	
 	/**
-	 * Attribute name for the key under which the port number ({@link #portNo})
+	 * Attribute name for the key under which the port number ({@link #portNum})
 	 * is stored in the file given by {@link #standardLaunchConfigFileName}.
 	 */
 	protected final static String PORT_KEY = "port";
@@ -105,7 +109,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * as a string when setting up the socket communication, this is not
 	 * declared as an integer.
 	 */
-	protected String portNo = "9000";
+	protected String portNum = "9000";
 
 //	/**
 //	 * Constructor for Rhino debug launch management which only calls
@@ -138,12 +142,14 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * The method can be used, if no manually created launch file was generated,
 	 * which can be checked by calling {@link #readDebugLaunchConfiguration()}.
 	 * 
+	 * @param sourceLookupRoot root directory where the debugger should start 
+	 * 			its source lookup.
 	 * @throws FileNotFoundException
 	 *             if the file could not be written
 	 * @throws RuntimeException
 	 *             if anything else went wrong e.g. bad encoding
 	 */
-	protected void writeLaunchFile() throws FileNotFoundException, RuntimeException {
+	protected void writeLaunchFile(IPath sourceLookupRoot) throws FileNotFoundException, RuntimeException {
 		// Hint: a direct access to attributes of launch configurations is not
 		// implemented in class LaunchConfiguration; therefore the settings
 		// are done by reading them from the file system which is supported.
@@ -152,16 +158,20 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		// configuration editor. 
 
 		// TODO check if file already exists? OK to overwrite??
-		// use a temporary file name??
+		// use a temporary file name?? generate backup??
 		
-		// TODO consider port num and project path
 		PrintWriter writer = null;
 		String info = "Error when trying to write a launch configuration " + 
 				"to the file system.\n";
+		String sourceLookupRootString = "";
+		if (sourceLookupRoot != null) {
+			// set path string for launch configuration 
+			sourceLookupRootString = sourceLookupRoot.toString();
+		}
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
-		IPath containerPath = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
-		if (containerPath == null) {
+		IPath pathForLaunches = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
+		if (pathForLaunches == null) {
 			// no path set
 			FileNotFoundException exc = new FileNotFoundException(info + 
 					"No path found for JavaScript debug launch. " + 
@@ -171,13 +181,15 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			
 		}
 
-		String fileName = containerPath.toOSString() + File.separator + 
+		String fileName = pathForLaunches.toOSString() + File.separator + 
 						standardLaunchConfigFileName + "." + 
 						LaunchConfiguration.LAUNCH_CONFIGURATION_FILE_EXTENSION;
 		
 		try {// TODO: should we use UTF-8 here?
 			writer = new PrintWriter(fileName, "UTF-8");
-			writer.print(launchConfigurationXMLText);
+			writer.print(prePortNumXMLText + portNum + 
+						 postPortNumXMLText + sourceLookupRootString + 
+						 postRhinoSourceLookupPathXMLText);
 		} catch (UnsupportedEncodingException e) {
 			String error = info
 					+ "File encoding UTF-8 is not supported by PrintWriter.";
@@ -197,7 +209,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 
 	/**
 	 * Checks the given configuration {@link #launchConfig} for the attribute
-	 * {@link #PORT_KEY} and sets {@link #portNo} with its value. If this is not
+	 * {@link #PORT_KEY} and sets {@link #portNum} with its value. If this is not
 	 * successful, the value will stay unchanged (it is initially set to a
 	 * default value).
 	 */
@@ -221,8 +233,8 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 					JSDebugLogger
 							.error("Port number could not be extracted!\n");
 				} else if (argumentMap.containsKey(PORT_KEY)) {
-					portNo = argumentMap.get(PORT_KEY);
-					JSDebugLogger.info("Port number is " + portNo + "!\n");
+					portNum = argumentMap.get(PORT_KEY);
+					JSDebugLogger.info("Port number is " + portNum + "!\n");
 				} else {
 					JSDebugLogger
 							.error("Port number could not be extracted from Rhino debug configuration settings!\n");
@@ -244,7 +256,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		// using the default value.
 		String info = "Port number for thread communication between Rhino "
 				+ "JavaScript debugger and its launch configuration is set to "
-				+ portNo + "!\n";
+				+ portNum + "!\n";
 		JSDebugLogger.info(info);
 	}
 
@@ -272,10 +284,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	}
 	
 	/**
-	 * @return {@link #portNo}
+	 * @return {@link #portNum}
 	 */
-	public String getPortNo() {
-		return portNo;
+	public String getPortNum() {
+		return portNum;
 	}
 
 	/**
@@ -327,7 +339,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		else { // this should only happen if the something basic changes in the 
 				// implementation of launches
 			String error =  "Something wrong with Rhino debug configuration: wrong type - check this!\n" +
-							"Trying to connect debugger to port " + getPortNo() + "!\n" +
+							"Trying to connect debugger to port " + getPortNum() + "!\n" +
 							"Will try to continue execution nevertheless!\n";
 			JSDebugLogger.error(error);
 			throw new ClassCastException(error);
@@ -338,17 +350,19 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * Tries to read a launch configuration from the file system (see 
 	 * {@link #readDebugLaunchConfiguration()}). If this is not successful,
 	 * a launch configuration is created and written to the default path for
-	 * launches (see {@link #createDebugLaunchConfiguration()}).
+	 * launches (see {@link #createDebugLaunchConfiguration(IPath)}).
+	 * @param sourceLookupRoot root directory where the debugger should start 
+	 * 			its source lookup.
 	 * @throws FileNotFoundException see {@link #createDebugLaunchConfiguration()}
 	 * @throws RuntimeException see {@link #createDebugLaunchConfiguration()}
 	 */
-	public void initDebugLaunchConfiguration() throws FileNotFoundException, RuntimeException {
+	public void initDebugLaunchConfiguration(IPath sourceLookupRoot) throws FileNotFoundException, RuntimeException {
 		try {
 			readDebugLaunchConfiguration();
 		}
 		catch (Exception e) {
 			// launch configuration could not be read -> create one
-			createDebugLaunchConfiguration();
+			createDebugLaunchConfiguration(sourceLookupRoot);
 		}
 	}
 	
@@ -358,12 +372,14 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * file was created by the user.
 	 * For details and exceptions thrown see {@link #writeLaunchFile()}, 
 	 * {@link #readDebugLaunchConfiguration()}.
+	 * @param sourceLookupRoot root directory where the debugger should start 
+	 * 			its source lookup.
 	 * @throws FileNotFoundException  
 	 * @throws RuntimeException
 	 */
-	public void createDebugLaunchConfiguration() throws FileNotFoundException, RuntimeException {
+	public void createDebugLaunchConfiguration(IPath sourceLookupRoot) throws FileNotFoundException, RuntimeException {
 		// write launch file to file system; then read the configuration from there
-		writeLaunchFile();
+		writeLaunchFile(sourceLookupRoot);
 		readDebugLaunchConfiguration();
 	}
 
