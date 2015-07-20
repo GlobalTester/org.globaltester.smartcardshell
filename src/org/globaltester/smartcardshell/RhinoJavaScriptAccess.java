@@ -243,12 +243,13 @@ public class RhinoJavaScriptAccess {
 	 * @param newDebugMode
 	 *            indicates if the debugger should be started or not
 	 * @return the activated context
-	 * @throws Exception if the debugger could not be started
+	 * @throws RuntimeException if the debugger could not be started. 
+	 * 			In this case no context will be activated.
 	 */
-	public Context activateContext(boolean newDebugMode) throws Exception {
-		Context cx = null;
+	public Context activateContext(boolean newDebugMode) throws RuntimeException {
 		
-		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + newDebugMode +  "\n");
+		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + 
+							newDebugMode +  "\n");
 		if (newDebugMode) {
 			debugMode = true;
 			startJSDebugger();
@@ -256,11 +257,7 @@ public class RhinoJavaScriptAccess {
 
 		// this always delivers the current context (if none is there, it will
 		// be generated)
-		cx = contextFactory.enterContext();
-		if (cx != null)
-			JSDebugLogger.info("Activating JavaScript context finished successfully!\n");
-		else 
-			JSDebugLogger.error("Activating JavaScript context finished without valid context!\n");
+		Context cx = contextFactory.enterContext();
 		
 		return cx;
 	}
