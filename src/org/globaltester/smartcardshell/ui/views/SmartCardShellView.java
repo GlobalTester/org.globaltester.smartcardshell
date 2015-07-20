@@ -74,6 +74,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 			// probably a JavaScript debugger exception;
 			// As long as JavaScript debugging is not supported for SmartCardShellView,
 			// (which is currently the case) we do not really expect exceptions here.
+			// TODO amay Do we want this error dialog here?
 			GtUiHelper.openErrorDialog(parentShell, info);
 			
 			GTLogger.getInstance().error(info);
