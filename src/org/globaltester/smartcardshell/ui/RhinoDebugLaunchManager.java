@@ -9,15 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
+import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
-import org.eclipse.swt.widgets.Display;
 import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.logging.logger.JSDebugLogger;
 import org.globaltester.smartcardshell.Activator;
@@ -186,7 +184,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		String sourceLookupRootString = "";
 		if (sourceLookupRoot != null) {
 			// set path string for launch configuration 
-			sourceLookupRootString = sourceLookupRoot.toString();
+			sourceLookupRootString = sourceLookupRoot.toPortableString();
 		}
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
@@ -428,7 +426,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @throws FileNotFoundException
 	 */
 	protected void deleteConfigFile(String configFileName) throws FileNotFoundException {
-		// TODO Auto-generated method stub
 		String info = "Error when trying to delete a launch configuration " + 
 				"from the file system.\n";
 
@@ -463,6 +460,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 *             this call and therefore no launch can be started.
 	 */
 	public void startDebugLaunchConfiguration() throws RuntimeException {
+
 		if (launchConfig == null) {
 			// no configuration found
 			String error = "Standard configuration was not correctly initialized!\n" +
@@ -472,14 +470,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			JSDebugLogger.error(error);
 			throw exc;			
 		}
-		
-//		// TODO this can be deleted as soon as we are sure there are no more thread problems
-//		if (Display.findDisplay(Thread.currentThread()) == null) {
-//			System.out.println("Thread is not UI in RhinoDebugLaunchManager.startDebugLaunchConfiguration");
-//		} else {
-//			System.out.println("Thread is UI in RhinoDebugLaunchManager.startDebugLaunchConfiguration");
-//		}
-		
+				
 		// start launch
 		DebugUITools.launch(launchConfig, ILaunchManager.DEBUG_MODE);
 	}
