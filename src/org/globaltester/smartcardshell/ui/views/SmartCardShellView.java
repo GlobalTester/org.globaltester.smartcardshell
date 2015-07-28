@@ -61,7 +61,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	protected CommandHistory cmdHistory = new CommandHistory();
 
 	public SmartCardShellView() throws OpenCardException,
-			ClassNotFoundException {
+			ClassNotFoundException, RuntimeException {
 
 		// activate Rhino JS Context
 		rhinoAccess = new RhinoJavaScriptAccess();
@@ -69,26 +69,22 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		try {
 			cx = rhinoAccess.activateContext(false);
 		} catch (Exception exc) {
-			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
-					+ exc.getLocalizedMessage();
 			// probably a JavaScript debugger exception;
 			// As long as JavaScript debugging is not supported for SmartCardShellView,
 			// (which is currently the case) we do not really expect exceptions here.
-			// TODO amay Do we want this error dialog here?
-			GtUiHelper.openErrorDialog(parentShell, info);
+			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
+					+ exc.getLocalizedMessage();
 			
 			GTLogger.getInstance().error(info);
 			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
+			throw new RuntimeException(info, exc);
 		}
 		
-		if (cx != null) { // the context could be activated and
-						  // execution can be continued.
-			// init JS ScriptRunner
-			scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
-			scriptRunner.init(cx);
-			scriptRunner.setPromptString("scsh");
-			scriptRunner.setTracer(this);
-		}
+		// init JS ScriptRunner
+		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
+		scriptRunner.init(cx);
+		scriptRunner.setPromptString("scsh");
+		scriptRunner.setTracer(this);
 	}
 
 	public void createPartControl(Composite parent) {
