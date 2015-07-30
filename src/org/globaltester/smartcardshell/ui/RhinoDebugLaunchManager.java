@@ -19,7 +19,7 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.globaltester.logging.logger.GtErrorLogger;
 import org.globaltester.logging.logger.JSDebugLogger;
 import org.globaltester.smartcardshell.Activator;
-import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
+import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 
 
 /**
@@ -31,7 +31,7 @@ import org.globaltester.smartcardshell.RhinoJavaScriptAccess;
  * number for the socket communication and starting the debugger launch thread.
  * The realization of the thread communication is currently done in
  * {@link org.globaltester.testrunner.ui.commands.DebugTestCommandHandler}. See
- * also {@link org.globaltester.smartcardshell.RhinoJavaScriptAccess} for
+ * also {@link org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess} for
  * details on the debugger thread.<br>
  * <br>
  * 
