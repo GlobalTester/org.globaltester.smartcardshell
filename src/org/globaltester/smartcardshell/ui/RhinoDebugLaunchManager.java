@@ -171,12 +171,9 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 *             if anything else went wrong e.g. bad encoding
 	 */
 	protected void writeLaunchConfigFile(IPath sourceLookupRoot, String configFileName) throws FileNotFoundException, RuntimeException {
-		// Hint: a direct access to attributes of launch configurations is not
+		// NOTE: a direct access to attributes of launch configurations is not
 		// implemented in class LaunchConfiguration; therefore the settings
 		// are done by reading them from the file system which is supported.
-		// A second advantage of this approach is that the user can manipulate
-		// the automatically generated file manually using the standard Eclipse
-		// configuration editor. 
 		
 		PrintWriter writer = null;
 		String info = "Error when trying to write a launch configuration " + 
@@ -202,7 +199,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 						configFileName + "." + 
 						LaunchConfiguration.LAUNCH_CONFIGURATION_FILE_EXTENSION;
 		
-		try {// TODO: should we use UTF-8 here?
+		try {// TODO amay: should we use UTF-8 here?
 			writer = new PrintWriter(fileName, "UTF-8");
 			writer.print(prePortNumXMLText + portNum + 
 						 postPortNumXMLText + sourceLookupRootString + 
