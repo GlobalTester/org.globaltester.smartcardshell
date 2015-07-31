@@ -228,7 +228,6 @@ public class RhinoJavaScriptAccess {
 			// NOTE: this exception is not send to the UI since
 			// there seems currently not to be a need to inform the user
 			// explicitly.
-			// TODO should anything else be done here?
 		}
 	}
 
