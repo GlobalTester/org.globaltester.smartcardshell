@@ -34,7 +34,7 @@ public class RhinoJavaScriptAccess {
 	 * which do not have access to the RhinoJavaScriptAccess and debugger
 	 * objects. It is used for initializing the {@link #portNum} value in new
 	 * RhinoJavaScriptAccess instances.<br>
-	 * Hint: Since it is read as a string from the configuration file, and set
+	 * NOTE: Since it is read as a string from the configuration file, and set
 	 * as a string when setting up the socket communication, this is not
 	 * declared as an integer.
 	 */
