@@ -49,17 +49,19 @@ import org.apache.commons.io.IOUtils;
  * mappable).<BR><BR>
  * 
  * FIXME Some functionality is still missing:<BR>
- * - Implementation for some additional Reader-methods is missing:
- * 	 more read methods, skip, reset (anything else?) (see ticket #68)
- * - special treatment for cdata areas inside JavaScript code: there may only be 
- * 	 one cdata area per "Technical Command/Result ..." block, which brackets 
- *   the whole JS code there
- * - JS code may not contain special XML characters such as "& lt ;" for "<"
+ * - some additional methods of class Reader should be added to ensure the 
+ * interface is complete:
+ * more read methods, skip, reset (anything else?)<BR>
+ * - cdata areas inside JavaScript code: there may currently be only one cdata 
+ * area per "Technical Command/Result ..." block, which brackets 
+ * the whole JS code there<BR>
+ * - JS code may not contain special XML characters such as "& lt ;" for "<"; 
+ * cdata areas can be used instead<BR>
  * - if one of the GT XML tags (TechnicalCommand etc.) is accidentally
- * 	 positioned inside an XML or JavaScript string value, this is not
- * 	 recognized. This is probably no problem since '<''>' must be masked
- *	 inside attribute values in XML code. Inside JavaScript such values should
- *   be bracketed by a cdata region and should thus also be no problem.
+ * positioned inside an XML or JavaScript string value, this is not
+ * recognized. This is probably no problem since '<''>' must be masked
+ * inside attribute values in XML code. Inside JavaScript such values should
+ * be bracketed by a cdata region and should thus also be no problem.
  * 
  * @author koelzer
  *
@@ -446,14 +448,20 @@ public class ConvertFileReader extends FileReader {
 		fileCursor += readChars; // move the cursor further adding the number of
 									// characters read
 
-		// TODO file is currently written at the end;
+		// TODO JS file is currently written at the end;
 		// we should better write every part, since exceptions from
 		// Context.evaluateReader() can cause that this point is never
 		// reached
 		if (fileCursor >= fileLength ) {// finished. file is completely
 												// read
-			JSFileWriter outputWriter = new JSFileWriter(fileName);
-			outputWriter.writeOutput(convertedCode);
+			try {
+				JSFileWriter outputWriter = new JSFileWriter(fileName);
+				outputWriter.writeOutput(convertedCode);
+			} catch (Exception exc) {
+				System.out.println("An error occurred acsessing file " + 
+						fileName + " for writing the converted JavaScript " + 
+						"code in ConvertFileReader.");
+			}
 		}
 
 		return readChars;
