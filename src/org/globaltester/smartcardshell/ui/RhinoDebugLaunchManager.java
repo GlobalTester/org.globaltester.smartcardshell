@@ -40,7 +40,7 @@ import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
  * and to get the port number. Then communicate
  * this port number using
  * {@link RhinoJavaScriptAccess#setStandardPortNum(String)}. The launch can then
- * be started using {@link #startDebugLaunchConfiguration()}. An example for this
+ * be started using {@link #startDebugLaunchConfiguration()}. For an example for this
  * use and the thread synchronisation needed for these two processes
  * see ->DebugTestCommandHandler (see above).
  * 
@@ -158,13 +158,17 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	}
 
 	/**
-	 * Writes a configuration file named configFileName
-	 * plus ".launch" extension to the standard Eclipse debug .launches-directory. 
-	 * If the file exists already, it is overwritten!<br>
+	 * Writes a configuration file named configFileName plus ".launch" extension
+	 * to the standard Eclipse debug .launches-directory, using the standard
+	 * launch file texts combined with the currently set port number and the
+	 * source lookup path sourceLookupRoot. If the file exists already, it is
+	 * overwritten!<br>
 	 * 
-	 * @param sourceLookupRoot root directory where the debugger should start 
-	 * 			its source lookup
-	 * @param configFileName file name to write to
+	 * @param sourceLookupRoot
+	 *            root directory where the debugger should start its source
+	 *            lookup
+	 * @param configFileName
+	 *            file name to write to
 	 * @throws FileNotFoundException
 	 *             if the file could not be written
 	 * @throws RuntimeException
@@ -199,14 +203,14 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 						configFileName + "." + 
 						LaunchConfiguration.LAUNCH_CONFIGURATION_FILE_EXTENSION;
 		
-		try {// TODO amay: should we use UTF-8 here?
+		try {
 			writer = new PrintWriter(fileName, "UTF-8");
 			writer.print(prePortNumXMLText + portNum + 
 						 postPortNumXMLText + sourceLookupRootString + 
 						 postRhinoSourceLookupPathXMLText);
 		} catch (UnsupportedEncodingException e) {
-			String error = info
-					+ "File encoding UTF-8 is not supported by PrintWriter.";
+			String error = info + "\nFile name: " + fileName + "\n"
+					+ "File encoding UTF-8 is not supported.";
 			JSDebugLogger.error(error);
 			// we use RuntimeException here to avoid more exception types in the interface
 			// and usually there should not be problems with UTF-8
