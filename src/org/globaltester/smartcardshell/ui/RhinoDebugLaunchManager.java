@@ -47,6 +47,7 @@ import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
  * @author koelzer
  *
  */
+@SuppressWarnings("restriction")
 public class RhinoDebugLaunchManager extends LaunchManager {
 	
 	/**
@@ -375,7 +376,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @throws RuntimeException see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 */
 	public void initDebugLaunchConfiguration(IPath sourceLookupRoot) throws FileNotFoundException, RuntimeException {
-		// NOTE: launch configurations are only read ones from the file system
+		// NOTE: launch configurations are only read once from the file system
 		// by the launch manager and configuration classes when
 		// the system is started. Afterwards
 		// changing a launch configuration on the file system
