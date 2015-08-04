@@ -1,6 +1,7 @@
 package org.globaltester.smartcardshell.jsinterface;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 // TODO: check file coding or not? UTF-8?
 // TODO: Tags could be a set. more elegant
@@ -53,9 +54,10 @@ public class JSFileWriter {
 	/**
 	 * creates a new {@link #writer} for file {@link #outputJSFileName}
 	 * @throws FileNotFoundException if {@link #writer} could not be started
+	 * @throws UnsupportedEncodingException if UTF-8 is not supported
 	 * @precondition {@link #outputJSFileName} != null
 	 */
-	private void openOutputFile() throws FileNotFoundException {
+	private void openOutputFile() throws FileNotFoundException, UnsupportedEncodingException {
 		assert (outputJSFileName != null);
 		
 		if (writer != null) {
@@ -64,8 +66,7 @@ public class JSFileWriter {
 			return;
 		}
 		
-		//writer = new PrintWriter( outputFileName, "UTF-8"); //TODO: should we use UTF-8 here?
-		writer = new PrintWriter( outputJSFileName);		
+		writer = new PrintWriter( outputJSFileName, "UTF-8");
 	}
 
 
@@ -77,6 +78,7 @@ public class JSFileWriter {
 		System.out.println(text);
 		assert (writer != null);
 		writer.print(text);
+		writer.flush();
 	}
 
 	/**
@@ -101,8 +103,9 @@ public class JSFileWriter {
 	 * 
 	 * @param text
 	 * @throws FileNotFoundException if file could not be opened
+	 * @throws UnsupportedEncodingException if file encoding (UTF-8) is not supported
 	 */
-	public void writeOutput(String text) throws FileNotFoundException {
+	public void writeOutput(String text) throws FileNotFoundException, UnsupportedEncodingException {
 		openOutputFile();
 		writeJS2OutputFile(text);
 		closeOutputFile();		
