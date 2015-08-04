@@ -70,6 +70,8 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 			cx = rhinoAccess.activateContext(false);
 		} catch (Exception exc) {
 			// probably a JavaScript debugger exception;
+			// we catch this exception here to be able to log it;
+			// then rethrow it for the calling modules.
 			// As long as JavaScript debugging is not supported for SmartCardShellView,
 			// (which is currently the case) we do not really expect exceptions here.
 			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
