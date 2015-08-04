@@ -24,7 +24,7 @@ import org.mozilla.javascript.tools.shell.Global;
  * {@link #activateContext(boolean)}. If a context is no longer needed, finish
  * its use by calling {@link #exitContext()}.
  * 
- * @author koelzer
+ * @author akoelzer
  */
 public class RhinoJavaScriptAccess {
 
@@ -59,7 +59,7 @@ public class RhinoJavaScriptAccess {
 	 * For JavaScript access a context must be activated. The context factory
 	 * delivers a new context respectively the context for the current thread. <br>
 	 * NOTE: This context factory is accessible from other modules using
-	 * ContextFactory.getGlobal(), see {@link #ContextFactory} for details.
+	 * ContextFactory.getGlobal(), see {@link ContextFactory} for details.
 	 */
 	protected static ContextFactory contextFactory = createContextFactory();
 
