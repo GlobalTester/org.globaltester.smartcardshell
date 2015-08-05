@@ -27,7 +27,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.ViewPart;
 import org.globaltester.core.ui.DialogOptions;
 import org.globaltester.core.ui.GtUiHelper;
@@ -38,7 +37,6 @@ import org.globaltester.smartcardshell.ScriptRunner;
 import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 import org.globaltester.smartcardshell.ui.Activator;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
 
 import de.cardcontact.scdp.js.GPTracer;
 
@@ -61,27 +59,16 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 	protected CommandHistory cmdHistory = new CommandHistory();
 
 	public SmartCardShellView() throws OpenCardException,
-			ClassNotFoundException, RuntimeException {
+			ClassNotFoundException {
 
+		// FIXME smartcard shell is currently not working properly;
+		// JS operations seem not be executed.
+		// Could be s.th. wrong with context !?
 		// activate Rhino JS Context
 		rhinoAccess = new RhinoJavaScriptAccess();
 		Context cx = null;
-		try {
-			cx = rhinoAccess.activateContext(false);
-		} catch (Exception exc) {
-			// probably a JavaScript debugger exception;
-			// we catch this exception here to be able to log it;
-			// then rethrow it for the calling modules.
-			// As long as JavaScript debugging is not supported for SmartCardShellView,
-			// (which is currently the case) we do not really expect exceptions here.
-			String info = "A problem occurred when trying to activate the Rhino JavaScript context."
-					+ exc.getLocalizedMessage();
-			
-			GTLogger.getInstance().error(info);
-			GtErrorLogger.log(Activator.PLUGIN_ID, exc);
-			throw new RuntimeException(info, exc);
-		}
-		
+		cx = rhinoAccess.activateContext();
+
 		// init JS ScriptRunner
 		scriptRunner = new ScriptRunner(cx, System.getProperty("user.dir"));
 		scriptRunner.init(cx);
