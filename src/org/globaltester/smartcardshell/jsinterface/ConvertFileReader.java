@@ -9,9 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 
 
 
@@ -63,7 +65,7 @@ import org.apache.commons.io.IOUtils;
  * inside attribute values in XML code. Inside JavaScript such values should
  * be bracketed by a cdata region and should thus also be no problem.
  * 
- * @author koelzer
+ * @author akoelzer
  *
  */
 public class ConvertFileReader extends FileReader {
@@ -184,7 +186,7 @@ public class ConvertFileReader extends FileReader {
 			}
 			writer.flush();
 			writer.close();
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -212,7 +214,7 @@ public class ConvertFileReader extends FileReader {
 	 * 
 	 */
 	public ConvertFileReader(String fileName) throws FileNotFoundException,
-			IOException, Exception {
+			IOException, RuntimeException {
 
 		super(fileName);
 		this.fileName = fileName;
@@ -457,7 +459,11 @@ public class ConvertFileReader extends FileReader {
 			try {
 				JSFileWriter outputWriter = new JSFileWriter(fileName);
 				outputWriter.writeOutput(convertedCode);
-			} catch (Exception exc) {
+			} catch (FileNotFoundException exc) {
+				System.out.println("An error occurred acsessing file " + 
+						fileName + " for writing the converted JavaScript " + 
+						"code in ConvertFileReader.");
+			} catch (UnsupportedEncodingException exc) {
 				System.out.println("An error occurred acsessing file " + 
 						fileName + " for writing the converted JavaScript " + 
 						"code in ConvertFileReader.");
@@ -502,8 +508,8 @@ public class ConvertFileReader extends FileReader {
 	 *             in case a syntax error occurred (end tag missing)
 	 */
 	// TODO should there be an exception of none of our tags is found?
-	public void findTagIndexes() throws Exception { // TODO which exception
-													// class ? new one?
+	public void findTagIndexes() throws RuntimeException { // TODO which exception
+													// class ? syntax error?
 
 		boolean found = true;
 		int fromIndex, startPos, endPos, pos, pos2;
@@ -535,7 +541,7 @@ public class ConvertFileReader extends FileReader {
 						// something wrong - no end tag found
 						// throw exception? TODO
 						// System.out.println("fromIndex: " + fromIndex);
-						throw new Exception("Syntax error in file " + fileName
+						throw new RuntimeException("Syntax error in file " + fileName
 								+ "occured! End tag not found!");
 					}
 				}
