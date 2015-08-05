@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import opencard.core.service.SmartCard;
 
 import org.globaltester.cardconfiguration.CardConfig;
+import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceInitializer;
 import org.junit.AfterClass;
@@ -40,11 +41,12 @@ public class ScriptRunnerTest {
 	}
 
 	@Test
-	public void testInitialCardConfig() throws Exception {
+	public void testInitialCardConfig() throws RuntimeException {
 
 		// activate Rhino JS Context
 		RhinoJavaScriptAccess rhinoAccess = new RhinoJavaScriptAccess();
-		Context cx = rhinoAccess.activateContext(false);
+		Context cx = rhinoAccess.activateContext(); // no exception handling done
+						// here since this is done in the calling methods
 
 		// init JS ScriptRunner
 		ScriptRunner sr = new ScriptRunner(cx, "");
@@ -69,11 +71,12 @@ public class ScriptRunnerTest {
 	 * (or sth. went wrong when activating the context) 
 	 */
 	@Test
-	public void testProtocolClassLoader() throws Exception {
+	public void testProtocolClassLoader() throws RuntimeException {
 
 		// activate Rhino JS Context
 		RhinoJavaScriptAccess rhinoAccess = new RhinoJavaScriptAccess();
-		Context cx = rhinoAccess.activateContext(false);
+		Context cx = rhinoAccess.activateContext(); // no exception handling done
+						// here since this is done in the calling methods
 
 		// init JS ScriptRunner
 		ScriptRunner sr = new ScriptRunner(cx, "");
