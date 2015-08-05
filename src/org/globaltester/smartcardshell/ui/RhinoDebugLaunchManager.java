@@ -44,7 +44,7 @@ import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
  * use and the thread synchronisation needed for these two processes
  * see ->DebugTestCommandHandler (see above).
  * 
- * @author koelzer
+ * @author akoelzer
  *
  */
 @SuppressWarnings("restriction")
@@ -78,7 +78,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			"sourceContainers duplicates=&quot;true&quot;&gt;&#13;&#10;&lt;" +
 			"container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; " +
 			"encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;" +
-			"&amp;#13;&amp;#10;&amp;lt;folder nest=&amp;quot;false&amp;quot; path=&amp;quot;";
+			"&amp;#13;&amp;#10;&amp;lt;directory nest=&amp;quot;false&amp;quot; path=&amp;quot;";
 	
 			//"/GlobalTester Sample TestSpecification/TestCases" +
 
@@ -88,7 +88,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 */
 	protected final static String postRhinoSourceLookupPathXMLText = 
 			"&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; " +
-			"typeId=&quot;org.eclipse.debug.core.containerType.folder&quot;" +
+			"typeId=&quot;org.eclipse.debug.core.containerType.directory&quot;" +
 			"/&gt;&#13;&#10;&lt;/sourceContainers&gt;&#13;&#10;&lt;" +
 			"/sourceLookupDirector&gt;&#13;&#10;\"/>\n" +
 	"</launchConfiguration>\n";		
@@ -122,6 +122,11 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 */
 	protected final static String PORT_KEY = "port";
 	
+	/**
+	 * path where sources for debugging can be looked for by debugger
+	 */
+	protected IPath sourceLookupRootPath = null;
+
 	/**
 	 * This stores the configuration information read from
 	 * {@link #standardLaunchConfigFileName}. Since the configuration may be
@@ -165,9 +170,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * source lookup path sourceLookupRoot. If the file exists already, it is
 	 * overwritten!<br>
 	 * 
-	 * @param sourceLookupRoot
-	 *            root directory where the debugger should start its source
-	 *            lookup
 	 * @param configFileName
 	 *            file name to write to
 	 * @throws FileNotFoundException
@@ -175,18 +177,24 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @throws RuntimeException
 	 *             if anything else went wrong e.g. bad encoding
 	 */
-	protected void writeLaunchConfigFile(IPath sourceLookupRoot, String configFileName) throws FileNotFoundException, RuntimeException {
+	protected void writeLaunchConfigFile(String configFileName)
+			throws FileNotFoundException, RuntimeException {
 		// NOTE: a direct access to attributes of launch configurations is not
 		// implemented in class LaunchConfiguration; therefore the settings
-		// are done by reading them from the file system which is supported.
+		// are done by reading them from the file system (which is supported).
 		
 		PrintWriter writer = null;
+		String sourceLookupRootString = "";
+		
 		String info = "Error when trying to write a launch configuration " + 
 				"to the file system.\n";
-		String sourceLookupRootString = "";
-		if (sourceLookupRoot != null) {
-			// set path string for launch configuration 
-			sourceLookupRootString = sourceLookupRoot.toPortableString();
+		if (sourceLookupRootPath != null) {
+			// set path string for launch configuration
+			sourceLookupRootString = sourceLookupRootPath.toOSString();
+			if (sourceLookupRootString == "") { //path missing or not convertable
+				throw new RuntimeException(info + 
+					"No source lookup path found for JavaScript debug launch.");
+			}
 		}
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
@@ -234,6 +242,23 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	}
 
 	/**
+	 * extracts relevant debugging settings from envSettings
+	 * 
+	 * @param envSettings
+	 *            may contain environment settings for starting the debugger;
+	 *            e.g. port number and file path of currently selected resource
+	 */
+	protected void setupEnvVariables(HashMap<String, Object> envSettings) {
+		Object portObj = envSettings.get(RhinoJavaScriptAccess.getRhinoJSPortHashKey());
+		if (portObj instanceof String)
+			portNum = (String) portObj;
+		Object pathObj = envSettings.get(RhinoJavaScriptAccess.getRhinoJSLookupPathHashKey());
+		if (pathObj instanceof IPath)
+			sourceLookupRootPath = (IPath) pathObj;
+	}
+	
+
+	/**
 	 * Checks the given configuration {@link #launchConfig} for the attribute
 	 * {@link #PORT_KEY} and sets {@link #portNum} with its value. If this is not
 	 * successful, the value will stay unchanged (it is initially set to a
@@ -267,7 +292,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 					JSDebugLogger.error("Key \"" + PORT_KEY
 							+ "\" was not found!\n");
 				}
-			} catch (CoreException exc) {
+			} catch (CoreException exc) { // can come from getAttribute()
 				String error = "No valid argument map found for Rhino debug "
 						+ "configuration settings! Port number stays set to default value.\n";
 				JSDebugLogger.error(error);
@@ -312,10 +337,14 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	/**
 	 * Reads the configuration settings from the file system using
 	 * {@link #findLocalLaunchConfiguration(String)}.
-	 * @param configFileName 
 	 * 
-	 * @throws FileNotFoundException if no launch configuration file could be found or opened.
-	 * @throws RuntimeException if a type error occurred when accessing the launch configuration.
+	 * @param configFileName name of configuration file which is looked for
+	 * 
+	 * @throws FileNotFoundException
+	 *             if no launch configuration file could be found or opened.
+	 * @throws RuntimeException
+	 *             if a type error occurred when accessing the launch
+	 *             configuration.
 	 */
 	public void readDebugLaunchConfiguration(String configFileName) throws FileNotFoundException, RuntimeException {
 
@@ -370,12 +399,13 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * Tries to read the standard launch configuration from the file system (see 
 	 * {@link #readDebugLaunchConfiguration(String)}). If this is not successful,
 	 * a temporary launch configuration is used.
-	 * @param sourceLookupRoot root directory where the debugger should start 
+	 * @param envSettings contains root directory where the debugger should start 
 	 * 			its source lookup.
 	 * @throws FileNotFoundException see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 * @throws RuntimeException see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 */
-	public void initDebugLaunchConfiguration(IPath sourceLookupRoot) throws FileNotFoundException, RuntimeException {
+	public void initDebugLaunchConfiguration(HashMap<String, Object> envSettings)
+			throws FileNotFoundException, RuntimeException {
 		// NOTE: launch configurations are only read once from the file system
 		// by the launch manager and configuration classes when
 		// the system is started. Afterwards
@@ -388,12 +418,13 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		// If editing an automatically generated or changed launch configuration
 		// becomes necessary, methods for sending notifying signals to the
 		// launch manager must be found resp. implemented.
+		setupEnvVariables(envSettings);
 		try {
 			readDebugLaunchConfiguration(standardLaunchConfigFileName);
 		}
-		catch (Exception e) {
+		catch (Exception e) { //must be done in any case; therefore "catch all"
 			// launch configuration could not be read -> create a temporary one
-			createDebugLaunchConfiguration(sourceLookupRoot, tmpLaunchConfigFileName);
+			createDebugLaunchConfiguration(tmpLaunchConfigFileName);
 			deleteConfigFile(tmpLaunchConfigFileName);
 		}
 	}
@@ -402,19 +433,16 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * Creates a debug launch configuration using a default XML debug launch 
 	 * configuration file text. This can be used when no launch configuration 
 	 * file was created by the user.
-	 * For details and exceptions thrown see {@link #writeLaunchConfigFile(IPath, String)}, 
+	 * For details and exceptions thrown see {@link #writeLaunchConfigFile(String)}, 
 	 * {@link #readDebugLaunchConfiguration(String)}.
-	 * @param sourceLookupRoot root directory where the debugger should start 
-	 * 			its source lookup.
 	 * @param configFileName file name to write to 
 	 * @throws FileNotFoundException 
 	 * @throws RuntimeException
 	 */
-	public void createDebugLaunchConfiguration(IPath sourceLookupRoot,
-			String configFileName) throws FileNotFoundException,
+	protected void createDebugLaunchConfiguration(String configFileName) throws FileNotFoundException,
 			RuntimeException {
 		// write launch file to file system; then read the configuration from there
-		writeLaunchConfigFile(sourceLookupRoot, configFileName);
+		writeLaunchConfigFile(configFileName);
 		readDebugLaunchConfiguration(configFileName);
 	}
 
