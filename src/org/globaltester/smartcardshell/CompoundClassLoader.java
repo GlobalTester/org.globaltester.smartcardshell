@@ -14,7 +14,7 @@ import java.util.Iterator;
  * 
  * The actual loading is executed by the standard method java.lang.ClassLoader.loadClass().
  * 
- * @author koelzer
+ * @author akoelzer
  **/
 public class CompoundClassLoader extends ClassLoader {
 	
