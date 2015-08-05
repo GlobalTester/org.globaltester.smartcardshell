@@ -1,6 +1,8 @@
 package org.globaltester.smartcardshell.jsinterface;
 
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger;
@@ -21,27 +23,32 @@ import org.mozilla.javascript.tools.shell.Global;
  * a context must be activated. If debug mode is wished, a debugger must be
  * activated. This functionality is provided by this class. <br>
  * To use this class construct an instance of it and then call
- * {@link #activateContext(boolean)}. If a context is no longer needed, finish
+ * {@link #activateContext()} or {@link #activateContext(HashMap)}. 
+ * If a context is no longer needed, finish
  * its use by calling {@link #exitContext()}.
  * 
  * @author akoelzer
  */
 public class RhinoJavaScriptAccess {
 
-	/**
-	 * Port number for socket communication between the debugger thread and the
-	 * debugger launch thread. This class variable is settable from modules
-	 * which do not have access to the RhinoJavaScriptAccess and debugger
-	 * objects. It is used for initializing the {@link #portNum} value in new
-	 * RhinoJavaScriptAccess instances.<br>
-	 * NOTE: Since it is read as a string from the configuration file, and set
-	 * as a string when setting up the socket communication, this is not
-	 * declared as an integer.
-	 */
-	static protected String standardPortNum = "9000";
+	private static final String RHINO_JS_PORT_HASH_KEY = "RHINO_JS_PORT_HASH_KEY";
+	private static final String RHINO_JS_FILENAME_HASH_KEY = "RHINO_JS_FILENAME_HASH_KEY";
+	private static final String RHINO_JS_SOURCE_LOOKUP_HASH_KEY = "RHINO_JS_SOURCE_LOOKUP_HASH_KEY";
+	
+	public static String getRhinoJSPortHashKey() {
+		return RHINO_JS_PORT_HASH_KEY;
+	}
+
+	public static String getRhinoJSFileNameHashKey() {
+		return RHINO_JS_FILENAME_HASH_KEY;
+	}
+
+	public static String getRhinoJSLookupPathHashKey() {
+		return RHINO_JS_SOURCE_LOOKUP_HASH_KEY;
+	}
 
 	/**
-	 * This interface class is used for {@link #debuggerStartedObj} and serves
+	 * This interface class is used for {@link debuggerStartedObj} and serves
 	 * as a place holder which can be filled with functionality in later
 	 * versions if needed to make some debugger information accessible.
 	 */
@@ -67,7 +74,7 @@ public class RhinoJavaScriptAccess {
 	 * XML file currently being debugged. Currently only used for testing
 	 * the {@link #ConvertFileReader} routines.
 	 */
-	protected static IPath currentXMLFilePath = null;
+	protected IPath currentXMLFilePath = null;
 
 	/**
 	 * If a JavaScript debugger is active, this member stores a reference to it.
@@ -89,14 +96,6 @@ public class RhinoJavaScriptAccess {
 	 * for later versions, but not yet implemented. 
 	 */
 	protected String portNum = "9000";
-
-	/**
-	 * Constructor initializes {@link #portNum} with the value of
-	 * {@link #standardPortNum}.
-	 */
-	public RhinoJavaScriptAccess() {
-		portNum = standardPortNum;
-	}
 
 	/**
 	 * Collects the class loaders for all protocol extensions in smartcardshell
@@ -123,22 +122,6 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
-	 * @return {@link #standardPortNum}
-	 */
-	public static String getStandardPortNum() {
-		return standardPortNum;
-	}
-
-	/**
-	 * @see #standardPortNum
-	 * @param standardPortNum
-	 *            the standardPortNum to set
-	 */
-	public static void setStandardPortNum(String standardPortNum) {
-		RhinoJavaScriptAccess.standardPortNum = standardPortNum;
-	}
-
-	/**
 	 * Creates the {@link #contextFactory} and initializes an appropriate
 	 * compound class loader for it, using loaders for protocol extensions,
 	 * compare {@link #getCompoundClassLoaderForProtocols()}.<br>
@@ -148,9 +131,6 @@ public class RhinoJavaScriptAccess {
 	protected static ContextFactory createContextFactory() {
 
 		contextFactory = new ContextFactory();
-		ContextFactory.initGlobal(contextFactory); // makes this context factory
-													// accessible
-		// from other modules using ContextFactory.getGlobal()
 
 		// here we add an appropriate class loader to avoid the
 		// class load problem of org.mozilla.javascript plugin
@@ -231,6 +211,24 @@ public class RhinoJavaScriptAccess {
 		}
 	}
 
+
+	/**
+	 * extracts relevant debugging settings from envSettings
+	 * 
+	 * @param envSettings
+	 *            may contain environment settings for starting the debugger;
+	 *            e.g. port number and file path of currently selected resource
+	 */
+	protected void setupEnvVariables(HashMap<String, Object> envSettings) {
+		Object portObj = envSettings.get(RHINO_JS_PORT_HASH_KEY);
+		if (portObj instanceof String)
+			portNum = (String) portObj;
+		Object pathObj = envSettings.get(RHINO_JS_FILENAME_HASH_KEY);
+		if (pathObj instanceof IPath)
+			currentXMLFilePath = (IPath) pathObj;
+	}
+	
+	
 	/**
 	 * @return {@link #portNum}
 	 */
@@ -249,24 +247,44 @@ public class RhinoJavaScriptAccess {
 
 	/**
 	 * Delivers a new context - respectively the context connected to the
-	 * current thread - and activates it. If debugMode==true, the Rhino
-	 * JavaScript debugger will be started. activateContext() must always be
-	 * followed by {@link #exitContext()} when JavaScript access is finished!
+	 * current thread - and activates it. If envSettings contains debugger
+	 * settings, the Rhino JavaScript debugger will be started.
+	 * activateContext() must always be followed by {@link #exitContext()} when
+	 * JavaScript access is finished!
 	 * 
-	 * @param newDebugMode
-	 *            indicates if the debugger should be started or not
+	 * @param envSettings
+	 *            may contain information on how the debugger should be started
 	 * @return the activated context
-	 * @throws RuntimeException if the debugger could not be started. 
-	 * 			In this case no context will be activated.
+	 * @throws RuntimeException
+	 *             if the debugger could not be started. In this case no context
+	 *             will be activated.
 	 */
-	public Context activateContext(boolean newDebugMode) throws RuntimeException {
+	public Context activateContext(HashMap<String, Object> envSettings) throws RuntimeException {
 		
-		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + 
-							newDebugMode +  "\n");
-		if (newDebugMode) {
+		// checks envSettings for debugging settings; if there were any, the debugger is started
+		// otherwise not
+		setupEnvVariables(envSettings);
+		
+		if (portNum != null) {
 			debugMode = true;
 			startJSDebugger();
 		}
+
+		return activateContext();
+	}
+
+	/**
+	 * Delivers a new context - respectively the context connected to the
+	 * current thread - and activates it.<br>
+	 * activateContext() must always be
+	 * followed by {@link #exitContext()} when JavaScript access is finished!
+	 * 
+	 * @return the activated context
+	 */
+	public Context activateContext() {
+		
+		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + 
+				debugMode +  "\n");
 
 		// this always delivers the current context (if none is there, it will
 		// be generated)
@@ -275,6 +293,7 @@ public class RhinoJavaScriptAccess {
 		return cx;
 	}
 
+	
 	/**
 	 * Stops the JavaScript debugger, if in debug mode, and exits the current
 	 * context.
@@ -293,33 +312,29 @@ public class RhinoJavaScriptAccess {
 	 * Currently only used for testing the {@link #ConvertFileReader} routines.
 	 * @param path
 	 */
-	public static void setCurrentXMLFile(IPath path) {
+	public void setCurrentXMLFile(IPath path) {
 
 		currentXMLFilePath = null;
 
 		if (path == null)
 			return;
-		
-		try {
-			String ext = path.getFileExtension();
-			if (ext.equals("xml")) {
-				currentXMLFilePath = path;
-			}
-		} catch (Exception e) {
-			// System.err.println("Not good!");
-		}	
+
+		String ext = path.getFileExtension();
+		if ((ext != null) && (ext.equals("xml"))) {
+			currentXMLFilePath = path;
+		}
 	}
 
 	/**
-	 * Converts test case given by iPath from xml to JavaScript by extracting
-	 * only the JS parts. Then evaluates the file with the Rhino evaluateReader
-	 * method. Currently only used for testing the {@link #ConvertFileReader}
-	 * routines.
+	 * Converts test case given by iPath in envSettings from xml to JavaScript
+	 * by extracting only the JS parts. Then evaluates the file with the Rhino
+	 * evaluateReader method. Currently only used for testing the
+	 * {@link #ConvertFileReader} routines.
 	 * 
 	 * @param iPath
 	 */
-	public static void XML2JSConverter(IPath iPath) {
-		setCurrentXMLFile(iPath);
+	public void XML2JSConverter(HashMap<String, Object> envSettings) {
+		setupEnvVariables(envSettings);;
 
 		if (currentXMLFilePath == null)
 			return;
@@ -348,7 +363,7 @@ public class RhinoJavaScriptAccess {
 			System.err.println("Column number: " + e.columnNumber());
 			if (e.getCause() != null)
 				System.err.println(e.getCause().toString());
-		} catch (Exception e) {
+		} catch (IOException e) { //includes FileNotFoundException
 //			e.printStackTrace();
 			String errorText = "An error occurred reading and evaluating file "
 					+ currentXMLFilePath;
