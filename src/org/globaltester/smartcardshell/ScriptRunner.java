@@ -1,6 +1,7 @@
 package org.globaltester.smartcardshell;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -17,7 +18,6 @@ import org.globaltester.cardconfiguration.CardConfig;
 import org.globaltester.logging.logger.TestLogger;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ImporterTopLevel;
@@ -600,7 +600,7 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 
 		try {
 			in = new FileReader(scriptfile);
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
 			this.currentWorkingDir = oldCWD;
 			Context.reportError(e.toString());
 			return e.getMessage();
