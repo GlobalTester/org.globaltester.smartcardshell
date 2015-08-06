@@ -35,6 +35,7 @@ public class RhinoJavaScriptAccess {
 	private static final String RHINO_JS_FILENAME_HASH_KEY = "RHINO_JS_FILENAME_HASH_KEY";
 	private static final String RHINO_JS_SOURCE_LOOKUP_HASH_KEY = "RHINO_JS_SOURCE_LOOKUP_HASH_KEY";
 	
+	//FIXME AKR what are these getters for? why are those constants private?
 	public static String getRhinoJSPortHashKey() {
 		return RHINO_JS_PORT_HASH_KEY;
 	}
@@ -96,6 +97,8 @@ public class RhinoJavaScriptAccess {
 	 * for later versions, but not yet implemented. 
 	 */
 	protected String portNum = "9000";
+
+//FIXME AKR why is the constructor missing completely now? How is the port Number changed now?
 
 	/**
 	 * Collects the class loaders for all protocol extensions in smartcardshell
@@ -265,7 +268,7 @@ public class RhinoJavaScriptAccess {
 		// otherwise not
 		setupEnvVariables(envSettings);
 		
-		if (portNum != null) {
+		if (portNum != null) { //FIXME AKR is this check correct? I guess it is not as setupEnvVariables does not make portNum null
 			debugMode = true;
 			startJSDebugger();
 		}
@@ -293,7 +296,6 @@ public class RhinoJavaScriptAccess {
 		return cx;
 	}
 
-	
 	/**
 	 * Stops the JavaScript debugger, if in debug mode, and exits the current
 	 * context.
