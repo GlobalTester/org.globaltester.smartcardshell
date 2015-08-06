@@ -125,6 +125,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	/**
 	 * path where sources for debugging can be looked for by debugger
 	 */
+	//FIXME AKR why this is a field now
 	protected IPath sourceLookupRootPath = null;
 
 	/**
@@ -248,6 +249,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 *            may contain environment settings for starting the debugger;
 	 *            e.g. port number and file path of currently selected resource
 	 */
+	//FIXME AKR why is this extracted as method?
 	protected void setupEnvVariables(HashMap<String, Object> envSettings) {
 		Object portObj = envSettings.get(RhinoJavaScriptAccess.getRhinoJSPortHashKey());
 		if (portObj instanceof String)
