@@ -64,6 +64,7 @@ public class SmartCardShellView extends ViewPart implements GPTracer {
 		// FIXME smartcard shell is currently not working properly;
 		// JS operations seem not be executed.
 		// Could be s.th. wrong with context !?
+
 		// activate Rhino JS Context
 		rhinoAccess = new RhinoJavaScriptAccess();
 		Context cx = null;
