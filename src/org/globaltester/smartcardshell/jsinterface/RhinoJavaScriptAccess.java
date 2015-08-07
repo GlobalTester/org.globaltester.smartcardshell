@@ -331,7 +331,6 @@ public class RhinoJavaScriptAccess {
 	 * evaluateReader method. Currently only used for testing the
 	 * {@link #ConvertFileReader} routines. 
 	 * 
-	 * @param iPath
 	 * @throws RuntimeException if {@link #currentXMLFilePath} is not set.
 	 */
 	public void XML2JSConverter() throws RuntimeException {
