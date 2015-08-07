@@ -125,7 +125,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	/**
 	 * path where sources for debugging can be looked for by debugger
 	 */
-	//FIXME AKR why this is a field now
 	protected IPath sourceLookupRootPath = null;
 
 	/**
@@ -149,6 +148,19 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 										 * declared as an integer.
 										 */
 	
+	/**
+	 * extracts relevant debugging settings from envSettings
+	 * 
+	 * @param envSettings can contain root directory where the debugger should start 
+	 * 			its source lookup.
+	 */
+	public RhinoDebugLaunchManager(HashMap<String, Object> envSettings) {
+		// port number is not extracted here, since it is delivered by the launch manager itself
+		Object pathObj = envSettings.get(RhinoJavaScriptAccess.RHINO_JS_SOURCE_LOOKUP_HASH_KEY);
+		if (pathObj instanceof IPath)
+			sourceLookupRootPath = (IPath) pathObj;		
+	}
+
 	/**
 	 * @return the {@link #standardLaunchConfigFileName}
 	 */
@@ -176,7 +188,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @throws FileNotFoundException
 	 *             if the file could not be written
 	 * @throws RuntimeException
-	 *             if anything else went wrong e.g. bad encoding
+	 *             if anything else went wrong e.g. sourceLookupRootPath is missing or bad encoding
 	 */
 	protected void writeLaunchConfigFile(String configFileName)
 			throws FileNotFoundException, RuntimeException {
@@ -194,8 +206,11 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			sourceLookupRootString = sourceLookupRootPath.toOSString();
 			if (sourceLookupRootString == "") { //path missing or not convertable
 				throw new RuntimeException(info + 
-					"No source lookup path found for JavaScript debug launch.");
+					"Empty source lookup path set for JavaScript debug launch.");
 			}
+		} else { //path missing
+			throw new RuntimeException(info + 
+					"No source lookup path found for JavaScript debug launch.");			
 		}
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
@@ -241,24 +256,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	public String getPortNum() {
 		return portNum;
 	}
-
-	/**
-	 * extracts relevant debugging settings from envSettings
-	 * 
-	 * @param envSettings
-	 *            may contain environment settings for starting the debugger;
-	 *            e.g. port number and file path of currently selected resource
-	 */
-	//FIXME AKR why is this extracted as method?
-	protected void setupEnvVariables(HashMap<String, Object> envSettings) {
-		Object portObj = envSettings.get(RhinoJavaScriptAccess.getRhinoJSPortHashKey());
-		if (portObj instanceof String)
-			portNum = (String) portObj;
-		Object pathObj = envSettings.get(RhinoJavaScriptAccess.getRhinoJSLookupPathHashKey());
-		if (pathObj instanceof IPath)
-			sourceLookupRootPath = (IPath) pathObj;
-	}
-	
 
 	/**
 	 * Checks the given configuration {@link #launchConfig} for the attribute
@@ -398,15 +395,19 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	}		
 	
 	/**
-	 * Tries to read the standard launch configuration from the file system (see 
-	 * {@link #readDebugLaunchConfiguration(String)}). If this is not successful,
-	 * a temporary launch configuration is used.
-	 * @param envSettings contains root directory where the debugger should start 
-	 * 			its source lookup.
-	 * @throws FileNotFoundException see {@link #createDebugLaunchConfiguration(IPath, String)}
-	 * @throws RuntimeException see {@link #createDebugLaunchConfiguration(IPath, String)}
+	 * Tries to read the standard launch configuration from the file system (see
+	 * {@link #readDebugLaunchConfiguration(String)}). If this is not
+	 * successful, a temporary launch configuration is used. In this latter case
+	 * the sourceLookupPath must be set properly, since the debugger works with
+	 * temporary created copies of the JS files otherwise (which makes editing 
+	 * difficult).
+	 * 
+	 * @throws FileNotFoundException
+	 *             see {@link #createDebugLaunchConfiguration(IPath, String)}
+	 * @throws RuntimeException
+	 *             see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 */
-	public void initDebugLaunchConfiguration(HashMap<String, Object> envSettings)
+	public void initDebugLaunchConfiguration()
 			throws FileNotFoundException, RuntimeException {
 		// NOTE: launch configurations are only read once from the file system
 		// by the launch manager and configuration classes when
@@ -420,7 +421,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		// If editing an automatically generated or changed launch configuration
 		// becomes necessary, methods for sending notifying signals to the
 		// launch manager must be found resp. implemented.
-		setupEnvVariables(envSettings);
 		try {
 			readDebugLaunchConfiguration(standardLaunchConfigFileName);
 		}
