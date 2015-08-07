@@ -31,22 +31,10 @@ import org.mozilla.javascript.tools.shell.Global;
  */
 public class RhinoJavaScriptAccess {
 
-	private static final String RHINO_JS_PORT_HASH_KEY = "RHINO_JS_PORT_HASH_KEY";
-	private static final String RHINO_JS_FILENAME_HASH_KEY = "RHINO_JS_FILENAME_HASH_KEY";
-	private static final String RHINO_JS_SOURCE_LOOKUP_HASH_KEY = "RHINO_JS_SOURCE_LOOKUP_HASH_KEY";
+	public static final String RHINO_JS_PORT_HASH_KEY = "RHINO_JS_PORT_HASH_KEY";
+	public static final String RHINO_JS_FILENAME_HASH_KEY = "RHINO_JS_FILENAME_HASH_KEY";
+	public static final String RHINO_JS_SOURCE_LOOKUP_HASH_KEY = "RHINO_JS_SOURCE_LOOKUP_HASH_KEY";
 	
-	//FIXME AKR what are these getters for? why are those constants private?
-	public static String getRhinoJSPortHashKey() {
-		return RHINO_JS_PORT_HASH_KEY;
-	}
-
-	public static String getRhinoJSFileNameHashKey() {
-		return RHINO_JS_FILENAME_HASH_KEY;
-	}
-
-	public static String getRhinoJSLookupPathHashKey() {
-		return RHINO_JS_SOURCE_LOOKUP_HASH_KEY;
-	}
 
 	/**
 	 * This interface class is used for {@link debuggerStartedObj} and serves
@@ -98,7 +86,30 @@ public class RhinoJavaScriptAccess {
 	 */
 	protected String portNum = "9000";
 
-//FIXME AKR why is the constructor missing completely now? How is the port Number changed now?
+	public RhinoJavaScriptAccess() {
+		// usable for activating contexts which do not 
+		// need environment settings
+	}
+
+	/**
+	 * constructor extracts relevant debugging settings from envSettings
+	 * 
+	 * @param envSettings
+	 *            may contain environment settings for starting the debugger;
+	 *            e.g. port number and file path of currently selected resource
+	 */
+	public RhinoJavaScriptAccess(HashMap<String, Object> envSettings) {
+		Object portObj = envSettings.get(RHINO_JS_PORT_HASH_KEY);
+		if (portObj instanceof String) {
+			portNum = (String) portObj;
+			// if a port number is set, debugging shall be activated
+			debugMode = true;
+		}
+		Object pathObj = envSettings.get(RHINO_JS_FILENAME_HASH_KEY);
+		if (pathObj instanceof IPath)
+			currentXMLFilePath = (IPath) pathObj;
+	}		
+
 
 	/**
 	 * Collects the class loaders for all protocol extensions in smartcardshell
@@ -216,23 +227,6 @@ public class RhinoJavaScriptAccess {
 
 
 	/**
-	 * extracts relevant debugging settings from envSettings
-	 * 
-	 * @param envSettings
-	 *            may contain environment settings for starting the debugger;
-	 *            e.g. port number and file path of currently selected resource
-	 */
-	protected void setupEnvVariables(HashMap<String, Object> envSettings) {
-		Object portObj = envSettings.get(RHINO_JS_PORT_HASH_KEY);
-		if (portObj instanceof String)
-			portNum = (String) portObj;
-		Object pathObj = envSettings.get(RHINO_JS_FILENAME_HASH_KEY);
-		if (pathObj instanceof IPath)
-			currentXMLFilePath = (IPath) pathObj;
-	}
-	
-	
-	/**
 	 * @return {@link #portNum}
 	 */
 	public String getPortNum() {
@@ -248,33 +242,33 @@ public class RhinoJavaScriptAccess {
 		this.portNum = portNum;
 	}
 
-	/**
-	 * Delivers a new context - respectively the context connected to the
-	 * current thread - and activates it. If envSettings contains debugger
-	 * settings, the Rhino JavaScript debugger will be started.
-	 * activateContext() must always be followed by {@link #exitContext()} when
-	 * JavaScript access is finished!
-	 * 
-	 * @param envSettings
-	 *            may contain information on how the debugger should be started
-	 * @return the activated context
-	 * @throws RuntimeException
-	 *             if the debugger could not be started. In this case no context
-	 *             will be activated.
-	 */
-	public Context activateContext(HashMap<String, Object> envSettings) throws RuntimeException {
-		
-		// checks envSettings for debugging settings; if there were any, the debugger is started
-		// otherwise not
-		setupEnvVariables(envSettings);
-		
-		if (portNum != null) { //FIXME AKR is this check correct? I guess it is not as setupEnvVariables does not make portNum null
-			debugMode = true;
-			startJSDebugger();
-		}
-
-		return activateContext();
-	}
+//	/**
+//	 * Delivers a new context - respectively the context connected to the
+//	 * current thread - and activates it. If envSettings contains debugger
+//	 * settings, the Rhino JavaScript debugger will be started.
+//	 * activateContext() must always be followed by {@link #exitContext()} when
+//	 * JavaScript access is finished!
+//	 * 
+//	 * @param envSettings
+//	 *            may contain information on how the debugger should be started
+//	 * @return the activated context
+//	 * @throws RuntimeException
+//	 *             if the debugger could not be started. In this case no context
+//	 *             will be activated.
+//	 */
+//	public Context activateContext(HashMap<String, Object> envSettings) throws RuntimeException {
+//		
+//		// checks envSettings for debugging settings; if there were any, the debugger is started
+//		// otherwise not
+//		setupEnvVariables(envSettings);
+//		
+//		if (portNum != null) { //FIXME AKR is this check correct? I guess it is not as setupEnvVariables does not make portNum null
+//			debugMode = true;
+//			startJSDebugger();
+//		}
+//
+//		return activateContext();
+//	}
 
 	/**
 	 * Delivers a new context - respectively the context connected to the
@@ -288,6 +282,10 @@ public class RhinoJavaScriptAccess {
 		
 		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + 
 				debugMode +  "\n");
+
+		if (debugMode) {
+			startJSDebugger();
+		}
 
 		// this always delivers the current context (if none is there, it will
 		// be generated)
@@ -331,15 +329,16 @@ public class RhinoJavaScriptAccess {
 	 * Converts test case given by iPath in envSettings from xml to JavaScript
 	 * by extracting only the JS parts. Then evaluates the file with the Rhino
 	 * evaluateReader method. Currently only used for testing the
-	 * {@link #ConvertFileReader} routines.
+	 * {@link #ConvertFileReader} routines. 
 	 * 
 	 * @param iPath
+	 * @throws RuntimeException if {@link #currentXMLFilePath} is not set.
 	 */
-	public void XML2JSConverter(HashMap<String, Object> envSettings) {
-		setupEnvVariables(envSettings);;
+	public void XML2JSConverter() throws RuntimeException {
 
-		if (currentXMLFilePath == null)
-			return;
+		if (currentXMLFilePath == null) {
+			throw new RuntimeException("File missing conversion of XML file to JavaScript.");
+		}
 
 		Context context = Context.enter();
 		// Class Global provides for sharing functions across multiple threads.
