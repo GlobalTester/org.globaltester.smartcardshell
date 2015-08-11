@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger;
 import org.globaltester.logging.logger.GtErrorLogger;
-import org.globaltester.logging.logger.JSDebugLogger;
+import org.globaltester.logging.logger.GTLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.CompoundClassLoader;
 import org.globaltester.smartcardshell.ProtocolExtensions;
@@ -21,9 +21,11 @@ import org.mozilla.javascript.tools.shell.Global;
  * This class organizes the access to the Rhino JavaScript evaluator and the
  * Rhino JavaScript debugger. Before it is possible to evaluate JavaScript code,
  * a context must be activated. If debug mode is wished, a debugger must be
- * activated. This functionality is provided by this class. <br>
- * To use this class construct an instance of it and then call
- * {@link #activateContext()} or {@link #activateContext(HashMap)}. 
+ * activated.<br>
+ * To use this class construct an instance of it using the default constructor,
+ * if no debugging is needed. Ohterwise set debugger information by call of 
+ * {@link #RhinoJavaScriptAccess(HashMap)}. Then call
+ * {@link #activateContext()}. 
  * If a context is no longer needed, finish
  * its use by calling {@link #exitContext()}.
  * 
@@ -78,17 +80,23 @@ public class RhinoJavaScriptAccess {
 	protected boolean debugMode = false;
 
 	/**
-	 * Individual port number of this instance for the socket communication
-	 * between the debugger thread and the debugger launch thread. It can be
-	 * used when one wants to work with several debuggers on different ports.<br>
-	 * NOTE: This functionality (working with several debuggers) is prepared
-	 * for later versions, but not yet implemented. 
+	 * Port number of this instance for the socket communication
+	 * between the debugger thread and the debugger launch thread.
+	 * The port number will usually be extracted from the Rhino
+	 * debug launch configuration and set then for the RhinoJavaScriptAccess
+	 * instance using the constructor or {@link #setPortNum(String)}. 
+	 * If nothing is exlicitly set, the default value will be used.
+	 * Compare {@link RhinoDebugLaunchManager#portNum}.
 	 */
+	// NOTE: {@link RhinoDebugLaunchManager#portNum} does not work
+	// since module is not imported here
 	protected String portNum = "9000";
 
+	/**
+	 * constructor usable for activating contexts which do not 
+	 * need environment settings
+	 */
 	public RhinoJavaScriptAccess() {
-		// usable for activating contexts which do not 
-		// need environment settings
 	}
 
 	/**
@@ -96,7 +104,8 @@ public class RhinoJavaScriptAccess {
 	 * 
 	 * @param envSettings
 	 *            may contain environment settings for starting the debugger;
-	 *            e.g. port number and file path of currently selected resource
+	 *            e.g. port number {@link #portNum} and file path of currently 
+	 *            selected resource
 	 */
 	public RhinoJavaScriptAccess(HashMap<String, Object> envSettings) {
 		Object portObj = envSettings.get(RHINO_JS_PORT_HASH_KEY);
@@ -139,8 +148,8 @@ public class RhinoJavaScriptAccess {
 	 * Creates the {@link #contextFactory} and initializes an appropriate
 	 * compound class loader for it, using loaders for protocol extensions,
 	 * compare {@link #getCompoundClassLoaderForProtocols()}.<br>
-	 * This method is automatically called on system start and must not be
-	 * called elsewhere.
+	 * This method is automatically called once when the plugin is loaded
+	 * and must not be called elsewhere.
 	 */
 	protected static ContextFactory createContextFactory() {
 
@@ -173,7 +182,7 @@ public class RhinoJavaScriptAccess {
 
 			String info = "Trying to start Rhino debugger with settings "
 					+ rhino + " ...";
-			JSDebugLogger.info(info);
+			GTLogger.getInstance().info(info);
 
 			debugger = new RhinoDebugger(rhino);
 			// create debuggerStartedObject which is used in debug command
@@ -181,7 +190,7 @@ public class RhinoJavaScriptAccess {
 			debuggerStartedObj = new IDebuggerInfo() {};
 
 			debugger.start();
-			JSDebugLogger.info("Debugger thread started!");
+			GTLogger.getInstance().info("Debugger thread started!");
 					
 			if (debugger != null) {
 				contextFactory.addListener(debugger);
@@ -190,7 +199,7 @@ public class RhinoJavaScriptAccess {
 			stopJSDebugger();
 			String info = ("JavaScript Rhino debugger could not be started!\n") +
 							"Reason:\n" + exc.getMessage();
-			JSDebugLogger.error(info);
+			GTLogger.getInstance().error(info);
 //			System.err.println("Rhino Debugger Start Exception:");
 //			exc.printStackTrace();
 
@@ -216,7 +225,7 @@ public class RhinoJavaScriptAccess {
 		} catch (Exception exc) { // probably coming from debugger.stop()
 			String info = "Error while stopping the Rhino JavaScript debugger. Reason:\n " 
 					+ exc.getMessage();
-			JSDebugLogger.error(info);
+			GTLogger.getInstance().error(info);
 			//e.printStackTrace();
 			GtErrorLogger.log(Activator.PLUGIN_ID, new RuntimeException(info, exc));
 			// NOTE: this exception is not send to the UI since
@@ -242,33 +251,6 @@ public class RhinoJavaScriptAccess {
 		this.portNum = portNum;
 	}
 
-//	/**
-//	 * Delivers a new context - respectively the context connected to the
-//	 * current thread - and activates it. If envSettings contains debugger
-//	 * settings, the Rhino JavaScript debugger will be started.
-//	 * activateContext() must always be followed by {@link #exitContext()} when
-//	 * JavaScript access is finished!
-//	 * 
-//	 * @param envSettings
-//	 *            may contain information on how the debugger should be started
-//	 * @return the activated context
-//	 * @throws RuntimeException
-//	 *             if the debugger could not be started. In this case no context
-//	 *             will be activated.
-//	 */
-//	public Context activateContext(HashMap<String, Object> envSettings) throws RuntimeException {
-//		
-//		// checks envSettings for debugging settings; if there were any, the debugger is started
-//		// otherwise not
-//		setupEnvVariables(envSettings);
-//		
-//		if (portNum != null) { //FIXME AKR is this check correct? I guess it is not as setupEnvVariables does not make portNum null
-//			debugMode = true;
-//			startJSDebugger();
-//		}
-//
-//		return activateContext();
-//	}
 
 	/**
 	 * Delivers a new context - respectively the context connected to the
@@ -280,7 +262,7 @@ public class RhinoJavaScriptAccess {
 	 */
 	public Context activateContext() {
 		
-		JSDebugLogger.info("Activating JavaScript context started with debug mode == " + 
+		GTLogger.getInstance().info("Activating JavaScript context started with debug mode == " + 
 				debugMode +  "\n");
 
 		if (debugMode) {
@@ -326,10 +308,12 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
-	 * Converts test case given by iPath in envSettings from xml to JavaScript
-	 * by extracting only the JS parts. Then evaluates the file with the Rhino
-	 * evaluateReader method. Currently only used for testing the
-	 * {@link #ConvertFileReader} routines. 
+	 * Evaluates an XML test case given by {@link #currentXMLFilePath} calling the Rhino
+	 * evaluateReader method with an overridden reader of type {@link #ConvertFileReader}. 
+	 * Thus only the JavaScript parts of the file are sent to the evaluator, the pure XML code 
+	 * is ignored.<br>
+	 * If any errors occur during evaluation, line number etc. are printed to system error.<br>
+	 * Currently only used for testing the {@link #ConvertFileReader} routines. 
 	 * 
 	 * @throws RuntimeException if {@link #currentXMLFilePath} is not set.
 	 */
