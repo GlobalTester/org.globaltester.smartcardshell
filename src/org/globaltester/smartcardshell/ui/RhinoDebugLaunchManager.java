@@ -2,6 +2,7 @@ package org.globaltester.smartcardshell.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.globaltester.logging.logger.GtErrorLogger;
-import org.globaltester.logging.logger.JSDebugLogger;
+import org.globaltester.logging.logger.GTLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 
@@ -50,6 +51,11 @@ import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 @SuppressWarnings("restriction")
 public class RhinoDebugLaunchManager extends LaunchManager {
 	
+	/**
+	 * path where launch configurations are stored and looked for
+	 */
+	IPath pathForLaunches = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
+
 	/**
 	 * XML text for the launch configuration file which stands in front of
 	 * the port number.
@@ -108,12 +114,6 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * standardLaunchConfigFile could be found. This file is deleted after being
 	 * read since the user should not edit it.
 	 */
-	/*
-	 * NOTE: the temporary file is written to the standard Eclipse
-	 * .launches-directory since it can be read from there with standard methods
-	 * which makes the handling easier. If one wants to write it to a GT
-	 * internal directory, more functionality must be implemented!
-	 */
 	protected static String tmpLaunchConfigFileName = "temp_runJSDebugger";
 	
 	/**
@@ -123,7 +123,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	protected final static String PORT_KEY = "port";
 	
 	/**
-	 * path where sources for debugging can be looked for by debugger
+	 * path where JavaScript sources for debugging can be looked for by debugger
 	 */
 	protected IPath sourceLookupRootPath = null;
 
@@ -138,7 +138,9 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	/**
 	 * Port number for the socket communication of the Rhino debugger thread and
 	 * its debug launch thread. This value is currently set from the
-	 * launch configuration file given by {@link #standardLaunchConfigFileName}.<br>
+	 * launch configuration file given by {@link #standardLaunchConfigFileName}.
+	 * If it cannot be retrieved from there, a default value is used. Compare 
+	 * {@link RhinoJavaScriptAccess#portNum}.<br>
 	 */
 	protected String portNum = "9000"; /*
 										 * NOTE: Since it is read as a string
@@ -180,21 +182,38 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * Writes a configuration file named configFileName plus ".launch" extension
 	 * to the standard Eclipse debug .launches-directory, using the standard
 	 * launch file texts combined with the currently set port number and the
-	 * source lookup path sourceLookupRoot. If the file exists already, it is
+	 * source lookup path {@link #sourceLookupRootPath}. If the file exists already, it is
 	 * overwritten!<br>
 	 * 
 	 * @param configFileName
 	 *            file name to write to
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 *             if the file could not be written
 	 * @throws RuntimeException
 	 *             if anything else went wrong e.g. sourceLookupRootPath is missing or bad encoding
 	 */
 	protected void writeLaunchConfigFile(String configFileName)
-			throws FileNotFoundException, RuntimeException {
-		// NOTE: a direct access to attributes of launch configurations is not
-		// implemented in class LaunchConfiguration; therefore the settings
-		// are done by reading them from the file system (which is supported).
+			throws IOException, RuntimeException {
+		/*
+		 * NOTE: the file is written to the standard Eclipse .launches-directory
+		 * since a direct access to attributes of launch configurations is not
+		 * implemented in class LaunchConfiguration. Therefore the settings are
+		 * written to file and then read from there (which is supported). If one
+		 * wants to write the file to a GT internal directory, the path must be
+		 * adapted! If one does not want to use the bypass (write launch
+		 * configuration to file system) more functionality must be implemented.
+		 * 
+		 * NOTE: launch configurations are only read once from the file system
+		 * by the launch manager and configuration classes when Eclipse is
+		 * started. Afterwards adding or changing a launch configuration on the
+		 * file system will not be detected!! Thus the changes made and written
+		 * to file system by RhinoDebugLaunchManager or newly generated files
+		 * will not be noticed in the launch configuration editor and can
+		 * therefore not be edited any further by the user!! If editing an
+		 * automatically generated or changed launch configuration becomes
+		 * necessary, methods for sending notifying signals to the launch
+		 * manager must be found resp. implemented.
+		 */
 		
 		PrintWriter writer = null;
 		String sourceLookupRootString = "";
@@ -214,12 +233,11 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		}
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
-		IPath pathForLaunches = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
 		if (pathForLaunches == null) {
 			// no path set
-			FileNotFoundException exc = new FileNotFoundException(info + 
+			IOException exc = new IOException(info + 
 					"No path found for JavaScript debug launch. " + 
-					"LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH in class " + 
+					"Path for launches in class " + 
 					"LaunchManager must be set correctly!");
 			throw exc;			
 		}
@@ -234,9 +252,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 						 postPortNumXMLText + sourceLookupRootString + 
 						 postRhinoSourceLookupPathXMLText);
 		} catch (UnsupportedEncodingException e) {
-			String error = info + "\nFile name: " + fileName + "\n"
-					+ "File encoding UTF-8 is not supported.";
-			JSDebugLogger.error(error);
+			String error = info + "\nFile name: " + fileName + "\n" +
+					"File encoding not supported.\n" +
+					"(" + e.getLocalizedMessage() + ")";
+			GTLogger.getInstance().error(error);
 			// we use RuntimeException here to avoid more exception types in the interface
 			// and usually there should not be problems with UTF-8
 			RuntimeException newExc = new RuntimeException(error, e);
@@ -269,7 +288,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 					+ getClass().getCanonicalName()
 					+ "!\n"
 					+ "Debug configuration settings cannot be read from it!\n";
-			JSDebugLogger.error(error);
+			GTLogger.getInstance().error(error);
 		} else {
 			try {
 				Map<String, String> argumentMap = new HashMap<String, String>();
@@ -278,23 +297,23 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 				argumentMap = launchConfig.getAttribute("argument_map",
 						defaultMap);
 				if (argumentMap.equals(defaultMap)) {
-					JSDebugLogger
+					GTLogger.getInstance()
 							.error("No argument map found for Rhino debug configuration settings!\n");
-					JSDebugLogger
+					GTLogger.getInstance()
 							.error("Port number could not be extracted!\n");
 				} else if (argumentMap.containsKey(PORT_KEY)) {
 					portNum = argumentMap.get(PORT_KEY);
-					JSDebugLogger.info("Port number is " + portNum + "!\n");
+					GTLogger.getInstance().info("Port number is " + portNum + "!\n");
 				} else {
-					JSDebugLogger
+					GTLogger.getInstance()
 							.error("Port number could not be extracted from Rhino debug configuration settings!\n");
-					JSDebugLogger.error("Key \"" + PORT_KEY
+					GTLogger.getInstance().error("Key \"" + PORT_KEY
 							+ "\" was not found!\n");
 				}
 			} catch (CoreException exc) { // can come from getAttribute()
 				String error = "No valid argument map found for Rhino debug "
 						+ "configuration settings! Port number stays set to default value.\n";
-				JSDebugLogger.error(error);
+				GTLogger.getInstance().error(error);
 				// exc.printStackTrace();
 				// we use RuntimeException here to be able to add some log information to it
 				RuntimeException newExc = new RuntimeException(error, exc);
@@ -307,7 +326,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 		String info = "Port number for thread communication between Rhino "
 				+ "JavaScript debugger and its launch configuration is set to "
 				+ portNum + "!\n";
-		JSDebugLogger.info(info);
+		GTLogger.getInstance().info(info);
 	}
 
 	/**
@@ -348,18 +367,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	public void readDebugLaunchConfiguration(String configFileName) throws FileNotFoundException, RuntimeException {
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
-		IPath containerPath = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
-		if (containerPath == null) {
+		if (pathForLaunches == null) {
 			// no path set
 			FileNotFoundException exc = new FileNotFoundException("No path found for JavaScript debug launch. " + 
-					"LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH in class LaunchManager must be set correctly!");
-			//NOTE: we could use a builtin launch configuration instead!
-			throw exc;			
-		}
-
-		final File directory = containerPath.toFile();
-		if (directory == null) {
-			FileNotFoundException exc = new FileNotFoundException("Error in retrieving file for path " + containerPath.toPortableString() + "!");
+					"Path for launches in class LaunchManager must be set correctly!");
 			throw exc;			
 		}
 
@@ -370,7 +381,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 							configFileName + " " +
 							"for Rhino debugger missing or invalid!\n" +
 							"File was looked for in directory " +
-							containerPath.toPortableString());
+							pathForLaunches.toPortableString());
 			throw exc;
 		}
 		
@@ -382,14 +393,14 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 			// NOTE: uncomment this if you want logging of configuration settings! 
 			// Map<String, Object> attrs = launchConfig.getAttributes();
 			// String info = "Rhino debug configuration settings:" + attrs + "\n";
-			// JSDebugLogger.info(info);
+			// GTLogger.getInstance().info(info);
 		}
-		else { // this should only happen if something basic changes in the 
+		else {	// this should only happen if something basic changes in the 
 				// implementation of launches
 			String error =  "Something wrong with Rhino debug configuration: wrong type - check this!\n" +
 							"Trying to connect debugger to port " + getPortNum() + "!\n" +
 							"Will try to continue execution nevertheless!\n";
-			JSDebugLogger.error(error);
+			GTLogger.getInstance().error(error);
 			throw new ClassCastException(error);
 		}
 	}		
@@ -402,25 +413,13 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * temporary created copies of the JS files otherwise (which makes editing 
 	 * difficult).
 	 * 
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 *             see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 * @throws RuntimeException
 	 *             see {@link #createDebugLaunchConfiguration(IPath, String)}
 	 */
 	public void initDebugLaunchConfiguration()
-			throws FileNotFoundException, RuntimeException {
-		// NOTE: launch configurations are only read once from the file system
-		// by the launch manager and configuration classes when
-		// the system is started. Afterwards
-		// changing a launch configuration on the file system
-		// will not be detected!!
-		// Thus the changes made and written to file system by
-		// RhinoDebugLaunchManager or newly generated files
-		// will not be noticed in the launch configuration editor
-		// and can therefore not be edited any further by the user!!
-		// If editing an automatically generated or changed launch configuration
-		// becomes necessary, methods for sending notifying signals to the
-		// launch manager must be found resp. implemented.
+			throws IOException, RuntimeException {
 		try {
 			readDebugLaunchConfiguration(standardLaunchConfigFileName);
 		}
@@ -438,10 +437,10 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * For details and exceptions thrown see {@link #writeLaunchConfigFile(String)}, 
 	 * {@link #readDebugLaunchConfiguration(String)}.
 	 * @param configFileName file name to write to 
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 * @throws RuntimeException
 	 */
-	protected void createDebugLaunchConfiguration(String configFileName) throws FileNotFoundException,
+	protected void createDebugLaunchConfiguration(String configFileName) throws IOException,
 			RuntimeException {
 		// write launch file to file system; then read the configuration from there
 		writeLaunchConfigFile(configFileName);
@@ -462,12 +461,11 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 				"from the file system.\n";
 
 		// path information code was copied from LaunchManager:findLocalLaunchConfigurations()
-		IPath pathForLaunches = RhinoDebugLaunchManager.LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH;
 		if (pathForLaunches == null) {
 			// no path set
 			FileNotFoundException exc = new FileNotFoundException(info + 
 					"No path found for JavaScript debug launch. " + 
-					"LOCAL_LAUNCH_CONFIGURATION_CONTAINER_PATH in class " + 
+					"Path for launches in class " + 
 					"LaunchManager must be set correctly!");
 			throw exc;			
 		}
@@ -495,11 +493,9 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 
 		if (launchConfig == null) {
 			// no configuration found
-			String error = "Standard configuration was not correctly initialized!\n" +
-					  "Make sure the launch configuration file " + standardLaunchConfigFileName +
-					  " exists on the standard launch configuration path.\n";
+			String error = "Standard configuration was not correctly initialized!\n";
 			RuntimeException exc = new RuntimeException(error);
-			JSDebugLogger.error(error);
+			GTLogger.getInstance().error(error);
 			throw exc;			
 		}
 				
