@@ -308,14 +308,20 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
-	 * Evaluates an XML test case given by {@link #currentXMLFilePath} calling the Rhino
-	 * evaluateReader method with an overridden reader of type {@link #ConvertFileReader}. 
-	 * Thus only the JavaScript parts of the file are sent to the evaluator, the pure XML code 
-	 * is ignored.<br>
-	 * If any errors occur during evaluation, line number etc. are printed to system error.<br>
-	 * Currently only used for testing the {@link #ConvertFileReader} routines. 
+	 * Evaluates an XML test case given by {@link #currentXMLFilePath} calling
+	 * the Rhino evaluateReader method with an overridden reader of type
+	 * {@link #ConvertFileReader}. Thus only the JavaScript parts of the file
+	 * are sent to the evaluator, the pure XML code is ignored.<br>
+	 * If any errors occur during evaluation, line number etc. are printed to
+	 * system error.<br>
+	 * NOTE: Currently only used for testing the {@link #ConvertFileReader}
+	 * routines. For activating this testwise open the classes
+	 * RunTestCommandHandler and DebugTestCommandHandler. Look for comments
+	 * containing "XML converter" and follow the instructions for uncommenting
+	 * code there!
 	 * 
-	 * @throws RuntimeException if {@link #currentXMLFilePath} is not set.
+	 * @throws RuntimeException
+	 *             if {@link #currentXMLFilePath} is not set.
 	 */
 	public void XML2JSConverter() throws RuntimeException {
 
