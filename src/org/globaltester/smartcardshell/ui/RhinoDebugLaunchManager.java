@@ -123,7 +123,12 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	protected final static String PORT_KEY = "port";
 	
 	/**
-	 * path where JavaScript sources for debugging can be looked for by debugger
+	 * Path where JavaScript sources for debugging can be looked for by debugger.<br>
+	 * NOTE: Currently only one path is supported. The launch configurations may
+	 * in principle contain several paths. If one works with test cases to be debugged
+	 * which lie in different directories, a common root directory could be used or the
+	 * functionality here must be expanded in a way that several paths can be
+	 * added. 
 	 */
 	protected IPath sourceLookupRootPath = null;
 
