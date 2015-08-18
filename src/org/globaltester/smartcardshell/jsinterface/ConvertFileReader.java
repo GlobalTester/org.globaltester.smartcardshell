@@ -25,43 +25,42 @@ import org.apache.commons.io.IOUtils;
  * The JavaScript code to be debugged in GT is not given in a ready to use
  * JavaScript file, but in an XML file. Special GT tags such as
  * &lt;TechnicalCommand&gt; and &lt;TechnicalResult&gt; bracket this code and
- * can be used to detect the appropriate areas. <BR>
+ * can be used to detect the appropriate areas. (More such
+ * tags can be added in method {@link #initTagTuple()})<BR>
  * <BR>
- * RhinoDebugger offers the method Context.evaluateReader(Scriptable scope, Reader
- * in, String sourceName, int lineno, Object securityDomain) to read and
- * evaluate a given JavaScript file. The given XML code in the GT test cases
- * is filtered in a way that only the relevant JavaScript code is evaluated
- * by this method. <BR>
+ * The Rhino mozilla JavaScript implementation offers the method 
+ * {@link Context#evaluateReader(Scriptable scope, Reader
+ * in, String sourceName, int lineno, Object securityDomain)} to read and
+ * evaluate a given JavaScript file. If this method is called with a reader parameter 
+ * of type ConvertFileReader, the given XML code in the GT test cases
+ * is filtered by {@link ConvertFileReader#read(char[], int, int)} in a way that 
+ * only the relevant JavaScript code is evaluated by this method.
+ * This reader replaces every non-whitespace character with a
+ * blank but leaves JavaScript code inside the declared tags untouched in a 
+ * way that the structure of the original file is
+ * maintained concerning number of characters, line numbers, tabs etc. Thus 
+ * positions are still mappable between the original file and the filtered code.
  * <BR>
  * <BR>
- * Therefore an analyzer was required for detecting the JavaScript code. Parts in
- * the XML file which are not JavaScript shall be replaced by whitespaces. This
- * shall be done in a way that the structure of the original file can be
- * maintained concerning number of characters, line numbers, tabs etc. This
- * filtered JavaScript code shall be passed to the evaluating method (see
- * above). The reader given here replaces every non-whitespace character with a
- * blank but leaves JavaScript code inside the declared tags untouched. More
- * tags can be added in method {@link #initTagTuple()}. <BR>
- * <BR>
- * What should be considered: The XML file must have a correct syntax, but may
+ * NOTE: The XML file must have a correct syntax, but may
  * be formatted in any allowed way e.g. JavaScript code can be in the same line
- * as non-JavaScript code. In the filtered code line numbers and the number of
- * signs of the XML file must be maintained so that errors can more easily be
- * retrieved (positions between original file and filtered code must still be
- * mappable).<BR><BR>
- * 
- * FIXME Some functionality is still missing:<BR>
- * - some additional methods of class Reader should be added to ensure the 
+ * as non-JavaScript code.<BR>
+ * NOTE: the currently implemented file converter can be tested via 
+ * {@link RhinoJavaScriptAccess#XML2JSConverter()}. Follow the instructions 
+ * given there! The method can also be used as an example on how to use the reader.<BR>
+ * <BR>
+ * FIXME Some functionality is still missing resp. there are some restrictions:<BR>
+ * - Some additional methods of class Reader should be added to ensure the 
  * interface is complete:
- * more read methods, skip, reset (anything else?)<BR>
+ * more read methods (read(), ...), skip, reset (anything else?).<BR>
  * - cdata areas inside JavaScript code: there may currently be only one cdata 
  * area per "Technical Command/Result ..." block, which brackets 
- * the whole JS code there<BR>
+ * the whole JS code there.<BR>
  * - JS code may not contain special XML characters such as "& lt ;" for "<"; 
- * cdata areas can be used instead<BR>
- * - if one of the GT XML tags (TechnicalCommand etc.) is accidentally
+ * cdata areas can be used to avoid the use of these characters.<BR>
+ * - If one of the GT XML tags (TechnicalCommand etc.) is accidentally
  * positioned inside an XML or JavaScript string value, this is not
- * recognized. This is probably no problem since '<''>' must be masked
+ * recognized. This is probably no problem since '<', '>' must be masked
  * inside attribute values in XML code. Inside JavaScript such values should
  * be bracketed by a cdata region and should thus also be no problem.
  * 
