@@ -14,11 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-
-
-
-//import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.globaltester.logging.logger.GTLogger;
 
 /**
  * 
@@ -46,8 +43,9 @@ import org.apache.commons.io.IOUtils;
  * be formatted in any allowed way e.g. JavaScript code can be in the same line
  * as non-JavaScript code.<BR>
  * NOTE: the currently implemented file converter can be tested via 
- * {@link RhinoJavaScriptAccess#XML2JSConverter()}. Follow the instructions 
- * given there! The method can also be used as an example on how to use the reader.<BR>
+ * {@link RhinoJavaScriptAccess#XML2JSConverter()} and 
+ * {@link RhinoJavaScriptAccess#XML2JSWriteToFile()}. Follow the instructions 
+ * given there! The methods can also be used as an example on how to use the reader.<BR>
  * <BR>
  * FIXME Some functionality is still missing resp. there are some restrictions:<BR>
  * - Some additional methods of class Reader should be added to ensure the 
@@ -96,6 +94,10 @@ public class ConvertFileReader extends FileReader {
 
 	}
 
+	/**
+	 * Used for comparing {@link IndexTuple}s to be able to sort them
+	 *
+	 */
 	public class TupleComparator implements Comparator<IndexTuple> {
 
 		/*
@@ -125,7 +127,7 @@ public class ConvertFileReader extends FileReader {
 	/**
 	 * Absolute index where we last found the start of an XML area
 	 */
-	int absCurStartPosXML = 0;
+	protected int absCurStartPosXML = 0;
 
 	/**
 	 * a copy of the whole content of the file
@@ -141,7 +143,7 @@ public class ConvertFileReader extends FileReader {
 	protected String convertedCode = "";
 
 	/**
-	 * name of the file in use (currently only used for debugging)
+	 * name of the file in use
 	 */
 	protected String fileName; 
 
@@ -171,7 +173,31 @@ public class ConvertFileReader extends FileReader {
 	protected int fileLength; 
 	
 	
-    /**
+	/**
+	 * Initializes file reader calling the super constructor. Afterwards the
+	 * content of the file given by fileName is stored in {@link #fileBuffer}. 
+	 * The indexes for JavaScript start and end positions are stored 
+	 * in an index array.
+	 * 
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws RuntimeException all exceptions are only transferred from called methods
+	 * 
+	 */
+	public ConvertFileReader(String fileName) throws FileNotFoundException,
+			IOException, RuntimeException {
+
+		super(fileName);
+		this.fileName = fileName;
+		initTagTuple(); //adds the currently relevant tags which should be considered
+		readFileIntoBuffer(fileName);
+		printFileOneCharPerLine(new String(fileName + "-1perLn.txt"), fileBuffer);
+		findTagIndexes();
+	}
+
+
+	/**
      * Writes text character wise one per line with a preceding line number;
      * currently only used for debugging 
      * @param fileName file to write to
@@ -191,8 +217,10 @@ public class ConvertFileReader extends FileReader {
 		}
     	
     }
-	/**
-	 * Prints index array to system out
+
+    /**
+	 * Prints index array to system out;
+     * currently only used for debugging 
 	 * @param indexArray2
 	 */
 	protected void printIndexArray(ArrayList<IndexTuple> indexArray2) {
@@ -200,27 +228,6 @@ public class ConvertFileReader extends FileReader {
 		for (IndexTuple indexTuple : indexArray) {
 			indexTuple.println();
 		}
-	}
-
-	/**
-	 * Initializes file reader calling the super constructor. Afterwards the
-	 * content of the file given by fileName is stored in {@link #fileBuffer}. 
-	 * The indexes for JavaScript start and end positions are stored 
-	 * in an index array.
-	 * 
-	 * @param fileName
-	 * @throws FileNotFoundException, IOException, Exception are only transferred from called methods
-	 * 
-	 */
-	public ConvertFileReader(String fileName) throws FileNotFoundException,
-			IOException, RuntimeException {
-
-		super(fileName);
-		this.fileName = fileName;
-		initTagTuple(); //adds the currently relevant tags which should be considered
-		readFileIntoBuffer(fileName);
-		printFileOneCharPerLine(new String(fileName + "-1perLn.txt"), fileBuffer);
-		findTagIndexes();
 	}
 
 	/**
@@ -239,21 +246,12 @@ public class ConvertFileReader extends FileReader {
 	 * 
 	 * @param fileName
 	 *            XML file to be converted
-	 * @throws IOException
+	 * @throws IOException if there was an error accessing the file
 	 */
-	// TODO this variant is used in the test environment, since it has different
-	// libraries installed. Delete this in later versions!
-	//	protected void readFileIntoBuffer(String fileName) throws IOException {
-//		File inFile = new File(fileName);
-////		curBuffer = FileUtils.read(inFile); // TODO: check character set?
-//		fileBuffer = FileUtils.readFileToString(inFile); // TODO: check character set?
-//		// System.out.println(curBuffer);
-//		fileLength = fileBuffer.length();
-//	}
-
 	protected void readFileIntoBuffer(String fileName) throws IOException {
 		FileInputStream inFile = new FileInputStream(fileName);
 		fileBuffer = IOUtils.toString(inFile); // TODO: check character set?
+		inFile.close();
 		//System.out.println(fileBuffer);
 	}
 
@@ -293,14 +291,14 @@ public class ConvertFileReader extends FileReader {
 			relativeEndPosXML = endIndex - relativeOffset;
 			xmlIndexArray.add(new IndexTuple(relativeStartPosXML,
 					relativeEndPosXML));
-			System.out.println("relativeStartPosXML "
-					+ relativeStartPosXML + ", relativeEndPosXML "
-					+ relativeEndPosXML);
-			System.out.println("abs. StartPosXML "
-					+ curFileCursor + ", abs. EndPosXML "
-					+ endIndex);
+//			System.out.println("relativeStartPosXML "
+//					+ relativeStartPosXML + ", relativeEndPosXML "
+//					+ relativeEndPosXML);
+//			System.out.println("abs. StartPosXML "
+//					+ curFileCursor + ", abs. EndPosXML "
+//					+ endIndex);
 			absCurStartPosXML = endIndex; // replace till end of block
-			System.out.println("absCurStartPosXML " + absCurStartPosXML);
+//			System.out.println("absCurStartPosXML " + absCurStartPosXML);
 			return;
 		}
 
@@ -316,10 +314,10 @@ public class ConvertFileReader extends FileReader {
 				relativeEndPosXML = indexTuple.startPos - relativeOffset;
 
 				xmlIndexArray.add(new IndexTuple(relativeStartPosXML, relativeEndPosXML));
-				System.out.println("relativeStartPosXML " + relativeStartPosXML + ", relativeEndPosXML " + relativeEndPosXML);
-				System.out.println("abs. StartPosXML "
-						+ absCurStartPosXML + ", abs. EndPosXML "
-						+ indexTuple.startPos);
+//				System.out.println("relativeStartPosXML " + relativeStartPosXML + ", relativeEndPosXML " + relativeEndPosXML);
+//				System.out.println("abs. StartPosXML "
+//						+ absCurStartPosXML + ", abs. EndPosXML "
+//						+ indexTuple.startPos);
 				absCurStartPosXML = indexTuple.endPos; // one behind the JS code
 			}
 			
@@ -328,10 +326,10 @@ public class ConvertFileReader extends FileReader {
 				relativeStartPosXML = off; // start on first field
 				relativeEndPosXML = endIndex - relativeOffset;
 				xmlIndexArray.add(new IndexTuple(relativeStartPosXML, relativeEndPosXML));
-				System.out.println("relativeStartPosXML " + relativeStartPosXML + ", relativeEndPosXML " + relativeEndPosXML);
-				System.out.println("abs. StartPosXML "
-						+ curFileCursor + ", abs. EndPosXML "
-						+ endIndex);
+//				System.out.println("relativeStartPosXML " + relativeStartPosXML + ", relativeEndPosXML " + relativeEndPosXML);
+//				System.out.println("abs. StartPosXML "
+//						+ curFileCursor + ", abs. EndPosXML "
+//						+ endIndex);
 				absCurStartPosXML = endIndex; // first field of next buffer
 			}
 			
@@ -347,12 +345,12 @@ public class ConvertFileReader extends FileReader {
 						relativeEndPosXML = endIndex - relativeOffset;
 						xmlIndexArray.add(new IndexTuple(relativeStartPosXML,
 								relativeEndPosXML));
-						System.out.println("relativeStartPosXML "
-								+ relativeStartPosXML + ", relativeEndPosXML "
-								+ relativeEndPosXML);
-						System.out.println("abs. StartPosXML "
-								+ indexTuple.endPos + ", abs. EndPosXML "
-								+ endIndex);
+//						System.out.println("relativeStartPosXML "
+//								+ relativeStartPosXML + ", relativeEndPosXML "
+//								+ relativeEndPosXML);
+//						System.out.println("abs. StartPosXML "
+//								+ indexTuple.endPos + ", abs. EndPosXML "
+//								+ endIndex);
 						absCurStartPosXML = endIndex; // first field of next
 															// buffer
 					}
@@ -362,17 +360,17 @@ public class ConvertFileReader extends FileReader {
 					relativeEndPosXML = endIndex - relativeOffset;
 					xmlIndexArray.add(new IndexTuple(relativeStartPosXML,
 							relativeEndPosXML));
-					System.out.println("relativeStartPosXML "
-							+ relativeStartPosXML + ", relativeEndPosXML "
-							+ relativeEndPosXML);
-					System.out.println("abs. StartPosXML "
-							+ indexTuple.endPos + ", abs. EndPosXML "
-							+ endIndex);
+//					System.out.println("relativeStartPosXML "
+//							+ relativeStartPosXML + ", relativeEndPosXML "
+//							+ relativeEndPosXML);
+//					System.out.println("abs. StartPosXML "
+//							+ indexTuple.endPos + ", abs. EndPosXML "
+//							+ endIndex);
 					absCurStartPosXML = endIndex; // replace till end of block
 				}
 			}
 
-			System.out.println("absCurStartPosXML " + absCurStartPosXML);
+//			System.out.println("absCurStartPosXML " + absCurStartPosXML);
 			
 			// we can stop if last endPos checked is behind the end of the
 			// current buffer
@@ -380,98 +378,8 @@ public class ConvertFileReader extends FileReader {
 				break;
 		}
 	}
+
 	
-	
-	
-	/** 
-	 * This method of InputStreamReader is overridden for the following reason:
-	 * evaluateReader of the Mozilla-RhinoDebugger interface calls
-	 * FileReader:read(char[] cbuf, int off, int len) (in blocks of 512 fields
-	 * length in the current implementation). Since GlobalTester does not use
-	 * pure JavaScript files for the test cases, but XML files containing
-	 * JavaScript between special tags, we need a way to filter the XML files to
-	 * be able to send the JS code to the debugger, but ignore the rest of XML
-	 * code. This read method replaces every character in the XML file by a
-	 * blank (' ') except whitespaces and except the JS code bracketed by the tags given in {@link #tagArray}. Since the
-	 * read method is called by evaluateReader in blocks of 512 fields, the
-	 * content of the read file is stored in {@link #currentBuf} so that we are
-	 * able to consider the context of what is currently read (the end tag of
-	 * JavaScript code could be in the next block for example).
-	 * This means the destination buffer cbuf contains the result of this filtering
-	 * on return.
-	 *  
-	 * @see java.io.InputStreamReader#read(char[], int, int)
-	 */ 
-	/*
-	 * TODO: if one of the GT XML tags (TechnicalCommand etc.) is accidentally
-	 * positioned inside an XML or JavaScript string value, this is not
-	 * recognized. This is probably no problem since '<''>' must be masked
-	 * inside attribute values in XML code. Inside JavaScript such values should
-	 * be bracketed by a cdata region and thus also should be no problem.
-	 */
-	@Override
-	public int read(char[] cbuf, int off, int len) throws IOException {
-
-		System.out.println("Offset: " + off + ", Length: " + len);
-		Integer readChars = super.read(cbuf, off, len); // fill buffer using the
-														// read method of super
-														// class
-
-		if (readChars == -1) // end of file reached
-			return readChars;
-		
-		int endIndex = fileCursor + readChars; // last absolute position read in the
-												// current file
-
-		ArrayList<IndexTuple> xmlIndexArray = new ArrayList<IndexTuple>(); 
-
-		getXMLStartEndIndexesForCurrentBuffer(xmlIndexArray, fileCursor, endIndex, off);
-		printIndexArray(xmlIndexArray);
-
-		for (IndexTuple indexTuple : xmlIndexArray) {
-			replaceCharacters(cbuf, indexTuple.startPos, indexTuple.endPos);
-		}
-
-		// Copy result into convertedCode. This is used to check the result; currently only for debugging
-		char [] relevantBuf = new char[readChars];
-		for (int i=0;i<readChars;i++) { //copy only relevant part of the buffer cbuf (it can contain obsolete characters)
-			relevantBuf[i] = cbuf[i+off];
-		}
-		
-		convertedCode += new String(relevantBuf);
-
-//		System.out.println("Converted buffer:");
-//		System.out.println(relevantBuf);
-//		System.out.println("End converted buffer:");
-//
-//		System.out.println("Return read characters: " + readChars);
-
-		fileCursor += readChars; // move the cursor further adding the number of
-									// characters read
-
-		// TODO JS file is currently written at the end;
-		// we should better write every part, since exceptions from
-		// Context.evaluateReader() can cause that this point is never
-		// reached
-		if (fileCursor >= fileLength ) {// finished. file is completely
-												// read
-			try {
-				JSFileWriter outputWriter = new JSFileWriter(fileName);
-				outputWriter.writeOutput(convertedCode);
-			} catch (FileNotFoundException exc) {
-				System.out.println("An error occurred acsessing file " + 
-						fileName + " for writing the converted JavaScript " + 
-						"code in ConvertFileReader.");
-			} catch (UnsupportedEncodingException exc) {
-				System.out.println("An error occurred acsessing file " + 
-						fileName + " for writing the converted JavaScript " + 
-						"code in ConvertFileReader.");
-			}
-		}
-
-		return readChars;
-	}
-
 	/**
 	 * Replaces every non-whitespace character in cbuf between field 
 	 * curStartPosXML and curEndPosXML by a blank
@@ -481,7 +389,7 @@ public class ConvertFileReader extends FileReader {
 	 * @param curEndPosXML
 	 */
 	protected void replaceCharacters(char[] cbuf, int curStartPosXML, int curEndPosXML) {
-		System.out.println("curStartPosXML " + curStartPosXML + " curEndPosXML " + curEndPosXML);
+//		System.out.println("curStartPosXML " + curStartPosXML + " curEndPosXML " + curEndPosXML);
 		for (int i = curStartPosXML; i < curEndPosXML; i++) {
 			// replace characters left to startPos
 			if (!Character.isWhitespace(cbuf[i]))
@@ -489,14 +397,6 @@ public class ConvertFileReader extends FileReader {
 		}		
 	}
 
-/* TODO
-	@Override
-	public int read() throws IOException {
-		// TODO this must check the input, too, according to read(buffer ...)
-		Integer inchar = super.read();
-		return inchar;
-	}
-*/
 	
 	/**
 	 * Analyzes the content of {@link #fileBuffer} in order to find the start
@@ -506,9 +406,8 @@ public class ConvertFileReader extends FileReader {
 	 * @throws Exception
 	 *             in case a syntax error occurred (end tag missing)
 	 */
-	// TODO should there be an exception of none of our tags is found?
-	public void findTagIndexes() throws RuntimeException { // TODO which exception
-													// class ? syntax error?
+	// TODO should there be an exception if none of our tags is found?
+	protected void findTagIndexes() throws RuntimeException {
 
 		boolean found = true;
 		int fromIndex, startPos, endPos, pos, pos2;
@@ -518,7 +417,7 @@ public class ConvertFileReader extends FileReader {
 			found = true;
 			//TODO check content of tagTuple.startTag and tagTuple.endTag, e.g. !="" ??
 			fromIndex = 0;
-			System.out.println("Tag tuple: " + tagTuple.startTag + ", " + tagTuple.endTag);
+//			System.out.println("Tag tuple: " + tagTuple.startTag + ", " + tagTuple.endTag);
 
 			while (found) {
 				found = false;
@@ -546,10 +445,9 @@ public class ConvertFileReader extends FileReader {
 				}
 			}
 		}
-		printIndexArray(indexArray);
+
 		Collections.sort(indexArray, new TupleComparator());
-//		indexArray.sort(new TupleComparator());
-		printIndexArray(indexArray);
+//		printIndexArray(indexArray);
 	}
 	
 	/**
@@ -562,22 +460,143 @@ public class ConvertFileReader extends FileReader {
 	 * 		the cdata start and end strings are deleted together with
 	 * 		the surrounding XML code.  
 	 */
-	public void changeIndexesForCDataArea(IndexTuple tuple) {
+	protected void changeIndexesForCDataArea(IndexTuple tuple) {
 		int startPos, endPos;
 		String cDataStart = "<![CDATA[";
 		String cDataEnd = "]]>";
 
 		if (((startPos = fileBuffer.indexOf(cDataStart, tuple.startPos)) != -1)
 				&& (startPos <= tuple.endPos)) {
-			System.out.println("cdata found at position: " + startPos);
+//			System.out.println("cdata found at position: " + startPos);
 			tuple.startPos = startPos + cDataStart.length();
 			
 			if (((endPos = fileBuffer.indexOf(cDataEnd, startPos)) != -1)
 					&& (endPos <= tuple.endPos)) {
-				System.out.println("cdata found at position: " + endPos);
+//				System.out.println("cdata found at position: " + endPos);
 				tuple.endPos = endPos - 1; // last field before end tag
 			}
 		}
 		// else nothing to do
-	}	
+	}
+	
+	/**
+	 * Uses the {@link #read(char[], int, int)} method for reading the currently
+	 * active XML file completely, so that the file content is converted to JavaSript.
+	 * The method can be used e.g. for generating JavaScript files from XML test 
+	 * cases.
+	 * @return converted code
+	 * @throws IOException - If an I/O error occurs
+	 */
+	public String convertToString() throws IOException {
+        char[] cbuf = new char[512]; // this (512) is the same size that is 
+        	// used by the evaluator!
+		int cursorPos = 0;
+
+		while (true) {
+            int n = read(cbuf, cursorPos, cbuf.length - cursorPos);
+            if (n < 0) { break; }
+            cursorPos += n;
+            if (cursorPos == cbuf.length) {
+                char[] tempBuf = new char[cbuf.length * 2];
+                System.arraycopy(cbuf, 0, tempBuf, 0, cursorPos);
+                cbuf = tempBuf;
+            }
+        }
+        return new String(cbuf, 0, cursorPos);
+	}
+
+	/** 
+	 * This method of InputStreamReader is overridden for the following reason:
+	 * evaluateReader of the Mozilla-RhinoDebugger interface calls
+	 * FileReader:read(char[] cbuf, int off, int len) (in blocks of 512 fields
+	 * length in the current implementation). Since GlobalTester does not use
+	 * pure JavaScript files for the test cases, but XML files containing
+	 * JavaScript between special tags, we need a way to filter the XML files to
+	 * be able to send the JS code to the debugger, but ignore the rest of XML
+	 * code. This read method replaces every character in the XML file by a
+	 * blank (' ') except whitespaces and except the JS code bracketed by the 
+	 * tags given in {@link #tagArray}. Since the
+	 * read method is called by evaluateReader in blocks of 512 fields, the
+	 * content of the read file is stored in {@link #currentBuf} so that we are
+	 * able to consider the context of what is currently read (the end tag of
+	 * JavaScript code could be in the next block for example).
+	 * This means the destination buffer cbuf contains the result of this filtering
+	 * on return.
+	 *  
+	 * @see java.io.InputStreamReader#read(char[], int, int)
+	 */ 
+	/*
+	 * TODO: if one of the GT XML tags (TechnicalCommand etc.) is accidentally
+	 * positioned inside an XML or JavaScript string value, this is not
+	 * recognized. This is probably no problem since '<''>' must be masked
+	 * inside attribute values in XML code. Inside JavaScript such values should
+	 * be bracketed by a cdata region and thus also should be no problem.
+	 */
+	@Override
+	public int read(char[] cbuf, int off, int len) throws IOException {
+
+//		System.out.println("Offset: " + off + ", Length: " + len);
+		Integer readChars = super.read(cbuf, off, len); // fill buffer using the
+														// read method of super
+														// class
+
+		if (readChars == -1) // end of file reached
+			return readChars;
+		
+		int endIndex = fileCursor + readChars; // last absolute position read in the
+												// current file
+
+		ArrayList<IndexTuple> xmlIndexArray = new ArrayList<IndexTuple>(); 
+
+		getXMLStartEndIndexesForCurrentBuffer(xmlIndexArray, fileCursor, endIndex, off);
+//		printIndexArray(xmlIndexArray);
+
+		for (IndexTuple indexTuple : xmlIndexArray) {
+			replaceCharacters(cbuf, indexTuple.startPos, indexTuple.endPos);
+		}
+
+		// Copy result into convertedCode. This is used to check the result; currently only for debugging
+		char [] relevantBuf = new char[readChars];
+		for (int i=0;i<readChars;i++) { //copy only relevant part of the buffer cbuf (it can contain obsolete characters)
+			relevantBuf[i] = cbuf[i+off];
+		}
+		
+		convertedCode += new String(relevantBuf);
+
+//		System.out.println("Converted buffer:");
+//		System.out.println(relevantBuf);
+//		System.out.println("End converted buffer:");
+//
+//		System.out.println("Return read characters: " + readChars);
+
+		fileCursor += readChars; // move the cursor further adding the number of
+									// characters read
+
+		// The following lines can be used to write the result of conversion to file.
+		// NOTE: exceptions from Context.evaluateReader() can cause that this point is
+		// never reached! Use convertToString() to get the whole file converted.
+		// Alternatively change code in a way that in-between results are written
+		// to the file.
+		// Uncomment this code from here ...
+//		if (fileCursor >= fileLength ) {// finished. file is completely read
+//			try {
+//				JSFileWriter outputWriter = new JSFileWriter(fileName + "_tmp");
+//				outputWriter.writeOutput(convertedCode);
+//			} catch (FileNotFoundException exc) {
+//				GTLogger.getInstance().error("An error occurred acsessing file " + 
+//						fileName + " for writing the converted JavaScript " + 
+//						"code in ConvertFileReader.\n" + 
+//						"Reason: " + exc.getLocalizedMessage());
+//			} catch (UnsupportedEncodingException exc) {
+//				GTLogger.getInstance().error("An error occurred acsessing file " + 
+//						fileName + " for writing the converted JavaScript " + 
+//						"code in ConvertFileReader.\n" + 
+//						"Reason: " + exc.getLocalizedMessage());
+//			}
+//		}
+		// ... to here (end uncomment)!
+
+		return readChars;
+	}
+
 }
