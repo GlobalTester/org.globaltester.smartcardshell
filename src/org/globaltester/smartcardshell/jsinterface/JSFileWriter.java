@@ -21,6 +21,14 @@ public class JSFileWriter {
 	private String outputJSFileName = null;
 
 	
+	public String getInputXMLFileName() {
+		return inputXMLFileName;
+	}
+
+	public void setInputXMLFileName(String inputXMLFileName) {
+		this.inputXMLFileName = inputXMLFileName;
+	}
+
 	/**
      * initializes {@link #inputXMLFileName} with xmlFileName
      * and outputFileName with xmlFileName + ".js"
@@ -28,7 +36,7 @@ public class JSFileWriter {
      * @param xmlFileName
      */
 	public JSFileWriter(String xmlFileName) {
-		inputXMLFileName = xmlFileName;
+		setInputXMLFileName(xmlFileName);
 		setOutputFileName(xmlFileName + ".js"); //only for debugging
 	}
 
@@ -110,4 +118,5 @@ public class JSFileWriter {
 		writeJS2OutputFile(text);
 		closeOutputFile();		
 	}
+
 }
