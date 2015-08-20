@@ -1,5 +1,6 @@
 package org.globaltester.smartcardshell.jsinterface;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import org.mozilla.javascript.tools.shell.Global;
  * a context must be activated. If debug mode is wished, a debugger must be
  * activated.<br>
  * To use this class construct an instance of it using the default constructor,
- * if no debugging is needed. Ohterwise set debugger information by call of 
+ * if no debugging is needed. Otherwise set debugger information by call of 
  * {@link #RhinoJavaScriptAccess(HashMap)}. Then call
  * {@link #activateContext()}. 
  * If a context is no longer needed, finish
@@ -369,5 +370,32 @@ public class RhinoJavaScriptAccess {
 			Context.exit();
 		}
 
+	}
+	
+	/**
+	 * Converts the currently active XML file to JavaScript code and writes
+	 * the result to a file named the same plus extension ".js" (same location)
+	 * <br>
+	 * NOTE: Currently only used for testing the {@link #ConvertFileReader}
+	 * routines. For activating this testwise open the classes
+	 * RunTestCommandHandler and DebugTestCommandHandler. Look for comments
+	 * containing "XML converter" and follow the instructions for uncommenting
+	 * code there!
+	 */
+	public void XML2JSWriteToFile() {
+		String fileName = currentXMLFilePath.toPortableString();
+		try {
+			ConvertFileReader reader = new ConvertFileReader(fileName);
+			String convertedCode = reader.convertToString();
+			reader.close();
+			JSFileWriter writer = new JSFileWriter(fileName);
+			writer.writeOutput(convertedCode);
+		} catch (Exception e) { // there could be different exceptions, which could
+					// be handled differently here
+			GTLogger.getInstance().error("Error while accessing file " + 
+						fileName + " for converting from XML to JavaScript!\n" + 
+						"Reason: " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
 	}
 }
