@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+         <view
+               category="org.globaltester.core.ui.category.globaltester"
+               class="org.globaltester.smartcardshell.ui.views.SmartCardShellView"
+               id="org.globaltester.smartcardshell.ui.views.SmartCardShellView"
+               name="SmartCardShell View"/>         
+   </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions"> 
+        <perspectiveExtension 
+            targetID="org.globaltester.core.ui.perspective.GlobalTesterPerspective">
+            <view id="org.globaltester.smartcardshell.ui.views.SmartCardShellView" relative="org.globaltester.core.ui.perspective.GlobalTesterPerspective.right" relationship="stack"/> 
+        </perspectiveExtension> 
+    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.globaltester.smartcardshell.ui.preferences.SmartCardShellPreferencePage"
+            id="org.globaltester.smartcardshell.ui.preferences.SmartCardShellPreferencePage"
+            name="SmartCardShell"
+            category="org.globaltester.core.ui.preferences.GlobalTesterPreferencePage">
+      </page>
+   </extension>
+
+</plugin>
