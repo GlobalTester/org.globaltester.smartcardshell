@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase id="LOAD_AND_DEBUG"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://globaltester.org/testspecification">
+	<Title>Test Case LOAD_AND_DEBUG</Title>
+	<Version>1.00</Version>
+	<Purpose>This test helps to check if a JavaScript file is properly loaded and executed. Breakpoints can be set in the loaded JavaScript file.It also helps to verify that a smartcardshell is loaded correctly using an appropriate _new_ command.</Purpose>
+	<Profile>ICAO</Profile>
+	<Reference>LOAD_AND_DEBUG</Reference>
+	<TestStep>
+		<Command>
+            <Text>Check if PrintTest can be loaded.</Text>
+        </Command>
+		<ExpectedResult>
+			<Text>Print infos in PrintTest!</Text>
+			<TechnicalResult>
+				/* adapt the path given here */
+				load("C:/Develop/eclipse-standard-luna-SR2-win32/workspaces/runtime-Luna-GT3_SDK/GlobalTester Sample TestSpecification/TestCases/JSDebugger-PrintTest.js");
+				new Packages.org.globaltester.smartcardshell.protocols.bac.BAC();
+			</TechnicalResult>
+		</ExpectedResult>
+	</TestStep>
+</TestCase>
