@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.help.toc">
+      <tocProvider
+            class="org.globaltester.smartcardshell.help.ScshCommandTocProvider">
+      </tocProvider>
+   </extension>
+   <extension
+         point="org.eclipse.help.contentProducer">
+      <contentProducer
+            producer="org.globaltester.smartcardshell.help.ContentProducer">
+      </contentProducer>
+   </extension>
+
+</plugin>
