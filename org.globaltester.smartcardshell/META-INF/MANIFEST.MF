@@ -7,7 +7,7 @@ Bundle-Activator: org.globaltester.smartcardshell.Activator
 Bundle-Vendor: HJP Consulting GmbH
 Require-Bundle: org.eclipse.core.runtime,
  org.globaltester.core;bundle-version="3.0.0",
- org.globaltester.logging;bundle-version="3.0.0",
+ org.globaltester.logging.legacy;bundle-version="3.0.0",
  org.globaltester.cardconfiguration;bundle-version="3.0.0",
  org.eclipse.ui.workbench;bundle-version="3.6.2",
  org.mozilla.javascript;bundle-version="1.7.2",
