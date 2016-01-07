@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GlobalTester SmartCardShell UI Test
-Bundle-SymbolicName: org.globaltester.smartcardshell.ui.test
+Bundle-SymbolicName: org.globaltester.smartcardshell.ui.integrationtest
 Bundle-Version: 3.0.1
 Bundle-Vendor: HJP Consulting GmbH
 Fragment-Host: org.globaltester.smartcardshell.ui;bundle-version="3.0.0"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.globaltester.smartcardshell.ui.test</name>
+	<name>org.globaltester.smartcardshell.ui.integrationtest</name>
 	<comment></comment>
 	<projects>
 	</projects>
