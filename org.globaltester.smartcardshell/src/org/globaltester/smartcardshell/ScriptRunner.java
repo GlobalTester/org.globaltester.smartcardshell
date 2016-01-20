@@ -301,7 +301,6 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	public String reset(Context cx) {
 		// reset internal variables
 		interactiveLineNo = 0;
-
 		// init the context
 		init(cx);
 
