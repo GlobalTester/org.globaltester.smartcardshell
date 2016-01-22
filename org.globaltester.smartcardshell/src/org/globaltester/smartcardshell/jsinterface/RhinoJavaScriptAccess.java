@@ -60,6 +60,8 @@ public class RhinoJavaScriptAccess {
 	 * ContextFactory.getGlobal(), see {@link ContextFactory} for details.
 	 */
 	protected static ContextFactory contextFactory = createContextFactory();
+	
+	protected static CompoundClassLoader classLoader;
 
 	/**
 	 * XML file currently being debugged. Currently only used for testing
@@ -127,8 +129,9 @@ public class RhinoJavaScriptAccess {
 	 * 
 	 * @return compound class loader
 	 */
-	protected static ClassLoader getCompoundClassLoaderForProtocols() {
+	protected static CompoundClassLoader getCompoundClassLoaderForProtocols() {
 		CompoundClassLoader compLoader = new CompoundClassLoader();
+		compLoader.addClass(RhinoJavaScriptAccess.class.getClassLoader()); // class loader for this class
 		for (IScshProtocolProvider curProtocolProvider : ProtocolExtensions
 				.getInstance().getAllAvailableProtocols()) {
 			compLoader
@@ -157,8 +160,11 @@ public class RhinoJavaScriptAccess {
 
 		// here we add an appropriate class loader to avoid the
 		// class load problem of org.mozilla.javascript plugin
+		
+		classLoader = getCompoundClassLoaderForProtocols();
+		
 		contextFactory
-				.initApplicationClassLoader(getCompoundClassLoaderForProtocols());
+				.initApplicationClassLoader(classLoader);
 		return contextFactory;
 	}
 
@@ -270,9 +276,9 @@ public class RhinoJavaScriptAccess {
 		}
 
 		// this always delivers the current context (if none is there, it will
-		// be generated)
+		// be generated
 		Context cx = contextFactory.enterContext();
-		
+		cx.setApplicationClassLoader(classLoader);
 		return cx;
 	}
 
@@ -396,5 +402,9 @@ public class RhinoJavaScriptAccess {
 						"Reason: " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public static CompoundClassLoader getClassLoader() {
+		return classLoader;
 	}
 }
