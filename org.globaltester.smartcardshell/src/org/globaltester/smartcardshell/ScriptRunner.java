@@ -9,13 +9,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import opencard.core.service.CardServiceException;
 import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
+import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalRegistry;
+import opencard.core.util.OpenCardPropertyLoadingException;
 
 import org.eclipse.core.runtime.Platform;
 import org.globaltester.cardconfiguration.CardConfig;
 import org.globaltester.logging.logger.TestLogger;
+import org.globaltester.smartcardshell.ocf.OCFWrapper;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 import org.mozilla.javascript.Context;
@@ -181,6 +185,23 @@ public class ScriptRunner extends ImporterTopLevel implements GPRuntime {
 	 */
 	public void initCard(Context cx, String varName, CardConfig cardConfig) {
 
+		//set up the OpenCardFramework
+		try {
+			OCFWrapper.start();
+		} catch (OpenCardPropertyLoadingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CardServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CardTerminalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if (isValidVariableName(varName)) {
 
 			
