@@ -15,6 +15,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+DynamicImport-Package: *
 Bundle-ClassPath: .,
  scsh3.7.989/lib/bcmail-jdk15-143-CC.jar,
  scsh3.7.989/lib/bcprov-jdk16-145-CC.jar,
