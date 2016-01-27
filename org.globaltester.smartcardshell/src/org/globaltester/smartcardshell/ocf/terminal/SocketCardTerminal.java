@@ -31,8 +31,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminal;
@@ -94,6 +97,7 @@ public class SocketCardTerminal extends CardTerminal {
 			try {
 				exchange(0, new CommandAPDU(HexString
 						.parseHexString("FF000000")));
+				closeSocket();
 			} catch (IOException e) {
 				log.println("Trace close -> exchange exception");
 				e.printStackTrace(log);
@@ -104,11 +108,39 @@ public class SocketCardTerminal extends CardTerminal {
 	}
 
 	/**
+	 * This method tries to open a socket with set timeouts to the simulator.
+	 * 
+	 * @return true, iff the socket was connected succesfully
+	 * @throws CardTerminalException 
+	 */
+	private boolean openSocket() throws CardTerminalException{
+		try {
+			socket = new Socket();
+			socket.connect(new InetSocketAddress(host, port), 1000);
+			socket.setSoTimeout(0);
+		} catch (UnknownHostException e) {
+			log.println("Trace connectToCard -> UnknownHostException");
+			e.printStackTrace(log);
+			log.flush();
+			throw new CardTerminalException(e.getLocalizedMessage());
+		} catch (IOException e) {
+			socket = null;
+			log.println("Trace connectToCard -> IOException");
+			e.printStackTrace(log);
+			log.flush();
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * 
 	 */
 	private void closeSocket() {
 		try {
-			socket.close();
+			if (socket != null){
+				socket.close();	
+			}
 		} catch (IOException e) {
 			log.println("Trace close -> socket.close exception");
 			e.printStackTrace(log);
@@ -121,31 +153,23 @@ public class SocketCardTerminal extends CardTerminal {
 	 * @param slotID
 	 * @return
 	 * @throws CardTerminalException
+	 * @throws SocketException 
 	 */
-	private byte[] connectToCard(int slotID) throws CardTerminalException {
+	private byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
 
 		if (socket != null) {
-			close();
-			socket = null;
+			closeSocket();
 		}
-
-		try {
-			socket = new Socket(host, port);
-		} catch (UnknownHostException e) {
-			log.println("Trace connectToCard -> UnknownHostException");
-			e.printStackTrace(log);
-			log.flush();
-			throw new CardTerminalException(e.getLocalizedMessage());
-		} catch (IOException e) {
-			socket = null;
-			log.println("Trace connectToCard -> IOException");
-			e.printStackTrace(log);
-			log.flush();
+		
+		if (openSocket()){
+			socket.setSoTimeout(1000);
+			cachedATR = exchange(slotID, new CommandAPDU(HexString
+					.parseHexString("FF010000")));
+			socket.setSoTimeout(0);
+		} else {
 			return null;
 		}
 
-		cachedATR = exchange(slotID, new CommandAPDU(HexString
-				.parseHexString("FF010000")));
 
 		return cachedATR;
 	}
@@ -229,7 +253,11 @@ public class SocketCardTerminal extends CardTerminal {
 			// (if card is already powered)
 			if (cachedATR == null) {
 				// card must be previously powered
-				cardID = new CardID(this, slotID, connectToCard(slotID));
+				try {
+					cardID = new CardID(this, slotID, connectToCard(slotID));
+				} catch (SocketException e) {
+					throw new CardTerminalException("Could not open connection");
+				}
 			} else {
 				// card was already powered
 				cardID = new CardID(this, slotID, cachedATR);
@@ -250,7 +278,6 @@ public class SocketCardTerminal extends CardTerminal {
 	@Override
 	protected CardID internalReset(int slotID, int ms)
 			throws CardTerminalException {
-
 		cachedATR = exchange(slotID, new CommandAPDU(HexString
 				.parseHexString("FFFF0000")));
 
@@ -277,10 +304,39 @@ public class SocketCardTerminal extends CardTerminal {
 	 */
 	@Override
 	public boolean isCardPresent(int slotID) throws CardTerminalException {
-		if (socket == null) {
-			connectToCard(slotID);
+		boolean closeSocketAfterCheck = false;
+		boolean simulatorAnswers = false;
+
+		if (socket == null || socket.isClosed()) {
+			if (openSocket()) {
+				closeSocketAfterCheck = true;
+			} else {
+				return false;
+			}
 		}
-		return socket != null;
+
+		try {
+			socket.setSoTimeout(1000);
+			simulatorAnswers = Arrays.equals(
+					HexString.parseHexString("9000"),
+					exchange(
+							slotID,
+							new CommandAPDU(HexString
+									.parseHexString("FF900000"))));
+			socket.setSoTimeout(0);
+		} catch (CardTerminalException e) {
+			// the simulator is not available or busy
+			simulatorAnswers = false;
+		} catch (SocketException e) {
+			// the simulator is not available or busy
+			simulatorAnswers = false;
+		}
+
+		if (closeSocketAfterCheck) {
+			closeSocket();
+		}
+
+		return simulatorAnswers;
 	}
 
 	/*
