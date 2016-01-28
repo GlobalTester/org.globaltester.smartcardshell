@@ -43,10 +43,9 @@ public class PreferenceConstants {
 	public static final String JS_CONF_MANUAL = "org.globaltester.smartcardshell.js.conf.manual";
 	public static final String JS_CONF_FILE = "org.globaltester.smartcardshell.js.conf.file";
 
-	//
-	// // readerBuffer and ReadFileEOF setting
-	// public static final String P_READBUFFER = "Default read buffer size";
-	// public static final String P_BUFFERREADFILEEOF =
-	// "Buffer size for function readFileEOF";
+	//readerBuffer and ReadFileEOF setting
+	public static final String P_READBUFFER = "Default read buffer size";
+	public static final String P_BUFFERREADFILEEOF = "Buffer size for function readFileEOF";
+
 
 }

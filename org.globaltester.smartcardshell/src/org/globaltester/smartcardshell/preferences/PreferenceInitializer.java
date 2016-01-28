@@ -2,7 +2,6 @@ package org.globaltester.smartcardshell.preferences;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.globaltester.smartcardshell.Activator;
@@ -26,10 +25,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
 
-		IPath pluginDir = Activator.getPluginDir();
-		String configPath = pluginDir.toPortableString()
-				+ Activator.SCSH_FOLDER + File.separator
-				+ "opencard.properties";
+		String configPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_PROPERTIES_FILE, configPath);
 
 		preferences.put(PreferenceConstants.OCF_OPENCARD_SERVICES,
@@ -43,6 +39,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.put(PreferenceConstants.OCF_READER, "");
 		preferences.putBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT,
 				false);
+		
+		preferences.put(PreferenceConstants.P_BUFFERREADFILEEOF, "INFINITE");
+		preferences.put(PreferenceConstants.OCF_MANUAL_READERSELECT, "223");
 
 		try {
 			// Forces the application to save the preferences
