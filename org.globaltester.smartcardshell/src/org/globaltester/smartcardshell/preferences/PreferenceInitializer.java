@@ -41,7 +41,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				false);
 		
 		preferences.put(PreferenceConstants.P_BUFFERREADFILEEOF, "INFINITE");
-		preferences.put(PreferenceConstants.OCF_MANUAL_READERSELECT, "223");
+		preferences.put(PreferenceConstants.P_READBUFFER, "223");
 
 		try {
 			// Forces the application to save the preferences
