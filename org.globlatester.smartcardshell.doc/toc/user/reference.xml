@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Reference" link_to="/org.globaltester.core.doc/toc/user/toc.xml#reference"> 
+<toc label="Reference" link_to="/org.globaltester.core.doc/toc/user/toc.xml#prefs"> 
 	
-	<topic label="Preference Page SmartCardShell"  href="html/user/reference/PreferencePageSmartCardShell.html">
+	<topic label="SmartCardShell"  href="html/user/reference/PreferencePageSmartCardShell.html">
 	</topic>
 	
-	<topic label="SmartCardShell View"  href="html/user/reference/SmartCardShellView.html">
-	</topic>
 	
 </toc>
