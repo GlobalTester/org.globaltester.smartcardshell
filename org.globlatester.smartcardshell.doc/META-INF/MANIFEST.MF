@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GlobalTester SmartCardShell User Guide
 Bundle-SymbolicName: org.globlatester.smartcardshell.doc;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.0.3
 Bundle-Vendor: HJP Consulting GmbH
 Require-Bundle: org.eclipse.help,
  org.eclipse.help.base;bundle-version="3.5.3",
