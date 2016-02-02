@@ -7,8 +7,4 @@ Bundle-Vendor: HJP Consulting GmbH
 Fragment-Host: org.globaltester.smartcardshell.ui;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit,
- org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.4",
- org.globaltester.core.ui;bundle-version="3.0.0",
- org.globaltester.swtbot;bundle-version="3.0.0",
- org.globaltester.core;bundle-version="3.0.1",
- org.globaltester.junit;bundle-version="1.0.0"
+ org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.4"
