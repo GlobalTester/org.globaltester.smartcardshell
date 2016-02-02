@@ -126,7 +126,12 @@ defineClass("de.cardcontact.scdp.gp.GPAtr");
 defineClass("de.cardcontact.scdp.gp.Card");
 defineClass("de.cardcontact.scdp.gp.GPKey");
 defineClass("de.cardcontact.scdp.gp.GPCrypto");
-defineClass("de.cardcontact.scdp.gp.GPXML");
+//TODO amay, TODO AKR: the next line is commented out because it causes an org.mozilla.javascript.EvaluatorException: 
+//"jsFunction_parse": name "parse" is already in use".
+//check if this must be replaced somehow!
+//How can we test, if this causes problems???
+//defineClass("de.cardcontact.scdp.gp.GPXML");
+
 defineClass("de.cardcontact.scdp.gp.GPTLV");
 defineClass("de.cardcontact.scdp.gp.GPTLVList");
 defineClass("de.cardcontact.scdp.gp.Application");
@@ -155,7 +160,9 @@ defineClass("de.cardcontact.scdp.cardsim.JsCardSimulationAdapter");
 defineClass("de.cardcontact.scdp.scsh3.OutlineNode");
 defineClass("de.cardcontact.scdp.scsh3.Dialog");
 
-defineClass("org.globaltester.testmanager.gp.AssertionError");
+//is called in scriptrunnter in Testmanager Bundle to avoid Class not found exceptions
+//in the the scriptrunner of the testmanager which isn't using this class anyway
+//defineClass("org.globaltester.testmanager.gp.AssertionError");
 
 ASN1.defineObjectIdentifier("CardContact", "1.3.6.1.4.1.24991");
 
