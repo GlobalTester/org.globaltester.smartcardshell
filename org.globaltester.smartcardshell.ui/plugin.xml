@@ -12,7 +12,7 @@
             class="org.globaltester.smartcardshell.ui.preferences.SmartCardShellPreferencePage"
             id="org.globaltester.smartcardshell.ui.preferences.SmartCardShellPreferencePage"
             name="SmartCardShell"
-            category="org.globaltester.core.ui.preferences.GlobalTesterPreferencePage">
+            category="org.globaltester.preferences.GlobalTesterPreferencePage">
       </page>
    </extension>
 

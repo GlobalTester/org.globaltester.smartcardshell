@@ -2,6 +2,7 @@ package org.globaltester.smartcardshell.preferences;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.globaltester.smartcardshell.Activator;
@@ -22,10 +23,17 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		Preferences preferences = new DefaultScope()
 				.getNode(Activator.PLUGIN_ID);
 
+//		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
+//				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
+		String configJsPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
-				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
-
-		String configPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
+				configJsPath);
+//		org.globaltester.smartcardshell.Activator.getPluginDir().toOSString() + "scsh3.7.989" + File.separator + "config.js", null);
+		//String configJsPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
+		IPath pluginDir = Activator.getPluginDir();
+		String configPath = pluginDir.toPortableString()
+				+ Activator.SCSH_FOLDER + File.separator
+				+ "opencard.properties";
 		preferences.put(PreferenceConstants.OCF_PROPERTIES_FILE, configPath);
 
 		preferences.put(PreferenceConstants.OCF_OPENCARD_SERVICES,
