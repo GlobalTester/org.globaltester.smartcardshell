@@ -27,8 +27,6 @@ public class CompoundClassLoader extends ClassLoader {
      * Adds some basic class loaders to the {@link #loaderList}
      */
     public CompoundClassLoader() {
-        addClass(Object.class.getClassLoader()); // basic class loader
-        addClass(getClass().getClassLoader()); // class loader for this class
     }
 
     /**

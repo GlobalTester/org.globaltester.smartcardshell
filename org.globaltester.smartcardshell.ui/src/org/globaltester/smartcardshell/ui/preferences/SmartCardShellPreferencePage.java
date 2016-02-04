@@ -5,6 +5,7 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -17,7 +18,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.globaltester.core.ui.preferences.PropertyFieldEditor;
+import org.globaltester.preferences.PropertyFieldEditor;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
@@ -37,6 +38,10 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private boolean configSourceFile;
 	private boolean configSourcePreferences;
 	private boolean manualReaderSelectEnabled;
+	
+	private Group bufferGroup;
+	private IntegerFieldEditor ifeReaderBuffer;
+	private RadioGroupFieldEditor rfeReadFileEOF;
 
 	public SmartCardShellPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -110,6 +115,32 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				PreferenceConstants.OCF_READER, "Reader selection", 1,
 				grpReaderSelection);
 		addField(orsfeReaderSelection);
+		
+		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
+		bufferGroup.setText("Buffer");
+		GridData gd3 = new GridData(GridData.FILL, GridData.FILL, true, false);
+		gd3.horizontalSpan = 2;
+		bufferGroup.setLayoutData(gd3);
+		bufferGroup.setLayout(new GridLayout(2, false));
+
+		ifeReaderBuffer = new IntegerFieldEditor(
+				PreferenceConstants.P_READBUFFER, "Read buffer size:",
+				bufferGroup);
+		ifeReaderBuffer.setValidRange(0, 32767); // Maximum size allowed in extended Length APDU
+		addField(ifeReaderBuffer);
+
+		rfeReadFileEOF = new RadioGroupFieldEditor(
+				PreferenceConstants.P_BUFFERREADFILEEOF,
+				"Alternative ways for JavaScript function readFileEOF()",
+				1,
+				new String[][] {
+						new String[] {
+								"Read data groups by checking header information (fast)",
+								"INFINITE" },
+						new String[] {
+								"Read data groups byte by byte (very slow)",
+								"SMALL" } }, bufferGroup, true);
+		addField(rfeReadFileEOF);
 		
 		updateFieldEditorEnabledStates();
 

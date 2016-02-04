@@ -21,8 +21,10 @@ public class OCFWrapper {
 	}
 
 	public static void start() throws OpenCardPropertyLoadingException, CardServiceException, CardTerminalException, ClassNotFoundException {
-		PreferencesPropertyLoader.initOCF();
-		SmartCard.start();
+		if(!SmartCard.isStarted()){
+			PreferencesPropertyLoader.initOCF();
+			SmartCard.start();
+		}
 	}
 
 }

@@ -23,9 +23,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		Preferences preferences = new DefaultScope()
 				.getNode(Activator.PLUGIN_ID);
 
+//		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
+//				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
+		String configJsPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
-				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
-
+				configJsPath);
+//		org.globaltester.smartcardshell.Activator.getPluginDir().toOSString() + "scsh3.7.989" + File.separator + "config.js", null);
+		//String configJsPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
 		IPath pluginDir = Activator.getPluginDir();
 		String configPath = pluginDir.toPortableString()
 				+ Activator.SCSH_FOLDER + File.separator
@@ -43,6 +47,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.put(PreferenceConstants.OCF_READER, "");
 		preferences.putBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT,
 				false);
+		
+		preferences.put(PreferenceConstants.P_BUFFERREADFILEEOF, "INFINITE");
+		preferences.put(PreferenceConstants.P_READBUFFER, "223");
 
 		try {
 			// Forces the application to save the preferences
