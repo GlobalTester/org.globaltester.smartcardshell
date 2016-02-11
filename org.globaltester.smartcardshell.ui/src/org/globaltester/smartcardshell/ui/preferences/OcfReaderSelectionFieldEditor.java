@@ -210,7 +210,9 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 		radioBox.pack();
 		
 		//select the correct button
-		doLoad();
+		if(getPreferenceStore()!=null) {
+			doLoad();
+		}
 		
 		//reorder layout
 		parent.pack();

@@ -151,6 +151,8 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		addField(rfeReadFileEOF);
 		
 		updateFieldEditorEnabledStates();
+		
+		orsfeReaderSelection.updateReaderList();
 
 	}
 
