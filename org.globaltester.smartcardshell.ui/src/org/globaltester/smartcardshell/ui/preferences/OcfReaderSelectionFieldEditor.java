@@ -181,6 +181,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 					case SWT.Selection:
 
 						updateReaderList();
+						fireValueChanged(VALUE, "", "");
 						break;
 					}
 				}

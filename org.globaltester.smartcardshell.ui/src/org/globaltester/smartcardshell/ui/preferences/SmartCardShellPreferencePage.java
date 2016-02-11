@@ -116,11 +116,13 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				PreferenceConstants.OCF_READER, "Reader selection", 1,
 				grpReaderSelection);
 		addField(orsfeReaderSelection);
-		// manual settings of terminals
+		
 		bfeEmptyReaderAllowed = new BooleanFieldEditor(
 				PreferenceConstants.P_ALLOW_EMPTY_READER,
 				"allow empty reader", grpReaderSelection);
 		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
+		addField(bfeEmptyReaderAllowed);
+
 		
 		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		bufferGroup.setText("Buffer");
@@ -189,6 +191,10 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				|| (pfeOpenCardServices.equals(event.getSource()))
 				|| (pfeOpenCardTerminals.equals(event.getSource()))) {
 			this.setOcfWarning(true);
+		}
+		
+		if (orsfeReaderSelection.equals(event.getSource())) {
+			getFieldEditorParent().pack(true);
 		}
 		
 		updateFieldEditorEnabledStates();
