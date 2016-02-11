@@ -38,6 +38,7 @@ public class PreferenceConstants {
 	// reader selection properties
 	public static final String OCF_READER = "org.globaltester.smartcardshell.ocf.reader";
 	public static final String OCF_MANUAL_READERSELECT = "org.globaltester.smartcardshell.ocf.reader.manualselect";
+	public static final String P_ALLOW_EMPTY_READER = "GlobalTester_TestManager_allow_empty_reader";
 
 	// path to configuration file needed by smart card shell
 	public static final String JS_CONF_MANUAL = "org.globaltester.smartcardshell.js.conf.manual";

@@ -35,6 +35,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private Group grpReaderSelection;
 	private BooleanFieldEditor bfeManualReaderSettings;
 	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
+	private BooleanFieldEditor bfeEmptyReaderAllowed;
 	private boolean configSourceFile;
 	private boolean configSourcePreferences;
 	private boolean manualReaderSelectEnabled;
@@ -115,6 +116,11 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				PreferenceConstants.OCF_READER, "Reader selection", 1,
 				grpReaderSelection);
 		addField(orsfeReaderSelection);
+		// manual settings of terminals
+		bfeEmptyReaderAllowed = new BooleanFieldEditor(
+				PreferenceConstants.P_ALLOW_EMPTY_READER,
+				"allow empty reader", grpReaderSelection);
+		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
 		
 		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		bufferGroup.setText("Buffer");
@@ -168,6 +174,13 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		}
 		if (bfeManualReaderSettings.equals(event.getSource())){
 			manualReaderSelectEnabled = (Boolean) event.getNewValue();
+			if (manualReaderSelectEnabled) {
+				orsfeReaderSelection.setEnabled(true, grpReaderSelection);
+				bfeEmptyReaderAllowed.setEnabled(true, grpReaderSelection);
+			} else {
+				orsfeReaderSelection.setEnabled(false, grpReaderSelection);
+				bfeEmptyReaderAllowed.setEnabled(false, grpReaderSelection);
+			}
 		}
 		
 		// add warning to this dialog if one of the OCF properties changes
@@ -212,6 +225,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		configSourcePreferences = PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences.equals(ocfConfigSource);
 		
 		manualReaderSelectEnabled = pStore.getDefaultBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT);
+		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
 		
 		updateFieldEditorEnabledStates();
 	}
