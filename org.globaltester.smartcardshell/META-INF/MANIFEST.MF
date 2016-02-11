@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: GlobalTester SmartCardShell
+Bundle-Name: GT SmartCardShell
 Bundle-SymbolicName: org.globaltester.smartcardshell;singleton:=true
 Bundle-Version: 3.0.3
 Bundle-Activator: org.globaltester.smartcardshell.Activator

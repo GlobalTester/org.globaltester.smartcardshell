@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: GlobalTester SmartCardShell User Guide
+Bundle-Name: GT SmartCardShell Doc 2
 Bundle-SymbolicName: org.globaltester.smartcardshell.doc2;singleton:=true
 Bundle-Version: 3.0.3
 Bundle-Vendor: HJP Consulting GmbH
