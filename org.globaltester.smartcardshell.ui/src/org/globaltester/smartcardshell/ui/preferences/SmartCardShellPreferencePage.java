@@ -20,12 +20,18 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.globaltester.preferences.PropertyFieldEditor;
 import org.globaltester.smartcardshell.Activator;
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
+
+import opencard.core.service.CardServiceException;
+import opencard.core.terminal.CardTerminalException;
+import opencard.core.util.OpenCardPropertyLoadingException;
 
 public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
-	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. ";
+	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. Further more if you"
+			+ "chose use default opencard.properies eclipse MUST be restarted!";
 	private Group grpOcfProperties;
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
@@ -222,14 +228,41 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		this.setOcfWarning(false);
 		
 		IPreferenceStore pStore = Activator.getDefault().getPreferenceStore();
-		String ocfConfigSource = pStore
-		.getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
+		String ocfConfigSource = pStore.getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
 		configSourceFile = PreferenceConstants.OCF_CONFIGURATION_SOURCE_file.equals(ocfConfigSource);
 		configSourcePreferences = PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences.equals(ocfConfigSource);
 		
 		manualReaderSelectEnabled = pStore.getBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT);
 		
 		updateFieldEditorEnabledStates();
+		
+		reinitializeOCF();
+	}
+	
+	@Override
+	public boolean performOk() {
+		boolean success = super.performOk();
+		reinitializeOCF();
+		
+		return success;
+	}
+
+	private void reinitializeOCF() {
+		try {
+			PreferencesPropertyLoader.restartAndInitializeOCF();
+		} catch (CardTerminalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OpenCardPropertyLoadingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CardServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -41,7 +41,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 						+ "opencard.opt.util.PassThruCardServiceFactory");
 		preferences
 				.put(PreferenceConstants.OCF_OPENCARD_TERMINALS,
-						"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL " +
+						"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL" +
 						"org.globaltester.smartcardshell.ocf.terminal.SocketCardTerminalFactory|SocketCardTerminal|Socket|9876|localhost");
 
 		preferences.put(PreferenceConstants.OCF_READER, "");

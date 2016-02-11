@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.globaltester.simulator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Eclipse-BundleShape: dir
 DynamicImport-Package: *
 Bundle-ClassPath: .,
  scsh3.7.989/lib/bcmail-jdk15-143-CC.jar,
