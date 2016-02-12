@@ -20,12 +20,20 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.globaltester.preferences.PropertyFieldEditor;
 import org.globaltester.smartcardshell.Activator;
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
+
+import opencard.core.service.CardServiceException;
+import opencard.core.terminal.CardTerminalException;
+import opencard.core.util.OpenCardPropertyLoadingException;
 
 public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
-	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. ";
+	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. Further more if you"
+			+ " choose use default opencard.properies eclipse MUST be restarted!";
+	private boolean ocfConfigSourceChanged = false;
+	
 	private Group grpOcfProperties;
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
@@ -194,8 +202,10 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private void setOcfWarning(boolean ocfMessage) {
 		if (ocfMessage) {
 			this.setMessage(OCF_WARNING, PreferencePage.WARNING);
+			ocfConfigSourceChanged = true;
 		} else {
 			this.setMessage("");
+			ocfConfigSourceChanged = false;
 		}
 		orsfeReaderSelection.setRefreshEnabled(!ocfMessage);		
 	}
@@ -206,8 +216,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		this.setOcfWarning(true);
 		
 		IPreferenceStore pStore = Activator.getDefault().getPreferenceStore();
-		String ocfConfigSource = pStore
-		.getDefaultString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
+		String ocfConfigSource = pStore.getDefaultString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
 		configSourceFile = PreferenceConstants.OCF_CONFIGURATION_SOURCE_file.equals(ocfConfigSource);
 		configSourcePreferences = PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences.equals(ocfConfigSource);
 		
@@ -219,17 +228,44 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	@Override
 	protected void performApply() {
 		super.performApply();
-		this.setOcfWarning(false);
 		
 		IPreferenceStore pStore = Activator.getDefault().getPreferenceStore();
-		String ocfConfigSource = pStore
-		.getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
+		String ocfConfigSource = pStore.getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
 		configSourceFile = PreferenceConstants.OCF_CONFIGURATION_SOURCE_file.equals(ocfConfigSource);
 		configSourcePreferences = PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences.equals(ocfConfigSource);
 		
 		manualReaderSelectEnabled = pStore.getBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT);
 		
 		updateFieldEditorEnabledStates();
+	}
+	
+	@Override
+	public boolean performOk() {
+		boolean success = super.performOk();
+		
+		if (ocfConfigSourceChanged) {
+			reinitializeOCF();
+			this.setOcfWarning(false);
+		}
+		
+		return success;
+	}
+	
+	/**
+	 * re-initialize the OpenCardFramework to use values from plugin preferences
+	 */
+	private void reinitializeOCF() {
+		try {
+			PreferencesPropertyLoader.restartAndInitializeOCF();
+		} catch (CardTerminalException e) {
+			e.printStackTrace();
+		} catch (OpenCardPropertyLoadingException e) {
+			e.printStackTrace();
+		} catch (CardServiceException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
