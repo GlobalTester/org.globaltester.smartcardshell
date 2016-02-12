@@ -5,7 +5,7 @@ This document describes validation tests that shall be performed on the final pr
 Use a setup where the final Prove EPP product is installed in a fresh Eclipse IDE.
 
 1. [ ] __Smardcardshell preference tests__  
- - [ ] run the test `7816_A_02`  
+ - [ ] run the test `7816_A_02` against a non-plain passport
      - [ ] test case must fail with 3 errors the first must be a java.lang.IllegalArgumentException
  - [ ] open the smartcardshell preference page, change the OpenCard.Terminals value to `com.ibm.opencard.terminal.pcsc10.Pcsc10CardTerminalFactory` and press ok 
  - [ ] run the test `7816_A_02` again  

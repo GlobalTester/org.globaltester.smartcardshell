@@ -31,7 +31,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
 	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. Further more if you"
-			+ "chose use default opencard.properies eclipse MUST be restarted!";
+			+ " choose use default opencard.properies eclipse MUST be restarted!";
 	private boolean ocfConfigSourceChanged = false;
 	
 	private Group grpOcfProperties;
@@ -228,11 +228,6 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	@Override
 	protected void performApply() {
 		super.performApply();
-		
-		if (ocfConfigSourceChanged) {
-			reinitializeOCF();
-			this.setOcfWarning(false);
-		}
 		
 		IPreferenceStore pStore = Activator.getDefault().getPreferenceStore();
 		String ocfConfigSource = pStore.getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE);
