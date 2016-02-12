@@ -43,6 +43,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private Group grpReaderSelection;
 	private BooleanFieldEditor bfeManualReaderSettings;
 	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
+	private BooleanFieldEditor bfeEmptyReaderAllowed;
 	private boolean configSourceFile;
 	private boolean configSourcePreferences;
 	private boolean manualReaderSelectEnabled;
@@ -124,6 +125,12 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				grpReaderSelection);
 		addField(orsfeReaderSelection);
 		
+		bfeEmptyReaderAllowed = new BooleanFieldEditor(
+				PreferenceConstants.P_ALLOW_EMPTY_READER,
+				"allow empty reader", grpReaderSelection);
+		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
+		addField(bfeEmptyReaderAllowed);
+		
 		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		bufferGroup.setText("Buffer");
 		GridData gd3 = new GridData(GridData.FILL, GridData.FILL, true, false);
@@ -152,7 +159,17 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		
 		updateFieldEditorEnabledStates();
 
-	}
+		orsfeReaderSelection.updateReaderList();
+		
+		if (manualReaderSelectEnabled) {
+			orsfeReaderSelection.setEnabled(true, grpReaderSelection);
+			bfeEmptyReaderAllowed.setEnabled(true, grpReaderSelection);
+		} else {
+			orsfeReaderSelection.setEnabled(false, grpReaderSelection);
+			bfeEmptyReaderAllowed.setEnabled(false, grpReaderSelection);
+		}
+
+	}	
 
 	public void init(IWorkbench workbench) {
 		IPreferenceStore pStore = Activator.getDefault().getPreferenceStore();
@@ -176,6 +193,13 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		}
 		if (bfeManualReaderSettings.equals(event.getSource())){
 			manualReaderSelectEnabled = (Boolean) event.getNewValue();
+			if (manualReaderSelectEnabled) {
+				orsfeReaderSelection.setEnabled(true, grpReaderSelection);
+				bfeEmptyReaderAllowed.setEnabled(true, grpReaderSelection);
+			} else {
+				orsfeReaderSelection.setEnabled(false, grpReaderSelection);
+				bfeEmptyReaderAllowed.setEnabled(false, grpReaderSelection);
+			}
 		}
 		
 		// add warning to this dialog if one of the OCF properties changes
@@ -184,6 +208,10 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				|| (pfeOpenCardServices.equals(event.getSource()))
 				|| (pfeOpenCardTerminals.equals(event.getSource()))) {
 			this.setOcfWarning(true);
+		}
+		
+		if (orsfeReaderSelection.equals(event.getSource())) {
+			getFieldEditorParent().pack(true);
 		}
 		
 		updateFieldEditorEnabledStates();
@@ -221,6 +249,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		configSourcePreferences = PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences.equals(ocfConfigSource);
 		
 		manualReaderSelectEnabled = pStore.getDefaultBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT);
+		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
 		
 		updateFieldEditorEnabledStates();
 	}

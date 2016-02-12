@@ -6,6 +6,9 @@
       <tocProvider
             class="org.globaltester.smartcardshell.help.ScshCommandTocProvider">
       </tocProvider>
+      <toc
+            file="toc/user/reference.xml">
+      </toc>
    </extension>
    <extension
          point="org.eclipse.help.contentProducer">
