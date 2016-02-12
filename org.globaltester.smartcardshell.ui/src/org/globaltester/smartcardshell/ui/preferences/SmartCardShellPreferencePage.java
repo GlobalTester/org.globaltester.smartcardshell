@@ -122,7 +122,6 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				"allow empty reader", grpReaderSelection);
 		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
 		addField(bfeEmptyReaderAllowed);
-
 		
 		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		bufferGroup.setText("Buffer");
@@ -153,6 +152,14 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		updateFieldEditorEnabledStates();
 		
 		orsfeReaderSelection.updateReaderList();
+		
+		if (manualReaderSelectEnabled) {
+			orsfeReaderSelection.setEnabled(true, grpReaderSelection);
+			bfeEmptyReaderAllowed.setEnabled(true, grpReaderSelection);
+		} else {
+			orsfeReaderSelection.setEnabled(false, grpReaderSelection);
+			bfeEmptyReaderAllowed.setEnabled(false, grpReaderSelection);
+		}
 
 	}
 
