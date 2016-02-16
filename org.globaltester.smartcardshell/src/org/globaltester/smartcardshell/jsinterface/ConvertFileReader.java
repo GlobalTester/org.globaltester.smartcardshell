@@ -3,19 +3,21 @@
  */
 package org.globaltester.smartcardshell.jsinterface;
 
-//import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.apache.commons.io.IOUtils;
-import org.globaltester.logging.logger.GTLogger;
+import javax.naming.Context;
+
+import org.mozilla.javascript.Scriptable;
 
 /**
  * 
@@ -249,9 +251,16 @@ public class ConvertFileReader extends FileReader {
 	 * @throws IOException if there was an error accessing the file
 	 */
 	protected void readFileIntoBuffer(String fileName) throws IOException {
-		FileInputStream inFile = new FileInputStream(fileName);
-		fileBuffer = IOUtils.toString(inFile); // TODO: check character set?
-		inFile.close();
+		Path path = Paths.get(fileName);
+		
+		byte[] data = Files.readAllBytes(path);
+		
+		//TODO check for charset
+		//most scripts are encoded as one of these charsets
+		//ISO-8859-1   	ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1
+		//UTF-8 		Eight-bit UCS Transformation Format
+		fileBuffer = new String(data);
+		
 		//System.out.println(fileBuffer);
 	}
 
