@@ -41,7 +41,10 @@ public class Activator extends AbstractUIPlugin {
 		Activator.setContext(bundleContext);
 		plugin = this;
 		
-		checkEnvironment();
+		File cardProperties = getOpenCardProperties();
+		if (!cardProperties.exists()){
+			createOpenCardProperties(cardProperties);	
+		}
 		
 		//set up the OpenCardFramework
 		OCFWrapper.start();
@@ -59,33 +62,26 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	/**
-	 * Lookup for property file 'opencard.properties'
-	 * 
+	 * @return the default destination for card properties file
 	 */
-	private void checkEnvironment() {
-		//log.debug("Looking up for property file opencard.properties...");
-
-		IPath pluginDir = getPluginDir();
-
+	private File getOpenCardProperties(){
 		File propertyFile = new File(System.getProperty("user.dir")
 				+ File.separator +"opencard.properties");
-		if (propertyFile.exists()) {
-			//log.debug("Property file opencard.properties exists");
-		} else {
-			//log.debug("Creating new property file opencard.properties");
-			File internalPropertyFile = new File(pluginDir
-					+ File.separator + "opencard.properties");
-			
-			try {
-				Files.copy(internalPropertyFile.toPath(), propertyFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
-			} catch (IOException e) {
-//				log.error(e);
-			} finally {
-				
-			}
-			
-			//log.debug("Property file " + propertyFile +" created.");
-		}
+		return propertyFile;
+	}
+	
+	/**
+	 * Copies the default opencard.properties to the given destination
+	 * 
+	 * @param destination
+	 *            the target to copy the internal opencard.properties file to
+	 * @throws IOException
+	 */
+	private void createOpenCardProperties(File destination) throws IOException{
+		IPath pluginDir = getPluginDir();
+		File internalPropertyFile = new File(pluginDir
+				+ File.separator + "opencard.properties");
+		Files.copy(internalPropertyFile.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 	
 	/**
