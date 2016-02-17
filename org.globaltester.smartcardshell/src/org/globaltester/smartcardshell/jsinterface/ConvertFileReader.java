@@ -260,8 +260,6 @@ public class ConvertFileReader extends FileReader {
 		//ISO-8859-1   	ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1
 		//UTF-8 		Eight-bit UCS Transformation Format
 		fileBuffer = new String(data);
-		
-		//System.out.println(fileBuffer);
 	}
 
 
