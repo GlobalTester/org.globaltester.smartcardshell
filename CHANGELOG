@@ -1,3 +1,15 @@
+Version 3.0.4 (18.02.2016)
+
+* Adaptions to match naming conventions
+* Add missing dlls in order to use the IBM terminal
+* Update reader list when preference page is created
+* Updated Bundle-Name to match naming conventions
+* Online help: Move SmartCardShell preference page, remove SCSH view
+* Moved Scriptrunner (and unit test) to testrunner bundle
+* Moved and adapted xxxCardTerminal classes
+* Remove smartcardshellview
+
+
 Version 3.0.3 (29.01.2016)
 
 * Repo migration
