@@ -308,7 +308,7 @@ public class RhinoJavaScriptAccess {
 			return;
 
 		String ext = path.getFileExtension();
-		if ((ext != null) && (ext.equals("xml"))) {
+		if ((ext != null) && (ext.equals("xml") || (ext.equals("gt") || ext.equals("gtsuite")))) {
 			currentXMLFilePath = path;
 		}
 	}
