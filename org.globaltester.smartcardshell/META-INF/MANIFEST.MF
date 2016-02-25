@@ -157,5 +157,4 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
  org.globaltester.smartcardshell.protocols,
  org.jcprev.xml.dsig.internal,
  org.jcprev.xml.dsig.internal.dom
-Import-Package: org.apache.commons.io
 Eclipse-ExtensibleAPI: true

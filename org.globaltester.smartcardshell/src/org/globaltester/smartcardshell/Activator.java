@@ -1,12 +1,10 @@
 package org.globaltester.smartcardshell;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
@@ -43,7 +41,10 @@ public class Activator extends AbstractUIPlugin {
 		Activator.setContext(bundleContext);
 		plugin = this;
 		
-		checkEnvironment();
+		File cardProperties = getOpenCardProperties();
+		if (!cardProperties.exists()){
+			createOpenCardProperties(cardProperties);	
+		}
 		
 		//set up the OpenCardFramework
 		OCFWrapper.start();
@@ -61,50 +62,26 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	/**
-	 * Lookup for property file 'opencard.properties'
-	 * 
+	 * @return the default destination for card properties file
 	 */
-	private void checkEnvironment() {
-		//log.debug("Looking up for property file opencard.properties...");
-
-		IPath pluginDir = getPluginDir();
-
+	private File getOpenCardProperties(){
 		File propertyFile = new File(System.getProperty("user.dir")
 				+ File.separator +"opencard.properties");
-		if (propertyFile.exists()) {
-			//log.debug("Property file opencard.properties exists");
-		} else {
-			//log.debug("Creating new property file opencard.properties");
-			File internalPropertyFile = new File(pluginDir
-					+ File.separator + "opencard.properties");
-			copy(internalPropertyFile, propertyFile);
-			//log.debug("Property file " + propertyFile +" created.");
-		}
+		return propertyFile;
 	}
 	
 	/**
-	 * Overwrites destination file with source file
+	 * Copies the default opencard.properties to the given destination
 	 * 
-	 * @param sourceFile
-	 * @param destinationFile
+	 * @param destination
+	 *            the target to copy the internal opencard.properties file to
+	 * @throws IOException
 	 */
-	private void copy(File sourceFile, File destinationFile) {
-		try {
-			FileChannel in = new FileInputStream(sourceFile).getChannel();
-			FileChannel out = new FileOutputStream(destinationFile)
-					.getChannel();
-			try {
-				in.transferTo(0, in.size(), out);
-				in.close();
-				out.close();
-			} catch (IOException e) {
-				//log.error(e);
-			} finally {
-				
-			}
-		} catch (FileNotFoundException e) {
-			//log.error(e);
-		}
+	private void createOpenCardProperties(File destination) throws IOException{
+		IPath pluginDir = getPluginDir();
+		File internalPropertyFile = new File(pluginDir
+				+ File.separator + "opencard.properties");
+		Files.copy(internalPropertyFile.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 	
 	/**
