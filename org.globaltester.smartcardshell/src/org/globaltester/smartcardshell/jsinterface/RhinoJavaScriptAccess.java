@@ -295,9 +295,10 @@ public class RhinoJavaScriptAccess {
 	}
 
 	/**
-	 * Sets current XML file path to "path", only if it has the extension ".xml"
-	 * Otherwise currentXMLFile is set to null.
+	 * Sets current XML file path to "path", only if it has the extension
+	 * ".xml", "*.gt" or "*.gtsuite" Otherwise currentXMLFile is set to null.
 	 * Currently only used for testing the {@link #ConvertFileReader} routines.
+	 * 
 	 * @param path
 	 */
 	public void setCurrentXMLFile(IPath path) {
@@ -308,7 +309,7 @@ public class RhinoJavaScriptAccess {
 			return;
 
 		String ext = path.getFileExtension();
-		if ((ext != null) && (ext.equals("xml"))) {
+		if ((ext != null) && (ext.equals("xml") || (ext.equals("gt") || ext.equals("gtsuite")))) {
 			currentXMLFilePath = path;
 		}
 	}
