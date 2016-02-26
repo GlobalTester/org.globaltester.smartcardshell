@@ -37,8 +37,7 @@ public class PreferencesTest {
 		SmartCard.shutdown();
 
 		// set values in preferences
-		Preferences preferences = new DefaultScope()
-				.getNode(Activator.PLUGIN_ID);
+		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
 		preferences.put(PreferenceConstants.OCF_OPENCARD_SERVICES,
@@ -73,8 +72,7 @@ public class PreferencesTest {
 	public void reinitOCF() throws Exception {
 
 		// set values in preferences
-		Preferences preferences = new DefaultScope()
-				.getNode(Activator.PLUGIN_ID);
+		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);
 		preferences.put(PreferenceConstants.OCF_OPENCARD_SERVICES,

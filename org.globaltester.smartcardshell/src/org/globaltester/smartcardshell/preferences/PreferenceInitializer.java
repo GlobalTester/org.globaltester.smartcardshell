@@ -20,8 +20,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 
-		Preferences preferences = new DefaultScope()
-				.getNode(Activator.PLUGIN_ID);
+		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 
 //		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE,
 //				PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences);

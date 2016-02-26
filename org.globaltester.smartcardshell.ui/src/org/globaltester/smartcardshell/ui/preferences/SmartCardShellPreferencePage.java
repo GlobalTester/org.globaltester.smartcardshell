@@ -54,7 +54,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 
 	public SmartCardShellPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
-		IPreferenceStore store = new ScopedPreferenceStore(new InstanceScope(),
+		IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				Activator.PLUGIN_ID);
 		setPreferenceStore(store);
 		setDescription("Preferences for OpenCardFramework and SmartCardShell.");
