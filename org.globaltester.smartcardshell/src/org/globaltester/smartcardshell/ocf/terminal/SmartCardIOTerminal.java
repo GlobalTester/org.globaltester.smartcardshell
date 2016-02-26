@@ -51,7 +51,6 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	private final static Tracer ctracer = new Tracer(SmartCardIOTerminal.class);
 
 	private boolean polling;
-	private boolean powerdownRequired;
 	private javax.smartcardio.CardTerminal ct;
 	private javax.smartcardio.Card card;
 	
@@ -63,7 +62,6 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 
 		this.ct = ct;
 		this.card = null;
-		this.powerdownRequired=false;
 		
 		addSlots(1);
 	}
@@ -133,7 +131,6 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			throw new CardTerminalException("CardException in transmit(): " + ce.getMessage());
 		}
 		
-		powerdownRequired = true;
 		return new ResponseAPDU(dst);
 	}
 
