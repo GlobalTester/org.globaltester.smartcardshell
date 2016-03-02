@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Reference" link_to="/org.globaltester.core.doc/toc/user/toc.xml#prefs"> 
+<toc label="Reference" link_to="/org.globaltester.base.doc/toc/user/toc.xml#prefs"> 
 	
 	<topic label="SmartCardShell"  href="html/user/reference/PreferencePageSmartCardShell.html">
 	</topic>

@@ -3,8 +3,8 @@ package org.globaltester.smartcardshell.help;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.help.IToc;
-import org.globaltester.help.Toc;
-import org.globaltester.help.Topic;
+import org.globaltester.base.doc.help.Toc;
+import org.globaltester.base.doc.help.Topic;
 import org.globaltester.smartcardshell.ProtocolExtensions;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 

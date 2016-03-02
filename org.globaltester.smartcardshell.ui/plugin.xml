@@ -3,7 +3,7 @@
 <plugin>
    <extension point="org.eclipse.ui.perspectiveExtensions"> 
         <perspectiveExtension 
-            targetID="org.globaltester.core.ui.perspective.GlobalTesterPerspective">
+            targetID="org.globaltester.base.ui.perspective.GlobalTesterPerspective">
         </perspectiveExtension> 
     </extension>
    <extension

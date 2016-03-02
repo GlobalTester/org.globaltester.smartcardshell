@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.help,
  org.globaltester.smartcardshell;bundle-version="3.0.0",
  org.globaltester.logging.legacy;bundle-version="3.0.0",
- org.globaltester.core.doc
+ org.globaltester.base.doc
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.globaltester.smartcardshell.doc

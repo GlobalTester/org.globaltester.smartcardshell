@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.globaltester.help.Topic;
+import org.globaltester.base.doc.help.Topic;
 import org.globaltester.smartcardshell.ProtocolExtensions;
 import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 
