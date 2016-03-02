@@ -17,7 +17,6 @@ Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
 DynamicImport-Package: *
 Bundle-ClassPath: .,
- scsh3.7.989/lib/bcmail-jdk15-143-CC.jar,
  scsh3.7.989/lib/ocf-cc.jar,
  scsh3.7.989/lib/scdp4j.jar,
  scsh3.7.989/lib/scsh3.jar,
@@ -70,7 +69,6 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
  opencard.opt.terminal,
  opencard.opt.terminal.protocol,
  opencard.opt.util,
- org.bouncycastle.cms,
  org.globaltester.smartcardshell,
  org.globaltester.smartcardshell.gp,
  org.globaltester.smartcardshell.jsinterface,
