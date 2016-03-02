@@ -5,8 +5,8 @@
 //define classes for a short method call in scripts
 var GTProtocols = Packages.org.globaltester.smartcardshell.ProtocolExtensions.getInstance();
 var HexString = new Packages.de.cardcontact.tlv.HexString();
-var ByteUtil = new Packages.org.globaltester.util.ByteUtil();
-var TLVUtil = new Packages.org.globaltester.util.TLVUtil();
+var ByteUtil = new Packages.org.globaltester.base.util.ByteUtil();
+var TLVUtil = new Packages.org.globaltester.base.util.TLVUtil();
 
 //define equivalent cases for return codes
 SW_NoError = new Array("9000");
