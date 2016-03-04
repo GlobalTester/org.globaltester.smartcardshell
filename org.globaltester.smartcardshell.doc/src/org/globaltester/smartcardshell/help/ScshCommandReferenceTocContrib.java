@@ -35,7 +35,7 @@ public class ScshCommandReferenceTocContrib implements ITocContribution {
 
 	@Override
 	public String getLinkTo() {
-		return "/org.globaltester.core.doc/toc/user/toc.xml#reference";
+		return "/org.globaltester.base.doc/toc/user/toc.xml#reference";
 	}
 
 	@Override
