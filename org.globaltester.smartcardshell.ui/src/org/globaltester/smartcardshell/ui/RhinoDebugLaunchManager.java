@@ -161,7 +161,7 @@ public class RhinoDebugLaunchManager extends LaunchManager {
 	 * @param envSettings can contain root directory where the debugger should start 
 	 * 			its source lookup.
 	 */
-	public RhinoDebugLaunchManager(HashMap<String, Object> envSettings) {
+	public RhinoDebugLaunchManager(Map<String, Object> envSettings) {
 		// port number is not extracted here, since it is delivered by the launch manager itself
 		Object pathObj = envSettings.get(RhinoJavaScriptAccess.RHINO_JS_SOURCE_LOOKUP_HASH_KEY);
 		if (pathObj instanceof IPath)
