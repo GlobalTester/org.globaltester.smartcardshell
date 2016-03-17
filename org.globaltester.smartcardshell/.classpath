@@ -8,8 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/bcmail-jdk15-143-CC.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/bcprov-jdk16-145-CC.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/ocf-cc.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scdp4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scsh3.jar"/>
