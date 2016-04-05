@@ -6,9 +6,9 @@ Use a setup where the final Prove EPP product is installed in a fresh Eclipse ID
 
 1. [ ] __Smardcardshell preference tests__  
  - [ ] run the test `7816_A_02` against a non-plain passport
-     - [ ] test case must fail with 3 errors the first must be a java.lang.IllegalArgumentException
+     - [ ] test case must fail with a java.lang.IllegalArgumentException
  - [ ] open the smartcardshell preference page, change the OpenCard.Terminals value to `com.ibm.opencard.terminal.pcsc10.Pcsc10CardTerminalFactory` and press ok 
  - [ ] run the test `7816_A_02` again  
-     - [ ] test case must fail with 2 errors the first must be a checking error with the status word 6982
+     - [ ] test case must not fail with errors regarding APDU formatting, other behavior depends on sample
 
 <p style="page-break-after: always"/>
