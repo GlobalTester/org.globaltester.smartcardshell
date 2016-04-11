@@ -5,6 +5,6 @@ Bundle-SymbolicName: org.globaltester.smartcardshell.test
 Bundle-Version: 3.0.5.qualifier
 Bundle-Vendor: HJP Consulting GmbH
 Fragment-Host: org.globaltester.smartcardshell;bundle-version="3.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit
 Export-Package: org.globaltester.smartcardshell.test
