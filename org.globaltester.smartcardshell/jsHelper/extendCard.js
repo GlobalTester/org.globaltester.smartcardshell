@@ -31,10 +31,10 @@ Card.prototype.gt_reset = function () {
 	return atr;
 }
 
-Card.prototype.gt_getCardConfig = function (protocol, key) {
-	if (this.gt_cardConfig == undefined) {
-		assertWarning("gt_cardConfig is not defined yet, will be created now");
-	    this.gt_cardConfig = new Packages.org.globaltester.cardconfiguration.CardConfig();
+Card.prototype.gt_getSampleConfig = function (protocol, key) {
+	if (this.gt_sampleConfig == undefined) {
+		assertWarning("gt_sampleConfig is not defined yet, will be created now");
+	    this.gt_sampleConfig = new Packages.org.globaltester.sampleconfiguration.SampleConfig();
 	}
-	return this.gt_cardConfig.get(protocol, key);
+	return this.gt_sampleConfig.get(protocol, key);
 }
