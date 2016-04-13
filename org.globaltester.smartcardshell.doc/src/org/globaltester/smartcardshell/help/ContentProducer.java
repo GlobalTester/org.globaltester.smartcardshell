@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.eclipse.help.IHelpContentProducer;
-import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.logging.legacy.logger.GtErrorLogger;
 import org.globaltester.smartcardshell.doc.Activator;
 
 public class ContentProducer implements IHelpContentProducer {

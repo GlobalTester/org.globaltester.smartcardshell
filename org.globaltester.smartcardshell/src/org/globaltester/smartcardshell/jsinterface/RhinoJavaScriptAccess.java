@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger;
-import org.globaltester.logging.logger.GTLogger;
-import org.globaltester.logging.logger.GtErrorLogger;
+import org.globaltester.logging.legacy.logger.GTLogger;
+import org.globaltester.logging.legacy.logger.GtErrorLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.CompoundClassLoader;
 import org.globaltester.smartcardshell.ProtocolExtensions;

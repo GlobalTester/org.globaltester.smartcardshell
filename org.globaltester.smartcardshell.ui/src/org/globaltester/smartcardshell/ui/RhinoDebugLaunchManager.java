@@ -17,8 +17,8 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
-import org.globaltester.logging.logger.GtErrorLogger;
-import org.globaltester.logging.logger.GTLogger;
+import org.globaltester.logging.legacy.logger.GTLogger;
+import org.globaltester.logging.legacy.logger.GtErrorLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.jsinterface.RhinoJavaScriptAccess;
 
