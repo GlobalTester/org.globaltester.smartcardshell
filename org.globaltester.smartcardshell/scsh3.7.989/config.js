@@ -149,7 +149,7 @@ defineClass("de.cardcontact.scdp.js.JsOCSPQuery");
 defineClass("de.cardcontact.scdp.js.JsLDAP");
 defineClass("de.cardcontact.scdp.js.JsSOAPConnection");
 defineClass("de.cardcontact.scdp.js.JsURLConnection");
-defineClass("de.cardcontact.scdp.cms.JsCMSSignedData");
+defineClass("org.globaltester.smartcardshell.cms.JsCmsSignedData");
 defineClass("de.cardcontact.scdp.cms.JsCMSGenerator");
 defineClass("de.cardcontact.scdp.pkcs11.JsPKCS11Provider");
 defineClass("de.cardcontact.scdp.pkcs11.JsPKCS11Session");
