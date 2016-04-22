@@ -70,6 +70,7 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
  opencard.opt.terminal.protocol,
  opencard.opt.util,
  org.globaltester.smartcardshell,
+ org.globaltester.smartcardshell.cms,
  org.globaltester.smartcardshell.gp,
  org.globaltester.smartcardshell.jsinterface,
  org.globaltester.smartcardshell.ocf,
@@ -78,3 +79,6 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
  org.jcprev.xml.dsig.internal,
  org.jcprev.xml.dsig.internal.dom
 Eclipse-ExtensibleAPI: true
+Import-Package: org.bouncycastle.asn1,
+ org.bouncycastle.asn1.cms,
+ org.bouncycastle.cms
