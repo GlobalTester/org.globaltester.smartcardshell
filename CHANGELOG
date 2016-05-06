@@ -1,7 +1,64 @@
-Version 3.0.5 (29.02.2016)
+Version 3.1.0 (06.05.2016)
 
+* Rename *.PNG to *.png
+* Merge remote-tracking branch 'origin/usr/jkoch/clearUpOnlineHelp'
+* Enhance Online Help
+* Disable broken code. See Bug #746
+* Merge branch 'usr/amay/hotfixCmsSignedData'
+* Wrap CmsSignedData to grant required access to signedData field
+* Merge branch 'usr/amay/renameConfigObject'
+* Refactor CardConfig
+* Resolves name clash of legacy logging packages
+* Merge remote-tracking branch 'origin/usr/mboonk/qaSprint15'
+* Set all build relevant settings to Java 1.8
+* Better description for the test steps
+* added new license reference for derivative code
+* Merge branch 'usr/cstroh/opensourcingPlatform'
+* Adapt README.md content
+* Add LICENSE and NOTICE to build.properties
+* Add LICENSE and NOTICE files for our code
+* Add LICENSE and NOTICE files to gitattributes
+* Add README.md to repository
+* Merge branch 'usr/mboonk/consistentTestCaseExec'
+* Merge branch 'usr/slutters/cryptoInfrastructure'
+* Removal of the org.globaltester.smartcardshell bouncycastle lib
+* Exchanged HashMap for more generic Map interface
+* Merge branch 'usr/cstroh/updateHelp'
+* Removes obsolete files
+* Remove o.g.smartcardshell.doc2 (contained only outdated preference page)
+* Note that scsh command extensions are not usable with old scriptrunner
+* Hook in smartcardshell preference page into correct anchor
+* Updated help images
+* Merge branch 'usr/jkoch/mergeCoreBase'
+* code maintenance
+* adapt changes due to the refactoring of core.ui to base.ui
+* adapted paths to utils
+* Merge branch 'usr/amay/releaseBuild'
+* removed exports provided by bcmail-jdk15-143-CC.jar
+* removed bcmail-jdk15-143-CC.jar from classpath
+* removed bcprov-jdk16-145-CC.jar from classpath and exports
+* Update version numbers in POM
+* Remove anmespaces from POMs
+* Update version numbers
+* Merge remote-tracking branch 'origin/usr/mboonk/fixFileEndings'
+* update parent pom version
+* Updated the changelog
+* Added missing line endings at the end of text files
+* Scope constructors are deprecated. Use singleton instance instead.
+* Merge remote-tracking branch 'origin/usr/mboonk/hotfix821'
+* Removal of obsolete variable
+* Removes not needed folder definitions from build.properties
+* Merge remote-tracking branch 'origin/usr/cstroh/fixGitAttributes'
+* Replace gitattributes by file from o.g.dev
+* Merge branch 'usr/jgoeke/fileEnding'
+* Merge branch 'usr/slutters/rmCommonsDep'
+* Adapted javadoc
+* Fixed line endings
 * added new file endings to function getCurrentXmlFile
-* remove obsolete dependency
+* removal of commented out code
+* Split the checkEnvironment method into 2 methods
+* fixed Resource Leak, consolidated code
+* removed dependency on org.apache.commons.io
 * Code maintenance
 
 
