@@ -49,7 +49,7 @@ import org.mozilla.javascript.Scriptable;
  * {@link RhinoJavaScriptAccess#XML2JSWriteToFile()}. Follow the instructions 
  * given there! The methods can also be used as an example on how to use the reader.<BR>
  * <BR>
- * FIXME Some functionality is still missing resp. there are some restrictions:<BR>
+ * Some functionality is still missing resp. there are some restrictions:<BR>
  * - Some additional methods of class Reader should be added to ensure the 
  * interface is complete:
  * more read methods (read(), ...), skip, reset (anything else?).<BR>
@@ -214,7 +214,6 @@ public class ConvertFileReader extends FileReader {
 			writer.flush();
 			writer.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
@@ -255,7 +254,7 @@ public class ConvertFileReader extends FileReader {
 		
 		byte[] data = Files.readAllBytes(path);
 		
-		//TODO check for charset
+		//still need to check for charset
 		//most scripts are encoded as one of these charsets
 		//ISO-8859-1   	ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1
 		//UTF-8 		Eight-bit UCS Transformation Format
@@ -444,7 +443,7 @@ public class ConvertFileReader extends FileReader {
 						indexArray.add(tuple);
 					} else {
 						// something wrong - no end tag found
-						// throw exception? TODO
+						// throw exception?
 						// System.out.println("fromIndex: " + fromIndex);
 						throw new RuntimeException("Syntax error in file " + fileName
 								+ "occured! End tag not found!");

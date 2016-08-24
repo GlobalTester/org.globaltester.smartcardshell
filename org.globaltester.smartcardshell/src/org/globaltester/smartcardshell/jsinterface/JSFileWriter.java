@@ -3,11 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-// TODO: check file coding or not? UTF-8?
-// TODO: Tags could be a set. more elegant
-// TODO: Converter must deliver the result file
-// TODO: Shall converter get a path parameter for where to put the result? (or use a class variable) 
-
 public class JSFileWriter {
 
 	/** opens stream for the output with file name {@link #outputJSFileName} */
@@ -44,16 +39,13 @@ public class JSFileWriter {
 	 * closes the output {@link #writer} and resets it to null.
 	 */
 	private void closeOutputFile() { 
-		// TODO catch exception or leave this to calling methods?
 		if (writer == null) {
-			//TODO: warning?
 			return;
 		}
 		try {
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		writer = null;
@@ -69,8 +61,7 @@ public class JSFileWriter {
 		assert (outputJSFileName != null);
 		
 		if (writer != null) {
-			// stream is already open. TODO: should this method always open a
-			// new stream or send an error message if outStr!=null??
+			// stream is already open
 			return;
 		}
 		
@@ -101,7 +92,6 @@ public class JSFileWriter {
 	 *            the outputFileName to set
 	 */
 	public void setOutputFileName(String outputFileName) {
-		// TODO any check wanted if outputFileName is null?
 		this.outputJSFileName = outputFileName;
 	}
 	
