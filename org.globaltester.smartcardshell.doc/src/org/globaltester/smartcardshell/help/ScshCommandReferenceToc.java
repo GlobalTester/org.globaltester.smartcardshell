@@ -31,7 +31,7 @@ public class ScshCommandReferenceToc extends Toc {
 				"html/user/reference/ScshCommandReference.html");
 		instance.addTopic(t);
 
-// TODO Ticket #746 reanable and repair the following code
+// #746 reanable and repair the following code
 		
 		// create subTopics for each protocol
 //		IConfigurationElement[] configElements = Platform

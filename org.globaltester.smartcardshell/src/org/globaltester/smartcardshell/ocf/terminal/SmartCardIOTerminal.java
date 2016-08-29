@@ -11,7 +11,6 @@
 package org.globaltester.smartcardshell.ocf.terminal;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
@@ -177,7 +176,6 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 
 	@Override
 	public void poll() throws CardTerminalException {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -243,30 +241,8 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 				m.setAccessible(true);
 				m.invoke(null, cardId, disposition);
 
-			// } catch(CardException ce) {
-				// ctracer.error("disconnect", ce);
-				// throw new CardTerminalException("Error connecting to card: "
-				// + ce.getMessage());
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
+			} catch (IllegalArgumentException | ReflectiveOperationException e) {
+				// #831 use consistent logging here
 				e.printStackTrace();
 			} finally {
 				this.card = null;

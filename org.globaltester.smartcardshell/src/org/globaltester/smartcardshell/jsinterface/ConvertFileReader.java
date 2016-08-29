@@ -412,7 +412,6 @@ public class ConvertFileReader extends FileReader {
 	 * @throws Exception
 	 *             in case a syntax error occurred (end tag missing)
 	 */
-	// TODO should there be an exception if none of our tags is found?
 	protected void findTagIndexes() throws RuntimeException {
 
 		boolean found = true;
@@ -421,7 +420,6 @@ public class ConvertFileReader extends FileReader {
 		// walk through all relevant tag pairs and store their positions
 		for (TagTuple tagTuple : tagArray) {
 			found = true;
-			//TODO check content of tagTuple.startTag and tagTuple.endTag, e.g. !="" ??
 			fromIndex = 0;
 //			System.out.println("Tag tuple: " + tagTuple.startTag + ", " + tagTuple.endTag);
 
@@ -531,13 +529,6 @@ public class ConvertFileReader extends FileReader {
 	 *  
 	 * @see java.io.InputStreamReader#read(char[], int, int)
 	 */ 
-	/*
-	 * TODO: if one of the GT XML tags (TechnicalCommand etc.) is accidentally
-	 * positioned inside an XML or JavaScript string value, this is not
-	 * recognized. This is probably no problem since '<''>' must be masked
-	 * inside attribute values in XML code. Inside JavaScript such values should
-	 * be bracketed by a cdata region and thus also should be no problem.
-	 */
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
 
