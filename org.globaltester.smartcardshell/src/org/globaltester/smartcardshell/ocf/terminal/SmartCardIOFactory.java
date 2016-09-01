@@ -59,9 +59,6 @@ public class SmartCardIOFactory implements CardTerminalFactory {
 		catch(CardException ce) {
 			ctracer.error("createCardTerminals", ce);
 		}
-
-		// TODO Auto-generated method stub
-
 	}
 
 

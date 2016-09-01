@@ -13,7 +13,7 @@ public class OCFWrapper {
 			SmartCard.shutdown();
 		}
 		SmartCard.start();
-		//TODO implement extension point to notify users of OCF about the upcoming restart
+		//IMPL implement extension point to notify users of OCF about the upcoming restart
 	}
 
 	public static void shutdown() throws CardTerminalException {
