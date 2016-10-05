@@ -1,26 +1,5 @@
 package org.globaltester.smartcardshell.gp;
 
-/* 
- * Project 	GlobalTester-Plugin 
- * File		AssertionError.java
- *
- * Date    	27.06.2006
- * 
- * 
- * Developed by HJP Consulting GmbH
- * Lanfert 24
- * 33106 Paderborn
- * Germany
- * 
- * 
- * This software is the confidential and proprietary information
- * of HJP ("Confidential Information"). You shall not disclose such
- * Confidential Information and shall use it only in accordance 
- * with the terms of the Non-Disclosure Agreement you entered 
- * into with HJP.
- * 
- */
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 

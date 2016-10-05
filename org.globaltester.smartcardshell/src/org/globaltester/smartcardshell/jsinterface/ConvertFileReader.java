@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.globaltester.smartcardshell.jsinterface;
 
 import java.io.FileNotFoundException;

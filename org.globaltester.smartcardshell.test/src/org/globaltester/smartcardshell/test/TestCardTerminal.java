@@ -1,27 +1,3 @@
-/* 
- * Project OCFSocketTerminal
- * Package com.hjp.opencard.terminal.socketterminal
- * 
- *
- * 
- * $Date: 2009/02/13 11:27:20 $
- * $Revision: 1.1 $
- * $Id: SocketCardTerminal.java,v 1.1 2009/02/13 11:27:20 hfunke Exp $
- * 
- * Copyright (c) 2006 HJP Consulting GmbH
- * Lanfert 24
- * 33106 Paderborn
- * Germany
- * All rights reserved.
- * 
- * This software is the confidential and proprietary information
- * of HJP ("Confidential Information"). You shall not disclose such
- * Confidential Information and shall use it only in accordance 
- * with the terms of the Non-Disclosure Agreement you entered 
- * into with HJP.
- * 
- */
-
 package org.globaltester.smartcardshell.test;
 
 import opencard.core.terminal.CardID;
