@@ -41,7 +41,7 @@ public class ServiceCardTerminalFactory implements CardTerminalFactory {
 		if (terminalInfo.length != 0)
 			throw new TerminalInitException(
 					"no parameters necessary");
-		ctr.add(new ServiceCardTerminal("Service Card Terminal", "HJP OSGi Simulator", "0"));
+		ctr.add(new ServiceCardTerminal("Service Card Terminal", "secunet OSGi Simulator", "0"));
 	}
 
 	/*
