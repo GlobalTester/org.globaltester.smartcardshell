@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.globaltester.preferences.PropertyFieldEditor;
+import org.globaltester.base.ui.preferences.PropertyFieldEditor;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
