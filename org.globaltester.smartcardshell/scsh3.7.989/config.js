@@ -127,7 +127,7 @@ defineClass("de.cardcontact.scdp.gp.Card");
 defineClass("de.cardcontact.scdp.gp.GPKey");
 defineClass("de.cardcontact.scdp.gp.GPCrypto");
 //TODO amay, TODO AKR: the next line is commented out because it causes an org.mozilla.javascript.EvaluatorException: 
-//"jsFunction_parse": name "parse" is already in use".
+//"jsFunction_parse": name "parse" is already in use.
 //check if this must be replaced somehow!
 //How can we test, if this causes problems???
 //defineClass("de.cardcontact.scdp.gp.GPXML");

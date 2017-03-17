@@ -194,7 +194,7 @@ X509CertificateGenerator.prototype.addExtension = function(extnID, critical, ext
  * <p>The function interprets the integer value as bitmap, where
  * bit 0 is the most significant bit of the least significant byte.</p>
  * <p>The function adds the minimum number of bytes to the final bit string
- * and encodes the "number of unused bits at the beginning.</p>
+ * and encodes the number of unused bits at the beginning.</p>
  * 
  * @param {Number} val the value to convert
  * @return the bit string
