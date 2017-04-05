@@ -97,7 +97,7 @@ public class ReaderSelection {
 	public static String getManuallySelectedReader() {
 		IPreferencesService scshPrefs = Platform.getPreferencesService();
 		
-		return scshPrefs.getString(org.globaltester.smartcardshell.Activator.PLUGIN_ID, PreferenceConstants.OCF_READER, "", null);
+		return scshPrefs.getString(Activator.PLUGIN_ID, PreferenceConstants.OCF_READER, "", null);
 	}
 
 }
