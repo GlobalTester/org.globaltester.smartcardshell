@@ -23,10 +23,6 @@ import opencard.core.util.OpenCardPropertyLoadingException;
 public class SmartCardShellInfo {
 	
 	public static String activeReaderName = "unknown";
-	
-	static {
-		Activator.getDefault().getPreferenceStore().setDefault(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file, Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator + "config.js");
-	}
 
 	/**
 	 * This method returns the name of the suggested card reader to be used.
@@ -133,7 +129,7 @@ public class SmartCardShellInfo {
 	}
 	
 	public static String getConfigFile() {
-		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file);
+		return Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator + "config.js";
 	}
 	
 	public static IPath getPluginDir() {
