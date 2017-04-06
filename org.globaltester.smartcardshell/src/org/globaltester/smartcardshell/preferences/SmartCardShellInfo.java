@@ -3,6 +3,7 @@ package org.globaltester.smartcardshell.preferences;
 import java.io.File;
 import java.util.Enumeration;
 
+import org.eclipse.core.runtime.IPath;
 import org.globaltester.logging.legacy.logger.TestLogger;
 import org.globaltester.smartcardshell.Activator;
 
@@ -24,7 +25,7 @@ public class SmartCardShellInfo {
 	public static String activeReaderName = "unknown";
 	
 	static {
-		Activator.getDefault().getPreferenceStore().setDefault(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file, Activator.getPluginDir().toOSString() + "scsh3.7.989" + File.separator + "config.js");
+		Activator.getDefault().getPreferenceStore().setDefault(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file, Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator + "config.js");
 	}
 
 	/**
@@ -133,6 +134,10 @@ public class SmartCardShellInfo {
 	
 	public static String getConfigFile() {
 		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file);
+	}
+	
+	public static IPath getPluginDir() {
+		return Activator.getPluginDir();
 	}
 
 }
