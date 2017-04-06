@@ -81,4 +81,5 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
 Eclipse-ExtensibleAPI: true
 Import-Package: org.bouncycastle.asn1,
  org.bouncycastle.asn1.cms,
- org.bouncycastle.cms
+ org.bouncycastle.cms,
+ org.eclipse.jface.preference
