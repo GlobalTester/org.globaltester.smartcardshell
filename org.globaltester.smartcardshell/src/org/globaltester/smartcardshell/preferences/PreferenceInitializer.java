@@ -50,8 +50,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		
 		preferences.put(PreferenceConstants.P_BUFFERREADFILEEOF, "INFINITE");
 		preferences.put(PreferenceConstants.P_READBUFFER, "223");
-		
-		preferences.put(PreferenceConstants.P_CARDREADERNAME, "unknown");
 
 		try {
 			// Forces the application to save the preferences

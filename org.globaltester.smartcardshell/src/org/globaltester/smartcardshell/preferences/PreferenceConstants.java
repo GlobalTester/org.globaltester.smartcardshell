@@ -47,8 +47,5 @@ public class PreferenceConstants {
 	//readerBuffer and ReadFileEOF setting
 	public static final String P_READBUFFER = "Default read buffer size";
 	public static final String P_BUFFERREADFILEEOF = "Buffer size for function readFileEOF";
-	
-	//internal preferences used for simple data storage, these are not setable through UI
-	public static final String P_CARDREADERNAME = "Card reader name"; //human readable used for reports
 
 }
