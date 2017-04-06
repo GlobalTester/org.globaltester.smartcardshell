@@ -22,7 +22,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 
-		String configJsPath = org.globaltester.smartcardshell.Activator.getPluginDir().toOSString()+"scsh3.7.989"+File.separator+"config.js";
+		String configJsPath = Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE, configJsPath);
 		IPath pluginDir = Activator.getPluginDir();
 		String configPath = pluginDir.toPortableString()
