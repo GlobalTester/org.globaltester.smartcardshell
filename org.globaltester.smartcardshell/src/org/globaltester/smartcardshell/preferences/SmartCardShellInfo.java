@@ -1,9 +1,8 @@
 package org.globaltester.smartcardshell.preferences;
 
+import java.io.File;
 import java.util.Enumeration;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.globaltester.logging.legacy.logger.TestLogger;
 import org.globaltester.smartcardshell.Activator;
 
@@ -20,7 +19,13 @@ import opencard.core.util.OpenCardPropertyLoadingException;
  * @author slutters
  * 
  */
-public class ReaderSelection {
+public class SmartCardShellInfo {
+	
+	public static String activeReaderName = "unknown";
+	
+	static {
+		Activator.getDefault().getPreferenceStore().setDefault(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file, Activator.getPluginDir().toOSString() + "scsh3.7.989" + File.separator + "config.js");
+	}
 
 	/**
 	 * This method returns the name of the suggested card reader to be used.
@@ -88,16 +93,46 @@ public class ReaderSelection {
 		return suggestedReaderName;
 	}
 	
+	/**
+	 * This method determines and sets the currently active card reader's name and returns the value.
+	 * For details on the selection mechanism see {@link #getSuggestedReaderName()}.
+	 * @return the value of the currently active card reader.
+	 */
+	public static String setActiveReaderName() {
+		activeReaderName = getSuggestedReaderName();
+		return activeReaderName;
+	}
+	
+	/**
+	 * This method returns the previously set active card reader's name.
+	 * @return the previously set active card reader's name.
+	 */
+	public static String getActiveReaderName() {
+		return activeReaderName;
+	}
+	
 	public static boolean isManualReader() {
-		IPreferencesService scshPrefs = Platform.getPreferencesService();
-		
-		return scshPrefs.getBoolean(Activator.PLUGIN_ID, PreferenceConstants.OCF_MANUAL_READERSELECT, false, null);
+		return Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT);
 	}
 	
 	public static String getManuallySelectedReader() {
-		IPreferencesService scshPrefs = Platform.getPreferencesService();
-		
-		return scshPrefs.getString(Activator.PLUGIN_ID, PreferenceConstants.OCF_READER, "", null);
+		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.OCF_READER);
+	}
+	
+	public static int getDefaultReadBufferSize() {
+		return Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_READBUFFER);
+	}
+	
+	public static String getBufferSizeForFunctionReadFileEOF() {
+		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_BUFFERREADFILEEOF);
+	}
+	
+	public static boolean allowEmptyReader() {
+		return Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_ALLOW_EMPTY_READER);
+	}
+	
+	public static String getConfigFile() {
+		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file);
 	}
 
 }
