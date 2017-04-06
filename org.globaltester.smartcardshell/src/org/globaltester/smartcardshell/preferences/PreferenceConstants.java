@@ -40,10 +40,6 @@ public class PreferenceConstants {
 	public static final String OCF_MANUAL_READERSELECT = "org.globaltester.smartcardshell.ocf.reader.manualselect";
 	public static final String P_ALLOW_EMPTY_READER = "GlobalTester_TestManager_allow_empty_reader";
 
-	// path to configuration file needed by smart card shell
-	public static final String JS_CONF_MANUAL = "org.globaltester.smartcardshell.js.conf.manual";
-	public static final String JS_CONF_FILE = "org.globaltester.smartcardshell.js.conf.file";
-
 	//readerBuffer and ReadFileEOF setting
 	public static final String P_READBUFFER = "Default read buffer size";
 	public static final String P_BUFFERREADFILEEOF = "Buffer size for function readFileEOF";
