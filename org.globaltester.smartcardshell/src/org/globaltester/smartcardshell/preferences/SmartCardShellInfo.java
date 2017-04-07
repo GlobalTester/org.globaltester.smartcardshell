@@ -91,6 +91,49 @@ public class SmartCardShellInfo {
 	}
 	
 	/**
+	 * Checks all card readers defined in opencard properties
+	 * 
+	 * @return true if card reader is available, else false
+	 */
+	public static boolean checkCardReader() {
+		TestLogger.debug("Looking up for card readers...");
+		
+		String[][] readerList;
+		
+		try {
+			SmartCard.start();
+			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
+			Enumeration<?> ctlist = ctr.getCardTerminals();
+			int i = ctr.countCardTerminals();
+
+			readerList = new String[i][2];
+
+			i = 0;
+			while (ctlist.hasMoreElements()) {
+				CardTerminal ct = (CardTerminal) ctlist.nextElement();
+				readerList[i][0] = ct.getName();
+				readerList[i][1] = Integer.toString(i);
+				TestLogger.debug("Registered card reader(s): " + readerList[i][0]);
+				i++;
+			}
+			
+			SmartCard.shutdown();
+			
+			if (i == 0) {
+				TestLogger.error("No card reader registered!");
+				return false;
+			}
+			return true;
+		}
+		
+		catch (Exception e) {
+			TestLogger.error("No card reader registered!");
+			TestLogger.error(e);
+			return false;
+		}
+	}
+	
+	/**
 	 * This method determines and sets the currently active card reader's name and returns the value.
 	 * For details on the selection mechanism see {@link #getSuggestedReaderName()}.
 	 * @return the value of the currently active card reader.
