@@ -123,7 +123,7 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 				PreferenceConstants.OCF_PROPERTIES_FILE, "", null);
 
 		// set properties from file contents
-		Properties props = new Properties();
+		Properties props = new Properties(System.getProperties());
 		FileInputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(fileName);
