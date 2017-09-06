@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.globaltester.smartcardshell.ocf.OCFWrapper;
+import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
@@ -32,10 +32,7 @@ public class Activator extends AbstractUIPlugin {
 		context = bundleContext;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
 		Activator.setContext(bundleContext);
@@ -46,18 +43,13 @@ public class Activator extends AbstractUIPlugin {
 			createOpenCardProperties(cardProperties);	
 		}
 		
-		//set up the OpenCardFramework
-		OCFWrapper.start();
+		PreferencesPropertyLoader.initOCF();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 		plugin = null;
 		Activator.setContext(null);
-		OCFWrapper.shutdown();
 		super.stop(bundleContext);
 	}
 	

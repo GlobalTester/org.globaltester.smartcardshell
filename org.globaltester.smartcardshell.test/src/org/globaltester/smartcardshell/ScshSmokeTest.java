@@ -51,6 +51,8 @@ public class ScshSmokeTest {
 			testTerminal = (CardTerminal) CardTerminalRegistry.getRegistry()
 					.getCardTerminals().nextElement();
 		}
+		
+		SmartCard.shutdown();
 
 		// asserts
 		assertTrue("No card terminals available", terminalsAvailable);

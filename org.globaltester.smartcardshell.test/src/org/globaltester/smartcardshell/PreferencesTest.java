@@ -48,6 +48,7 @@ public class PreferencesTest {
 
 		// initialize OCF with values from Preferences
 		PreferencesPropertyLoader.initOCF();
+
 		SmartCard.start();
 
 		boolean terminalsAvailable = CardTerminalRegistry.getRegistry()
@@ -58,6 +59,8 @@ public class PreferencesTest {
 			testTerminal = (CardTerminal) CardTerminalRegistry.getRegistry()
 					.getCardTerminals().nextElement();
 		}
+		
+		SmartCard.shutdown();
 
 		// asserts
 		assertTrue("No card terminals available", terminalsAvailable);

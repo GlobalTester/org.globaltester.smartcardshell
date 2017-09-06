@@ -5,16 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import opencard.core.service.CardServiceException;
-import opencard.core.service.SmartCard;
-import opencard.core.terminal.CardTerminalException;
-import opencard.core.util.OpenCardConfigurationProvider;
-import opencard.core.util.OpenCardPropertyLoadingException;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
+
+import opencard.core.service.CardServiceException;
+import opencard.core.terminal.CardTerminalException;
+import opencard.core.util.OpenCardConfigurationProvider;
+import opencard.core.util.OpenCardPropertyLoadingException;
 
 public class PreferencesPropertyLoader implements OpenCardConfigurationProvider {
 
@@ -57,8 +56,6 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 			OpenCardPropertyLoadingException, CardServiceException,
 			ClassNotFoundException {
 
-		SmartCard.shutdown();
-
 		String configSource = Platform.getPreferencesService().getString(
 				Activator.PLUGIN_ID,
 				PreferenceConstants.OCF_CONFIGURATION_SOURCE, "", null);
@@ -80,7 +77,6 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 					"opencard.opt.util.OpenCardPropertyFileLoader");
 		}
 
-		SmartCard.start();
 	}
 
 	@Override

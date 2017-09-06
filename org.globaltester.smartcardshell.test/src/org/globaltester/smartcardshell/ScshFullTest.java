@@ -60,6 +60,8 @@ public class ScshFullTest {
 		CommandAPDU command = new CommandAPDU(CMD_APDU_SELECT_MF);
 		ResponseAPDU response = ptcs.sendCommandAPDU(command);
 
+		SmartCard.shutdown();
+		
 		// asserts
 		assertNotNull("No response received", response);
 		assertEquals("Command returned wrong data", "90 00",

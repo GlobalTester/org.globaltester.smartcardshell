@@ -2,12 +2,6 @@ package org.globaltester.smartcardshell.ui.preferences;
 
 import java.util.Enumeration;
 
-import opencard.core.service.CardServiceException;
-import opencard.core.terminal.CardTerminal;
-import opencard.core.terminal.CardTerminalException;
-import opencard.core.terminal.CardTerminalRegistry;
-import opencard.core.util.OpenCardPropertyLoadingException;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -24,9 +18,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.globaltester.logging.legacy.logger.GtErrorLogger;
-import org.globaltester.smartcardshell.ocf.OCFWrapper;
-import org.globaltester.smartcardshell.ui.Activator;
+
+import opencard.core.service.SmartCard;
+import opencard.core.terminal.CardTerminal;
+import opencard.core.terminal.CardTerminalRegistry;
 
 public class OcfReaderSelectionFieldEditor extends FieldEditor {
 
@@ -191,22 +186,10 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 		return btnRefresh;
 	}
 
-	public void updateReaderList() {
-		//restart OCF
-		try {
-			OCFWrapper.restart();
-		} catch (CardTerminalException e) {
-			GtErrorLogger.log(Activator.PLUGIN_ID, e);
-		} catch (OpenCardPropertyLoadingException e) {
-			GtErrorLogger.log(Activator.PLUGIN_ID, e);
-		} catch (CardServiceException e) {
-			GtErrorLogger.log(Activator.PLUGIN_ID, e);
-		} catch (ClassNotFoundException e) {
-			GtErrorLogger.log(Activator.PLUGIN_ID, e);
-		}
-		
+	public void updateReaderList() {		
 		//create buttons
 		createReaderRadioButtons(radioBox);
+		
 		radioBox.pack();
 		
 		//select the correct button
@@ -267,6 +250,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 	public String[] getAvailableReaders() {
 		String[] readerList = null;
 		try {
+			SmartCard.start();
 			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
 			Enumeration<?> ctlist = ctr.getCardTerminals();
 
@@ -278,7 +262,7 @@ public class OcfReaderSelectionFieldEditor extends FieldEditor {
 				readerList[i] = ct.getName();
 				i++;
 			}
-
+			SmartCard.shutdown();
 		} catch (Exception e) {
 			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getShell();
