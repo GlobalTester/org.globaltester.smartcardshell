@@ -23,13 +23,10 @@ import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
-import opencard.core.service.CardServiceException;
-import opencard.core.terminal.CardTerminalException;
-import opencard.core.util.OpenCardPropertyLoadingException;
-
 public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
+	private static final int MAX_EXTENDED_LENGTH_APDU_SIZE = 32767;
 	private static final String OCF_WARNING = "Changes of OCF Framework parameters will require a restart of SmartCardService to take effect. This might interrupt running SmartCardShells. Further more if you"
 			+ " choose use default opencard.properies eclipse MUST be restarted!";
 	private boolean ocfConfigSourceChanged = false;
@@ -47,10 +44,6 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private boolean configSourceFile;
 	private boolean configSourcePreferences;
 	private boolean manualReaderSelectEnabled;
-	
-	private Group bufferGroup;
-	private IntegerFieldEditor ifeReaderBuffer;
-	private RadioGroupFieldEditor rfeReadFileEOF;
 
 	public SmartCardShellPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -64,8 +57,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	protected void createFieldEditors() {
 		// get common values
 		Composite parent = getFieldEditorParent();
-		int columns = ((GridLayout) parent.getLayout()).numColumns + 1;
-		columns = 3;
+		int columns = 3;
 
 		// create group for OCF properties
 		grpOcfProperties = new Group(parent, SWT.NONE);
@@ -131,20 +123,20 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		bfeEmptyReaderAllowed.setEnabled(manualReaderSelectEnabled, grpReaderSelection);
 		addField(bfeEmptyReaderAllowed);
 		
-		bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
+		Group bufferGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		bufferGroup.setText("Buffer");
 		GridData gd3 = new GridData(GridData.FILL, GridData.FILL, true, false);
 		gd3.horizontalSpan = 2;
 		bufferGroup.setLayoutData(gd3);
 		bufferGroup.setLayout(new GridLayout(2, false));
 
-		ifeReaderBuffer = new IntegerFieldEditor(
+		IntegerFieldEditor ifeReaderBuffer = new IntegerFieldEditor(
 				PreferenceConstants.P_READBUFFER, "Read buffer size:",
 				bufferGroup);
-		ifeReaderBuffer.setValidRange(0, 32767); // Maximum size allowed in extended Length APDU
+		ifeReaderBuffer.setValidRange(0, MAX_EXTENDED_LENGTH_APDU_SIZE); // Maximum size allowed in extended Length APDU
 		addField(ifeReaderBuffer);
 
-		rfeReadFileEOF = new RadioGroupFieldEditor(
+		RadioGroupFieldEditor rfeReadFileEOF = new RadioGroupFieldEditor(
 				PreferenceConstants.P_BUFFERREADFILEEOF,
 				"Alternative ways for JavaScript function readFileEOF()",
 				1,
@@ -273,28 +265,11 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		boolean success = super.performOk();
 		
 		if (ocfConfigSourceChanged) {
-			reinitializeOCF();
+			PreferencesPropertyLoader.restartAndInitializeOCF();
 			this.setOcfWarning(false);
 		}
 		
 		return success;
-	}
-	
-	/**
-	 * re-initialize the OpenCardFramework to use values from plugin preferences
-	 */
-	private void reinitializeOCF() {
-		try {
-			PreferencesPropertyLoader.restartAndInitializeOCF();
-		} catch (CardTerminalException e) {
-			e.printStackTrace();
-		} catch (OpenCardPropertyLoadingException e) {
-			e.printStackTrace();
-		} catch (CardServiceException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

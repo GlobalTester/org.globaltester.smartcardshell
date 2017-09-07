@@ -1,12 +1,12 @@
 package org.globaltester.smartcardshell.ocf;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.globaltester.logging.legacy.logger.GtErrorLogger;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
@@ -16,6 +16,9 @@ import opencard.core.util.OpenCardConfigurationProvider;
 import opencard.core.util.OpenCardPropertyLoadingException;
 
 public class PreferencesPropertyLoader implements OpenCardConfigurationProvider {
+
+	private static final String OPENCARD_OPT_UTIL_OPEN_CARD_PROPERTY_FILE_LOADER = "opencard.opt.util.OpenCardPropertyFileLoader";
+	private static final String OPEN_CARD_LOADER_CLASS_NAME = "OpenCard.loaderClassName";
 
 	/**
 	 * initialize the OpenCardFramework to use values from plugin preferences
@@ -32,15 +35,15 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 						.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences))) {
 			// use this PropertyLoader that sets properties according to eclipse
 			// preferences
-			System.setProperty("OpenCard.loaderClassName",
+			System.setProperty(OPEN_CARD_LOADER_CLASS_NAME,
 					PreferencesPropertyLoader.class.getCanonicalName());
 		}
 
 		else {
 			// use default implementation that loads properties from property
 			// file
-			System.setProperty("OpenCard.loaderClassName",
-					"opencard.opt.util.OpenCardPropertyFileLoader");
+			System.setProperty(OPEN_CARD_LOADER_CLASS_NAME,
+					OPENCARD_OPT_UTIL_OPEN_CARD_PROPERTY_FILE_LOADER);
 		}
 	}
 
@@ -52,9 +55,7 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 	 * @throws CardServiceException
 	 * @throws OpenCardPropertyLoadingException
 	 */
-	public static void restartAndInitializeOCF() throws CardTerminalException,
-			OpenCardPropertyLoadingException, CardServiceException,
-			ClassNotFoundException {
+	public static void restartAndInitializeOCF() {
 
 		String configSource = Platform.getPreferencesService().getString(
 				Activator.PLUGIN_ID,
@@ -66,15 +67,15 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 						.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences))) {
 			// use this PropertyLoader that sets properties according to eclipse
 			// preferences
-			System.setProperty("OpenCard.loaderClassName",
+			System.setProperty(OPEN_CARD_LOADER_CLASS_NAME,
 					PreferencesPropertyLoader.class.getCanonicalName());
 		}
 
 		else {
 			// use default implementation that loads properties from property
 			// file
-			System.setProperty("OpenCard.loaderClassName",
-					"opencard.opt.util.OpenCardPropertyFileLoader");
+			System.setProperty(OPEN_CARD_LOADER_CLASS_NAME,
+					OPENCARD_OPT_UTIL_OPEN_CARD_PROPERTY_FILE_LOADER);
 		}
 
 	}
@@ -87,10 +88,10 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 
 		if (configSource
 				.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_file)) {
-			this.loadPropertiesFromFile();
+			loadPropertiesFromFile();
 		} else if (configSource
 				.equals(PreferenceConstants.OCF_CONFIGURATION_SOURCE_preferences)) {
-			this.loadPropertiesFromPreferences();
+			loadPropertiesFromPreferences();
 		} else {
 			loadingImpossible("Preferences do not allow loading of properties from preferences");
 		}
@@ -102,7 +103,7 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 	 * 
 	 * @throws OpenCardPropertyLoadingException
 	 */
-	private void loadPropertiesFromFile()
+	private static void loadPropertiesFromFile()
 			throws OpenCardPropertyLoadingException {
 		IPreferencesService prefService = Platform.getPreferencesService();
 
@@ -120,31 +121,17 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 
 		// set properties from file contents
 		Properties props = new Properties(System.getProperties());
-		FileInputStream inputStream = null;
-		try {
-			inputStream = new FileInputStream(fileName);
+		try (FileInputStream inputStream = new FileInputStream(fileName)) {
 			props.load(inputStream);
-		} catch (FileNotFoundException e) {
-			loadingImpossible("Properties file can not be found: "
-					+ e.getMessage());
 		} catch (IOException e) {
+			GtErrorLogger.log(Activator.PLUGIN_ID, e);
 			loadingImpossible("Properties file can not used: " + e.getMessage());
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					// ignore this, if the stream can not be closed it does not
-					// need to be closed
-				}
-			}
 		}
 		System.setProperties(props);
 
 	}
 
-	private void loadPropertiesFromPreferences()
-			throws OpenCardPropertyLoadingException {
+	private static void loadPropertiesFromPreferences() {
 
 		IPreferencesService prefService = Platform.getPreferencesService();
 
@@ -160,10 +147,10 @@ public class PreferencesPropertyLoader implements OpenCardConfigurationProvider 
 
 	}
 
-	private void loadingImpossible(String msg)
+	private static void loadingImpossible(String msg)
 			throws OpenCardPropertyLoadingException {
-		System.setProperty("OpenCard.loaderClassName",
-				"opencard.opt.util.OpenCardPropertyFileLoader");
+		System.setProperty(OPEN_CARD_LOADER_CLASS_NAME,
+				OPENCARD_OPT_UTIL_OPEN_CARD_PROPERTY_FILE_LOADER);
 		throw new OpenCardPropertyLoadingException(msg);
 
 	}
