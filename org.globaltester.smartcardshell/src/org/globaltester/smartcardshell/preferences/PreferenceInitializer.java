@@ -21,6 +21,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		
+		preferences.put(PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION, "JAVA");
 
 		String configJsPath = Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE, configJsPath);
