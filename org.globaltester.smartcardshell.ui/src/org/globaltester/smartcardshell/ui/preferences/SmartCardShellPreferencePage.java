@@ -69,7 +69,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		GridData gdGrpSmartcardImplementation = new GridData(GridData.FILL, GridData.FILL, true, false);
 		
 		cfeSmartcardImplementation = new ComboFieldEditor(PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION,
-				"Smartcard impementation", 
+				"Smartcard implementation", 
 				new String[][] {
 					new String[] {
 						"Java Smartcard I/O",
