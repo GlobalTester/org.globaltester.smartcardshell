@@ -49,9 +49,10 @@ public class DummyCardTerminalFactory implements CardTerminalFactory {
 					terminalInfo[TERMINAL_TYPE_ENTRY],
 					terminalInfo[TERMINAL_ADDRESS_ENTRY]));
 
-		} else
+		} else {
 			throw new TerminalInitException("Type unknown: "
 					+ terminalInfo[TERMINAL_NAME_ENTRY]);
+		}
 	}
 
 	/*

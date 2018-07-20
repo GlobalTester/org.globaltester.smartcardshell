@@ -56,9 +56,10 @@ public class SocketCardTerminalFactory implements CardTerminalFactory {
 					terminalInfo[TERMINAL_HOST_ENTRY]));
 			// these four TERMINAL variables are
 			// defined in CardTerminalFactory
-		} else
+		} else {
 			throw new TerminalInitException("Type unknown: "
 					+ terminalInfo[TERMINAL_NAME_ENTRY]);
+		}
 	}
 
 	/*
