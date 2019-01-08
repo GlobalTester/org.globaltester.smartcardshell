@@ -21,6 +21,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		Preferences preferences = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		
+		preferences.put(PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION, "JNA");
 
 		String configJsPath = Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator+"config.js";
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE, configJsPath);
@@ -35,7 +37,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 						+ "opencard.opt.util.PassThruCardServiceFactory");
 		preferences
 				.put(PreferenceConstants.OCF_OPENCARD_TERMINALS,
-						"de.cardcontact.opencard.terminal.smartcardio.SmartCardIOFactory|*|PCSC10-NOPOLL " +
+						"org.globaltester.smartcardshell.ocf.terminal.SmartCardIOFactory|*|PCSC10-NOPOLL " +
 						"org.globaltester.smartcardshell.ocf.terminal.ServiceCardTerminalFactory " + 
 						"org.globaltester.smartcardshell.ocf.terminal.SocketCardTerminalFactory|SocketCardTerminal|Socket|9876|localhost ");
 

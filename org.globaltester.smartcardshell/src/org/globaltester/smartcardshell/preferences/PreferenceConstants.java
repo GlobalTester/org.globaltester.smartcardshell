@@ -7,6 +7,9 @@ package org.globaltester.smartcardshell.preferences;
  * 
  */
 public class PreferenceConstants {
+	
+	//smartcard implementation properties
+	public static final String OCF_SMARTCARD_IMPLEMENTATION = "org.globaltester.smartcardshell.ocf.smartcard.implementation";
 
 	// Preferences to define OCF configuration source
 	public static final String OCF_CONFIGURATION_SOURCE = "org.globaltester.smartcardshell.ocf.configuration.source";

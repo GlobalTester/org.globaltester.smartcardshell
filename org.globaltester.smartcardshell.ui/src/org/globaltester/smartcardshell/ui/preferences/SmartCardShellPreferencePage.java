@@ -2,6 +2,7 @@ package org.globaltester.smartcardshell.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,6 +32,9 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 			+ " choose use default opencard.properies eclipse MUST be restarted!";
 	private boolean ocfConfigSourceChanged = false;
 	
+	private Group grpSmartcardImplementation;
+	private ComboFieldEditor cfeSmartcardImplementation;
+	
 	private Group grpOcfProperties;
 	private RadioGroupFieldEditor rgfeConfigSource;
 	private StringFieldEditor sfeScshConfigPath;
@@ -58,6 +62,30 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		// get common values
 		Composite parent = getFieldEditorParent();
 		int columns = 3;
+		
+		// create group for smartcard implementation
+		grpSmartcardImplementation = new Group(parent, SWT.NONE);
+		grpSmartcardImplementation.setText("Smartcard Implementation");
+		GridData gdGrpSmartcardImplementation = new GridData(GridData.FILL, GridData.FILL, true, false);
+		
+		cfeSmartcardImplementation = new ComboFieldEditor(PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION,
+				"Smartcard implementation", 
+				new String[][] {
+					new String[] {
+						"Java Smartcard I/O",
+						"JAVA"
+					},
+					new String[] {
+						"JNA Smartcard I/O",
+						"JNA"
+					}
+				}, 
+				grpSmartcardImplementation);
+		addField(cfeSmartcardImplementation);
+		
+		gdGrpSmartcardImplementation.horizontalSpan = columns;
+		grpSmartcardImplementation.setLayoutData(gdGrpSmartcardImplementation);
+		grpSmartcardImplementation.setLayout(new GridLayout(columns, false));
 
 		// create group for OCF properties
 		grpOcfProperties = new Group(parent, SWT.NONE);
@@ -78,9 +106,9 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				"Configuration source\n", 1, configOptions, grpOcfProperties);
 		addField(rgfeConfigSource);
 
-		gdGrpOcfProperties.horizontalSpan = columns;
+		gdGrpOcfProperties.horizontalSpan = 2;
 		grpOcfProperties.setLayoutData(gdGrpOcfProperties);
-		grpOcfProperties.setLayout(new GridLayout(columns, false));
+		grpOcfProperties.setLayout(new GridLayout(2, false));
 
 		sfeScshConfigPath = new FileFieldEditor(
 				PreferenceConstants.OCF_PROPERTIES_FILE, "OpenCard.properties",

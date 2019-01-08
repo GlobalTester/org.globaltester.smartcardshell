@@ -10,11 +10,18 @@
 
 package org.globaltester.smartcardshell.ocf.terminal;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
+
+import org.eclipse.core.runtime.Platform;
+import org.globaltester.lib.smartcardio.Smartcardio;
+import org.globaltester.logging.BasicLogger;
+import org.globaltester.smartcardshell.Activator;
+import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalFactory;
@@ -50,14 +57,26 @@ public class SmartCardIOFactory implements CardTerminalFactory {
 			terminalType = terminalInfo[1];
 		}
 		try	{
-			TerminalFactory factory = TerminalFactory.getDefault();
+			String smartcardImplemenatation = Platform.getPreferencesService().getString(
+					Activator.PLUGIN_ID,
+					PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION, "JAVA", null);
+			TerminalFactory factory;
+			if(smartcardImplemenatation.equals("JAVA" )) {
+				factory = TerminalFactory.getDefault();
+			}
+			else {
+				factory = TerminalFactory.getInstance("PC/SC", null, new Smartcardio());
+			}
+			
 			List<CardTerminal> terminals = factory.terminals().list();
 			for (CardTerminal ct : terminals) {
 				ctr.add(new SmartCardIOTerminal(ct.getName(), terminalType, "", ct));	
 			}
+			
+			BasicLogger.log(this.getClass(), factory.toString());
 		}
-		catch(CardException ce) {
-			ctracer.error("createCardTerminals", ce);
+		catch(CardException | NoSuchAlgorithmException e) {
+			ctracer.error("createCardTerminals", e);
 		}
 	}
 
