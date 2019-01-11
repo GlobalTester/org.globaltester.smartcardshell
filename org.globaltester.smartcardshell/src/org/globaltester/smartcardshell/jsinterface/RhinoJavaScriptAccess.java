@@ -45,7 +45,7 @@ public class RhinoJavaScriptAccess {
 	 * Indicates if this instance supports JavaScript debugging and a Rhino
 	 * debugger is or is going to be connected.
 	 */
-	public static boolean debugMode = false;
+	private static boolean debugMode = false;
 
 	private Dim dim;
 
@@ -157,9 +157,6 @@ public class RhinoJavaScriptAccess {
 	 * context.
 	 */
 	public void exitContext() {
-		if (debugMode) {
-			debugMode = false;
-		}
 		Context.exit();
 	}
 	
