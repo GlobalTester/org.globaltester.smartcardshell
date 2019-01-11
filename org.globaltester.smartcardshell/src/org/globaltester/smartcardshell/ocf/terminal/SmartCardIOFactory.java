@@ -73,7 +73,7 @@ public class SmartCardIOFactory implements CardTerminalFactory {
 				ctr.add(new SmartCardIOTerminal(ct.getName(), terminalType, "", ct));	
 			}
 			
-			BasicLogger.log(this.getClass(), factory.toString());
+			BasicLogger.log(this.getClass(), "SmartCardIO factory: " + factory.toString());
 		}
 		catch(CardException | NoSuchAlgorithmException e) {
 			ctracer.error("createCardTerminals", e);
