@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.globaltester.simulator,
  org.globaltester.logging,
- org.globaltester.lib.smartcardio;bundle-version="3.3.1"
+ org.globaltester.lib.smartcardio
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
