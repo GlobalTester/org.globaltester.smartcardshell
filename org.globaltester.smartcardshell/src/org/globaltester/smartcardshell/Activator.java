@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Hashtable;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.globaltester.control.RemoteControlHandler;
 import org.globaltester.smartcardshell.ocf.PreferencesPropertyLoader;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -32,6 +35,10 @@ public class Activator extends AbstractUIPlugin {
 		context = bundleContext;
 	}
 
+	private SmartCardShellManagerSoap smartCardShellManager;
+
+	private ServiceRegistration<RemoteControlHandler> smartCardShellManagerRegistration;
+
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
@@ -43,12 +50,19 @@ public class Activator extends AbstractUIPlugin {
 			createOpenCardProperties(cardProperties);	
 		}
 		
+		smartCardShellManager = new SmartCardShellManagerSoap();
+		smartCardShellManagerRegistration = context.registerService(RemoteControlHandler.class, smartCardShellManager, new Hashtable<String, String>());
+		
+	
 		PreferencesPropertyLoader.initOCF();
 	}
 
 	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 		plugin = null;
+		if (smartCardShellManagerRegistration != null){
+			smartCardShellManagerRegistration.unregister();	
+		}
 		Activator.setContext(null);
 		super.stop(bundleContext);
 	}
