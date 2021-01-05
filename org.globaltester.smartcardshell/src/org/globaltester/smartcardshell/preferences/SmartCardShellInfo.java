@@ -23,6 +23,18 @@ import opencard.core.util.OpenCardPropertyLoadingException;
 public class SmartCardShellInfo {
 	
 	public static String activeReaderName = "unknown";
+	
+	public static void startSmartcard() throws OpenCardPropertyLoadingException, CardServiceException, CardTerminalException, ClassNotFoundException {
+		//if (!SmartCard.isStarted()) {
+			SmartCard.start();	
+		//}
+	}
+	
+	public static void shutdownSmartcard() throws CardTerminalException {
+		if (!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.OCF_KEEP_RUNNING)) {
+			SmartCard.shutdown();	
+		}
+	}
 
 	/**
 	 * This method returns the name of the suggested card reader to be used.
@@ -39,7 +51,7 @@ public class SmartCardShellInfo {
 		
 		try {
 			
-			SmartCard.start();
+			startSmartcard();
 			
 			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
 			Enumeration<?> ctlist = ctr.getCardTerminals();
@@ -81,7 +93,7 @@ public class SmartCardShellInfo {
 				}
 			}
 			
-			SmartCard.shutdown();
+			shutdownSmartcard();
 		} catch (CardTerminalException | OpenCardPropertyLoadingException | CardServiceException | ClassNotFoundException e) {
 			// just print the error
 			e.printStackTrace();
@@ -101,7 +113,7 @@ public class SmartCardShellInfo {
 		String[][] readerList;
 		
 		try {
-			SmartCard.start();
+			startSmartcard();
 			CardTerminalRegistry ctr = CardTerminalRegistry.getRegistry();
 			Enumeration<?> ctlist = ctr.getCardTerminals();
 			int i = ctr.countCardTerminals();
@@ -117,7 +129,7 @@ public class SmartCardShellInfo {
 				i++;
 			}
 			
-			SmartCard.shutdown();
+			shutdownSmartcard();
 			
 			if (i == 0) {
 				TestLogger.error("No card reader registered!");

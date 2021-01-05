@@ -42,6 +42,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 						"org.globaltester.smartcardshell.ocf.terminal.SocketCardTerminalFactory|SocketCardTerminal|Socket|9876|localhost ");
 
 		preferences.put(PreferenceConstants.OCF_READER, "");
+		preferences.putBoolean(PreferenceConstants.OCF_KEEP_RUNNING, false);
 		preferences.putBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT,
 				false);
 		

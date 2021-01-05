@@ -42,6 +42,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 	private PropertyFieldEditor pfeOpenCardTerminals;
 
 	private Group grpReaderSelection;
+	private BooleanFieldEditor bfeKeepOcfRunning;
 	private BooleanFieldEditor bfeManualReaderSettings;
 	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
 	private BooleanFieldEditor bfeEmptyReaderAllowed;
@@ -110,6 +111,11 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		grpOcfProperties.setLayoutData(gdGrpOcfProperties);
 		grpOcfProperties.setLayout(new GridLayout(2, false));
 
+		bfeKeepOcfRunning = new BooleanFieldEditor(
+				PreferenceConstants.OCF_KEEP_RUNNING,
+				"Keep OCF running", 1, grpOcfProperties);
+		addField(bfeKeepOcfRunning);
+
 		sfeScshConfigPath = new FileFieldEditor(
 				PreferenceConstants.OCF_PROPERTIES_FILE, "OpenCard.properties",
 				grpOcfProperties);
@@ -124,6 +130,8 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 				PreferenceConstants.OCF_OPENCARD_TERMINALS,
 				"OpenCard.Terminals", grpOcfProperties);
 		addField(pfeOpenCardTerminals);
+		
+
 
 		// create group for reader selection
 		grpReaderSelection = new Group(getFieldEditorParent(), SWT.NONE);
@@ -134,7 +142,6 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		grpReaderSelection.setLayoutData(gdGrpReaderSelection);
 		grpReaderSelection.setLayout(new GridLayout(2, false));
 
-		// manual settings of terminals
 		bfeManualReaderSettings = new BooleanFieldEditor(
 				PreferenceConstants.OCF_MANUAL_READERSELECT,
 				"Manual setting of card terminal", grpReaderSelection);
