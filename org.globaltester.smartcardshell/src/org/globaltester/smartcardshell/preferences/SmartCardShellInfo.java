@@ -26,7 +26,7 @@ public class SmartCardShellInfo {
 	
 	public static void startSmartcard() throws OpenCardPropertyLoadingException, CardServiceException, CardTerminalException, ClassNotFoundException {
 		//if (!SmartCard.isStarted()) {
-			SmartCard.start();	
+			SmartCard.start();
 		//}
 	}
 	

@@ -43,6 +43,7 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 
 	private Group grpReaderSelection;
 	private BooleanFieldEditor bfeKeepOcfRunning;
+	private BooleanFieldEditor bfeForceExclusive;
 	private BooleanFieldEditor bfeManualReaderSettings;
 	private OcfReaderSelectionFieldEditor orsfeReaderSelection;
 	private BooleanFieldEditor bfeEmptyReaderAllowed;
@@ -110,6 +111,11 @@ public class SmartCardShellPreferencePage extends FieldEditorPreferencePage
 		gdGrpOcfProperties.horizontalSpan = 2;
 		grpOcfProperties.setLayoutData(gdGrpOcfProperties);
 		grpOcfProperties.setLayout(new GridLayout(2, false));
+
+		bfeForceExclusive = new BooleanFieldEditor(
+				PreferenceConstants.OCF_FORCE_EXCLUSIVE,
+				"Force exclusive reader access where possible", 1, grpOcfProperties);
+		addField(bfeForceExclusive);
 
 		bfeKeepOcfRunning = new BooleanFieldEditor(
 				PreferenceConstants.OCF_KEEP_RUNNING,

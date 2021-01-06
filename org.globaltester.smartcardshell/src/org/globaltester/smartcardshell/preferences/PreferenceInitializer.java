@@ -43,6 +43,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		preferences.put(PreferenceConstants.OCF_READER, "");
 		preferences.putBoolean(PreferenceConstants.OCF_KEEP_RUNNING, false);
+		preferences.putBoolean(PreferenceConstants.OCF_FORCE_EXCLUSIVE, false);
 		preferences.putBoolean(PreferenceConstants.OCF_MANUAL_READERSELECT,
 				false);
 		

@@ -41,11 +41,13 @@ public class PreferenceConstants {
 	// reader selection properties
 	public static final String OCF_READER = "org.globaltester.smartcardshell.ocf.reader";
 	public static final String OCF_KEEP_RUNNING = "org.globaltester.smartcardshell.ocf.keep_running";
+	public static final String OCF_FORCE_EXCLUSIVE = "org.globaltester.smartcardshell.ocf.force_exclusive";
 	public static final String OCF_MANUAL_READERSELECT = "org.globaltester.smartcardshell.ocf.reader.manualselect";
 	public static final String P_ALLOW_EMPTY_READER = "GlobalTester_TestManager_allow_empty_reader";
 
 	//readerBuffer and ReadFileEOF setting
 	public static final String P_READBUFFER = "Default read buffer size";
 	public static final String P_BUFFERREADFILEEOF = "Buffer size for function readFileEOF";
+
 
 }

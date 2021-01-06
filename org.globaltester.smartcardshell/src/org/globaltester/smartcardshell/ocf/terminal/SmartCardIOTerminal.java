@@ -17,6 +17,10 @@ import java.nio.ByteBuffer;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
 
+import org.eclipse.core.runtime.Platform;
+import org.globaltester.smartcardshell.Activator;
+import org.globaltester.smartcardshell.preferences.PreferenceConstants;
+
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalException;
@@ -186,6 +190,14 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	 * 
 	 */
 	private void connect() throws CardTerminalException {
+		if (card != null) {
+			return;
+		}
+		
+		boolean exclusive = Platform.getPreferencesService().getBoolean(
+				Activator.PLUGIN_ID,
+				PreferenceConstants.OCF_FORCE_EXCLUSIVE, false, null);
+		
 		try	{
 			this.card = ct.connect("T=1");
 		}
@@ -199,6 +211,13 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 				throw new CardTerminalException("Error connecting to card: " + nce.getMessage());
 			}
 		}
+		if (card != null && exclusive) {
+			try {
+				this.card.beginExclusive();
+			} catch (CardException e) {
+				throw new CardTerminalException("Error connecting exclusively: " + e.getMessage());
+			}	
+		}
 	}
 
 	/**
@@ -210,8 +229,15 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	 */
 	private void disconnect(boolean reset) throws CardTerminalException {
 		if (this.card != null) {
-
 			try {
+				boolean exclusive = Platform.getPreferencesService().getBoolean(
+						Activator.PLUGIN_ID,
+						PreferenceConstants.OCF_FORCE_EXCLUSIVE, false, null);
+				
+				if (exclusive) {
+					this.card.endExclusive();
+				}
+				
 				// this.card.disconnect(reset);
 
 				Class<?> cl;
@@ -241,7 +267,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 				m.setAccessible(true);
 				m.invoke(null, cardId, disposition);
 
-			} catch (IllegalArgumentException | ReflectiveOperationException e) {
+			} catch (IllegalArgumentException | ReflectiveOperationException | CardException e) {
 				// #831 use consistent logging here
 				e.printStackTrace();
 			} finally {
