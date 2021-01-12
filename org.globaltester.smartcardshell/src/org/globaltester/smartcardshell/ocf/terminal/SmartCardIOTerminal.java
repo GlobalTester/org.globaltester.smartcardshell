@@ -238,34 +238,40 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 					this.card.endExclusive();
 				}
 				
-				// this.card.disconnect(reset);
+				String smartcardImplemenatation = Platform.getPreferencesService().getString(
+						Activator.PLUGIN_ID,
+						PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION, "JAVA", null);
+				
+				if(smartcardImplemenatation.equals("JAVA" )) {
+					Class<?> cl;
+					Field f;
+					Method m;
 
-				Class<?> cl;
-				Field f;
-				Method m;
+					// read cardId
+					Object cardId;
+					cl = Class.forName("sun.security.smartcardio.CardImpl");
+					f = cl.getDeclaredField("cardId");
+					f.setAccessible(true);
+					cardId = f.get(this.card);
 
-				// read cardId
-				Object cardId;
-				cl = Class.forName("sun.security.smartcardio.CardImpl");
-				f = cl.getDeclaredField("cardId");
-				f.setAccessible(true);
-				cardId = f.get(this.card);
+					// read disposition
+					Object disposition;
+					cl = Class.forName("sun.security.smartcardio.PCSC");
+					f = cl.getDeclaredField("SCARD_UNPOWER_CARD");
+					// f = cl.getDeclaredField("SCARD_RESET_CARD");
+					// f = cl.getDeclaredField("SCARD_LEAVE_CARD");
+					f.setAccessible(true);
+					disposition = f.get(null);
 
-				// read disposition
-				Object disposition;
-				cl = Class.forName("sun.security.smartcardio.PCSC");
-				f = cl.getDeclaredField("SCARD_UNPOWER_CARD");
-				// f = cl.getDeclaredField("SCARD_RESET_CARD");
-				// f = cl.getDeclaredField("SCARD_LEAVE_CARD");
-				f.setAccessible(true);
-				disposition = f.get(null);
-
-				// Execute SCardDisconnect
-				cl = Class.forName("sun.security.smartcardio.PCSC");
-				m = cl.getDeclaredMethod("SCardDisconnect", Long.TYPE,
-						Integer.TYPE);
-				m.setAccessible(true);
-				m.invoke(null, cardId, disposition);
+					// Execute SCardDisconnect
+					cl = Class.forName("sun.security.smartcardio.PCSC");
+					m = cl.getDeclaredMethod("SCardDisconnect", Long.TYPE,
+							Integer.TYPE);
+					m.setAccessible(true);
+					m.invoke(null, cardId, disposition);
+				} else {
+					this.card.disconnect(reset);
+				}
 
 			} catch (IllegalArgumentException | ReflectiveOperationException | CardException e) {
 				// #831 use consistent logging here
