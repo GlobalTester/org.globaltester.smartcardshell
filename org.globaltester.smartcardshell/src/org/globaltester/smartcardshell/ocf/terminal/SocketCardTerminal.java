@@ -156,7 +156,7 @@ public class SocketCardTerminal extends CardTerminal {
 	 * @return
 	 * @throws CardTerminalException
 	 */
-	private byte[] exchange(int slotID, CommandAPDU apdu)
+	protected byte[] exchange(int slotID, CommandAPDU apdu)
 			throws CardTerminalException {
 		if (slotID != 0) {
 			throw new CardTerminalException("Unknown slot");
