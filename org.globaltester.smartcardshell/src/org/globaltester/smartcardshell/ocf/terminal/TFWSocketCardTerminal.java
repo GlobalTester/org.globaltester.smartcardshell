@@ -21,14 +21,14 @@ import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CommandAPDU;
 
-public class SmartEIDCardTerminal extends SocketCardTerminal {
+public class TFWSocketCardTerminal extends SocketCardTerminal {
 	private byte[] cachedATR;
 	private PrintWriter log;
 	private int port;
 	private String host;
 	private Socket socket;
 	
-	protected SmartEIDCardTerminal(String name, String type, String device, String hostname) {
+	protected TFWSocketCardTerminal(String name, String type, String device, String hostname) {
 		super(name, type, device, hostname);
 	}
 	
