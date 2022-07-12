@@ -32,9 +32,9 @@ public class SocketCardTerminal extends CardTerminal {
 
 	private byte[] cachedATR = null;
 	private String host = null;
-	private PrintWriter log = null;
+	protected PrintWriter log = null;
 	private int port = 0;
-	private Socket socket = null;
+	protected Socket socket = null;
 
 	/**
 	 * @param name
@@ -89,7 +89,7 @@ public class SocketCardTerminal extends CardTerminal {
 	 * @return true, iff the socket was connected succesfully
 	 * @throws CardTerminalException 
 	 */
-	private boolean openSocket() throws CardTerminalException{
+	protected boolean openSocket() throws CardTerminalException{
 		try {
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(host, port), 1000);
@@ -112,7 +112,7 @@ public class SocketCardTerminal extends CardTerminal {
 	/**
 	 * 
 	 */
-	private void closeSocket() {
+	protected void closeSocket() {
 		try {
 			if (socket != null){
 				socket.close();	
@@ -131,7 +131,7 @@ public class SocketCardTerminal extends CardTerminal {
 	 * @throws CardTerminalException
 	 * @throws SocketException 
 	 */
-	private byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
+	protected byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
 
 		if (socket != null) {
 			closeSocket();
