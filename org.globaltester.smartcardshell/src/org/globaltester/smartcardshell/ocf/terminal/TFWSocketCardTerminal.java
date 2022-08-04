@@ -13,8 +13,6 @@ import org.bouncycastle.asn1.ASN1OutputStream;
 import org.bouncycastle.asn1.DERApplicationSpecific;
 import org.bouncycastle.asn1.DERObject;
 
-import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
-import de.persosim.simulator.tlv.TlvTag;
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CommandAPDU;
