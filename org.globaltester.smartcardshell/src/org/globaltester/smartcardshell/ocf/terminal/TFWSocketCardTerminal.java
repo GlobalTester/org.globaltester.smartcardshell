@@ -1,14 +1,9 @@
 package org.globaltester.smartcardshell.ocf.terminal;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.SocketException;
 
 import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.bouncycastle.asn1.DERApplicationSpecific;
 import org.bouncycastle.asn1.DERObject;
@@ -19,12 +14,16 @@ import opencard.core.terminal.CommandAPDU;
 
 public class TFWSocketCardTerminal extends SocketCardTerminal {
 	
-	protected TFWSocketCardTerminal(String name, String type, String device, String hostname) {
+	public TFWSocketCardTerminal(String name, String type, String device, String hostname) {
 		super(name, type, device, hostname);
 	}
 	
 	@Override
 	protected byte[] exchange(int slotID, CommandAPDU apdu) throws CardTerminalException {
+		return sendMessage(slotID, 0, apdu.getBytes());
+	}
+	
+	public byte[] sendMessage(int slotID, int tag, byte [] bytes) throws CardTerminalException {
 		log.append("\n\nTest\n\n");
 		log.flush();
 		if (slotID != 0) {
@@ -41,7 +40,7 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 			out = new ASN1OutputStream(socket.getOutputStream());
 			in = new ASN1InputStream(socket.getInputStream());
 			 
-			out.writeObject(new DERApplicationSpecific(0, apdu.getBytes()));
+			out.writeObject(new DERApplicationSpecific(tag, bytes));
 			out.flush();
 			 
 			derResponse = in.readObject();	 
@@ -80,7 +79,7 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 	 * @throws SocketException 
 	 */
 	@Override
-	protected byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
+	public byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
 		final byte[] atr = new byte[] {0x3b, (byte)0x90, (byte)0x94, 0x00, (byte)0x92, 0x02, 0x75, (byte)0x93, 0x11, 0x00, 0x01, 0x02, 0x02, 0x10};
 		
 		if (socket != null && socket.isConnected()) {

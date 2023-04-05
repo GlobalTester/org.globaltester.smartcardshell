@@ -131,7 +131,7 @@ public class SocketCardTerminal extends CardTerminal {
 	 * @throws CardTerminalException
 	 * @throws SocketException 
 	 */
-	protected byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
+	public byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
 
 		if (socket != null) {
 			closeSocket();
