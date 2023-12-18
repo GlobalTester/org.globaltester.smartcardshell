@@ -8,3 +8,4 @@ Fragment-Host: org.globaltester.smartcardshell;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit
 Export-Package: org.globaltester.smartcardshell.test
+Automatic-Module-Name: org.globaltester.smartcardshell.test
