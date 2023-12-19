@@ -87,8 +87,8 @@ public class JsCmsSignedData extends JsCMSSignedData {
 	}
 
 	public static void finishInit(final Scriptable scope, final FunctionObject ctor, final Scriptable proto) {
-        ScriptableObject.defineProperty((Scriptable)ctor, "SID_ISSUERANDSERIALNUMBER", (Object)new Integer(1), 0);
-        ScriptableObject.defineProperty((Scriptable)ctor, "SID_SUBJECTKEYIDENTIFIER", (Object)new Integer(2), 0);
+        ScriptableObject.defineProperty((Scriptable)ctor, "SID_ISSUERANDSERIALNUMBER", (Object)Integer.valueOf(1), 0);
+        ScriptableObject.defineProperty((Scriptable)ctor, "SID_SUBJECTKEYIDENTIFIER", (Object)Integer.valueOf(2), 0);
         ScriptableObject.defineProperty((Scriptable)ctor, "ATTR_MESSAGEDIGEST", (Object)new String("1.2.840.113549.1.9.4"), 0);
         ScriptableObject.defineProperty((Scriptable)ctor, "ATTR_SIGNINGTIME", (Object)new String("1.2.840.113549.1.9.5"), 0);
     }
