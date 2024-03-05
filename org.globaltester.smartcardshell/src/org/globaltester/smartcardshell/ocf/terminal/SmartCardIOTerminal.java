@@ -18,6 +18,8 @@ import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
 
 import org.eclipse.core.runtime.Platform;
+import org.globaltester.logging.BasicLogger;
+import org.globaltester.logging.tags.LogLevel;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
@@ -28,15 +30,12 @@ import opencard.core.terminal.CardTerminalRegistry;
 import opencard.core.terminal.CommandAPDU;
 import opencard.core.terminal.Pollable;
 import opencard.core.terminal.ResponseAPDU;
-import opencard.core.util.Tracer;
 import opencard.opt.terminal.TerminalCommand;
 
 /**
  * Implements a wrapper card terminal for access to smart card with the javax.smartcardio interface.
  */
 public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand, Pollable {
-
-	private final static Tracer ctracer = new Tracer(SmartCardIOTerminal.class);
 
 	private boolean polling;
 	private javax.smartcardio.CardTerminal ct;
@@ -79,7 +78,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 	public CardID getCardID(int slotID) throws CardTerminalException {
 		
 		if (!isCardPresent(slotID)) {
-			ctracer.debug("getCardID", "no card in reader");
+			BasicLogger.log("getCardID - no card in reader", LogLevel.DEBUG);
 			return null;
 		}
 		connect();
@@ -115,7 +114,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			bbrapdu.get(dst, bbrapdu.position(), dst.length);
 		}
 		catch(CardException ce) {
-			ctracer.error("internalSendAPDU", ce);
+			BasicLogger.logException("Exception during internalSendAPDU", ce, LogLevel.ERROR);
 			throw new CardTerminalException("CardException in transmit(): " + ce.getMessage());
 		}
 		
@@ -131,7 +130,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			cardPresent = ct.isCardPresent();
 		}
 		catch(CardException ce) {
-			ctracer.error("isCardPresent", ce);
+			BasicLogger.logException("Exception during isCardPresent", ce, LogLevel.ERROR);
 			throw new CardTerminalException("CardException in isCardPresent(): " + ce.getMessage());
 		}
 
@@ -170,7 +169,7 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			resdata = this.card.transmitControlCommand(c, cmddata);
 		}
 		catch(CardException ce) {
-			ctracer.error("sendTerminalCommand", ce);
+			BasicLogger.logException("Exception during sendTerminalCommand", ce, LogLevel.ERROR);
 			throw new CardTerminalException("CardException in sendTerminalCommand(): " + ce.getMessage());
 		}
 		return resdata;
@@ -202,12 +201,12 @@ public class SmartCardIOTerminal extends CardTerminal implements TerminalCommand
 			this.card = ct.connect("T=1");
 		}
 		catch(CardException ce) {
-			ctracer.debug("connect", ce);
+			BasicLogger.logException("Exception during connect", ce, LogLevel.DEBUG);
 			try	{
 				this.card = ct.connect("*");
 			}
 			catch(CardException nce) {
-				ctracer.error("connect", nce);
+				BasicLogger.logException("Exception during connect", nce, LogLevel.ERROR);
 				throw new CardTerminalException("Error connecting to card: " + nce.getMessage());
 			}
 		}

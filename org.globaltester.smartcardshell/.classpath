@@ -12,10 +12,12 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/ocf-cc.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scdp4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/scsh3.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/xmldsig.jar"/>
-	<classpathentry exported="true" kind="lib" path="scsh3.7.989/lib/opensc-java.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/ocf-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/ocf-daemon.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/ocf-ui.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/scdp4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/scsh-3.18.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/opensc-java.jar"/>
+	<classpathentry exported="true" kind="lib" path="scsh-3.18.12/lib/sc-hsm-jceprovider.jar"/>	
 	<classpathentry kind="output" path="bin"/>
 </classpath>

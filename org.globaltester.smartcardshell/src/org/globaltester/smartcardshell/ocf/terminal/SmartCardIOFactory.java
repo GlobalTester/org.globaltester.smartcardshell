@@ -20,6 +20,7 @@ import javax.smartcardio.TerminalFactory;
 import org.eclipse.core.runtime.Platform;
 import org.globaltester.lib.smartcardio.Smartcardio;
 import org.globaltester.logging.BasicLogger;
+import org.globaltester.logging.tags.LogLevel;
 import org.globaltester.smartcardshell.Activator;
 import org.globaltester.smartcardshell.preferences.PreferenceConstants;
 
@@ -27,17 +28,12 @@ import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalFactory;
 import opencard.core.terminal.CardTerminalRegistry;
 import opencard.core.terminal.TerminalInitException;
-import opencard.core.util.Tracer;
 
 /**
  * Factory that creates a CardTerminal object for each card reader listed via the javax.smartcardio interface.
  * 
  */
 public class SmartCardIOFactory implements CardTerminalFactory {
-
-	private final static Tracer ctracer = new Tracer(SmartCardIOFactory.class);
-
-
 
 	@Override
 	public void close() throws CardTerminalException {
@@ -76,7 +72,7 @@ public class SmartCardIOFactory implements CardTerminalFactory {
 			BasicLogger.log(this.getClass(), "SmartCardIO factory: " + factory.toString());
 		}
 		catch(CardException | NoSuchAlgorithmException e) {
-			ctracer.error("createCardTerminals", e);
+			BasicLogger.logException("Exception during createCardTerminals", e, LogLevel.ERROR);
 		}
 	}
 

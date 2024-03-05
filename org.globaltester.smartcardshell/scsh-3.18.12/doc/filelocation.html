@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- #BeginTemplate "template.dwt" -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css"/>
+<meta name="author" content="Andreas Schwier"/>
+</head>
+<body>
+<div id="wrapper">
+<div><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80"/></a></div>
+<div id="pagelist">
+	<h1>Smart Card Shell</h1>
+	<ul>
+		<li>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="gperror.html">GPError</a></li>
+				<li><a href="gpsystem.html">GPSystem</a></li>
+				<li><a href="bytestring.html">ByteString</a></li>
+				<li><a href="bytebuffer.html">ByteBuffer</a></li>
+				<li><a href="tlv.html">TLV</a></li>
+				<li><a href="tlvlist.html">TLVList</a></li>
+				<li><a href="card.html">Card</a></li>
+				<li><a href="atr.html">Atr</a></li>
+				<li><a href="key.html">Key</a></li>
+				<li><a href="crypto.html">Crypto</a></li>
+				<li><a href="application.html">Application</a></li>
+				<li><a href="gpapplication.html">GPApplication</a></li>
+				<li><a href="gpsecuritydomain.html">GPSecDomain</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="asn1.html">ASN1</a></li>
+				<li><a href="cardfile.html">CardFile</a></li>
+				<li><a href="isosecurechannel.html">IsoSecureChannel</a></li>
+				<li><a href="applicationfactory.html">ApplFactory</a></li>
+				<li><a href="gpxml.html">GPXML</a></li>
+				<li><a href="jsscript.html">JsScript</a></li>
+				<li><a href="cardsimulationadapter.html">CardSim</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="x509.html">X509</a></li>
+				<li><a href="crl.html">CRL</a></li>
+				<li><a href="keystore.html">KeyStore</a></li>
+				<li><a href="cmssigneddata.html">Signed CMS</a></li>
+				<li><a href="cmsenvelopeddata.html">Enveloped CMS</a></li>
+				<li><a href="cmsgenerator.html">CMS Generator</a></li>
+				<li><a href="xmlsignature.html">XMLSignature</a></li>
+				<li><a href="ocspquery.html">OCSPQuery</a></li>
+				<li><a href="ldap.html">LDAP</a></li>
+				<li><a href="soapconnection.html">SOAP</a></li>
+				<li><a href="urlconnection.html">URLConnection</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="pkcs11provider.html">PKCS11Provider</a></li>
+				<li><a href="pkcs11session.html">PKCS11Session</a></li>
+				<li><a href="pkcs11object.html">PKCS11Object</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="outlinenode.html">OutlineNode</a></li>
+				<li><a href="dialog.html">Dialog</a></li>
+				<li><a href="task.html">Task</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="jsdoc/index.html">Tools</a></li>
+				<li><a href="scsh-jsdoc/index.html">Modules</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="http://www.openscdp.org">OpenSCDP</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h2>Locating Files</h2>
+<p>When calling load() to execute ECMAScripts, then the file name can be given
+   with either an absolute or a relative path. An absolute path starts at the root of the file
+   system, e.g. "C:\" on Windows or "/" on a UNIX like system. It uniquely identifies the file on
+   the host system and requires no additional processing. However, specifying a relative file
+   path allows a more flexible setup of script files and directories, in particular if scripts
+   shall be reused or run on systems with different directory configurations.</p>
+<p>The shell maintains 3 different directories</p>
+<ul>
+  <li>a current working directory (CWD)</li>
+  <li>a workspace directory (USR)</li>
+  <li>and a system directory (SYS)</li>
+</ul>
+<p>When a relative file name given, then the file is first searched relative to the current
+   working directory. If it can not be found, then the workspace directory and finally the
+   system directory is examined. If it can not be found in either location, then an error is
+   returned.</p>
+<p>The system directory (SYS) is determined by the location of the shell executable file and does not
+   change once the shell is started. The location of the executable is usually selected
+   during installation (Installation directory, e.g. "c:\Program Files\CardContact\Smart Card Shell 3")
+   and read/only for users that do not have administration privileges.</p>
+<p>The workspace directory (USR) is selected by the user when the shell is started. This directory usually
+   contains the initial CONFIG.JS file, which provides for the initial shell configuration.</p>
+<p>The GUI version of the shell provides a dialog to select the workspace, in the command line
+   version the workspace directory is determined by the directory from which the shell is
+   executed (Not to confuse with the system directory, which is the location of the executable itself !)</p>
+<p>Initially the current working directory (CWD) is set to the workspace directory (USR).
+   Before a script file is loaded and executed, the current working directory is changed
+   to the directory where the script was found. When calling a script from within another
+   script, the location of the subordinate script is again determined by a search for the
+   file in the current working directory, the workspace directory and the system directory.
+   After the script terminated, the previous current working directory is restored.</p>
+<h3>Locating modules</h3>
+<p>Modules are scripts included with the require() statement as defined in the modules specification of <a href="http://www.commonjs.org/">CommonJS</a></p>
+<p>A module id is translated into a file name by adding ".js" and searching the three directories CWD, USR and SYS</p>
+<p>If a module is found, then the script is loaded and executed, but in contrast to scripts executed mit load(), the
+   current working directory is not changed, but remains the CWD of the last script executed with load().</p>
+<h3>Common pitfalls</h3>
+<p>Care should be taken when script files have the same name but reside in different directories.
+   File name resolution for a relative file path always starts with the current working
+   directory, which is determined by the location of the script that is containing the load()
+   statement. Therefore a script executed from the system directory has the current working
+   directory set to the system directory and will therefore find files in this location first.
+   Only if the included file can not be found in the current working directory, then the user and
+   system directories are searched in turn. Overwriting a file in the system directory with a file
+   of the same name in the user directory has no effect, if this file is included from a script in the
+   system directory.</p>
+<p>If you want to select a specific file, you should use the <a href="gpsystem.html#mapFilename">GPSystem.mapFilename()</a>
+   method to obtain an absolute path for use in the load() statement.</p>
+<!-- #EndEditable -->
+<br/>
+<p class="copyright">&copy; Copyright 2003 - 2024 <a href="http://www.cardcontact.de">CardContact Systems GmbH</a>
+, Minden, Germany</p>
+</div>
+</div>
+</body>
+</html>
+<!-- #EndTemplate -->

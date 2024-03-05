@@ -24,7 +24,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		
 		preferences.put(PreferenceConstants.OCF_SMARTCARD_IMPLEMENTATION, "JAVA");
 
-		String configJsPath = Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator+"config.js";
+		//String configJsPath = Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator+"config.js";
+		String configJsPath = SmartCardShellInfo.getConfigFile();
 		preferences.put(PreferenceConstants.OCF_CONFIGURATION_SOURCE, configJsPath);
 		IPath pluginDir = Activator.getPluginDir();
 		String configPath = pluginDir.toPortableString()

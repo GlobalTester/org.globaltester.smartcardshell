@@ -1,0 +1,577 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="pkcs10.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>pkcs10.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		A PKCS#10 generator class based on RFC5280<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="PKCS10Generator.html">PKCS10Generator</a></b></td>
+    <td>Class implementing a PKCS#10 certificate request
+ </td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+	<a name="method_summary"><!-- --></a>
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+			<td colspan=2>
+				<font size="+2">
+					<b>Method Summary</b>
+				</font>
+			</td>
+		</tr>
+	
+		
+		   <tr bgcolor="white" class="TableRowColor">
+		      <td align="right" valign="top" width="1%">
+			 <font size="-1">
+			    <code>static&nbsp;Object</code>
+			 </font>
+		      </td>
+		      <td>
+			 <code>
+			    <b>
+			       <a href="GLOBALS.html#!s!PKCS10GeneratorTest">PKCS10GeneratorTest</a></b>()
+			 </code>
+			 <br>
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
+		      </td>
+		   </tr>
+		
+	
+	</table>
+    <p>
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2009 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * <span class="attrib">@fileoverview</span> A PKCS#10 generator class based on RFC5280
+ */</span>
+
+load(<span class="literal">"pkixcommon.js"</span>);
+
+
+<span class="comment">/**
+ * Create a PKCS#10 certificate request
+ *
+ * <span class="attrib">@class</span> Class implementing a PKCS#10 certificate request
+ * <span class="attrib">@constructor</span>
+ *
+ * <span class="attrib">@param</span> {Crypto} crypto the crypto provider to use for signing operations
+ */</span>
+<span class="reserved">function</span> PKCS10Generator(crypto) {
+	<span class="reserved">this</span>.crypto = crypto;
+	<span class="reserved">this</span>.reset();
+}
+
+
+
+<span class="comment">/**
+ * Resets all internal state variables.
+ *
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.reset = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.extensions = new Array();
+	<span class="reserved">this</span>.attributes = new Array();
+}
+
+
+
+<span class="comment">/**
+ * Sets the subject name.
+ *
+ * &lt;p&gt;The subject name must be a JavaScript object containing the properties:&lt;/p&gt;
+ * &lt;ul&gt;
+ *  &lt;li&gt;C - the country&lt;/li&gt;
+ *  &lt;li&gt;O - the organization&lt;/li&gt;
+ *  &lt;li&gt;OU - the organization unit&lt;/li&gt;
+ *  &lt;li&gt;CN - the common name&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;Example:&lt;/p&gt;
+ * &lt;pre&gt;
+ *	var subject = { C:"UT", O:"ACME Corporation", CN:"Joe Doe" };
+ * &lt;/pre&gt;
+ * <span class="attrib">@see</span> PKIXCommon.encodeName()
+ * <span class="attrib">@param</span> {Object} subject the subject name
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.setSubject = <span class="reserved">function</span>(subject) {
+	<span class="reserved">this</span>.subject = subject;
+}
+
+
+
+<span class="comment">/**
+ * Sets the subjects public key
+ *
+ * &lt;p&gt;The methods accepts ECC and RSA Public Keys.&lt;/p&gt;
+ *
+ * <span class="attrib">@param</span> {Key} publicKey the subjects public key
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.setPublicKey = <span class="reserved">function</span>(publicKey) {
+	<span class="reserved">this</span>.publicKey = publicKey;
+}
+
+
+
+<span class="comment">/**
+ * Sets the signature algorithm. Currently only Crypto.RSA is supported
+ *
+ * <span class="attrib">@param</span> {Number} alg the signature algorithm, only Crypto.RSA supported
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.setSignatureAlgorithm = <span class="reserved">function</span>(alg) {
+	<span class="reserved">this</span>.signatureAlgorithm = alg;
+}
+
+
+
+<span class="comment">/**
+ * Adds an extension to the certificate
+ *
+ * &lt;p&gt;The structure is defined as:&lt;/p&gt;
+ * &lt;pre&gt;
+ *    Extension  ::=  SEQUENCE  {
+ *        extnID      OBJECT IDENTIFIER,
+ *        extnValue   OCTET STRING
+ *                    -- contains the DER encoding of an ASN.1 value
+ *                    -- corresponding to the extension type identified
+ *                    -- by extnID
+ *        }
+ *&lt;/pre&gt;
+ * <span class="attrib">@param</span> {String} extnID the extensions object identifier
+ * <span class="attrib">@param</span> {ByteString} the extension value as ByteString
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.addExtension = <span class="reserved">function</span>(extnID, extnValue) {
+	var t = new ASN1(<span class="literal">"extension"</span>, ASN1.SEQUENCE,
+				new ASN1(<span class="literal">"extnID"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(extnID, OID))
+			);
+
+	t.add(new ASN1(<span class="literal">"extnValue"</span>, ASN1.OCTET_STRING, extnValue));
+	<span class="reserved">this</span>.extensions.push(t);
+}
+
+
+
+<span class="comment">/**
+ * Adds the key usage extension.
+ *
+ * &lt;p&gt;The following flags are defined:&lt;/p&gt;
+ * &lt;pre&gt;
+ * PKCS10Generator.digitalSignature = 0x0080;
+ * PKCS10Generator.nonRepudiation   = 0x0040;
+ * PKCS10Generator.keyEncipherment  = 0x0020;
+ * PKCS10Generator.dataEncipherment = 0x0010;
+ * PKCS10Generator.keyAgreement     = 0x0008;
+ * PKCS10Generator.keyCertSign      = 0x0004;
+ * PKCS10Generator.cRLSign          = 0x0002;
+ * PKCS10Generator.encipherOnly     = 0x0001;
+ * PKCS10Generator.decipherOnly     = 0x8000;
+ * &lt;/pre&gt;
+ * <span class="attrib">@param</span> {Number} the key usage flags as combination of the flags defined above.
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.addKeyUsageExtension = <span class="reserved">function</span>(flags) {
+	var t = new ASN1(ASN1.BIT_STRING, PKIXCommon.bitstringForInteger(flags));
+	<span class="reserved">this</span>.addExtension(<span class="literal">"2.5.29.15"</span>, t.getBytes());
+}
+
+<span class="comment">// Deprecated: Use PKIXCommon. instead</span>
+PKCS10Generator.digitalSignature	= 0x0080;
+PKCS10Generator.nonRepudiation		= 0x0040;
+PKCS10Generator.keyEncipherment		= 0x0020;
+PKCS10Generator.dataEncipherment	= 0x0010;
+PKCS10Generator.keyAgreement		= 0x0008;
+PKCS10Generator.keyCertSign			= 0x0004;
+PKCS10Generator.cRLSign				= 0x0002;
+PKCS10Generator.encipherOnly		= 0x0001;
+PKCS10Generator.decipherOnly		= 0x8000;
+
+
+
+<span class="comment">/**
+ * Adds extended key usages
+ *
+ * <span class="attrib">@param</span> {String[]} the list of extended key usage object identifier
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.addExtendedKeyUsageExtension = <span class="reserved">function</span>(keyusages) {
+	var t = new ASN1(ASN1.SEQUENCE);
+	<span class="reserved">for</span> (var i = 0; i &lt; keyusages.length; i++) {
+		t.add(new ASN1(ASN1.OBJECT_IDENTIFIER, new ByteString(keyusages[i], OID)));
+	}
+	<span class="reserved">this</span>.addExtension(<span class="literal">"id-ce-extKeyUsage"</span>, t.getBytes());
+}
+
+
+
+<span class="comment">/**
+ * Adds the BasicConstraints extension.
+ *
+ * <span class="attrib">@param</span> {Boolean} cA the certificate belongs to a CA
+ * <span class="attrib">@param</span> {Number} pathLenConstraint the maximum number of subordinate CA certificates
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.addBasicConstraintsExtension = <span class="reserved">function</span>(cA, pathLenConstraint) {
+	var t = new ASN1(<span class="literal">"BasicConstraints"</span>,ASN1.SEQUENCE);
+	<span class="reserved">if</span> (cA) {
+		t.add(new ASN1(<span class="literal">"cA"</span>, ASN1.BOOLEAN, new ByteString(<span class="literal">"FF"</span>, HEX)));
+	}
+	<span class="reserved">if</span> (pathLenConstraint &gt;= 0) {
+		var bb = new ByteBuffer();
+		bb.append(pathLenConstraint);
+		t.add(new ASN1(<span class="literal">"pathLenConstraint"</span>, ASN1.INTEGER, bb.toByteString()));
+	}
+	<span class="reserved">this</span>.addExtension(<span class="literal">"2.5.29.19"</span>, t.getBytes());
+}
+
+
+
+<span class="comment">/**
+ * Gets the subject name as TLV object
+ *
+ * <span class="attrib">@return</span> the issuer RDNSequence
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getSubject = <span class="reserved">function</span>() {
+	<span class="reserved">return</span> PKIXCommon.encodeName(<span class="reserved">this</span>.subject);
+}
+
+
+
+<span class="comment">/**
+ * Gets the subject's public key as TLV object
+ *
+ * <span class="attrib">@return</span> the subject's public key info
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getSubjectPublicKeyInfo = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.publicKey.getComponent(Key.MODULUS)) {
+		<span class="reserved">return</span> PKIXCommon.createRSASubjectPublicKeyInfo(<span class="reserved">this</span>.publicKey);
+	} <span class="reserved">else</span> {
+		<span class="reserved">return</span> PKIXCommon.createECSubjectPublicKeyInfo(<span class="reserved">this</span>.publicKey, <span class="reserved">this</span>.encodeECDomainParameter);
+	}
+}
+
+
+
+<span class="comment">/**
+ * Gets the extension attribute as TLV object
+ *
+ * <span class="attrib">@return</span> the certificate extensions
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getExtensions = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"extensions"</span>, ASN1.SEQUENCE);
+	t.add(new ASN1(ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"1.2.840.113549 1 9 14"</span>, OID)));
+	var s = new ASN1(<span class="literal">"extensions"</span>, ASN1.SET);
+	t.add(s);
+	var l = new ASN1(<span class="literal">"extensions"</span>, ASN1.SEQUENCE);
+	s.add(l);
+	
+	<span class="reserved">for</span> (var i = 0; i &lt; <span class="reserved">this</span>.extensions.length; i++) {
+		l.add(<span class="reserved">this</span>.extensions[i]);
+	}
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the attributes as TLV object
+ *
+ * <span class="attrib">@return</span> the request attributes
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getAttributes = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"attributes"</span>, 0xA0);
+	
+	<span class="reserved">if</span> (<span class="reserved">this</span>.extensions.length &gt; 0) {
+		t.add(<span class="reserved">this</span>.getExtensions());
+	}
+	
+	<span class="reserved">for</span> (var i = 0; i &lt; <span class="reserved">this</span>.attributes.length; i++) {
+		t.add(<span class="reserved">this</span>.attributes[i]);
+	}
+	
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the part of the request that will be signed
+ *
+ * <span class="attrib">@return</span> the TBSCertificate part
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getTbsRequest = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"certificationRequestInfo"</span>, ASN1.SEQUENCE);
+	t.add(new ASN1(ASN1.INTEGER, new ByteString(<span class="literal">"00"</span>, HEX)));
+	t.add(<span class="reserved">this</span>.getSubject());
+	t.add(<span class="reserved">this</span>.getSubjectPublicKeyInfo());
+	t.add(<span class="reserved">this</span>.getAttributes());
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the signature algorithm TLV object
+ *
+ * <span class="attrib">@return</span> the signature algorithm object
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.getSignatureAlgorithm = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"signatureAlgorithm"</span>, ASN1.SEQUENCE);
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.signatureAlgorithm == Crypto.RSA) {
+		t.add(new ASN1(<span class="literal">"algorithm"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"1.2.840.113549.1.1.5"</span>, OID)));
+		t.add(new ASN1(<span class="literal">"parameters"</span>, ASN1.NULL, new ByteString(<span class="literal">""</span>, HEX)));
+	} <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.signatureAlgorithm == Crypto.RSA_SHA256) {
+		t.add(new ASN1(<span class="literal">"algorithm"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"1 2 840 113549 1 1 11"</span>, OID)));
+		t.add(new ASN1(<span class="literal">"parameters"</span>, ASN1.NULL, new ByteString(<span class="literal">""</span>, HEX)));
+	} <span class="reserved">else</span> {
+		throw new GPError(<span class="literal">"PKCS10Generator"</span>, GPError.INVALID_MECH, <span class="reserved">this</span>.signatureAlgorithm, <span class="literal">"Invalid algorithm"</span>);
+	}
+		
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Generates the certificate.
+ *
+ * <span class="attrib">@return</span> the generated certificate
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+PKCS10Generator.<span class="reserved">prototype</span>.generateCertificationRequest = <span class="reserved">function</span>(privateKey) {
+	var request = new ASN1(<span class="literal">"certificationRequest"</span>, ASN1.SEQUENCE);
+	
+	var tbs = <span class="reserved">this</span>.getTbsRequest();
+	request.add(tbs);
+	request.add(<span class="reserved">this</span>.getSignatureAlgorithm());
+	
+	var signature = <span class="reserved">this</span>.crypto.sign(privateKey, <span class="reserved">this</span>.signatureAlgorithm, tbs.getBytes());
+	signature = (new ByteString(<span class="literal">"00"</span>, HEX)).concat(signature);
+
+	var signatureValue = new ASN1(<span class="literal">"signatureValue"</span>, ASN1.BIT_STRING, signature);
+	request.add(signatureValue);
+	
+	<span class="reserved">return</span> request;
+}
+
+
+
+<span class="reserved">function</span> PKCS10GeneratorTest() {
+
+	var crypto = new Crypto();
+	
+	var reqPrivateKey = new Key();
+	reqPrivateKey.setType(Key.PRIVATE);
+
+	var reqPublicKey = new Key();
+	reqPublicKey.setType(Key.PUBLIC);
+	reqPublicKey.setSize(1024);
+	
+	crypto.generateKeyPair(Crypto.RSA, reqPublicKey, reqPrivateKey);
+	
+	var x = new PKCS10Generator(crypto);
+
+	x.reset();
+	x.setSignatureAlgorithm(Crypto.RSA_SHA256);
+
+	var subject = [{C:<span class="literal">"UT"</span>}, {O:<span class="literal">"Utopia CA"</span>}, {OU:<span class="literal">"ACME Corporation"</span>}, {CN:<span class="literal">"Joe Doe"</span>} ];
+	
+	x.setSubject(subject);
+
+	x.setPublicKey(reqPublicKey);
+
+	x.addKeyUsageExtension(	PKIXCommon.digitalSignature |
+							PKIXCommon.keyCertSign |
+							PKIXCommon.cRLSign );
+
+	var req = x.generateCertificationRequest(reqPrivateKey);
+	var fn = GPSystem.mapFilename(<span class="literal">"cert.csr"</span>, GPSystem.USR);
+	PKIXCommon.writeFileToDisk(fn, req.getBytes());
+
+	print(req);
+	
+	<span class="reserved">return</span> req;
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 23 09:14:23 2024</div>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="crlgenerator.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>crlgenerator.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		Simple CRL generator class<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="CRLGenerator.html">CRLGenerator</a></b></td>
+    <td>Class implementing a CRL certificate generator
+ </td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+	<a name="method_summary"><!-- --></a>
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+			<td colspan=2>
+				<font size="+2">
+					<b>Method Summary</b>
+				</font>
+			</td>
+		</tr>
+	
+		
+		   <tr bgcolor="white" class="TableRowColor">
+		      <td align="right" valign="top" width="1%">
+			 <font size="-1">
+			    <code>static&nbsp;void</code>
+			 </font>
+		      </td>
+		      <td>
+			 <code>
+			    <b>
+			       <a href="GLOBALS.html#!s!CRLGeneratorTest">CRLGeneratorTest</a></b>()
+			 </code>
+			 <br>
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
+		      </td>
+		   </tr>
+		
+	
+	</table>
+    <p>
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2009 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * <span class="attrib">@fileoverview</span>
+ * Simple CRL generator class
+ */</span>
+
+<span class="reserved">if</span> (typeof(__ScriptingServer) == <span class="literal">"undefined"</span>) {
+	load(<span class="literal">"pkixcommon.js"</span>);
+}
+
+ 
+
+<span class="comment">/**
+ * Create a Certificate Revocation List (CRL) generator.
+ *
+ * <span class="attrib">@class</span> Class implementing a CRL certificate generator
+ * <span class="attrib">@constructor</span>
+ *
+ * <span class="attrib">@param</span> {Crypto} crypto the crypto provider to use for signing operations
+ */</span>
+<span class="reserved">function</span> CRLGenerator(crypto) {
+	<span class="reserved">this</span>.crypto = crypto;
+	<span class="reserved">this</span>.reset();
+}
+
+
+CRLGenerator.unspecified = 0;
+CRLGenerator.keyCompromise = 1;
+CRLGenerator.cACompromise = 2;
+CRLGenerator.affiliationChanged = 3;
+CRLGenerator.superseded = 4;
+CRLGenerator.cessationOfOperation = 5;
+CRLGenerator.certificateHold = 6;
+CRLGenerator.removeFromCRL = 8;
+CRLGenerator.privilegeWithdrawn = 9;
+CRLGenerator.aACompromise = 10;
+
+
+
+<span class="comment">/**
+ * Resets all internal state variables.
+ *
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.reset = <span class="reserved">function</span>() {
+	<span class="reserved">this</span>.extensions = [];
+	<span class="reserved">this</span>.revokedCertificates = [];
+	<span class="reserved">this</span>.nextUpdate = null;
+}
+
+
+
+<span class="comment">/**
+ * Sets the isser name.
+ *
+ * &lt;p&gt;The issuer name must be a JavaScript object containing the properties:&lt;/p&gt;
+ * &lt;ul&gt;
+ *  &lt;li&gt;C - the country&lt;/li&gt;
+ *  &lt;li&gt;O - the organization&lt;/li&gt;
+ *  &lt;li&gt;OU - the organization unit&lt;/li&gt;
+ *  &lt;li&gt;CN - the common name&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;Example:&lt;/p&gt;
+ * &lt;pre&gt;
+ *	var issuer = { C:"UT", O:"ACME Corporation", CN:"Test-CA" };
+ * &lt;/pre&gt;
+ * <span class="attrib">@param</span> {Object} issuer the issuer name
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.setIssuer = <span class="reserved">function</span>(issuer) {
+	<span class="reserved">this</span>.issuer = issuer;
+}
+
+
+
+<span class="comment">/**
+ * Sets the timestamp for this CRL
+ *
+ * <span class="attrib">@param</span> {Date} datetime the current date and time
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.setThisUpdate = <span class="reserved">function</span>(datetime) {
+	<span class="reserved">this</span>.thisUpdate = datetime;
+}
+
+
+
+<span class="comment">/**
+ * Sets the timestamp for the next update
+ *
+ * <span class="attrib">@param</span> {Date} datetime the date and time of the next update
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.setNextUpdate = <span class="reserved">function</span>(datetime) {
+	<span class="reserved">this</span>.nextUpdate = datetime;
+}
+
+
+
+<span class="comment">/**
+ * Sets the signature algorithm.
+ *
+ * <span class="attrib">@param</span> {Number} alg the signature algorithm, must be one of Crypto.RSA, Crypto.RSA_SHA256 or Crypto.ECDSA_SHA256
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.setSignatureAlgorithm = <span class="reserved">function</span>(alg) {
+	<span class="reserved">this</span>.signatureAlgorithm = alg;
+}
+
+
+
+<span class="comment">/**
+ * Adds an extension to the CRL
+ *
+ * &lt;p&gt;The structure is defined as:&lt;/p&gt;
+ * &lt;pre&gt;
+ *    Extension  ::=  SEQUENCE  {
+ *        extnID      OBJECT IDENTIFIER,
+ *        critical    BOOLEAN DEFAULT FALSE,
+ *        extnValue   OCTET STRING
+ *                    -- contains the DER encoding of an ASN.1 value
+ *                    -- corresponding to the extension type identified
+ *                    -- by extnID
+ *        }
+ *&lt;/pre&gt;
+ * <span class="attrib">@param</span> {String} extnID the extensions object identifier
+ * <span class="attrib">@param</span> {Boolean} critical the extension is critical
+ * <span class="attrib">@param</span> {ByteString} the extension value as ByteString
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.addExtension = <span class="reserved">function</span>(extnID, critical, extnValue) {
+	var t = new ASN1(<span class="literal">"extension"</span>, ASN1.SEQUENCE,
+				new ASN1(<span class="literal">"extnID"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(extnID, OID))
+			);
+
+	<span class="reserved">if</span> (critical) {
+		t.add(new ASN1(<span class="literal">"critical"</span>, ASN1.BOOLEAN, new ByteString(<span class="literal">"FF"</span>, HEX)));
+	}
+
+	t.add(new ASN1(<span class="literal">"extnValue"</span>, ASN1.OCTET_STRING, extnValue));
+	<span class="reserved">this</span>.extensions.push(t);
+
+}
+
+
+
+<span class="comment">/**
+ * Adds the authority public key identifier extension based on the issuers key.
+ *
+ * &lt;p&gt;The key identifier is calculated as SHA-1 hash over the contents of the
+ * issuer public key (Without tag, length and number of unused bits.&lt;/p&gt;
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.addAuthorityKeyIdentifierExtension = <span class="reserved">function</span>(publicKey) {
+	<span class="reserved">if</span> (publicKey.getComponent(Key.MODULUS)) {
+		var spi = PKIXCommon.createRSASubjectPublicKeyInfo(publicKey);
+	} <span class="reserved">else</span> {
+		var spi = PKIXCommon.createECSubjectPublicKeyInfo(publicKey, <span class="reserved">this</span>.encodeECDomainParameter);
+	}
+
+	var keyvalue = spi.get(1).value.bytes(1);
+	var hash = <span class="reserved">this</span>.crypto.digest(Crypto.SHA_1, keyvalue);
+	
+	var t = new ASN1(ASN1.SEQUENCE,
+					new ASN1(0x80, hash)
+				);
+	<span class="reserved">this</span>.addExtension(<span class="literal">"id-ce-authorityKeyIdentifier"</span>, false, t.getBytes());
+}
+
+
+
+<span class="comment">/**
+ * Adds the CRL number extension.
+ *
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.addCRLNumberExtension = <span class="reserved">function</span>(crlnumber) {
+	var t = new ASN1(ASN1.INTEGER,
+					PKIXCommon.convertUnsignedInteger(ByteString.valueOf(crlnumber))
+				);
+	<span class="reserved">this</span>.addExtension(<span class="literal">"id-ce-cRLNumber"</span>, false, t.getBytes());
+}
+
+
+
+<span class="comment">/**
+ * Add a revoked certificate to the list. This adds the complete DER encoded structure.
+ *
+ * <span class="attrib">@param</span> {ASN1} revokedCertificate the information related to the revoked certificate
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.addRevokedCertificate = <span class="reserved">function</span>(revokedCertificate) {
+	<span class="reserved">this</span>.revokedCertificates.push(revokedCertificate);
+}
+
+
+
+<span class="comment">/**
+ * Add a revoked certificate to the list. This adds the complete DER encoded structure.
+ *
+ * <span class="attrib">@param</span> {ByteString} serial the serial number of the certificate to revoke
+ * <span class="attrib">@param</span> {Date} timestamp the revocation time, optional, default is now
+ * <span class="attrib">@param</span> {Number) reason the revocation reason
+ * <span class="attrib">@param</span> {ASN1) ext the crl entry extensions
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.revokeCertificate = <span class="reserved">function</span>(serial, timestamp, reason, ext) {
+	<span class="reserved">if</span> (typeof(timestamp) == <span class="literal">"undefined"</span>) {
+		timestamp = new Date();
+	}
+	var t = new ASN1(<span class="literal">"revokedCertificate"</span>, ASN1.SEQUENCE, 
+				new ASN1(<span class="literal">"userCertificate"</span>, ASN1.INTEGER, PKIXCommon.convertUnsignedInteger(serial)),
+				new ASN1(<span class="literal">"revocationTime"</span>, ASN1.UTCTime, new ByteString(PKIXCommon.dtoUTC(timestamp), ASCII))
+				);
+
+	<span class="reserved">if</span> (typeof(ext) == <span class="literal">"undefined"</span>) {
+		ext = new ASN1(<span class="literal">"crlExtensions"</span>, ASN1.SEQUENCE);
+	}
+	
+	<span class="reserved">if</span> ((typeof(reason) != <span class="literal">"undefined"</span>) &amp;&amp; (reason != -1)) {
+		ext.add(new ASN1(<span class="literal">"reason"</span>, ASN1.SEQUENCE,
+					new ASN1(<span class="literal">"extnID"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"id-ce-cRLReasons"</span>, OID)),
+					new ASN1(<span class="literal">"extnValue"</span>, ASN1.OCTET_STRING,
+						(new ASN1(<span class="literal">"cRLReason"</span>, ASN1.ENUMERATED, ByteString.valueOf(reason))).getBytes())
+					)
+				);
+		t.add(ext);
+	}
+	
+	<span class="reserved">this</span>.revokedCertificates.push(t);
+}
+
+
+
+<span class="comment">/**
+ * Load list of revoked certificates from an existing CRL
+ *
+ * <span class="attrib">@param</span> {String} filename the file name of the DER encoded CRL
+ * <span class="attrib">@type</span> Number
+ * <span class="attrib">@return</span> the value of the CRLNumber extension, 0 if extension not defined or -1 if file could not be loaded
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.loadCRLEntries = <span class="reserved">function</span>(filename) {
+	var crlnumber = 0;
+	
+	try	{
+		var crlbin = PKIXCommon.readFileFromDisk(filename);
+		var crl = new ASN1(crlbin);
+		print(crl);
+		var tbs = crl.get(0);
+		var i = 0;
+		<span class="reserved">if</span> ((i &lt; tbs.length) &amp;&amp; (tbs.get(i).tag == ASN1.INTEGER)) {		<span class="comment">// Skip version if present</span>
+			i++;
+		}
+		i += 3;		<span class="comment">// Skip signature, issuer, thisUpdate</span>
+		<span class="reserved">if</span> ((i &lt; tbs.length) &amp;&amp; (tbs.get(i).tag == ASN1.UTCTime)) {		<span class="comment">// nextUpdate if present</span>
+			i++;
+		}
+		<span class="reserved">if</span> ((i &lt; tbs.length) &amp;&amp; (tbs.get(i).tag == ASN1.SEQUENCE)) {
+			<span class="reserved">for</span> (var j = 0; j &lt; tbs.get(i).elements; j++) {
+				<span class="reserved">this</span>.revokedCertificates.push(tbs.get(i).get(j));
+			}
+			i++;
+		}
+		<span class="reserved">if</span> ((i &lt; tbs.length) &amp;&amp; (tbs.get(i).tag == 0xA0)) {
+			var l = tbs.get(i).get(0);
+			var oid = new ByteString(<span class="literal">"id-ce-cRLNumber"</span>, OID);
+			<span class="reserved">for</span> (var j = 0; j &lt; l.elements; j++) {
+				var ext = l.get(j);
+				<span class="reserved">if</span> (ext.get(0).value.equals(oid)) {
+					var extval = new ASN1(ext.get(1).value);
+					crlnumber = extval.value.toUnsigned();
+				}
+			}
+			
+		}
+	}
+	catch(e) {
+		GPSystem.trace(e);
+		<span class="reserved">return</span> -1;
+	}
+	<span class="reserved">return</span> crlnumber;
+}
+
+
+
+<span class="comment">/**
+ * Gets the issuer name as TLV object
+ *
+ * <span class="attrib">@return</span> the issuer RDNSequence
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getIssuer = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (<span class="reserved">this</span>.issuer instanceof ASN1) {
+		<span class="reserved">return</span> <span class="reserved">this</span>.issuer;
+	} <span class="reserved">else</span> {
+		<span class="reserved">return</span> PKIXCommon.encodeName(<span class="reserved">this</span>.issuer);
+	}
+}
+
+
+
+<span class="comment">/**
+ * Gets the thisUpdate TLV object
+ *
+ * <span class="attrib">@return</span> the thisUpdate UTC encoded time
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getThisUpdate = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"thisUpdate"</span>, ASN1.UTCTime, new ByteString(PKIXCommon.dtoUTC(<span class="reserved">this</span>.thisUpdate), ASCII));
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the nextUpdate TLV object
+ *
+ * <span class="attrib">@return</span> the nextUpdate UTC encoded time
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getNextUpdate = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"nextUpdate"</span>, ASN1.UTCTime, new ByteString(PKIXCommon.dtoUTC(<span class="reserved">this</span>.nextUpdate), ASCII));
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the signature algorithm TLV object
+ *
+ * <span class="attrib">@return</span> the signature algorithm object
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getSignatureAlgorithm = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"signatureAlgorithm"</span>, ASN1.SEQUENCE);
+
+	<span class="reserved">if</span> (<span class="reserved">this</span>.signatureAlgorithm == Crypto.RSA) {
+		t.add(new ASN1(<span class="literal">"algorithm"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"1.2.840.113549.1.1.5"</span>, OID)));
+		t.add(new ASN1(<span class="literal">"parameters"</span>, ASN1.NULL, new ByteString(<span class="literal">""</span>, HEX)));
+	} <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.signatureAlgorithm == Crypto.RSA_SHA256) {
+		t.add(new ASN1(<span class="literal">"algorithm"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"1.2.840.113549.1.1.11"</span>, OID)));
+		t.add(new ASN1(<span class="literal">"parameters"</span>, ASN1.NULL, new ByteString(<span class="literal">""</span>, HEX)));
+	} <span class="reserved">else</span> <span class="reserved">if</span> (<span class="reserved">this</span>.signatureAlgorithm == Crypto.ECDSA_SHA256) {
+		t.add(new ASN1(<span class="literal">"algorithm"</span>, ASN1.OBJECT_IDENTIFIER, new ByteString(<span class="literal">"ecdsa-with-SHA256"</span>, OID)));
+		t.add(new ASN1(<span class="literal">"parameters"</span>, ASN1.NULL, new ByteString(<span class="literal">""</span>, HEX)));
+	} <span class="reserved">else</span> {
+		throw new GPError(<span class="literal">"CRLGenerator"</span>, GPError.INVALID_MECH, <span class="reserved">this</span>.signatureAlgorithm, <span class="literal">"Invalid algorithm"</span>);
+	}
+		
+	<span class="reserved">return</span> t;
+}
+
+ 
+
+<span class="comment">/**
+ * Gets revoked certificates
+ *
+ * <span class="attrib">@return</span> the list of revoked certificates
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getRevokedCertificates = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"revokedCertificates"</span>, ASN1.SEQUENCE);
+	<span class="reserved">for</span> (var i = 0; i &lt; <span class="reserved">this</span>.revokedCertificates.length; i++) {
+		t.add(<span class="reserved">this</span>.revokedCertificates[i]);
+	}
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the CRL extension as TLV object
+ *
+ * <span class="attrib">@return</span> the CRL extensions
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getExtensions = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"extensions"</span>, 0xA0);
+	var s = new ASN1(<span class="literal">"extensions"</span>, ASN1.SEQUENCE);
+	
+	t.add(s);
+	
+	<span class="reserved">for</span> (var i = 0; i &lt; <span class="reserved">this</span>.extensions.length; i++) {
+		s.add(<span class="reserved">this</span>.extensions[i]);
+	}
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Gets the part of the CRL that will be signed
+ *
+ * <span class="attrib">@return</span> the TBSCertificate part
+ * <span class="attrib">@type</span> ASN1
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.getTbsCertificateList = <span class="reserved">function</span>() {
+	var t = new ASN1(<span class="literal">"tbsCertList"</span>, ASN1.SEQUENCE);
+	t.add(new ASN1(<span class="literal">"version"</span>, ASN1.INTEGER, new ByteString(<span class="literal">"01"</span>, HEX)));
+	t.add(<span class="reserved">this</span>.getSignatureAlgorithm());
+	t.add(<span class="reserved">this</span>.getIssuer());
+	t.add(<span class="reserved">this</span>.getThisUpdate());
+	<span class="reserved">if</span> (<span class="reserved">this</span>.nextUpdate != null) {
+		t.add(<span class="reserved">this</span>.getNextUpdate());
+	}
+	<span class="reserved">if</span> (<span class="reserved">this</span>.revokedCertificates.length &gt; 0) {
+		t.add(<span class="reserved">this</span>.getRevokedCertificates());
+	}
+	<span class="reserved">if</span> (<span class="reserved">this</span>.extensions.length &gt; 0) {
+		t.add(<span class="reserved">this</span>.getExtensions());
+	}
+	<span class="reserved">return</span> t;
+}
+
+
+
+<span class="comment">/**
+ * Generates the certificate.
+ *
+ * <span class="attrib">@return</span> the generated certificate
+ * <span class="attrib">@type</span> X509
+ */</span>
+CRLGenerator.<span class="reserved">prototype</span>.generateCRL = <span class="reserved">function</span>(privateKey) {
+	var certlist = new ASN1(<span class="literal">"certificateList"</span>, ASN1.SEQUENCE);
+	
+	var tbs = <span class="reserved">this</span>.getTbsCertificateList();
+	certlist.add(tbs);
+	certlist.add(<span class="reserved">this</span>.getSignatureAlgorithm());
+	
+	var signature = <span class="reserved">this</span>.crypto.sign(privateKey, <span class="reserved">this</span>.signatureAlgorithm, tbs.getBytes());
+	signature = (new ByteString(<span class="literal">"00"</span>, HEX)).concat(signature);
+
+	var signatureValue = new ASN1(<span class="literal">"signatureValue"</span>, ASN1.BIT_STRING, signature);
+	certlist.add(signatureValue);
+	
+	<span class="reserved">return</span> certlist;
+}
+
+
+
+<span class="reserved">function</span> CRLGeneratorTest() {
+
+	var crypto = new Crypto();
+	
+	var caPrivateKey = new Key();
+	caPrivateKey.setType(Key.PRIVATE);
+
+	var caPublicKey = new Key();
+	caPublicKey.setType(Key.PUBLIC);
+	caPublicKey.setSize(1024);
+
+	crypto.generateKeyPair(Crypto.RSA, caPublicKey, caPrivateKey);
+
+<span class="comment">//	var caPrivKey = new Key("profiles/kp_rsa_private.xml");</span>
+
+	var x = new CRLGenerator(crypto);
+
+	x.reset();
+	x.setSignatureAlgorithm(Crypto.RSA);
+	var issuer = [{ C:<span class="literal">"UT"</span> },{ O:<span class="literal">"ACME Corporation"</span> },{ CN:<span class="literal">"Test-CA"</span> }];
+	x.setIssuer(issuer);
+	var now = new Date();
+	x.setThisUpdate(now);
+	var nextMonth = new Date();
+	nextMonth.setMonth((now.getMonth() + 1) % 12);
+	x.setNextUpdate(nextMonth);
+	x.addAuthorityKeyIdentifierExtension(caPublicKey);
+	x.addCRLNumberExtension(11);
+	
+	x.revokeCertificate(new ByteString(<span class="literal">"01"</span>, HEX));
+	x.revokeCertificate(new ByteString(<span class="literal">"80"</span>, HEX), new Date());
+	x.revokeCertificate(new ByteString(<span class="literal">"80"</span>, HEX), new Date(), CRLGenerator.keyCompromise);
+	x.revokeCertificate(new ByteString(<span class="literal">"80"</span>, HEX), new Date(), CRLGenerator.superseded, new ASN1(<span class="literal">"crlExtensions"</span>, ASN1.SEQUENCE));
+	
+	var crl = x.generateCRL(caPrivateKey);
+	
+	var fn = GPSystem.mapFilename(<span class="literal">"crl.crl"</span>, GPSystem.USR);
+	PKIXCommon.writeFileToDisk(fn, crl.getBytes());
+
+	print(crl);
+	
+	var x = new CRLGenerator(crypto);
+	x.reset();
+	x.setSignatureAlgorithm(Crypto.RSA);
+	var issuer = [{ C:<span class="literal">"UT"</span> },{ O:<span class="literal">"ACME Corporation"</span> },{ CN:<span class="literal">"Test-CA"</span> }];
+	x.setIssuer(issuer);
+	var now = new Date();
+	x.setThisUpdate(now);
+	var nextMonth = new Date();
+	nextMonth.setMonth((now.getMonth() + 1) % 12);
+	x.setNextUpdate(nextMonth);
+	var crlnumber = x.loadCRLEntries(fn);
+	assert(crlnumber == 11);
+	x.addAuthorityKeyIdentifierExtension(caPublicKey);
+	x.addCRLNumberExtension(crlnumber + 1);
+	
+	x.revokeCertificate(crypto.generateRandom(8), new Date(), CRLGenerator.keyCompromise);
+	var crl = x.generateCRL(caPrivateKey);
+<span class="comment">//	PKIXCommon.writeFileToDisk(fn, crl.getBytes());</span>
+	
+	print(crl);
+}
+
+
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 23 09:14:23 2024</div>
+</body>
+</html>

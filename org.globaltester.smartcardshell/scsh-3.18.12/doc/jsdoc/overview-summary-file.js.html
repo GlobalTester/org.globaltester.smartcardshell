@@ -1,0 +1,417 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="file.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>file.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		General File I/O Class<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="File.html">File</a></b></td>
+    <td>Class implementing basic support for files
+ </td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+ *  ---------
+ * |.##&gt; &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+ * |#       #|  
+ * |#       #|  Copyright (c) 1999-2006 CardContact Software &amp; System Consulting
+ * |'##&gt; &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+ *  --------- 
+ *
+ *  This file is part of OpenSCDP.
+ *
+ *  OpenSCDP is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 2 as
+ *  published by the Free Software Foundation.
+ *
+ *  OpenSCDP is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with OpenSCDP; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * <span class="attrib">@fileoverview</span> General File I/O Class
+ */</span>
+
+
+
+<span class="comment">/**
+ * Create a reference to a file system object (file or directory)
+ *
+ * <span class="attrib">@class</span> Class implementing basic support for files
+ * <span class="attrib">@constructor</span>
+ * <span class="attrib">@param</span> {String} name relative or absolute file path
+ */</span>
+<span class="reserved">function</span> File(name) {
+	<span class="reserved">this</span>.name = name;
+}
+
+
+
+<span class="comment">/**
+ * Return absolute path
+ *
+ * <span class="attrib">@param</span>{Number} mode one of GPSystem.AUTO, GPSystem.CWD, GPSystem.USR or GPSystem.SYS. See GPSystem.mapFilename() for details
+ * <span class="attrib">@type</span> String
+ * <span class="attrib">@return</span> the absolute path
+ */</span>
+File.<span class="reserved">prototype</span>.getAbsolutePath = <span class="reserved">function</span>(mode) {
+	<span class="reserved">if</span> (typeof(mode) == <span class="literal">"undefined"</span>) {
+		mode = GPSystem.CWD;
+	}
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.abspath) == <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.abspath = GPSystem.mapFilename(<span class="reserved">this</span>.name, mode);
+	}
+	<span class="reserved">return</span> <span class="reserved">this</span>.abspath;
+}
+
+
+
+<span class="comment">/**
+ * <span class="attrib">@private</span>
+ * Return a java.io.File object
+ */</span>
+File.<span class="reserved">prototype</span>.getFile = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.file) == <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.file = new java.io.File(<span class="reserved">this</span>.getAbsolutePath(GPSystem.AUTO));
+	}
+	<span class="reserved">return</span> <span class="reserved">this</span>.file; 
+}
+
+
+
+<span class="comment">/**
+ * Close streams associated with file
+ */</span>
+File.<span class="reserved">prototype</span>.close = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.os) != <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.os.close();
+		delete(<span class="reserved">this</span>.os);
+	}
+
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.is) != <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.is.close();
+		delete(<span class="reserved">this</span>.is);
+	}
+}
+
+
+
+<span class="comment">/**
+ * <span class="attrib">@private</span>
+ * Return a java.io.FileInputStream
+ */</span>
+File.<span class="reserved">prototype</span>.getInputStream = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.is) == <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.is = new java.io.FileInputStream(<span class="reserved">this</span>.getAbsolutePath(GPSystem.AUTO));
+	}
+	<span class="reserved">return</span> <span class="reserved">this</span>.is; 
+}
+
+
+
+<span class="comment">/**
+ * <span class="attrib">@private</span>
+ * Return a java.io.FileOutputStream
+ */</span>
+File.<span class="reserved">prototype</span>.getOutputStream = <span class="reserved">function</span>() {
+	<span class="reserved">if</span> (typeof(<span class="reserved">this</span>.os) == <span class="literal">"undefined"</span>) {
+		<span class="reserved">this</span>.os = new java.io.FileOutputStream(<span class="reserved">this</span>.getAbsolutePath(GPSystem.CWD));
+	}
+	<span class="reserved">return</span> <span class="reserved">this</span>.os; 
+}
+
+
+
+<span class="comment">/**
+ * Read complete file into ByteString object
+ *
+ * <span class="attrib">@type</span> ByteString
+ * <span class="attrib">@return</span> the binary content
+ */</span>
+File.<span class="reserved">prototype</span>.readAllAsBinary = <span class="reserved">function</span>() {
+	var is = <span class="reserved">this</span>.getInputStream();
+
+	<span class="comment">// Determine file size</span>
+	var flen = is.available();
+
+	<span class="comment">// Allocate native byte array</span>
+	var bs = java.lang.reflect.Array.newInstance(java.lang.Byte.TYPE, flen);
+
+	<span class="comment">// Read into byte array</span>
+	var len = is.read(bs);
+
+	<span class="reserved">this</span>.close();
+
+	<span class="comment">// Allocate JavaScript ByteBuffer from native/wrapped byte array</span>
+	var bb = new ByteBuffer(bs);
+
+	<span class="comment">// Convert to JavaScript ByteString</span>
+	var data = bb.toByteString();
+
+	<span class="reserved">return</span> data;
+}
+
+
+
+<span class="comment">/**
+ * Read complete file into String object
+ *
+ * <span class="attrib">@type</span> String
+ * <span class="attrib">@return</span> the text content
+ */</span>
+File.<span class="reserved">prototype</span>.readAllAsString = <span class="reserved">function</span>(encoding) {
+
+	<span class="reserved">if</span> (typeof(encoding) == <span class="literal">"undefined"</span>) {
+		encoding = UTF8;
+	}
+
+	<span class="reserved">return</span> <span class="reserved">this</span>.readAllAsBinary().toString(encoding);
+}
+
+
+
+<span class="comment">/**
+ * Write the object to file
+ *
+ * <span class="attrib">@param</span>{Object} obj to write to file (Using toString() for any other than String and ByteString)
+ * <span class="attrib">@param</span>{Number} one of UTF8 or ASCII (Default is UTF8)
+ */</span>
+File.<span class="reserved">prototype</span>.writeAll = <span class="reserved">function</span>(obj, encoding) {
+	<span class="reserved">if</span> ((typeof(obj) != <span class="literal">"string"</span>) &amp;&amp; !(obj instanceof ByteString)) {
+		obj = obj.toString();
+	}
+	<span class="reserved">if</span> (typeof(obj) == <span class="literal">"string"</span>) {
+		<span class="reserved">if</span> (typeof(encoding) == <span class="literal">"undefined"</span>) {
+			encoding = UTF8;
+		}
+		obj = new ByteString(obj, encoding);
+	}
+
+	var os = <span class="reserved">this</span>.getOutputStream();
+	os.write(obj);
+	<span class="reserved">this</span>.close();
+}
+
+
+
+<span class="comment">/**
+ * Return list of files contained in the directory referenced by the File object
+ *
+ * <span class="attrib">@type</span> String[]
+ * <span class="attrib">@return</span> the list of file names
+ */</span>
+File.<span class="reserved">prototype</span>.list = <span class="reserved">function</span>() {
+	var list = <span class="reserved">this</span>.getFile().list();
+	var jslist = [];
+	
+	<span class="reserved">for</span> (var i = 0; i &lt; list.length; i++) {
+		jslist.push(new String(list[i]));
+	}
+	<span class="reserved">return</span> jslist;
+}
+
+
+
+<span class="comment">/**
+ * Return the parent file of this file object
+ *
+ * <span class="attrib">@type</span> File
+ * <span class="attrib">@return</span> the parent file object or null
+ */</span>
+File.<span class="reserved">prototype</span>.getParentFile = <span class="reserved">function</span>() {
+	var file = <span class="reserved">this</span>.getFile();
+	var parent = file.getParent();
+	<span class="reserved">if</span> (parent == null) {
+		<span class="reserved">return</span> null;
+	}
+	<span class="reserved">return</span> new File(parent);
+}
+
+
+
+File.test = <span class="reserved">function</span>() {
+	var file = new File(<span class="literal">"test.bin"</span>);
+	var b = new ByteString(<span class="literal">"Hello World"</span>, ASCII);
+	file.writeAll(b);
+	
+	var file = new File(<span class="literal">"test.bin"</span>);
+	var c = file.readAllAsBinary();
+	print(c.toString(ASCII));
+	
+	var file = new File(<span class="literal">"test.txt"</span>);
+	var s = <span class="literal">"Hello World"</span>;
+	file.writeAll(s);
+	
+	var file = new File(<span class="literal">"test.txt"</span>);
+	var c = file.readAllAsString();
+	print(c);
+	
+	var dir = file.getParentFile();
+	print(dir.getAbsolutePath());
+	print(dir.list());
+	
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 23 09:14:23 2024</div>
+</body>
+</html>
