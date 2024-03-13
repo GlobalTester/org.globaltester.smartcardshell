@@ -112,6 +112,12 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 	@Override
 	protected CardID internalReset(int slotID, int ms)
 			throws CardTerminalException {
+		close();
+		try {
+			connectToCard(slotID);
+		} catch (SocketException e) {
+			throw new CardTerminalException(e.getLocalizedMessage());
+		}
 		return this.getCardID(slotID);
 	}
 
