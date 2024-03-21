@@ -15,11 +15,7 @@ import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
-import org.bouncycastle.cms.SignerInformationVerifier;
-import org.bouncycastle.cms.jcajce.JcaSignerInfoVerifierBuilder;
-import org.bouncycastle.operator.DigestCalculatorProvider;
-import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
-import org.bouncycastle.util.Selector;
+import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.util.Store;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -37,11 +33,7 @@ import de.cardcontact.tlv.ParseBuffer;
 import de.cardcontact.tlv.PrimitiveTLV;
 
 /**
- * Extends JsCMSSignedData in order to allow operation with a broader range of
- * BouncyCastle versions (even w/o the original CC modification)
- * 
- * @author amay
- *
+ * Extends JsCMSSignedData to access some of its internal encapsulated data.
  */
 public class JsCmsSignedData extends JsCMSSignedData {
 
@@ -63,7 +55,6 @@ public class JsCmsSignedData extends JsCMSSignedData {
 				throw new RuntimeException(e);
 			}
 		}
-
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -81,13 +72,20 @@ public class JsCmsSignedData extends JsCMSSignedData {
 		}
 
 		ByteString encoded = (ByteString) args[0];
-		final JsCmsSignedData sdo = new JsCmsSignedData();
+		byte[] cmsSignedDataRaw = encoded.getBytes();
+		return new JsCmsSignedData(cmsSignedDataRaw);
+	}
+
+	public JsCmsSignedData() {
+		// nothing to do
+	}
+
+	public JsCmsSignedData(byte[] encoded) {
 		try {
-			sdo.setSignedDataFromBytes(encoded.getBytes());
+			setSignedDataFromBytes(encoded);
 		} catch (Exception e) {
 			throw new RuntimeException("ByteString contains no valid encoded CMS signed data object", e);
 		}
-		return sdo;
 	}
 
 	private void setSignedDataFromBytes(byte[] bytes) throws NoSuchFieldException, SecurityException,
@@ -102,8 +100,8 @@ public class JsCmsSignedData extends JsCMSSignedData {
 	public static void finishInit(final Scriptable scope, final FunctionObject ctor, final Scriptable proto) {
 		ScriptableObject.defineProperty(ctor, "SID_ISSUERANDSERIALNUMBER", Integer.valueOf(1), 0);
 		ScriptableObject.defineProperty(ctor, "SID_SUBJECTKEYIDENTIFIER", Integer.valueOf(2), 0);
-		ScriptableObject.defineProperty(ctor, "ATTR_MESSAGEDIGEST", new String("1.2.840.113549.1.9.4"), 0);
-		ScriptableObject.defineProperty(ctor, "ATTR_SIGNINGTIME", new String("1.2.840.113549.1.9.5"), 0);
+		ScriptableObject.defineProperty(ctor, "ATTR_MESSAGEDIGEST", "1.2.840.113549.1.9.4", 0);
+		ScriptableObject.defineProperty(ctor, "ATTR_SIGNINGTIME", "1.2.840.113549.1.9.5", 0);
 	}
 
 	public static Scriptable jsFunction_getSignedContent(final Context cx, final Scriptable thisObj,
@@ -174,7 +172,8 @@ public class JsCmsSignedData extends JsCMSSignedData {
 		JsCmsSignedData cms = (JsCmsSignedData) thisObj;
 		SignerInformationStore signers = cms.signedDataExt.getSignerInfos();
 		if (index < 0 || index >= signers.size())
-			GPError.throwAsGPErrorEx(thisObj, 11, index, "Index for isCertificateAvailable() out of range");
+			GPError.throwAsGPErrorEx(thisObj, GPError.INVALID_INDEX, index,
+					"Index for isCertificateAvailable() out of range");
 		Object[] allSigners = signers.getSigners().toArray();
 		SignerInformation si = (SignerInformation) allSigners[index];
 		Store<X509CertificateHolder> certs = cms.signedDataExt.getCertificates();
@@ -213,46 +212,50 @@ public class JsCmsSignedData extends JsCMSSignedData {
 		// args, funObj);
 		ArgChecker.checkRange(thisObj, "CMSSignedData", args, 1, 2);
 		int index = ArgChecker.getInt(thisObj, "CMSSignedData", args, 0, 0);
-		X509CertificateHolder certBuilder = null;
-		if (args.length > 1)
+		X509CertificateHolder certHolder = null;
+		if (args.length > 1) {
 			if (args[1] instanceof ByteString) {
 				ByteString signerCertificate = ArgChecker.getByteString(thisObj, "CMSSignedData", args, 1, null);
 				try {
-					certBuilder = new X509CertificateHolder(signerCertificate.getBytes());
+					certHolder = new X509CertificateHolder(signerCertificate.getBytes());
 				} catch (Exception ce) {
-					GPError.throwAsGPErrorEx(thisObj, 10, 0, ce.getLocalizedMessage());
+					GPError.throwAsGPErrorEx(thisObj, GPError.INVALID_ENCODING, 0, ce.getLocalizedMessage());
 				}
 			} else if (args[1] instanceof JsX509) {
-				certBuilder = new X509CertificateHolder(((JsX509) args[1]).getCertificate().getEncoded());
+				certHolder = new X509CertificateHolder(((JsX509) args[1]).getCertificate().getEncoded());
 			} else {
-				GPError.throwAsGPErrorEx(thisObj, 8, 1, "Argument must be of type ByteString or X509");
+				GPError.throwAsGPErrorEx(thisObj, GPError.INVALID_ARGUMENTS, 1,
+						"Argument must be of type ByteString or X509");
 			}
+		}
 		JsCmsSignedData cms = (JsCmsSignedData) thisObj;
+		return isSignerInfoSignatureValid(index, certHolder, cms);
+	}
+
+	public static boolean isSignerInfoSignatureValid(int index, X509CertificateHolder certHolder, JsCmsSignedData cms) {
 		SignerInformationStore signers = cms.signedDataExt.getSignerInfos();
 		if (index < 0 || index >= signers.size())
-			GPError.throwAsGPErrorEx(thisObj, 11, index, "Index for isSignerInfoSignatureValid() out of range");
+			GPError.throwAsGPErrorEx(cms, GPError.INVALID_INDEX, index,
+					"Index for isSignerInfoSignatureValid() out of range");
 		Object[] allSigners = signers.getSigners().toArray();
 		SignerInformation si = (SignerInformation) allSigners[index];
-		if (certBuilder == null) {
+		if (certHolder == null) {
 			Store<X509CertificateHolder> certs = cms.signedDataExt.getCertificates();
-			Collection<X509CertificateHolder> certCollection = certs.getMatches((Selector) si.getSID());
+			Collection<X509CertificateHolder> certCollection = certs.getMatches(si.getSID());
 			if (certCollection.isEmpty())
-				GPError.throwAsGPErrorEx(thisObj, 23, 0,
+				GPError.throwAsGPErrorEx(cms, GPError.OBJECT_NOT_FOUND, 0,
 						"There are no signer certificates within the encoded CMS structure");
 			Iterator<X509CertificateHolder> certIt = certCollection.iterator();
-			certBuilder = certIt.next();
+			certHolder = certIt.next();
 		}
 		boolean result = false;
 		try {
-			JcaDigestCalculatorProviderBuilder dcpb = new JcaDigestCalculatorProviderBuilder();
-			dcpb.setProvider("BC");
-			DigestCalculatorProvider dcp = dcpb.build();
-			JcaSignerInfoVerifierBuilder sivb = new JcaSignerInfoVerifierBuilder(dcp);
-			sivb.setProvider("BC");
-			SignerInformationVerifier siv = sivb.build(certBuilder);
-			result = si.verify(siv);
+			JcaSimpleSignerInfoVerifierBuilder builder = new JcaSimpleSignerInfoVerifierBuilder();
+			result = si.verify(builder.setProvider("BC").build(certHolder));
+			// System.out.println("verify result: " + result);
 		} catch (Exception e) {
-			GPError.throwAsGPErrorEx(thisObj, 5, 0, "Could not verify signer: " + e.getMessage());
+			e.printStackTrace();
+			GPError.throwAsGPErrorEx(cms, GPError.CRYPTO_FAILED, 0, "Could not verify signer: " + e.getMessage());
 		}
 		return result;
 	}
