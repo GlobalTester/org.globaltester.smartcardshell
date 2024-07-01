@@ -4,7 +4,7 @@ Bundle-Name: GT SmartCardShell Test
 Bundle-SymbolicName: org.globaltester.smartcardshell.test
 Bundle-Version: 3.10.0.qualifier
 Bundle-Vendor: secunet Security Networks AG
-Fragment-Host: org.globaltester.smartcardshell;bundle-version="3.0.0"
+Fragment-Host: org.globaltester.smartcardshell
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit
 Export-Package: org.globaltester.smartcardshell.test

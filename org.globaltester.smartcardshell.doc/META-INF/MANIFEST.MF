@@ -7,8 +7,8 @@ Bundle-Activator: org.globaltester.smartcardshell.doc.Activator
 Bundle-Vendor: secunet Security Networks AG
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.help,
- org.globaltester.smartcardshell;bundle-version="3.0.0",
- org.globaltester.logging.legacy;bundle-version="3.0.0",
+ org.globaltester.smartcardshell,
+ org.globaltester.logging.legacy,
  org.globaltester.base.doc
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
