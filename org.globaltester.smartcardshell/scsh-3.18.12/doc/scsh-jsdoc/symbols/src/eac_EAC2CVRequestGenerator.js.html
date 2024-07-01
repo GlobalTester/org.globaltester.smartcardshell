@@ -1,0 +1,459 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  *  ---------
+<span class='line'>  3</span>  * |.##> &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+<span class='line'>  4</span>  * |#       #|
+<span class='line'>  5</span>  * |#       #|  Copyright (c) 1999-2010 CardContact Software & System Consulting
+<span class='line'>  6</span>  * |'##> &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+<span class='line'>  7</span>  *  ---------
+<span class='line'>  8</span>  *
+<span class='line'>  9</span>  *  This file is part of OpenSCDP.
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  *  OpenSCDP is free software; you can redistribute it and/or modify
+<span class='line'> 12</span>  *  it under the terms of the GNU General Public License version 2 as
+<span class='line'> 13</span>  *  published by the Free Software Foundation.
+<span class='line'> 14</span>  *
+<span class='line'> 15</span>  *  OpenSCDP is distributed in the hope that it will be useful,
+<span class='line'> 16</span>  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 17</span>  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 18</span>  *  GNU General Public License for more details.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *  You should have received a copy of the GNU General Public License
+<span class='line'> 21</span>  *  along with OpenSCDP; if not, write to the Free Software
+<span class='line'> 22</span>  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+<span class='line'> 23</span>  *
+<span class='line'> 24</span>  * @fileoverview Implementation of Simple CV request generator based on
+<span class='line'> 25</span>  * TR-03110 "Advanced Security Mechanisms for Machine Readable Travel Documents", Version 2.0
+<span class='line'> 26</span>  *
+<span class='line'> 27</span>  */</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span> </span><span class="COMM">// Imports</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">CVC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'scsh/eac/CVC'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">CVC</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PublicKeyReference</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'scsh/eac/PublicKeyReference'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">PublicKeyReference</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> 
+<span class='line'> 34</span> 
+<span class='line'> 35</span> </span><span class="COMM">/**
+<span class='line'> 36</span>  * Constructor for request generator
+<span class='line'> 37</span>  *
+<span class='line'> 38</span>  * @class Class implementing a generator for CVC requests
+<span class='line'> 39</span>  *
+<span class='line'> 40</span>  * @constructor
+<span class='line'> 41</span>  * @param {Crypto} Crypto object to use
+<span class='line'> 42</span>  */</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">	</span><span class="NAME">this.crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">crypto</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 46</span> 
+<span class='line'> 47</span> </span><span class="NAME">exports.EAC2CVRequestGenerator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> 
+<span class='line'> 50</span> 
+<span class='line'> 51</span> </span><span class="COMM">/*
+<span class='line'> 52</span>  * Convert x/y coordinates to uncompressed format
+<span class='line'> 53</span>  *
+<span class='line'> 54</span>  * x/y - coordinates of EC point
+<span class='line'> 55</span>  *
+<span class='line'> 56</span>  * return ByteString containing compressed format
+<span class='line'> 57</span>  *
+<span class='line'> 58</span>  * TODO: Move to ECUtils
+<span class='line'> 59</span>  */</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="NAME">EAC2CVRequestGenerator.encodeUncompressedECPoint</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 61</span> 
+<span class='line'> 62</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteBuffer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> 
+<span class='line'> 64</span> </span><span class="WHIT">    </span><span class="COMM">// uncompressed encoding</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">    </span><span class="NAME">bb.append</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"04"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">    </span><span class="NAME">bb.append</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">    </span><span class="NAME">bb.append</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span> 
+<span class='line'> 69</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">bb.toByteString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 71</span> 
+<span class='line'> 72</span> 
+<span class='line'> 73</span> 
+<span class='line'> 74</span> </span><span class="COMM">/**
+<span class='line'> 75</span>  * Strips leading zeros of a ByteString
+<span class='line'> 76</span>  *
+<span class='line'> 77</span>  * @param {ByteString} value the ByteString value
+<span class='line'> 78</span>  * @return the stripped ByteString object, may be an empty ByteString
+<span class='line'> 79</span>  * @type ByteString
+<span class='line'> 80</span>  *
+<span class='line'> 81</span>  * TODO: Move to Utils
+<span class='line'> 82</span>  */</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">value.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value.byteAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> 
+<span class='line'> 87</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">value.right</span><span class="PUNC">(</span><span class="NAME">value.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 89</span> 
+<span class='line'> 90</span> 
+<span class='line'> 91</span> 
+<span class='line'> 92</span> </span><span class="COMM">/**
+<span class='line'> 93</span>  * Set the public key that should be encoded within the request
+<span class='line'> 94</span>  *
+<span class='line'> 95</span>  * @param {Key} publicKey Public Key
+<span class='line'> 96</span>  */</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setPublicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">publicKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">	</span><span class="NAME">this.publicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">publicKey</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>100</span> 
+<span class='line'>101</span> 
+<span class='line'>102</span> 
+<span class='line'>103</span> </span><span class="COMM">/**
+<span class='line'>104</span>  * Set the certficate holder reference (CHR) for the request
+<span class='line'>105</span>  *
+<span class='line'>106</span>  * @param {String} chr CHR for the request
+<span class='line'>107</span>  */</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setCHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">chr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">chr</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">		</span><span class="NAME">this.CHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">chr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">chr</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">PublicKeyReference</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">		</span><span class="NAME">this.CHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">chr.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">		</span><span class="NAME">this.CHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">chr.toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASCII</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>117</span> 
+<span class='line'>118</span> 
+<span class='line'>119</span> 
+<span class='line'>120</span> </span><span class="COMM">/**
+<span class='line'>121</span>  * Reset the current generator object
+<span class='line'>122</span>  *
+<span class='line'>123</span>  * TODO: Implement me
+<span class='line'>124</span>  */</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.reset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>127</span> 
+<span class='line'>128</span> 
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="COMM">/**
+<span class='line'>131</span>  * Set the certificate profile identifier (CPI) for the request
+<span class='line'>132</span>  *
+<span class='line'>133</span>  * @param {Number} profileID CPI for the request
+<span class='line'>134</span>  */</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setProfileIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">profileID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">	</span><span class="NAME">this.profileIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">profileID</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>138</span> 
+<span class='line'>139</span> 
+<span class='line'>140</span> 
+<span class='line'>141</span> </span><span class="COMM">/**
+<span class='line'>142</span>  * Set the certficate authorization reference (CAR) for the request
+<span class='line'>143</span>  *
+<span class='line'>144</span>  * The usage of this method is optional - if no CAR is set, there will be no
+<span class='line'>145</span>  * "inner" CAR included within the certficate request
+<span class='line'>146</span>  *
+<span class='line'>147</span>  * @param {String} car CAR for the request
+<span class='line'>148</span>  */</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setCAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">car</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">car</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">		</span><span class="NAME">this.CAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">car</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">car</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">PublicKeyReference</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">		</span><span class="NAME">this.CAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">car.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">		</span><span class="NAME">this.CAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">car.toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASCII</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span> 
+<span class='line'>160</span> 
+<span class='line'>161</span> </span><span class="COMM">/**
+<span class='line'>162</span>  * Set the extension values that should be included within the request
+<span class='line'>163</span>  *
+<span class='line'>164</span>  * @param {ByteString[]} extensions Array of DER-encoded extensions
+<span class='line'>165</span>  */</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setExtensions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">extensions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">	</span><span class="NAME">this.extensions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">extensions</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>169</span> 
+<span class='line'>170</span> 
+<span class='line'>171</span> 
+<span class='line'>172</span> </span><span class="COMM">/**
+<span class='line'>173</span>  * Set the object identifier that should be included in the public key domain parameters
+<span class='line'>174</span>  *
+<span class='line'>175</span>  * @param {ByteString} oid Object identifier as specified in appendix A.6.4
+<span class='line'>176</span>  */</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.setTAAlgorithmIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">	</span><span class="NAME">this.taOID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>180</span> 
+<span class='line'>181</span> 
+<span class='line'>182</span> 
+<span class='line'>183</span> </span><span class="COMM">/**
+<span class='line'>184</span>  * Get the CAR as ByteString object
+<span class='line'>185</span>  *
+<span class='line'>186</span>  * @private
+<span class='line'>187</span>  */</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getCAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certification Authority Reference"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x42</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.CAR</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>192</span> 
+<span class='line'>193</span> 
+<span class='line'>194</span> 
+<span class='line'>195</span> </span><span class="COMM">/**
+<span class='line'>196</span>  * Get the CHR as ByteString object
+<span class='line'>197</span>  *
+<span class='line'>198</span>  * @private
+<span class='line'>199</span>  */</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getCHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certification Holder Reference"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F20</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.CHR</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>204</span> 
+<span class='line'>205</span> 
+<span class='line'>206</span> 
+<span class='line'>207</span> </span><span class="COMM">/**
+<span class='line'>208</span>  * Get the encoded public key including domain parameters
+<span class='line'>209</span>  *
+<span class='line'>210</span>  * @private
+<span class='line'>211</span>  */</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getPublicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>213</span> 
+<span class='line'>214</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Public Key"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x7F49</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Object Identifier"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x06</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.taOID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_P</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Prime Modulus"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x81</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_P</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"First coefficient a"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x82</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_A</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Second coefficient b"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x83</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_B</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Base Point G"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x84</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.encodeUncompressedECPoint</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_GX</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_GY</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Order of the base point"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x85</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_N</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Public Point y"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x86</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.encodeUncompressedECPoint</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_QX</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_QY</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span> 
+<span class='line'>226</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Cofactor f"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x87</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_H</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Composite Modulus"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x81</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.MODULUS</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Public Exponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x82</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.stripLeadingZeros</span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.EXPONENT</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>231</span> 
+<span class='line'>232</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>234</span> 
+<span class='line'>235</span> 
+<span class='line'>236</span> 
+<span class='line'>237</span> </span><span class="COMM">/**
+<span class='line'>238</span>  * Get the encoded CPI as ByteString
+<span class='line'>239</span>  *
+<span class='line'>240</span>  * @private
+<span class='line'>241</span>  */</span><span class="WHIT">
+<span class='line'>242</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getProfileIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteBuffer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="WHIT">	</span><span class="NAME">bb.append</span><span class="PUNC">(</span><span class="NAME">this.profileIdentifier</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>245</span> 
+<span class='line'>246</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certificate Profile Identifier"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F29</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bb.toByteString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>249</span> 
+<span class='line'>250</span> 
+<span class='line'>251</span> 
+<span class='line'>252</span> </span><span class="COMM">/**
+<span class='line'>253</span>  * Get the DER-encoded extension vector
+<span class='line'>254</span>  *
+<span class='line'>255</span>  * @private
+<span class='line'>256</span>  */</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getExtensions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certificate Extensions"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x65</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.extensions.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.extensions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>263</span> 
+<span class='line'>264</span> 
+<span class='line'>265</span> 
+<span class='line'>266</span> </span><span class="COMM">/**
+<span class='line'>267</span>  * Get the encoded certificate request body
+<span class='line'>268</span>  *
+<span class='line'>269</span>  * @private
+<span class='line'>270</span>  */</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.getCertificateBody</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>272</span> 
+<span class='line'>273</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certificate Body"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x7F4E</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getProfileIdentifier</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> 
+<span class='line'>276</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.CAR</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getCAR</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getPublicKey</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getCHR</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> 
+<span class='line'>283</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.extensions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getExtensions</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>288</span> 
+<span class='line'>289</span> 
+<span class='line'>290</span> 
+<span class='line'>291</span> </span><span class="COMM">/**
+<span class='line'>292</span>  * Generate initial certificate request using the specified private key for signing
+<span class='line'>293</span>  *
+<span class='line'>294</span>  * @param {Key} privateKey Private key for signature creation
+<span class='line'>295</span>  * @return The DER-encoded CV request
+<span class='line'>296</span>  * @type ASN1
+<span class='line'>297</span>  */</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.generateCVRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">privateKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"CV Certificate"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x7F21</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> 
+<span class='line'>301</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">body</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCertificateBody</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> 
+<span class='line'>303</span> </span><span class="WHIT">	</span><span class="NAME">request.add</span><span class="PUNC">(</span><span class="NAME">body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span> 
+<span class='line'>305</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mech</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">CVC.getSignatureMech</span><span class="PUNC">(</span><span class="NAME">this.taOID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.crypto.sign</span><span class="PUNC">(</span><span class="NAME">privateKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">mech</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">body.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">CVC.isECDSA</span><span class="PUNC">(</span><span class="NAME">this.taOID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">privateKey.getSize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">>></span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Signature"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F37</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">CVC.unwrapSignature</span><span class="PUNC">(</span><span class="NAME">signature</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Signature"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F37</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>313</span> 
+<span class='line'>314</span> </span><span class="WHIT">	</span><span class="NAME">request.add</span><span class="PUNC">(</span><span class="NAME">signatureValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>315</span> 
+<span class='line'>316</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">request</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>318</span> 
+<span class='line'>319</span> 
+<span class='line'>320</span> 
+<span class='line'>321</span> </span><span class="COMM">/**
+<span class='line'>322</span>  * Countersign request
+<span class='line'>323</span>  *
+<span class='line'>324</span>  * @param {Crypto} crypto the crypto provide to use for signing the request
+<span class='line'>325</span>  * @param {CVC} request the self-signed request
+<span class='line'>326</span>  * @param {Key} authenticationKey Private key for used for signing and authenticating the request
+<span class='line'>327</span>  * @param {PublicKeyReference} authCHR CHR of the authenticating authority
+<span class='line'>328</span>  * @param {ByteString} taOID the public key object identifier of the authentication key
+<span class='line'>329</span>  *
+<span class='line'>330</span>  * @return The DER-encoded authenticated CV request
+<span class='line'>331</span>  * @type ASN1
+<span class='line'>332</span>  */</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="NAME">EAC2CVRequestGenerator.signAuthenticatedCVRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authenticationKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authCHR</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">authRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Authentication"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x67</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>335</span> 
+<span class='line'>336</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">chr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Certification Authority Reference"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x42</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authCHR.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>337</span> 
+<span class='line'>338</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureInput</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">request.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">concat</span><span class="PUNC">(</span><span class="NAME">chr.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> 
+<span class='line'>340</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mech</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">CVC.getSignatureMech</span><span class="PUNC">(</span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">crypto.sign</span><span class="PUNC">(</span><span class="NAME">authenticationKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">mech</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">signatureInput</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> 
+<span class='line'>343</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">CVC.isECDSA</span><span class="PUNC">(</span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">authenticationKey.getSize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">>></span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Signature"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F37</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">CVC.unwrapSignature</span><span class="PUNC">(</span><span class="NAME">signature</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"Signature"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0x5F37</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>349</span> 
+<span class='line'>350</span> </span><span class="WHIT">	</span><span class="NAME">authRequest.add</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="WHIT">	</span><span class="NAME">authRequest.add</span><span class="PUNC">(</span><span class="NAME">chr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">	</span><span class="NAME">authRequest.add</span><span class="PUNC">(</span><span class="NAME">signatureValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> 
+<span class='line'>354</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">authRequest</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>356</span> 
+<span class='line'>357</span> 
+<span class='line'>358</span> 
+<span class='line'>359</span> </span><span class="COMM">/**
+<span class='line'>360</span>  * Generate authenticated request
+<span class='line'>361</span>  *
+<span class='line'>362</span>  * @param {Key} requestKey Private key for the request signature
+<span class='line'>363</span>  * @param {Key} authenticationKey Private key for used for signing and authenticating the request
+<span class='line'>364</span>  * @param {PublicKeyReference} authCHR CHR of the authenticating authority
+<span class='line'>365</span>  * @param {ByteString} taOID the public key object identifier of the authentication key
+<span class='line'>366</span>  *
+<span class='line'>367</span>  * @return The DER-encoded authenticated CV request
+<span class='line'>368</span>  * @type ASN1
+<span class='line'>369</span>  */</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="NAME">EAC2CVRequestGenerator.prototype.generateAuthenticatedCVRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">requestKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authenticationKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authCHR</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>371</span> 
+<span class='line'>372</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.generateCVRequest</span><span class="PUNC">(</span><span class="NAME">requestKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>373</span> 
+<span class='line'>374</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">		</span><span class="NAME">outertaOID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.taOID</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator.signAuthenticatedCVRequest</span><span class="PUNC">(</span><span class="NAME">this.crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authenticationKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">authCHR</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outertaOID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>379</span> 
+<span class='line'>380</span> 
+<span class='line'>381</span> 
+<span class='line'>382</span> </span><span class="NAME">EAC2CVRequestGenerator.test</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">test</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">taOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">reqGenerator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">EAC2CVRequestGenerator</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> 
+<span class='line'>386</span> </span><span class="WHIT">		</span><span class="COMM">// Set CPI</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setProfileIdentifier</span><span class="PUNC">(</span><span class="NUMB">0x00</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> 
+<span class='line'>389</span> </span><span class="WHIT">		</span><span class="COMM">// Set "inner" CAR</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">CAR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"decvca00000"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setCAR</span><span class="PUNC">(</span><span class="NAME">CAR</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>392</span> 
+<span class='line'>393</span> </span><span class="WHIT">		</span><span class="COMM">// Set public key for request</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setPublicKey</span><span class="PUNC">(</span><span class="NAME">pubKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> 
+<span class='line'>396</span> </span><span class="WHIT">		</span><span class="COMM">// Set oid of algorithm</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setTAAlgorithmIdentifier</span><span class="PUNC">(</span><span class="NAME">taOID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>398</span> 
+<span class='line'>399</span> </span><span class="WHIT">		</span><span class="COMM">// Set some dummy extensions</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ext1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"ext1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"06022A11"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ext2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"ext2"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"06022A12"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setExtensions</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="NAME">ext1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ext2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>403</span> 
+<span class='line'>404</span> </span><span class="WHIT">		</span><span class="COMM">// Set CHR for the request</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">CHR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"dedvca00001"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">		</span><span class="NAME">reqGenerator.setCHR</span><span class="PUNC">(</span><span class="NAME">CHR</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>407</span> 
+<span class='line'>408</span> </span><span class="WHIT">		</span><span class="COMM">// Generate the request</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">req</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">reqGenerator.generateAuthenticatedCVRequest</span><span class="PUNC">(</span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PublicKeyReference</span><span class="PUNC">(</span><span class="STRN">"dedvca00000"</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">taOID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>410</span> </span><span class="WHIT">		</span><span class="NAME">GPSystem.trace</span><span class="PUNC">(</span><span class="NAME">req</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>411</span> 
+<span class='line'>412</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cvreq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">CVC</span><span class="PUNC">(</span><span class="NAME">req</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">		</span><span class="NAME">GPSystem.trace</span><span class="PUNC">(</span><span class="NAME">cvreq</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>414</span> 
+<span class='line'>415</span> </span><span class="WHIT">		</span><span class="NAME">assert</span><span class="PUNC">(</span><span class="NAME">cvreq.verifyWith</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">taOID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">		</span><span class="NAME">assert</span><span class="PUNC">(</span><span class="NAME">cvreq.verifyATWith</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">taOID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>418</span> 
+<span class='line'>419</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Crypto</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span> 
+<span class='line'>421</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">	</span><span class="NAME">priKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PRIVATE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PUBLIC</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">	</span><span class="NAME">priKey.setComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_CURVE_OID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"brainpoolP256t1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_CURVE_OID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"brainpoolP256t1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">	</span><span class="NAME">crypto.generateKeyPair</span><span class="PUNC">(</span><span class="NAME">Crypto.EC</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> 
+<span class='line'>429</span> </span><span class="WHIT">	</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"id-TA-ECDSA-SHA-256"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>430</span> 
+<span class='line'>431</span> 
+<span class='line'>432</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">	</span><span class="NAME">priKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PRIVATE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PUBLIC</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">	</span><span class="NAME">priKey.setComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_CURVE_OID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"secp521r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setComponent</span><span class="PUNC">(</span><span class="NAME">Key.ECC_CURVE_OID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"secp521r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">	</span><span class="NAME">crypto.generateKeyPair</span><span class="PUNC">(</span><span class="NAME">Crypto.EC</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>439</span> 
+<span class='line'>440</span> </span><span class="WHIT">	</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"id-TA-ECDSA-SHA-512"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> 
+<span class='line'>442</span> 
+<span class='line'>443</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">	</span><span class="NAME">priKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PRIVATE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PUBLIC</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">	</span><span class="NAME">pubKey.setSize</span><span class="PUNC">(</span><span class="NUMB">1024</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">	</span><span class="NAME">crypto.generateKeyPair</span><span class="PUNC">(</span><span class="NAME">Crypto.RSA</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>449</span> 
+<span class='line'>450</span> </span><span class="WHIT">	</span><span class="NAME">test</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"id-TA-RSA-v1-5-SHA-256"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>452</span> </span></pre></body></html>

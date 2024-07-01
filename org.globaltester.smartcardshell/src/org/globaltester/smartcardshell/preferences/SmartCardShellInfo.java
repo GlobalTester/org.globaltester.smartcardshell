@@ -184,7 +184,8 @@ public class SmartCardShellInfo {
 	}
 	
 	public static String getConfigFile() {
-		return Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator + "config.js";
+		return Activator.getPluginDir().toOSString() + Activator.SCSH_FOLDER + File.separator + "config_gt.js";
+		//return Activator.getPluginDir().toOSString() + "config_gt.js";
 	}
 	
 	public static IPath getPluginDir() {

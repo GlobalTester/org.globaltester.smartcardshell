@@ -1,0 +1,2 @@
+#!/bin/sh
+java -Dsun.security.smartcardio.t1GetResponse=false -Dorg.bouncycastle.asn1.allow_unsafe_integer=true -Djava.library.path=./lib -classpath 'lib/*' de.cardcontact.scdp.engine.CommandProcessor

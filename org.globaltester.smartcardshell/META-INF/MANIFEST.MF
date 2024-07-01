@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: org.globaltester.smartcardshell
 Bundle-Name: GT SmartCardShell
 Bundle-SymbolicName: org.globaltester.smartcardshell;singleton:=true
-Bundle-Version: 3.9.0.qualifier
+Bundle-Version: 3.10.0.qualifier
 Bundle-Activator: org.globaltester.smartcardshell.Activator
 Bundle-Vendor: secunet Security Networks AG
 Require-Bundle: org.eclipse.core.runtime,
@@ -14,65 +15,58 @@ Require-Bundle: org.eclipse.core.runtime,
  org.globaltester.simulator,
  org.globaltester.logging,
  org.globaltester.lib.smartcardio,
- org.globaltester.cryptoprovider.bc.legacy_1_46,
+ org.globaltester.cryptoprovider.bc,
  org.globaltester.control,
- org.globaltester.control.soap
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+ org.globaltester.control.soap,
+ slf4j.api
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
 DynamicImport-Package: *
 Bundle-ClassPath: .,
- scsh3.7.989/lib/ocf-cc.jar,
- scsh3.7.989/lib/scdp4j.jar,
- scsh3.7.989/lib/scsh3.jar,
- scsh3.7.989/lib/xmldsig.jar,
- scsh3.7.989/lib/opensc-java.jar
-Export-Package: com.ibm.opencard.terminal.pcsc,
- com.ibm.opencard.terminal.pcsc10,
- com.ms.security,
- de.cardcontact.jni2ctapi,
- de.cardcontact.opencard.factory,
+ scsh-3.18.12/lib/ocf-core.jar,
+ scsh-3.18.12/lib/ocf-daemon.jar,
+ scsh-3.18.12/lib/ocf-ui.jar,
+ scsh-3.18.12/lib/scdp4j.jar,
+ scsh-3.18.12/lib/scsh-3.18.12.jar,
+ scsh-3.18.12/lib/opensc-java.jar,
+ scsh-3.18.12/lib/sc-hsm-jceprovider.jar
+Export-Package: de.cardcontact.opencard.factory,
  de.cardcontact.opencard.security,
  de.cardcontact.opencard.service,
- de.cardcontact.opencard.service.acos,
- de.cardcontact.opencard.service.gemxcos,
+ de.cardcontact.opencard.service.eac20,
  de.cardcontact.opencard.service.globalplatform,
  de.cardcontact.opencard.service.isocard,
- de.cardcontact.opencard.service.signature,
+ de.cardcontact.opencard.service.isocard.apdu,
+ de.cardcontact.opencard.service.remoteclient,
+ de.cardcontact.opencard.service.smartcardhsm,
  de.cardcontact.opencard.terminal.ctapi4ocf,
  de.cardcontact.opencard.terminal.jcopsim,
  de.cardcontact.opencard.utils,
  de.cardcontact.scdp.cardsim,
  de.cardcontact.scdp.cms,
+ de.cardcontact.scdp.cryptoscript,
  de.cardcontact.scdp.engine,
  de.cardcontact.scdp.gp,
- de.cardcontact.scdp.gpmsg,
  de.cardcontact.scdp.js,
  de.cardcontact.scdp.ocsp,
  de.cardcontact.scdp.pkcs11,
- de.cardcontact.scdp.scsh3,
  de.cardcontact.scdp.utils,
  de.cardcontact.scdp.xmldsig,
+ de.cardcontact.scdp.scsh3,
+ de.cardcontact.ctapi,
  de.cardcontact.tlv,
- netscape.security,
  opencard.core,
  opencard.core.event,
  opencard.core.service,
  opencard.core.terminal,
  opencard.core.util,
  opencard.opt.applet,
- opencard.opt.applet.mgmt,
- opencard.opt.database,
- opencard.opt.emv.mgmt,
  opencard.opt.iso.fs,
- opencard.opt.javacard,
- opencard.opt.ms,
- opencard.opt.netscape,
  opencard.opt.security,
  opencard.opt.service,
  opencard.opt.signature,
  opencard.opt.terminal,
- opencard.opt.terminal.protocol,
  opencard.opt.util,
  org.globaltester.smartcardshell,
  org.globaltester.smartcardshell.cms,
@@ -80,8 +74,7 @@ Export-Package: com.ibm.opencard.terminal.pcsc,
  org.globaltester.smartcardshell.jsinterface,
  org.globaltester.smartcardshell.ocf,
  org.globaltester.smartcardshell.preferences,
- org.globaltester.smartcardshell.protocols,
- org.jcprev.xml.dsig.internal,
- org.jcprev.xml.dsig.internal.dom
+ org.globaltester.smartcardshell.protocols
 Eclipse-ExtensibleAPI: true
-Import-Package: org.eclipse.jface.preference
+Import-Package: javax.jws,
+ org.eclipse.jface.preference

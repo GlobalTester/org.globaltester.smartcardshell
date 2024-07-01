@@ -23,7 +23,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	public static final String SCSH_FOLDER = "scsh3.7.989";
+	public static final String SCSH_FOLDER = "scsh-3.18.12";
 	
 	private static BundleContext context;
 

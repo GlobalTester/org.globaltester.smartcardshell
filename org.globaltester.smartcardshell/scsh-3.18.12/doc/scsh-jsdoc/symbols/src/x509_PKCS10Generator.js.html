@@ -1,0 +1,366 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  *  ---------
+<span class='line'>  3</span>  * |.##> &lt;##.|  Open Smart Card Development Platform (www.openscdp.org)
+<span class='line'>  4</span>  * |#       #|
+<span class='line'>  5</span>  * |#       #|  Copyright (c) 1999-2009 CardContact Software & System Consulting
+<span class='line'>  6</span>  * |'##> &lt;##'|  Andreas Schwier, 32429 Minden, Germany (www.cardcontact.de)
+<span class='line'>  7</span>  *  ---------
+<span class='line'>  8</span>  *
+<span class='line'>  9</span>  *  This file is part of OpenSCDP.
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  *  OpenSCDP is free software; you can redistribute it and/or modify
+<span class='line'> 12</span>  *  it under the terms of the GNU General Public License version 2 as
+<span class='line'> 13</span>  *  published by the Free Software Foundation.
+<span class='line'> 14</span>  *
+<span class='line'> 15</span>  *  OpenSCDP is distributed in the hope that it will be useful,
+<span class='line'> 16</span>  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 17</span>  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 18</span>  *  GNU General Public License for more details.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *  You should have received a copy of the GNU General Public License
+<span class='line'> 21</span>  *  along with OpenSCDP; if not, write to the Free Software
+<span class='line'> 22</span>  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+<span class='line'> 23</span>  *
+<span class='line'> 24</span>  * @fileoverview A PKCS#10 generator class based on RFC5280
+<span class='line'> 25</span>  */</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PKIXCommon</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'scsh/x509/PKIXCommon'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">PKIXCommon</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span> 
+<span class='line'> 30</span> 
+<span class='line'> 31</span> </span><span class="COMM">/**
+<span class='line'> 32</span>  * Create a PKCS#10 certificate request
+<span class='line'> 33</span>  *
+<span class='line'> 34</span>  * @class Class implementing a PKCS#10 certificate request
+<span class='line'> 35</span>  * @constructor
+<span class='line'> 36</span>  *
+<span class='line'> 37</span>  * @param {Crypto} crypto the crypto provider to use for signing operations
+<span class='line'> 38</span>  */</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">PKCS10Generator</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">	</span><span class="NAME">this.crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">crypto</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">	</span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 43</span> 
+<span class='line'> 44</span> </span><span class="NAME">exports.PKCS10Generator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PKCS10Generator</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> 
+<span class='line'> 46</span> 
+<span class='line'> 47</span> 
+<span class='line'> 48</span> </span><span class="COMM">/**
+<span class='line'> 49</span>  * Resets all internal state variables.
+<span class='line'> 50</span>  *
+<span class='line'> 51</span>  */</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="NAME">PKCS10Generator.prototype.reset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">	</span><span class="NAME">this.extensions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">	</span><span class="NAME">this.attributes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 56</span> 
+<span class='line'> 57</span> 
+<span class='line'> 58</span> 
+<span class='line'> 59</span> </span><span class="COMM">/**
+<span class='line'> 60</span>  * Sets the subject name.
+<span class='line'> 61</span>  *
+<span class='line'> 62</span>  * &lt;p>The subject name must be a JavaScript object containing the properties:&lt;/p>
+<span class='line'> 63</span>  * &lt;ul>
+<span class='line'> 64</span>  *  &lt;li>C - the country&lt;/li>
+<span class='line'> 65</span>  *  &lt;li>O - the organization&lt;/li>
+<span class='line'> 66</span>  *  &lt;li>OU - the organization unit&lt;/li>
+<span class='line'> 67</span>  *  &lt;li>CN - the common name&lt;/li>
+<span class='line'> 68</span>  * &lt;/ul>
+<span class='line'> 69</span>  * &lt;p>Example:&lt;/p>
+<span class='line'> 70</span>  * &lt;pre>
+<span class='line'> 71</span>  *	var subject = { C:"UT", O:"ACME Corporation", CN:"Joe Doe" };
+<span class='line'> 72</span>  * &lt;/pre>
+<span class='line'> 73</span>  * @see PKIXCommon.encodeName()
+<span class='line'> 74</span>  *
+<span class='line'> 75</span>  * The subject can also be passed an already encoded ASN.1 structure
+<span class='line'> 76</span>  *
+<span class='line'> 77</span>  * @param {Object} subject the subject name
+<span class='line'> 78</span>  */</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="NAME">PKCS10Generator.prototype.setSubject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">subject</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">	</span><span class="NAME">this.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subject</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 82</span> 
+<span class='line'> 83</span> 
+<span class='line'> 84</span> 
+<span class='line'> 85</span> </span><span class="COMM">/**
+<span class='line'> 86</span>  * Sets the subjects public key
+<span class='line'> 87</span>  *
+<span class='line'> 88</span>  * &lt;p>The methods accepts ECC and RSA Public Keys.&lt;/p>
+<span class='line'> 89</span>  *
+<span class='line'> 90</span>  * @param {Key} publicKey the subjects public key
+<span class='line'> 91</span>  */</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="NAME">PKCS10Generator.prototype.setPublicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">publicKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">	</span><span class="NAME">this.publicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">publicKey</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 95</span> 
+<span class='line'> 96</span> 
+<span class='line'> 97</span> 
+<span class='line'> 98</span> </span><span class="COMM">/**
+<span class='line'> 99</span>  * Sets the signature algorithm. Currently only Crypto.RSA is supported
+<span class='line'>100</span>  *
+<span class='line'>101</span>  * @param {Number} alg the signature algorithm, only Crypto.RSA supported
+<span class='line'>102</span>  */</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="NAME">PKCS10Generator.prototype.setSignatureAlgorithm</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">alg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">	</span><span class="NAME">this.signatureAlgorithm</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">alg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>106</span> 
+<span class='line'>107</span> 
+<span class='line'>108</span> 
+<span class='line'>109</span> </span><span class="COMM">/**
+<span class='line'>110</span>  * Adds an extension to the certificate
+<span class='line'>111</span>  *
+<span class='line'>112</span>  * &lt;p>The structure is defined as:&lt;/p>
+<span class='line'>113</span>  * &lt;pre>
+<span class='line'>114</span>  *    Extension  ::=  SEQUENCE  {
+<span class='line'>115</span>  *        extnID      OBJECT IDENTIFIER,
+<span class='line'>116</span>  *        extnValue   OCTET STRING
+<span class='line'>117</span>  *                    -- contains the DER encoding of an ASN.1 value
+<span class='line'>118</span>  *                    -- corresponding to the extension type identified
+<span class='line'>119</span>  *                    -- by extnID
+<span class='line'>120</span>  *        }
+<span class='line'>121</span>  *&lt;/pre>
+<span class='line'>122</span>  * @param {String} extnID the extensions object identifier
+<span class='line'>123</span>  * @param {ByteString} the extension value as ByteString
+<span class='line'>124</span>  */</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="NAME">PKCS10Generator.prototype.addExtension</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">extnID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">extnValue</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extension"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">				</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extnID"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.OBJECT_IDENTIFIER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">extnID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">			</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extnValue"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.OCTET_STRING</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">extnValue</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">	</span><span class="NAME">this.extensions.push</span><span class="PUNC">(</span><span class="NAME">t</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>133</span> 
+<span class='line'>134</span> 
+<span class='line'>135</span> 
+<span class='line'>136</span> </span><span class="COMM">/**
+<span class='line'>137</span>  * Adds the key usage extension.
+<span class='line'>138</span>  *
+<span class='line'>139</span>  * &lt;p>The following flags are defined:&lt;/p>
+<span class='line'>140</span>  * &lt;pre>
+<span class='line'>141</span>  * PKCS10Generator.digitalSignature = 0x0080;
+<span class='line'>142</span>  * PKCS10Generator.nonRepudiation   = 0x0040;
+<span class='line'>143</span>  * PKCS10Generator.keyEncipherment  = 0x0020;
+<span class='line'>144</span>  * PKCS10Generator.dataEncipherment = 0x0010;
+<span class='line'>145</span>  * PKCS10Generator.keyAgreement     = 0x0008;
+<span class='line'>146</span>  * PKCS10Generator.keyCertSign      = 0x0004;
+<span class='line'>147</span>  * PKCS10Generator.cRLSign          = 0x0002;
+<span class='line'>148</span>  * PKCS10Generator.encipherOnly     = 0x0001;
+<span class='line'>149</span>  * PKCS10Generator.decipherOnly     = 0x8000;
+<span class='line'>150</span>  * &lt;/pre>
+<span class='line'>151</span>  * @param {Number} the key usage flags as combination of the flags defined above.
+<span class='line'>152</span>  */</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="NAME">PKCS10Generator.prototype.addKeyUsageExtension</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">flags</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="NAME">ASN1.BIT_STRING</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">PKIXCommon.bitstringForInteger</span><span class="PUNC">(</span><span class="NAME">flags</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">	</span><span class="NAME">this.addExtension</span><span class="PUNC">(</span><span class="STRN">"2.5.29.15"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">t.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>157</span> 
+<span class='line'>158</span> </span><span class="COMM">// Deprecated: Use PKIXCommon. instead</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="NAME">PKCS10Generator.digitalSignature</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0080</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="NAME">PKCS10Generator.nonRepudiation</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0040</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="NAME">PKCS10Generator.keyEncipherment</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0020</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="NAME">PKCS10Generator.dataEncipherment</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0010</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="NAME">PKCS10Generator.keyAgreement</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0008</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="NAME">PKCS10Generator.keyCertSign</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0004</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="NAME">PKCS10Generator.cRLSign</span><span class="WHIT">			</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0002</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="NAME">PKCS10Generator.encipherOnly</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x0001</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="NAME">PKCS10Generator.decipherOnly</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0x8000</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span> 
+<span class='line'>169</span> 
+<span class='line'>170</span> 
+<span class='line'>171</span> </span><span class="COMM">/**
+<span class='line'>172</span>  * Adds extended key usages
+<span class='line'>173</span>  *
+<span class='line'>174</span>  * @param {String[]} the list of extended key usage object identifier
+<span class='line'>175</span>  */</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="NAME">PKCS10Generator.prototype.addExtendedKeyUsageExtension</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">keyusages</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">keyusages.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="NAME">ASN1.OBJECT_IDENTIFIER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="NAME">keyusages</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">	</span><span class="NAME">this.addExtension</span><span class="PUNC">(</span><span class="STRN">"id-ce-extKeyUsage"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">t.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> 
+<span class='line'>185</span> 
+<span class='line'>186</span> </span><span class="COMM">/**
+<span class='line'>187</span>  * Adds the BasicConstraints extension.
+<span class='line'>188</span>  *
+<span class='line'>189</span>  * @param {Boolean} cA the certificate belongs to a CA
+<span class='line'>190</span>  * @param {Number} pathLenConstraint the maximum number of subordinate CA certificates
+<span class='line'>191</span>  */</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="NAME">PKCS10Generator.prototype.addBasicConstraintsExtension</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cA</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pathLenConstraint</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"BasicConstraints"</span><span class="PUNC">,</span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">cA</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"cA"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.BOOLEAN</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"FF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pathLenConstraint</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteBuffer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">		</span><span class="NAME">bb.append</span><span class="PUNC">(</span><span class="NAME">pathLenConstraint</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"pathLenConstraint"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.INTEGER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bb.toByteString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">	</span><span class="NAME">this.addExtension</span><span class="PUNC">(</span><span class="STRN">"2.5.29.19"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">t.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>204</span> 
+<span class='line'>205</span> 
+<span class='line'>206</span> 
+<span class='line'>207</span> </span><span class="COMM">/**
+<span class='line'>208</span>  * Gets the subject name as TLV object
+<span class='line'>209</span>  *
+<span class='line'>210</span>  * @return the issuer RDNSequence
+<span class='line'>211</span>  * @type ASN1
+<span class='line'>212</span>  */</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="NAME">PKCS10Generator.prototype.getSubject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.subject</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.subject</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">PKIXCommon.encodeName</span><span class="PUNC">(</span><span class="NAME">this.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>219</span> 
+<span class='line'>220</span> 
+<span class='line'>221</span> 
+<span class='line'>222</span> </span><span class="COMM">/**
+<span class='line'>223</span>  * Gets the subject's public key as TLV object
+<span class='line'>224</span>  *
+<span class='line'>225</span>  * @return the subject's public key info
+<span class='line'>226</span>  * @type ASN1
+<span class='line'>227</span>  */</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="NAME">PKCS10Generator.prototype.getSubjectPublicKeyInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.publicKey.getComponent</span><span class="PUNC">(</span><span class="NAME">Key.MODULUS</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">PKIXCommon.createRSASubjectPublicKeyInfo</span><span class="PUNC">(</span><span class="NAME">this.publicKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">PKIXCommon.createECSubjectPublicKeyInfo</span><span class="PUNC">(</span><span class="NAME">this.publicKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.encodeECDomainParameter</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>235</span> 
+<span class='line'>236</span> 
+<span class='line'>237</span> 
+<span class='line'>238</span> </span><span class="COMM">/**
+<span class='line'>239</span>  * Gets the extension attribute as TLV object
+<span class='line'>240</span>  *
+<span class='line'>241</span>  * @return the certificate extensions
+<span class='line'>242</span>  * @type ASN1
+<span class='line'>243</span>  */</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="NAME">PKCS10Generator.prototype.getExtensions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extensions"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="NAME">ASN1.OBJECT_IDENTIFIER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"1.2.840.113549 1 9 14"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">OID</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extensions"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SET</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">l</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"extensions"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">	</span><span class="NAME">s.add</span><span class="PUNC">(</span><span class="NAME">l</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span> 
+<span class='line'>252</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.extensions.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">		</span><span class="NAME">l.add</span><span class="PUNC">(</span><span class="NAME">this.extensions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>257</span> 
+<span class='line'>258</span> 
+<span class='line'>259</span> 
+<span class='line'>260</span> </span><span class="COMM">/**
+<span class='line'>261</span>  * Gets the attributes as TLV object
+<span class='line'>262</span>  *
+<span class='line'>263</span>  * @return the request attributes
+<span class='line'>264</span>  * @type ASN1
+<span class='line'>265</span>  */</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="NAME">PKCS10Generator.prototype.getAttributes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"attributes"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0xA0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>268</span> 
+<span class='line'>269</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.extensions.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getExtensions</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>272</span> 
+<span class='line'>273</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.attributes.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">		</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.attributes</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>276</span> 
+<span class='line'>277</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span> 
+<span class='line'>281</span> 
+<span class='line'>282</span> </span><span class="COMM">/**
+<span class='line'>283</span>  * Gets the part of the request that will be signed
+<span class='line'>284</span>  *
+<span class='line'>285</span>  * @return the TBSCertificate part
+<span class='line'>286</span>  * @type ASN1
+<span class='line'>287</span>  */</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="NAME">PKCS10Generator.prototype.getTbsRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"certificationRequestInfo"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="NAME">ASN1.INTEGER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getSubject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getSubjectPublicKeyInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">	</span><span class="NAME">t.add</span><span class="PUNC">(</span><span class="NAME">this.getAttributes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">t</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>296</span> 
+<span class='line'>297</span> 
+<span class='line'>298</span> 
+<span class='line'>299</span> </span><span class="COMM">/**
+<span class='line'>300</span>  * Generates the certificate.
+<span class='line'>301</span>  *
+<span class='line'>302</span>  * @return the generated certificate
+<span class='line'>303</span>  * @type ASN1
+<span class='line'>304</span>  */</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="NAME">PKCS10Generator.prototype.generateCertificationRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">privateKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"certificationRequest"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.SEQUENCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> 
+<span class='line'>308</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tbs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getTbsRequest</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">	</span><span class="NAME">request.add</span><span class="PUNC">(</span><span class="NAME">tbs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">	</span><span class="NAME">request.add</span><span class="PUNC">(</span><span class="NAME">PKIXCommon.encodeSignatureAlgorithm</span><span class="PUNC">(</span><span class="NAME">this.signatureAlgorithm</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>311</span> 
+<span class='line'>312</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.crypto.sign</span><span class="PUNC">(</span><span class="NAME">privateKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.signatureAlgorithm</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tbs.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">	</span><span class="NAME">signature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ByteString</span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">HEX</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">concat</span><span class="PUNC">(</span><span class="NAME">signature</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>314</span> 
+<span class='line'>315</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">signatureValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ASN1</span><span class="PUNC">(</span><span class="STRN">"signatureValue"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ASN1.BIT_STRING</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">signature</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">	</span><span class="NAME">request.add</span><span class="PUNC">(</span><span class="NAME">signatureValue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>317</span> 
+<span class='line'>318</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">request</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>320</span> 
+<span class='line'>321</span> 
+<span class='line'>322</span> 
+<span class='line'>323</span> </span><span class="NAME">PKCS10Generator.test</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>324</span> 
+<span class='line'>325</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Crypto</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>326</span> 
+<span class='line'>327</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">reqPrivateKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">	</span><span class="NAME">reqPrivateKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PRIVATE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> 
+<span class='line'>330</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">reqPublicKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Key</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">	</span><span class="NAME">reqPublicKey.setType</span><span class="PUNC">(</span><span class="NAME">Key.PUBLIC</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="WHIT">	</span><span class="NAME">reqPublicKey.setSize</span><span class="PUNC">(</span><span class="NUMB">1024</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>333</span> 
+<span class='line'>334</span> </span><span class="WHIT">	</span><span class="NAME">crypto.generateKeyPair</span><span class="PUNC">(</span><span class="NAME">Crypto.RSA</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reqPublicKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reqPrivateKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>335</span> 
+<span class='line'>336</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PKCS10Generator</span><span class="PUNC">(</span><span class="NAME">crypto</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>337</span> 
+<span class='line'>338</span> </span><span class="WHIT">	</span><span class="NAME">x.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">	</span><span class="NAME">x.setSignatureAlgorithm</span><span class="PUNC">(</span><span class="NAME">Crypto.RSA_SHA256</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> 
+<span class='line'>341</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">{</span><span class="NAME">C</span><span class="PUNC">:</span><span class="STRN">"UT"</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">O</span><span class="PUNC">:</span><span class="STRN">"Utopia CA"</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">OU</span><span class="PUNC">:</span><span class="STRN">"ACME Corporation"</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">CN</span><span class="PUNC">:</span><span class="STRN">"Joe Doe"</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> 
+<span class='line'>343</span> </span><span class="WHIT">	</span><span class="NAME">x.setSubject</span><span class="PUNC">(</span><span class="NAME">subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>344</span> 
+<span class='line'>345</span> </span><span class="WHIT">	</span><span class="NAME">x.setPublicKey</span><span class="PUNC">(</span><span class="NAME">reqPublicKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span> 
+<span class='line'>347</span> </span><span class="WHIT">	</span><span class="NAME">x.addKeyUsageExtension</span><span class="PUNC">(</span><span class="WHIT">	</span><span class="NAME">PKIXCommon.digitalSignature</span><span class="WHIT"> </span><span class="PUNC">|</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">							</span><span class="NAME">PKIXCommon.keyCertSign</span><span class="WHIT"> </span><span class="PUNC">|</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="WHIT">							</span><span class="NAME">PKIXCommon.cRLSign</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span> 
+<span class='line'>351</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">req</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.generateCertificationRequest</span><span class="PUNC">(</span><span class="NAME">reqPrivateKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">GPSystem.mapFilename</span><span class="PUNC">(</span><span class="STRN">"cert.csr"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">GPSystem.USR</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="WHIT">	</span><span class="NAME">PKIXCommon.writeFileToDisk</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">req.getBytes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>354</span> 
+<span class='line'>355</span> </span><span class="WHIT">	</span><span class="NAME">print</span><span class="PUNC">(</span><span class="NAME">req</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> 
+<span class='line'>357</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">req</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>359</span> </span></pre></body></html>

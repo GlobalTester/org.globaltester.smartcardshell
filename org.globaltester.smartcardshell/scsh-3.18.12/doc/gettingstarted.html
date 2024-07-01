@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- #BeginTemplate "template.dwt" -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<!-- #BeginEditable "TITLE" -->
+<title>Smart Card Shell 3 - Getting Started</title>
+<!-- #EndEditable -->
+<link rel=stylesheet type="text/css" href="style.css"/>
+<meta name="author" content="Andreas Schwier"/>
+</head>
+<body>
+<div id="wrapper">
+<div><a href="http://www.cardcontact.de"><img src="banner.jpg" width="750" height="80"/></a></div>
+<div id="pagelist">
+	<h1>Smart Card Shell</h1>
+	<ul>
+		<li>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="gperror.html">GPError</a></li>
+				<li><a href="gpsystem.html">GPSystem</a></li>
+				<li><a href="bytestring.html">ByteString</a></li>
+				<li><a href="bytebuffer.html">ByteBuffer</a></li>
+				<li><a href="tlv.html">TLV</a></li>
+				<li><a href="tlvlist.html">TLVList</a></li>
+				<li><a href="card.html">Card</a></li>
+				<li><a href="atr.html">Atr</a></li>
+				<li><a href="key.html">Key</a></li>
+				<li><a href="crypto.html">Crypto</a></li>
+				<li><a href="application.html">Application</a></li>
+				<li><a href="gpapplication.html">GPApplication</a></li>
+				<li><a href="gpsecuritydomain.html">GPSecDomain</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="asn1.html">ASN1</a></li>
+				<li><a href="cardfile.html">CardFile</a></li>
+				<li><a href="isosecurechannel.html">IsoSecureChannel</a></li>
+				<li><a href="applicationfactory.html">ApplFactory</a></li>
+				<li><a href="gpxml.html">GPXML</a></li>
+				<li><a href="jsscript.html">JsScript</a></li>
+				<li><a href="cardsimulationadapter.html">CardSim</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="x509.html">X509</a></li>
+				<li><a href="crl.html">CRL</a></li>
+				<li><a href="keystore.html">KeyStore</a></li>
+				<li><a href="cmssigneddata.html">Signed CMS</a></li>
+				<li><a href="cmsenvelopeddata.html">Enveloped CMS</a></li>
+				<li><a href="cmsgenerator.html">CMS Generator</a></li>
+				<li><a href="xmlsignature.html">XMLSignature</a></li>
+				<li><a href="ocspquery.html">OCSPQuery</a></li>
+				<li><a href="ldap.html">LDAP</a></li>
+				<li><a href="soapconnection.html">SOAP</a></li>
+				<li><a href="urlconnection.html">URLConnection</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="pkcs11provider.html">PKCS11Provider</a></li>
+				<li><a href="pkcs11session.html">PKCS11Session</a></li>
+				<li><a href="pkcs11object.html">PKCS11Object</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="outlinenode.html">OutlineNode</a></li>
+				<li><a href="dialog.html">Dialog</a></li>
+				<li><a href="task.html">Task</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="jsdoc/index.html">Tools</a></li>
+				<li><a href="scsh-jsdoc/index.html">Modules</a></li>
+			</ul>
+		</li>
+		<li>
+			<ul>
+				<li><a href="http://www.openscdp.org">OpenSCDP</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="main">
+<!-- #BeginEditable "BODY" -->
+<h1>Getting Started</h1>
+<p>At this point you should have installed the Smart Card Shell. If not, please have a look
+   at the <a href="installation.html">installation instructions</a>.</p>
+<p>After you started the Smart Card Shell and selected a working directory, you will see
+   a window divided into two panes. The left pane will be empty and the right pane will show a
+   text area, which works as a console and is the main user interface of the Smart Card Shell.</p>
+<p>The left pane is called the outline. It will be filled with informations generated when you
+   run scripts. You can drag the divider between the two panes and change the amount of space
+   allocated to the outline and the text area.</p>
+<p>To end the shell, you can either enter "quit" into the text area or select "Exit" from the "File"
+   menu.</p>
+<h2>Quick Start</h2>
+<p>Insert a smart card into your reader and enter:</p>
+<pre>
+&gt r
+</pre>
+<p>If everythings is installed correctly, then you should see the Answer to Reset (ATR) for your card.</p>
+<p>If you feel like more, try</p>
+<pre>
+&gt load("tools/explore.js");
+</pre>
+<p>and see for yourself.</p>
+<h2>Understanding the Shell Concept</h2>
+<p>The Smart Card Shell uses a JavaScript interpreter and compiler to execute scripts. JavaScript is a
+typeless, object-oriented programming language commonly used in web browsers for active HTML pages.
+The language syntax is very similar to Java and C.</p>
+<p>The shell is directly connected to the JavaScript interpreter, so any input in the text area
+must be valid JavaScript code. Whenever you enter a command into the shell, this command is evaluated
+by the interpreter, executed and the resulting value displayed to the user. Give it a try and enter:</p>
+<pre>
+&gt 1000 + 2000
+</pre>
+<p>After pressing ENTER the shell will display</p>
+<pre>
+3000
+&gt
+</pre>
+<p>and is ready to accept the next command.</p>
+<p>Invoking functions is as simple. To print something on the command line or from within a script
+   you can invoke the print() function. The print() function will print all passed arguments separated
+   by a whitespace and a final line break.</p>
+<pre>
+&gt print("Value", 100, 200);
+</pre>
+<p>will result in</p>
+<pre>
+Value 100 200
+&gt
+</pre>
+<p>When entering a function name without parentheses, the shell will invoke this function with the
+   result of the previous command as argument. This can be quite handy, if you define functions which
+   shall continue processing on the output of the previous function. However this functionality is
+   only available when entering commands in the shell. When writing scripts, you need to store the result
+   in a variable instead.</p>
+<p>The help() function can be invoked with or without parentheses and it will display a short help text.
+   The function itself is defined in the CONFIG.JS script, which is run as the initial configuration
+   script when you start the shell.</p>
+<p>Don't be surprised, if only a few commands are build-in commands. Most of the time you will write and
+   use scripts to do something with the Smart Card Shell.</p>
+<p>Variables can be assigned a value without prior declaration. The script interpreter will take
+   care of the best storage type and any conversion necessary.</p>
+<p>You can define global and local variables. Global variables are created when you first assign
+   a value to it:</p>
+<pre>
+&gt globalVariable = "Test";
+</pre>
+   creates a global variable named <code>globalVariable</code> and with a string value "Test". Local variable are
+   declared with a <code>var</code> prefix:
+<pre>
+&gt var localVariable = "Hello";
+</pre>
+<p>Local variables are only valid within the function in which they are defined.</p>
+
+<h2>Running Scripts</h2>
+<p>Most of the time you will run scripts that are either supplied with the Smart Card Shell or
+   which you developed for your own purpose. A script can be compiled and executed using the
+   <code>load()</code> method build into the scripting enviroment.</p>
+<p>The <code>load()</code> method accepts a string as the script name:</p>
+<pre>
+&gt load("tools/explore.js");
+</pre>
+<p>Remember, that all commands entered in the shell must be valid JavaScript code.
+   Specifying a full path requires you to escape the backslash character with an
+   additional backslash, because this notation is required for string literals:</p>
+<pre>
+&gt load("c:\\myscripts\\explore.js");
+</pre>
+<p>For your own convenience and better portability to other operating systems, we
+   recommend to use the forward slash instead. This does not need to be escaped:</p>
+<pre>
+&gt load("c:/myscripts/explore.js");
+</pre>
+<p>You can also run scripts from the "File" / "Run Script" menu or by entering CTRL-R.</p>
+<p>The shell is using a simple scheme to map file names used in scripts to files in
+   the operating environment. As a rule of thumb, all file names are resolved relative to
+   the location of the script which is currently running. If a file cannot be found relative
+   to the location of the script, then in turn the working directory and the installation directory is
+   searched. See <a href="filelocation.html">Locating Files</a> for details.</p>
+<p>The scripts supplied with the Smart Card Shell are located in directories underneath the
+   installation directory (Usually "c:\Program Files\CardContact\Smart Card Shell 3"). The <code>tools</code>
+   directory contains a number of scripts that provide support for common tasks. Other directories
+   contain script for specific card applications (e.g. <a href="icaomrtd.html">ICAO MRTD</a>,
+   <a href="emv.html">EMV</a>, <a href="geldkarte.html">GeldKarte</a>, <a href="egk.html">eGK</a>
+   and <a href="hpc.html">HPC</a>)</p>
+
+<h2>Selecting a Card Reader</h2>
+<p>Unless you explicitly selected a card reader from the "Options" / "Reader Configuration", the shell will
+   use the first card reader in the system as default reader. Once you select a card reader, the JavaScript
+   variable <code>_scsh3.reader</code> will be set to the name of the reader. You can reference this
+   <a href="settings.html">configuration variable</a> in your own scripts.</p>
+
+<h2>Defining and Using Objects</h2>
+<p>JavaScript supports object-oriented programming, but uses prototype objects rather than
+   classes. A prototype object contains the common properties of all instances of the same object.
+   Common properties can be, for example, constants and methods.</p>
+<p>Objects are created using the <code>new</code> operator. Following the new operator you can define a function
+   that acts as a constructor. You can pass arguments to this function to initialize the newly created object.</p>
+<p>Constructor functions in JavaScript are similar to classes in Java. By defining a constructor function
+   and assigning other functions to the prototype of a constructor you can build your own objects and
+   methods. The following code shows the concept:</p>
+<pre>
+//
+// Define constructor and class Point
+//
+function Point(x, y) {
+        this.x = x;
+        this.y = y;
+}
+
+//
+// Define method add() and assign to the prototype object, making it available
+// for all instances created with the Point constructor function
+//
+Point.prototype.add = function(x, y) {
+        this.x += x;
+        this.y += y;
+}
+
+//
+// Define a toString() method
+//
+Point.prototype.toString = function() {
+        return("y = " + this.x + ", y = " + this.y);
+}
+
+var p = new Point(10, 20);
+
+p.add(20, 10);
+print(p);
+</pre>
+
+<p>The Smart Card Shell supports a large number of predefined classes (aka constructor functions) and methods
+   to work with smart cards, cryptographic material, data structures and PKI services. See the main page for
+   a complete reference of Global Platform and shell scripting classes.</p>
+
+<h2>Using Modules</h2>
+<p>The Smart Card Shell supports modules as defined in the <a href="https://en.wikipedia.org/wiki/CommonJS">CommonJS</a> specification.</p>
+<p>A module is a script that exports functions that other scripts or modules can use. Modules have their own top level scope, so
+   global variables or functions declared in a module are only visible within the module. Only functions or variables declared in the <i>export</i>
+   variable are visible to others.<p>
+<p>A module can be included using the require() statement, which returns the contents of the <i>export</i> variable from the module:</p>
+<pre>
+CVC = require('scsh/eac/CVC').CVC;
+</pre>
+<p>The above statements inspects the cache for a module with the id scsh/eac/CVC. If no such module exists in the internal cache, then
+the Smart Card Shell <a href="filelocation.html">locates the module</a> file CVC.js, executes it and stores the resulting exports in the cache.
+Modules are executed only once, so transitive use in other modules is possible and effective.</p>
+<p>To declare a module, you must assign your exports to the variable exports defined in the module scope:</p>
+<pre>
+function CVC() {
+	...
+}
+
+exports.CVC = CVC;
+</pre>
+<p>In the module, you can use the variable <i>module</i> to access the module id and module URI. The module id is the id used in the require()
+statement, while the URI is the absolute filename where the module was loaded from.</p>
+<pre>
+print(module.id);
+print(module.uri);
+</pre>
+<p>outputs for a module included with require('scsh/eac/CVC') from a user workspace (USR) /home/user/scsh_workspace:</p>
+<pre>
+scsh/eac/CVC
+/home/user/scsh_workspace/scsh/eac/CVC.js
+</pre>
+<p>If you need to access resources relative to the location of the module, then the recommended way is to
+extract the module path from the module URI:</p>
+<pre>
+// Remove "file:" and trailing module name
+modulepath = module.uri.substr(0, module.uri.lastIndexOf("/")).substr(5);
+</pre>
+<!-- #EndEditable -->
+<br/>
+<p class="copyright">&copy; Copyright 2003 - 2024 <a href="http://www.cardcontact.de">CardContact Systems GmbH</a>
+, Minden, Germany</p>
+</div>
+</div>
+</body>
+</html>
+<!-- #EndTemplate -->

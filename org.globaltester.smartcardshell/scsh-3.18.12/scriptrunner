@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo $0
+INSTALLDIR=$(dirname $0)
+WORKSPACE=`pwd`
+cd ${INSTALLDIR}
+
+java -classpath 'lib/*' -Dorg.bouncycastle.asn1.allow_unsafe_integer=true -Djava.library.path=./lib -Dscdp.workspace=${WORKSPACE} de.cardcontact.scdp.engine.ScriptRunner $*
+
+RC=$?
+cd ${WORKSPACE}
+exit ${RC}

@@ -5,8 +5,8 @@ import java.net.SocketException;
 
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OutputStream;
-import org.bouncycastle.asn1.DERApplicationSpecific;
-import org.bouncycastle.asn1.DERObject;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminalException;
@@ -35,12 +35,13 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		
 		ASN1OutputStream out;
 		ASN1InputStream in;
-		DERObject derResponse;
+		ASN1Primitive derResponse;
 		try {
-			out = new ASN1OutputStream(socket.getOutputStream());
+			out = ASN1OutputStream.create(socket.getOutputStream());
 			in = new ASN1InputStream(socket.getInputStream());
-			 
-			out.writeObject(new DERApplicationSpecific(tag, bytes));
+			
+			ASN1TaggedObject appSpec = (ASN1TaggedObject)ASN1Primitive.fromByteArray(bytes);			
+			out.writeObject(appSpec);
 			out.flush();
 			 
 			derResponse = in.readObject();	 
@@ -52,11 +53,16 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		
 		// TODO: Close socket on FF000000?
 		
-		if (!(derResponse instanceof DERApplicationSpecific)) {
-			throw new CardTerminalException("Illegal state: Response is not of type DERApplicationSpecific");
+		if (!(derResponse instanceof ASN1TaggedObject)) {
+			throw new CardTerminalException("Illegal state: Response is not of type DERApplicationSpecific/ASN1TaggedObject");
 		}
 		
-		return ((DERApplicationSpecific) derResponse).getContents();
+		try {
+			return ((ASN1TaggedObject) derResponse).getEncoded();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new CardTerminalException("Response of type DERApplicationSpecific/ASN1TaggedObject cannot be encoded to bytes");
+		}
 	}
 	
 	/*

@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.globaltester.smartcardshell.protocols.IScshProtocolProvider;
 
 public abstract class AbstractScshProtocolProvider implements IScshProtocolProvider {
 

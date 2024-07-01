@@ -1,0 +1,15 @@
+#!/bin/sh
+cd $(dirname $0)
+
+# If no card reader can be found, then most likely the Java runtime does not find the PCSC client library.
+# You will then need to find the folder containing PCSC on MacOSX or libpcsclite.so on Linux and specify
+# that path in the Java system property sun.security.smartcardio.library
+#
+# Examples are
+#  -Dsun.security.smartcardio.library=/System/Library/Frameworks/PCSC.framework/Versions/Current/PCSC
+#  -Dsun.security.smartcardio.library=lib/x86_64-linux-gnu/libpcsclite.so
+
+java -Dsun.security.smartcardio.t1GetResponse=false -Dorg.bouncycastle.asn1.allow_unsafe_integer=true -Djava.library.path=./lib -classpath 'lib/*' de.cardcontact.scdp.scsh3.GUIShell
+
+
+
