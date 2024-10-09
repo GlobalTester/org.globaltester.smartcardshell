@@ -2,11 +2,14 @@ package org.globaltester.smartcardshell.ocf.terminal;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Arrays;
 
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminalException;
@@ -40,11 +43,10 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 			out = ASN1OutputStream.create(socket.getOutputStream());
 			in = new ASN1InputStream(socket.getInputStream());
 			
-			ASN1TaggedObject appSpec = (ASN1TaggedObject)ASN1Primitive.fromByteArray(bytes);			
-			out.writeObject(appSpec);
+			out.writeObject(new DERTaggedObject(false, 64, tag, new DEROctetString(bytes)));
 			out.flush();
-			 
-			derResponse = in.readObject();	 
+			
+			derResponse = in.readObject();			
 		} catch (IOException e) {
 			e.printStackTrace(log);
 			log.flush();
@@ -54,14 +56,16 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		// TODO: Close socket on FF000000?
 		
 		if (!(derResponse instanceof ASN1TaggedObject)) {
-			throw new CardTerminalException("Illegal state: Response is not of type DERApplicationSpecific/ASN1TaggedObject");
+			throw new CardTerminalException("Illegal state: Response is not of type ASN1TaggedObject");
 		}
 		
 		try {
-			return ((ASN1TaggedObject) derResponse).getEncoded();
+			// Hack: get rid off first 2 bytes; found no better solution for ASN1Primitive :(
+			byte[] encodedResponse = derResponse.getEncoded();
+			return Arrays.copyOfRange(encodedResponse, 2, encodedResponse.length);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new CardTerminalException("Response of type DERApplicationSpecific/ASN1TaggedObject cannot be encoded to bytes");
+			throw new CardTerminalException("Response of type ASN1TaggedObject cannot be encoded to bytes");
 		}
 	}
 	
