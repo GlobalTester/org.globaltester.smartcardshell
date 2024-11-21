@@ -76,5 +76,6 @@ Export-Package: de.cardcontact.opencard.factory,
  org.globaltester.smartcardshell.preferences,
  org.globaltester.smartcardshell.protocols
 Eclipse-ExtensibleAPI: true
-Import-Package: javax.jws,
+Import-Package: de.persosim.simulator.tlv,
+ javax.jws,
  org.eclipse.jface.preference
