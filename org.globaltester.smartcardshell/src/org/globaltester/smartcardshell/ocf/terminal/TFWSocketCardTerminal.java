@@ -2,7 +2,6 @@ package org.globaltester.smartcardshell.ocf.terminal;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Arrays;
 
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OutputStream;
@@ -11,22 +10,24 @@ import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERTaggedObject;
 
+import de.persosim.simulator.tlv.TlvDataObject;
+import de.persosim.simulator.tlv.TlvDataObjectFactory;
 import opencard.core.terminal.CardID;
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CommandAPDU;
 
 public class TFWSocketCardTerminal extends SocketCardTerminal {
-	
+
 	public TFWSocketCardTerminal(String name, String type, String device, String hostname) {
 		super(name, type, device, hostname);
 	}
-	
+
 	@Override
 	protected byte[] exchange(int slotID, CommandAPDU apdu) throws CardTerminalException {
 		return sendMessage(slotID, 0, apdu.getBytes());
 	}
-	
-	public byte[] sendMessage(int slotID, int tag, byte [] bytes) throws CardTerminalException {
+
+	public byte[] sendMessage(int slotID, int tag, byte[] bytes) throws CardTerminalException {
 		log.append("\n\nTest\n\n");
 		log.flush();
 		if (slotID != 0) {
@@ -35,43 +36,44 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		if (socket == null) {
 			throw new CardTerminalException("Not connected");
 		}
-		
+
 		ASN1OutputStream out;
 		ASN1InputStream in;
 		ASN1Primitive derResponse;
 		try {
 			out = ASN1OutputStream.create(socket.getOutputStream());
 			in = new ASN1InputStream(socket.getInputStream());
-			
+
 			out.writeObject(new DERTaggedObject(false, 64, tag, new DEROctetString(bytes)));
 			out.flush();
-			
-			derResponse = in.readObject();			
+
+			derResponse = in.readObject();
 		} catch (IOException e) {
 			e.printStackTrace(log);
 			log.flush();
 			throw new CardTerminalException("Could not open connection or connection reset");
 		}
-		
+
 		// TODO: Close socket on FF000000?
-		
+
 		if (!(derResponse instanceof ASN1TaggedObject)) {
 			throw new CardTerminalException("Illegal state: Response is not of type ASN1TaggedObject");
 		}
-		
+
 		try {
-			// Hack: get rid off first 2 bytes; found no better solution for ASN1Primitive :(
 			byte[] encodedResponse = derResponse.getEncoded();
-			return Arrays.copyOfRange(encodedResponse, 2, encodedResponse.length);
+			TlvDataObject tlvDataObject = TlvDataObjectFactory.createTLVDataObject(encodedResponse);
+			encodedResponse = tlvDataObject.getValueField();
+			return encodedResponse;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new CardTerminalException("Response of type ASN1TaggedObject cannot be encoded to bytes");
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see opencard.core.terminal.CardTerminal#isCardPresent(int)
 	 */
 	@Override
@@ -81,31 +83,32 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param slotID
 	 * @return
 	 * @throws CardTerminalException
-	 * @throws SocketException 
+	 * @throws SocketException
 	 */
 	@Override
 	public byte[] connectToCard(int slotID) throws CardTerminalException, SocketException {
-		final byte[] atr = new byte[] {0x3b, (byte)0x90, (byte)0x94, 0x00, (byte)0x92, 0x02, 0x75, (byte)0x93, 0x11, 0x00, 0x01, 0x02, 0x02, 0x10};
-		
+		final byte[] atr = new byte[] { 0x3b, (byte) 0x90, (byte) 0x94, 0x00, (byte) 0x92, 0x02, 0x75, (byte) 0x93,
+				0x11, 0x00, 0x01, 0x02, 0x02, 0x10 };
+
 		if (socket != null && socket.isConnected()) {
 			return atr;
 		}
-		
-		if (openSocket()){
+
+		if (openSocket()) {
 			return atr;
 		} else {
 			return null;
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see opencard.core.terminal.CardTerminal#close()
 	 */
 	@Override
@@ -113,15 +116,14 @@ public class TFWSocketCardTerminal extends SocketCardTerminal {
 		closeSocket();
 		log.close();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see opencard.core.terminal.CardTerminal#internalReset(int, int)
 	 */
 	@Override
-	protected CardID internalReset(int slotID, int ms)
-			throws CardTerminalException {
+	protected CardID internalReset(int slotID, int ms) throws CardTerminalException {
 		close();
 		try {
 			connectToCard(slotID);
