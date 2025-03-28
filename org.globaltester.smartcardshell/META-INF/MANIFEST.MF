@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: org.globaltester.smartcardshell
 Bundle-Name: GT SmartCardShell
 Bundle-SymbolicName: org.globaltester.smartcardshell;singleton:=true
-Bundle-Version: 3.10.2.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: org.globaltester.smartcardshell.Activator
 Bundle-Vendor: secunet Security Networks AG
 Require-Bundle: org.eclipse.core.runtime,
